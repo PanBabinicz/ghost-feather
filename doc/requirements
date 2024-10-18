@@ -1,0 +1,24 @@
+# Ghost Feather
+
+
+## High level description
+
+    The dorne should be able to update fimware via OTA. Thats why it needs the wireless transciever.
+    It will use the ARM Cortex M7 based MCU - probalby the STM32F7x2 series.
+    The special bootloaders should be created to be able to update firmware using OTA.
+    Drone will have the FPV capabilities. The PCB will be created in KiCAD. During PCB creation, the
+    firmware will be written and tested using dev boards.
+
+
+## Main parts
+
+    - Frame: https://www.robotshop.com/products/lynxmotion-hunter-vtail-500-drone-kit-large-motor-hardware-only
+    - MCU1:  https://www.st.com/en/microcontrollers-microprocessors/stm32f7x2.html
+    - WIFI:  https://www.digikey.com/en/products/detail/inventek-systems/ISM43362-M3G-L44-U-SPI-C6-2-1-11/1430964
+
+
+## Links
+
+    - OTA bootloader webinar:          https://memfault.com/webinars/device-firmware-update-best-practices/
+    - Memfault blog bootloader:        https://interrupt.memfault.com/blog/how-to-write-a-bootloader-from-scratch 
+    - Low Byte Productions bootloader: https://www.youtube.com/playlist?list=PLP29wDx6QmW7HaCrRydOnxcy8QmW0SNdQ
