@@ -4,10 +4,11 @@
 ## High level description
 
     The dorne should be able to update fimware via OTA. Thats why it needs the wireless transciever.
-    It will use the ARM Cortex M7 based MCU - probalby the STM32F7x2 series.
+    It will use the ARM Cortex M7 based MCU - probably the STM32F7x2 series.
     The special bootloaders should be created to be able to update firmware using OTA.
     Drone will have the FPV capabilities. The PCB will be created in KiCAD. During PCB creation, the
-    firmware will be written and tested using dev boards.
+    firmware will be written and tested using dev boards. The HIL system (Jenkins etc.) will be
+    set on the Raspberry Pi board.
 
 
 ## Main parts
