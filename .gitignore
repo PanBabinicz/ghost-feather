@@ -1,2 +1,7 @@
 # ignore generated tags file
 tags
+
+# ignore all the binary files
+*.bin
+*.hex
+*.elf
