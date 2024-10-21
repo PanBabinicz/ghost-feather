@@ -28,9 +28,10 @@ static circular_buffer_t circular_buffer_array[CIRCULAR_BUFFER_INSTANCE_TOTAL];
 /// \param[in] circular_buffer The address of the circular buffer pointer which will point to the
 ///                            address of the one instance from the static array.
 ///
-/// \return circular_buffer_result_t       Result of the function.
-/// \retval CIRCULAR_BUFFER_RESULT_SUCCESS On success.
-/// \retval CIRCULAR_BUFFER_RESULT_ERROR   Otherwise.
+/// \return circular_buffer_result_t                Result of the function.
+/// \retval CIRCULAR_BUFFER_RESULT_SUCCESS          On success.
+/// \retval CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE On invalid instace.
+/// \retval CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE On null pointer.
 ///
 static circular_buffer_result_t circular_buffer_get(circular_buffer_instance_t instance,
                                                     circular_buffer_t **circular_buffer);
@@ -43,7 +44,12 @@ static circular_buffer_result_t circular_buffer_get(circular_buffer_instance_t i
 {
     circular_buffer_result_t result = CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE;
 
-    if ((instance >= CIRCULAR_BUFFER_INSTANCE_0) && (instance < CIRCULAR_BUFFER_INSTANCE_TOTAL))
+    // Check if you don't dereference NULL pointer. Undefined behavior.
+    if (circular_buffer == NULL)
+    {
+        result = CIRCULAR_BUFFER_RESULT_NULL_POINTER;
+    }
+    else if ((instance >= CIRCULAR_BUFFER_INSTANCE_0) && (instance < CIRCULAR_BUFFER_INSTANCE_TOTAL))
     {
         *circular_buffer = &circular_buffer_array[instance];
         result = CIRCULAR_BUFFER_RESULT_SUCCESS;

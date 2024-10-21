@@ -36,9 +36,9 @@ typedef enum
 ///
 /// \param[in] instance The instance of the circular buffer data structure.
 ///
-/// \return circular_buffer_result_t       Result of the function.
-/// \retval CIRCULAR_BUFFER_RESULT_SUCCESS On success.
-/// \retval CIRCULAR_BUFFER_RESULT_ERROR   Otherwise.
+/// \return circular_buffer_result_t                Result of the function.
+/// \retval CIRCULAR_BUFFER_RESULT_SUCCESS          On success.
+/// \retval CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE On invalid instance.
 ///
 circular_buffer_result_t circular_buffer_clear(circular_buffer_instance_t instance);
 
@@ -69,9 +69,10 @@ circular_buffer_result_t circular_buffer_push(circular_buffer_instance_t instanc
 /// \param[in]  instance The instance of the circular buffer data structure.
 /// \param[out] element  The address where the element will be placed.
 ///
-/// \return circular_buffer_result_t       Result of the function.
-/// \retval CIRCULAR_BUFFER_RESULT_SUCCESS On success.
-/// \retval CIRCULAR_BUFFER_RESULT_ERROR   Otherwise.
+/// \return circular_buffer_result_t            Result of the function.
+/// \retval CIRCULAR_BUFFER_RESULT_SUCCESS      On success.
+/// \retval CIRCULAR_BUFFER_RESULT_EMPTY        On empty circular buffer.
+/// \retval CIRCULAR_BUFFER_RESULT_NULL_POINTER On null pointer.
 ///
 circular_buffer_result_t circular_buffer_pop(circular_buffer_instance_t instance, uint8_t *element);
 
