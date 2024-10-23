@@ -1,9 +1,0 @@
-COMPONENT_NAME=sum
-
-SRC_FILES = \
-  $(PROJECT_SRC_DIR)/my_sum.c \
-
-TEST_SRC_FILES = \
-  $(UNITTEST_SRC_DIR)/test_my_sum.c
-
-include $(CPPUTEST_MAKFILE_INFRA)
