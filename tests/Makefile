@@ -12,10 +12,11 @@ export CPPUTEST_MAKFILE_INFRA := $(UNITTEST_ROOT)/MakefileWorkerOverrides.mk
 #  recursive make.
 # Allows filtering by setting `UNITTEST_MAKEFILE_FILTER` to a wildcard filter. 
 UNITTEST_MAKEFILE_FILTER ?= *
-UNITTEST_MAKEFILES := $(wildcard $(UNITTEST_MAKEFILES_DIR)/Makefile_$(UNITTEST_MAKEFILE_FILTER))
+UNITTEST_MAKEFILES := $(wildcard $(UNITTEST_MAKEFILES_DIR)/circular_buffer/Makefile_$(UNITTEST_MAKEFILE_FILTER))
 
 export UNITTEST_EXTRA_INC_PATHS += \
-  -I$(PROJECT_ROOT_DIR)
+  -I$(PROJECT_ROOT_DIR) \
+  -I$(PROJECT_ROOT_DIR)/shared
 
 # Run the test on all Makesfiles found
 all: $(UNITTEST_MAKEFILES)
