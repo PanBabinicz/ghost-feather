@@ -108,6 +108,7 @@ circular_buffer_result_t circular_buffer_push(circular_buffer_instance_t instanc
         }
 
         circular_buffer->front = (circular_buffer->front + 1) % CIRCULAR_BUFFER_LENGTH;
+        result = CIRCULAR_BUFFER_RESULT_SUCCESS;
     }
 
     return result;
