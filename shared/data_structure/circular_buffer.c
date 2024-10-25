@@ -1,7 +1,5 @@
 #include "data_structure/circular_buffer.h"
 
-#define CIRCULAR_BUFFER_LENGTH  (64U)
-
 typedef struct
 {
     uint8_t rear;
@@ -134,7 +132,7 @@ circular_buffer_result_t circular_buffer_pop(circular_buffer_instance_t instance
         }
         else if ((circular_buffer->rear == circular_buffer->front) && (circular_buffer->overflow == 1))
         {
-            *element = circular_buffer->data[circular_buffer->rear];
+            *element                  = circular_buffer->data[circular_buffer->rear];
             circular_buffer->rear     = (circular_buffer->rear + 1) % CIRCULAR_BUFFER_LENGTH;
             circular_buffer->overflow = 0;
             result = CIRCULAR_BUFFER_RESULT_SUCCESS;
