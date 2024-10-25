@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#define CIRCULAR_BUFFER_LENGTH  (64U)
+
 ///
 /// \breif The circular buffer instance type.
 ///
