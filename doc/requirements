@@ -28,3 +28,4 @@
     - Load view vs execution view,
       linker script and startup file
       and reset:                       https://www.reddit.com/r/arm/comments/aifq0e/load_view_vs_execution_view_linker_script_and/
+    - Booting modes of STM32:          https://electronics.stackexchange.com/questions/676754/booting-modes-of-stm32-microcontrollers
