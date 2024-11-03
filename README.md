@@ -27,3 +27,14 @@
 > LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 > OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 > THE SOFTWARE.
+
+# Compilation process
+
+> [!NOTE]
+> **The current compilation process will be changed**
+
+```console
+~ arm-none-eabi-gcc -g -c -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m7 -mthumb \
+                          -I memory -I bootloader \
+                          startup/stm32f722xx/stm32722xx_startup.c -o build/stm32f722xx_startup.o
+```
