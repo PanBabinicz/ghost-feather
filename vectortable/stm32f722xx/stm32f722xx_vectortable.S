@@ -15,7 +15,7 @@
         .global _vector_table
         .type _vector_table, %object
 _vector_table:                                  @ |-   Offset   -|
-        .word _stack_end                        @ |- 0x00000000 -| 
+        .word _estack                           @ |- 0x00000000 -|
         defisr _reset_handler                   @ |- 0x00000004 -|
         defisr _nmi_handler                     @ |- 0x00000008 -|
         defisr _hardfault_handler               @ |- 0x0000000c -|
