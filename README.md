@@ -38,3 +38,19 @@
                           -I memory -I bootloader \
                           startup/stm32f722xx/stm32722xx_startup.c -o build/stm32f722xx_startup.o
 ```
+
+```console
+~ arm-none-eabi-gcc -g -c -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m7 -mthumb \
+                          -I libopencm3/include -I memory -DSTM32F7 \
+                          bootloader/stm32f722xx_first_bootloader.c -o build/stm32f722xx_first_bootloader.o
+```
+
+```console
+~ arm-none-eabi-as -g vectortable/stm32f722xx/stm32f722xx_vectortable.S -o build/stm32f722xx_vectortable.o
+```
+
+```console
+~ arm-none-eabi-gcc -g -nostartfiles -nostdlib -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m7 -mthumb \
+                       build/stm32f722xx_first_bootloader.o build/stm32f722xx_startup.o build/stm32f722xx_vectortable.o -o build/stm32f722xx_first_bootloader.elf \
+                       -T linkerscript/stm32f722xx/stm32f722xx_bootloader.ld -L linkerscript/stm32f722xx -L libopencm3/lib -lopencm3_stm32f7
+```
