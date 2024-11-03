@@ -1,4 +1,4 @@
-INCLUDE stm32f722xx_memory_map.ld
+INCLUDE "stm32f722xx_memory_map.ld"
 
 STACK_SIZE = DEFINED(STACK_SIZE) ? STACK_SIZE : DEFINED(__stack_size__) ? __stack_size__ : 0x2000;
 
@@ -8,7 +8,7 @@ SECTIONS
     {
         . = ALIGN(4);
         _stext = .;
-        KEEP(*(.vector_table))
+        KEEP(*(._vector_table))
         *(.text)
         *(.rodata)
         . = ALIGN(4);
@@ -21,7 +21,7 @@ SECTIONS
         _sbss = .;
         *(.bss)
         *(COMMON)
-        . = ALIGN(4)
+        . = ALIGN(4);
         _ebss = .;
     } > sram1
 
