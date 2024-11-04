@@ -5,3 +5,6 @@ tags
 *.bin
 *.hex
 *.elf
+
+# ignore build dir
+build/
