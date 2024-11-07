@@ -6,6 +6,11 @@ set_property(
     ${STARTUP_SOURCES}
     )
 
+message(
+    STATUS
+    "Add stm32f722xx_startup library"
+    )
+
 add_library(
     stm32f722xx_startup
     ${STARTUP_SOURCES}
@@ -13,7 +18,7 @@ add_library(
 
 target_include_directories(
     stm32f722xx_startup
-    PUBLIC
+    PRIVATE
     ${PROJECT_SOURCE_DIR}/memory
     ${PROJECT_SOURCE_DIR}/bootloader/stm32f722xx
     )

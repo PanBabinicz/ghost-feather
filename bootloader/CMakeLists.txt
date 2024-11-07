@@ -6,6 +6,11 @@ set_property(
     ${FIRST_BOOTLOADER_SOURCES}
     )
 
+message(
+    STATUS
+    "Add first_bootloader library"
+    )
+
 add_library(
     first_bootloader
     ${FIRST_BOOTLOADER_SOURCES}
@@ -13,7 +18,7 @@ add_library(
 
 target_include_directories(
     first_bootloader
-    PUBLIC
+    PRIVATE
     ${PROJECT_SOURCE_DIR}/memory
     ${PROJECT_SOURCE_DIR}/libopencm3/include
     )

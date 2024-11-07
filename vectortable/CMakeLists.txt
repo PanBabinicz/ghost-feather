@@ -6,6 +6,11 @@ set_property(
     ${VECTORTABLE_SOURCES}
     )
 
+message(
+    STATUS
+    "Add vectortable library"
+    )
+
 add_library(
     vectortable
     ${VECTORTABLE_SOURCES}
