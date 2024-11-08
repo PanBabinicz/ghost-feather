@@ -54,3 +54,21 @@
                        build/stm32f722xx_first_bootloader.o build/stm32f722xx_startup.o build/stm32f722xx_vectortable.o -o build/stm32f722xx_first_bootloader.elf \
                        -T linkerscript/stm32f722xx/stm32f722xx_bootloader.ld -L linkerscript/stm32f722xx -L libopencm3/lib -lopencm3_stm32f7
 ```
+
+## CMake generators
+
+> **Unix Makefiles**
+>
+> ```console
+> ~ cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=arm-none-eabi-toolchain.cmake
+> ~ cd build
+> ~ cmake --build . --config Debug
+> ```
+
+> **Ninja Multi-Config**
+>
+> ```console
+> ~ cmake -G "Ninja Multi-Config" -S . -B build -DCMAKE_TOOLCHAIN_FILE=arm-none-eabi-toolchain.cmake
+> ~ cd build
+> ~ cmake --build . --config Debug
+> ```
