@@ -19,6 +19,6 @@ add_library(
 target_include_directories(
     stm32f722xx_startup
     PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory
+    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/bootloader/stm32f722xx
     )

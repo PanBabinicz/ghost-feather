@@ -19,7 +19,7 @@ add_library(
 target_include_directories(
     first_bootloader
     PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory
+    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/libopencm3/include
     )
 

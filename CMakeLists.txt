@@ -40,7 +40,7 @@ target_link_libraries(
 target_include_directories(
     ghost-feather
     PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory
+    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/libopencm3/include
     ${PROJECT_SOURCE_DIR}/bootloader/stm32f722xx
     )
