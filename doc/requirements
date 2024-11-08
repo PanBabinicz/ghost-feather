@@ -24,6 +24,7 @@
     - Memfault blog bootloader:        https://interrupt.memfault.com/blog/how-to-write-a-bootloader-from-scratch 
     - Low Byte Productions bootloader: https://www.youtube.com/playlist?list=PLP29wDx6QmW7HaCrRydOnxcy8QmW0SNdQ
     - HIL environment:                 https://www.youtube.com/playlist?list=PL4cGeWgaBTe1uwiqIAc6fwPzPpvgPZI2J
+    - Memfault bootloader repo:        https://github.com/memfault/zero-to-main/tree/master
     - Where VTOR should be placed:     https://electronics.stackexchange.com/questions/700185/where-should-the-interrupt-vector-table-be-placed-in-memory-on-stm32h7a3rgt6-chi
     - Load view vs execution view,
       linker script and startup file

@@ -6,5 +6,8 @@ tags
 *.hex
 *.elf
 
+# ignore build dir
+build
+
 # ignore DS_store file
 .DS_Store
