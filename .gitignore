@@ -7,4 +7,7 @@ tags
 *.elf
 
 # ignore build dir
-build/
+build
+
+# ignore DS_store file
+.DS_Store
