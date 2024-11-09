@@ -13,7 +13,7 @@ SECTIONS
         *(.rodata)
         . = ALIGN(4);
         _etext = .;
-    } > bootrom
+    } > bootrom2
 
     .bss (NOLOAD) :
     {
@@ -23,7 +23,7 @@ SECTIONS
         *(COMMON)
         . = ALIGN(4);
         _ebss = .;
-    } > sram1
+    } > sram_boot2
 
     .data :
     {
@@ -32,7 +32,7 @@ SECTIONS
         *(.data)
         . = ALIGN(4);
         _edata = .;
-    } > sram1 AT > bootrom
+    } > sram_boot2 AT > bootrom2
 
     .stack (NOLOAD) :
     {
@@ -41,7 +41,7 @@ SECTIONS
         . = . + STACK_SIZE;
         . = ALIGN(8);
         _estack = .;
-    } > sram1
+    } > sram_boot2
 
     . = ALIGN(4);
     _end = .;
