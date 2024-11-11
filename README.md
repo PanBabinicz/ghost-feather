@@ -72,3 +72,7 @@
 > ~ cd build
 > ~ cmake --build . --config Debug
 > ```
+
+# How to program
+
+> For now, CMake generates two elf files. Each of these files needs to be uploaded to the device.
