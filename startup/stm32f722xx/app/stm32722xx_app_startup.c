@@ -1,5 +1,4 @@
-#include "stm32f722xx_memory_map.h"
-#include "stm32f722xx_first_bootloader.h"
+#include "stm32f722xx_app.h"
 
 extern uint32_t _sbss;
 extern uint32_t _ebss;
@@ -10,7 +9,7 @@ extern uint32_t _etext;
 extern void _reset_handler(void);
 
 ///
-/// \breif This reset handler function is used to run first bootloader.
+/// \breif This reset handler function is to prepare for the app.
 ///
 void _reset_handler(void)
 {
@@ -32,7 +31,7 @@ void _reset_handler(void)
         }
     }
 
-    first_bootloader_start();
+    app_start();
 
     /* Never return */
     while (1);

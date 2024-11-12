@@ -8,7 +8,7 @@ SECTIONS
     {
         . = ALIGN(4);
         _stext = .;
-        KEEP(*(.vector_table))
+        KEEP(*(._vector_table))
         *(.text)
         *(.rodata)
         . = ALIGN(4);
@@ -21,7 +21,7 @@ SECTIONS
         _sbss = .;
         *(.bss)
         *(COMMON)
-        . = ALIGN(4)
+        . = ALIGN(4);
         _ebss = .;
     } > sram_app
 

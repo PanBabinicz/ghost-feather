@@ -3,7 +3,7 @@
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 
-static void second_bootloader_startup(uint32_t sp, uint32_t pc);
+static void second_bootloader_startup(uint32_t pc, uint32_t sp);
 static void rcc_setup(void);
 static void gpio_setup(void);
 static void led_on(void);
