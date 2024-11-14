@@ -87,10 +87,10 @@ static void led_off(void)
 
 static void delay(uint32_t ms)
 {
-    uint32_t ns = (ms * 1000000);
-    ns /= 4;
+    ms = ms * 1000 * 1000;
+    ms /= 250;
 
-    for (volatile uint32_t i = 0; i < ns; i++)
+    for (volatile uint32_t i = 0; i < ms; i++)
     {
         __asm("nop");
     }
@@ -105,12 +105,12 @@ boot_updater_result_t boot_updater_init(void)
     gpio_setup();
     usart_setup();
 
-    for (uint32_t i = 0; i < 5; i++)
+    for (uint32_t i = 0; i < 3; i++)
     {
         led_off();
-        delay(1000);
+        delay(500);
         led_on();
-        delay(1000);
+        delay(500);
     }
 
     /* Send A */
@@ -127,11 +127,8 @@ boot_updater_result_t boot_updater_deinit(void)
 
 void boot_updater_start(void)
 {
-    boot_updater_init();
-    volatile uint32_t x = 0;
-    ++x;
-    ++x;
+    (void)boot_updater_init();
 
     /* Never return */
-    //while (1);
+    while (1);
 }
