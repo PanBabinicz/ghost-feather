@@ -41,6 +41,8 @@ static void delay(uint32_t ms);
 ///*************************************************************************************************
 static void rcc_setup(void)
 {
+    rcc_clock_setup_hsi(&rcc_3v3[RCC_CLOCK_3V3_216MHZ]);
+
     /* USART3 uses PD8 and PD9 pins */
     rcc_periph_clock_enable(RCC_GPIOD);
     rcc_periph_clock_enable(RCC_USART3);
@@ -64,7 +66,7 @@ static void usart_setup(void)
     usart_disable(USART3);
 
     /* Check the way how the baudrate is set, the calculation is wrong.. */
-    usart_set_baudrate(USART3, 9600);
+    usart_set_baudrate(USART3, 115200);
     usart_set_databits(USART3, 8);
 
     /* 1 stop bit, refer to manual */
