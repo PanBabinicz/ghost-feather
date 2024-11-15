@@ -65,7 +65,6 @@ static void usart_setup(void)
 {
     usart_disable(USART3);
 
-    /* Check the way how the baudrate is set, the calculation is wrong.. */
     usart_set_baudrate(USART3, 115200);
     usart_set_databits(USART3, 8);
 
