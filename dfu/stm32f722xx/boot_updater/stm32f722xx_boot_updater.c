@@ -2,9 +2,13 @@
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 #include "libopencm3/stm32/usart.h"
+#include "libopencm3/cm3/systick.h"
+
+#define PROCESSOR_FREQUENCY (216000000u)
+#define CYCLE_TIME          (((1.0f / PROCESSOR_FREQUENCY) * 1000000000.0f))
 
 ///*************************************************************************************************
-/// Private objects - declaration.
+/// Private functions - declaration.
 ///*************************************************************************************************
 ///
 /// \brief
@@ -24,6 +28,11 @@ static void usart_setup(void);
 ///
 /// \brief
 ///
+static void systick_init(void);
+
+///
+/// \brief
+///
 static void led_on(void);
 
 ///
@@ -34,10 +43,10 @@ static void led_off(void);
 ///
 /// \brief
 ///
-static void delay(uint32_t ms);
+static void systick_delay_ms(uint32_t ms);
 
 ///*************************************************************************************************
-/// Private objects - definition.
+/// Private functions - definition.
 ///*************************************************************************************************
 static void rcc_setup(void)
 {
@@ -77,6 +86,13 @@ static void usart_setup(void)
     usart_enable(USART3);
 }
 
+static void systick_init(void)
+{
+    /* Prescaled processor clock */
+    systick_set_clocksource(STK_CSR_CLKSOURCE_AHB_DIV8);
+    systick_counter_enable();
+}
+
 static void led_on(void)
 {
     gpio_set(GPIOB, GPIO14);
@@ -87,15 +103,18 @@ static void led_off(void)
     gpio_clear(GPIOB, GPIO14);
 }
 
-static void delay(uint32_t ms)
+static void systick_delay_ms(uint32_t ms)
 {
-    ms = ms * 1000 * 1000;
-    ms /= 250;
+    uint32_t reload_value;
+    uint32_t ns = ms * 1000000;
 
-    for (volatile uint32_t i = 0; i < ms; i++)
-    {
-        __asm("nop");
-    }
+    reload_value = (uint32_t)((float)ns / CYCLE_TIME);
+
+    systick_set_reload(reload_value);
+    systick_clear();
+
+    /* Wait for the count flag to be set */
+    while (!systick_get_countflag());
 }
 
 ///*************************************************************************************************
@@ -104,15 +123,16 @@ static void delay(uint32_t ms)
 boot_updater_result_t boot_updater_init(void)
 {
     rcc_setup();
+    systick_init();
     gpio_setup();
     usart_setup();
 
     for (uint32_t i = 0; i < 3; i++)
     {
         led_off();
-        delay(500);
+        systick_delay_ms(500);
         led_on();
-        delay(500);
+        systick_delay_ms(500);
     }
 
     /* Send A */
