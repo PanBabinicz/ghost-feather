@@ -11,6 +11,7 @@ add_subdirectory(dfu)
 add_subdirectory(app)
 add_subdirectory(startup)
 add_subdirectory(vectortable)
+add_subdirectory(shared)
 
 get_cmake_property(first_bootloader_sources FIRST_BOOTLOADER_SOURCES)
 get_cmake_property(second_bootloader_sources SECOND_BOOTLOADER_SOURCES)
@@ -21,6 +22,7 @@ get_cmake_property(stm32f722xx_second_bootloader_startup_sources STM32F722XX_SEC
 get_cmake_property(stm32f722xx_boot_updater_startup_sources STM32F722XX_BOOT_UPDATER_STARTUP_SOURCES)
 get_cmake_property(stm32f722xx_app_startup_sources STM32F722XX_APP_STARTUP_SOURCES)
 get_cmake_property(vectortable_sources VECTORTABLE_SOURCES)
+get_cmake_property(usart_printf_sources USART_PRINTF_SOURCES)
 
 message(STATUS "Add ghost-feather-first-bootloader executable")
 add_executable(
@@ -44,6 +46,7 @@ add_executable(
     ${boot_updater}
     ${stm32f722xx_boot_updater_startup_sources}
     ${vectortable_sources}
+    ${usart_printf_sources}
     )
 
 message(STATUS "Add ghost-feather-app executable")
@@ -60,6 +63,7 @@ target_link_directories(
     PRIVATE
     ${PROJECT_SOURCE_DIR}/libopencm3/lib
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/shared
     )
 
 message(STATUS "Add ghost-feather-second-bootloader target link directories")
@@ -68,6 +72,7 @@ target_link_directories(
     PRIVATE
     ${PROJECT_SOURCE_DIR}/libopencm3/lib
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/shared
     )
 
 message(STATUS "Add ghost-feather-boot-updater target link directories")
@@ -76,6 +81,7 @@ target_link_directories(
     PRIVATE
     ${PROJECT_SOURCE_DIR}/libopencm3/lib
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/shared
     )
 
 message(STATUS "Add ghost-feather-app target link directories")
@@ -84,6 +90,7 @@ target_link_directories(
     PRIVATE
     ${PROJECT_SOURCE_DIR}/libopencm3/lib
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/shared
     )
 
 message(STATUS "Add ghost-feather-first-bootloader target link libraries")
@@ -113,6 +120,7 @@ target_link_libraries(
     stm32f722xx_boot_updater_startup
     boot_updater
     vectortable
+    usart_printf
     libopencm3_stm32f7.a
     )
 
@@ -151,6 +159,7 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/libopencm3/include
     ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/boot_updater
+    ${PROJECT_SOURCE_DIR}/shared/printf
     )
 
 message(STATUS "Add ghost-feather-app target include directories")

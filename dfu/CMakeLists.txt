@@ -18,6 +18,7 @@ target_include_directories(
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/libopencm3/include
+    ${PROJECT_SOURCE_DIR}/shared/printf
     )
 
 message(STATUS "Add boot_updater target compile definitions")
