@@ -135,8 +135,7 @@ boot_updater_result_t boot_updater_init(void)
         systick_delay_ms(500);
     }
 
-    /* Send A */
-    usart_send_blocking(USART3, 0x41);
+    printf("Boot updater %d initialized...\n\r", 1);
 
     return BOOT_UPDATER_RESULT_SUCCESS;
 }
