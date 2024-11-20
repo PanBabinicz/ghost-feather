@@ -82,6 +82,7 @@ target_link_directories(
     ${PROJECT_SOURCE_DIR}/libopencm3/lib
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
     ${PROJECT_SOURCE_DIR}/shared
+    /Applications/ArmGNUToolchain/13.3.rel1/arm-none-eabi/arm-none-eabi/lib/thumb/v7e-m+fp/hard
     )
 
 message(STATUS "Add ghost-feather-app target link directories")
@@ -122,6 +123,7 @@ target_link_libraries(
     vectortable
     usart_printf
     libopencm3_stm32f7.a
+    libc.a
     )
 
 message(STATUS "Add ghost-feather-app target link libraries")
@@ -268,7 +270,6 @@ target_link_options(
     PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/stm32f722xx_boot_updater.ld
     -nostartfiles
-    -nostdlib
     )
 
 message(STATUS "Add ghost-feather-app target compile options")
