@@ -261,7 +261,6 @@ target_link_options(
     PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/stm32f722xx_second_bootloader.ld
     -nostartfiles
-    -nostdlib
     )
 
 message(STATUS "Add ghost-feather-boot-updater target compile options")
@@ -278,5 +277,4 @@ target_link_options(
     PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/stm32f722xx_app.ld
     -nostartfiles
-    -nostdlib
     )
