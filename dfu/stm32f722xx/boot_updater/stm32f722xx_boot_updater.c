@@ -1,4 +1,5 @@
 #include "stm32f722xx_boot_updater.h"
+#include "usart_controller.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 #include "libopencm3/stm32/usart.h"
@@ -19,11 +20,6 @@ static void rcc_setup(void);
 /// \brief
 ///
 static void gpio_setup(void);
-
-///
-/// \brief
-///
-static void usart_setup(void);
 
 ///
 /// \brief
@@ -70,22 +66,6 @@ static void gpio_setup(void)
     gpio_mode_setup(GPIOB, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO14);
 }
 
-static void usart_setup(void)
-{
-    usart_disable(USART3);
-
-    usart_set_baudrate(USART3, 115200);
-    usart_set_databits(USART3, 8);
-
-    /* 1 stop bit, refer to manual */
-    usart_set_stopbits(USART3, 0);
-
-    usart_set_parity(USART3, USART_PARITY_NONE);
-    usart_set_mode(USART3, USART_MODE_TX_RX);
-
-    usart_enable(USART3);
-}
-
 static void systick_init(void)
 {
     /* Prescaled processor clock */
@@ -120,12 +100,14 @@ static void systick_delay_ms(uint32_t ms)
 ///*************************************************************************************************
 /// Global functions - definition.
 ///*************************************************************************************************
-boot_updater_result_t boot_updater_init(void)
+void boot_updater_init(void)
 {
+    uint32_t *usart_instance;
+
     rcc_setup();
     systick_init();
     gpio_setup();
-    usart_setup();
+    usart_controller_debug_init();
 
     for (uint32_t i = 0; i < 3; i++)
     {
@@ -135,9 +117,7 @@ boot_updater_result_t boot_updater_init(void)
         systick_delay_ms(500);
     }
 
-    printf("Boot updater %d initialized...\n\r", 1);
-
-    return BOOT_UPDATER_RESULT_SUCCESS;
+    //printf("Boot updater %d initialized...\n\r", 1);
 }
 
 /*

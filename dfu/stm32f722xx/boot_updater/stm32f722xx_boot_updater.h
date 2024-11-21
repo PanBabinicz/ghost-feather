@@ -15,7 +15,7 @@ typedef enum
 ///
 /// \brief
 ///
-boot_updater_result_t boot_updater_init(void);
+void boot_updater_init(void);
 
 /*
 ///
