@@ -1,5 +1,11 @@
 #include "data_structure/circular_buffer.h"
 
+///*************************************************************************************************
+/// Private objects - declaration.
+///*************************************************************************************************
+///
+/// \brief
+///
 typedef struct
 {
     uint8_t rear;
@@ -9,7 +15,7 @@ typedef struct
 } circular_buffer_t;
 
 ///*************************************************************************************************
-/// Private objects - declaration.
+/// Private objects - definition.
 ///*************************************************************************************************
 ///
 /// \breif Circular buffer data structure array.
@@ -50,7 +56,7 @@ static circular_buffer_result_t circular_buffer_get(circular_buffer_instance_t i
     else if ((instance >= CIRCULAR_BUFFER_INSTANCE_0) && (instance < CIRCULAR_BUFFER_INSTANCE_TOTAL))
     {
         *circular_buffer = &circular_buffer_array[instance];
-        result = CIRCULAR_BUFFER_RESULT_SUCCESS;
+        result           = CIRCULAR_BUFFER_RESULT_SUCCESS;
     }
 
     return result;
@@ -106,7 +112,7 @@ circular_buffer_result_t circular_buffer_push(circular_buffer_instance_t instanc
         }
 
         circular_buffer->front = (circular_buffer->front + 1) % CIRCULAR_BUFFER_LENGTH;
-        result = CIRCULAR_BUFFER_RESULT_SUCCESS;
+        result                 = CIRCULAR_BUFFER_RESULT_SUCCESS;
     }
 
     return result;
@@ -135,7 +141,7 @@ circular_buffer_result_t circular_buffer_pop(circular_buffer_instance_t instance
             *element                  = circular_buffer->data[circular_buffer->rear];
             circular_buffer->rear     = (circular_buffer->rear + 1) % CIRCULAR_BUFFER_LENGTH;
             circular_buffer->overflow = 0;
-            result = CIRCULAR_BUFFER_RESULT_SUCCESS;
+            result                    = CIRCULAR_BUFFER_RESULT_SUCCESS;
         }
     }
 
