@@ -1,8 +1,11 @@
 #include <sys/stat.h>
 #include "usart_controller.h"
+#include "libopencm3/stm32/usart.h"
+
+extern uint32_t _end;
 
 ///
-/// \brief Status of an open file. Minimal implemention.
+/// \brief Status of an open file.
 ///
 int _fstat(int file, struct stat *st) 
 {
@@ -11,7 +14,7 @@ int _fstat(int file, struct stat *st)
 }
 
 ///
-/// \brief Set position in a file. Minimal implementation.
+/// \brief Set position in a file.
 ///
 int _lseek(int file, int ptr, int dir)
 {
@@ -19,7 +22,7 @@ int _lseek(int file, int ptr, int dir)
 }
 
 ///
-/// \brief Close a file. Minimal implementation.
+/// \brief Close a file.
 ///
 int _close(int file)
 {
@@ -90,14 +93,6 @@ void *_sbrk(int incr)
 int _isatty(int file)
 {
     return 1;
-}
-
-///
-/// \brief Set position in a file.
-///
-int _lseek(int file, int ptr, int dir)
-{
-    return 0;
 }
 
 ///
