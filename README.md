@@ -81,3 +81,5 @@
 
 > To use newlib with libopencm3 it is necessary to recomplie the libc to be able to use hard floating point numbers which use on-chip FPU.
 > The second option is to use soft floating point numbers but the speed will be slower.
+
+# Marco Paland printf implementation
