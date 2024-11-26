@@ -1,5 +1,6 @@
 #include "stm32f722xx_boot_updater.h"
 #include "usart_controller.h"
+#include "printf.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 #include "libopencm3/stm32/usart.h"
@@ -117,7 +118,7 @@ void boot_updater_init(void)
         systick_delay_ms(500);
     }
 
-    //printf("Boot updater %d initialized...\n\r", 1);
+    printf("Boot updater %d initialized...\n\r", 1);
 }
 
 /*

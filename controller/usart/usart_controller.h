@@ -2,6 +2,10 @@
 #define _USART_CONTROLLER_H
 
 #include <stdint.h>
+#include "libopencm3/stm32/usart.h"
+
+#define USART_CONTROLLER_DEBUG_BAUDRATE  (115200u)
+#define USART_CONTROLLER_DEBUG_INTERFACE (USART3)
 
 ///
 /// \brief
@@ -15,11 +19,6 @@ typedef enum
 ///
 /// \brief
 ///
-void usart_controller_debug_init(const uint32_t instance);
-
-///
-/// \brief
-///
-usart_controller_result_t usart_controller_debug_get_instance(uint32_t * const instance);
+void usart_controller_debug_init(void);
 
 #endif /* _USART_CONTROLLER_H */

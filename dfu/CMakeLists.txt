@@ -17,8 +17,9 @@ target_include_directories(
     boot_updater
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/libopencm3/include
-    ${PROJECT_SOURCE_DIR}/shared/printf
+    ${PROJECT_SOURCE_DIR}/controller/usart
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
+    ${PROJECT_SOURCE_DIR}/submodules/printf
     )
 
 message(STATUS "Add boot_updater target compile definitions")
@@ -33,7 +34,7 @@ target_compile_options(
     boot_updater
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv4-sp-d16>"
+    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-sp-d16>"
     "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
     "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
     "$<$<COMPILE_LANGUAGE:C>:-O1>"
