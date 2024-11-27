@@ -3,13 +3,28 @@
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 
+#define START_APP   (0)
+
 static void app_startup(uint32_t pc, uint32_t sp);
+static void boot_updater_startup(uint32_t pc, uint32_t sp);
 static void rcc_setup(void);
 static void gpio_setup(void);
 static void led_on(void);
 
 __attribute__((naked))
 static void app_startup(uint32_t pc, uint32_t sp)
+{
+    __asm("                                             \n\
+          .syntax unified                               \n\
+          .cpu cortex-m7                                \n\
+          .thumb                                        \n\
+          msr msp, r1 /* load r1 into MSP */            \n\
+          bx r0       /* branch to the address at r0 */ \n\
+    ");
+}
+
+__attribute__((naked))
+static void boot_updater_startup(uint32_t pc, uint32_t sp)
 {
     __asm("                                             \n\
           .syntax unified                               \n\
@@ -43,11 +58,19 @@ void second_bootloader_start(void)
     /* Turn on the red led to signalize that we reached the second bootloader */
     led_on();
 
+#if (defined(START_APP) && (START_APP == 1))
     uint32_t *app_code         = (uint32_t*)&__approm_start__;
     uint32_t app_stack_pointer = app_code[0];
     uint32_t app_reset_handler = app_code[1];
 
     app_startup(app_reset_handler, app_stack_pointer);
+#else
+    uint32_t *boot_updater_code         = (uint32_t*)&__ubootrom_start__;
+    uint32_t boot_updater_stack_pointer = boot_updater_code[0];
+    uint32_t boot_updater_reset_handler = boot_updater_code[1];
+
+    boot_updater_startup(boot_updater_reset_handler, boot_updater_stack_pointer);
+#endif
     
     /* Never return */
     while (1);
