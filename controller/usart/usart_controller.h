@@ -8,7 +8,7 @@
 #define USART_CONTROLLER_DEBUG_INTERFACE (USART3)
 
 ///
-/// \brief
+/// \brief The usart controller result type.
 ///
 typedef enum
 {
@@ -17,7 +17,7 @@ typedef enum
 } usart_controller_result_t;
 
 ///
-/// \brief
+/// \brief Initialize the usart controller debug interface.
 ///
 void usart_controller_debug_init(void);
 
