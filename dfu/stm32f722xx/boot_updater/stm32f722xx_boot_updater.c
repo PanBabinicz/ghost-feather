@@ -129,7 +129,7 @@ boot_updater_result_t boot_updater_deinit(void)
 
 void boot_updater_start(void)
 {
-    (void)boot_updater_init();
+    boot_updater_init();
 
     /* Never return */
     while (1);
