@@ -1,6 +1,7 @@
 import sys
 import serial
-import readelf
+
+from elftools.elf.elffile import ELFFile
 
 class dfu_updater:
     def __init__(self):
@@ -13,7 +14,8 @@ class dfu_updater:
         self.baudrate = sys.argv[3]
 
         self.converted_hexdata = []
-        self.raw_hexdata = []
+        self.raw_hexdata       = []
+        self.text              = []
 
     def print_arguments(self):
         print("Bin:      " + self.bin)
@@ -35,26 +37,33 @@ class dfu_updater:
 
     def get_data_from_file(self):
         with open(self.bin, 'rb') as bin_file:
-            self.raw_hexdata = bin_file.read().hex()
+            self.elf = ELFFile(bin_file)
 
     def readelf_get_sections(self):
-        file = readelf.readelf(self.bin)
-        size = 0
-        for section in file.segments[2].sections:
-            size += section.size
-            print(str(section) + ": " + str(section.size))
-        print(size)
+        with open(self.bin, 'rb') as bin_file:
+            self.elf = ELFFile(bin_file)
+            for section in self.elf.iter_sections():
+                if (section.name.startswith('.text')):
+                    print(section)
 
+"""
+        size = 0
+        print(self.file.find_sections('.text'))
+        for section in self.file.segments[0].sections:
+            size += section.size
+            print(str(section) + ": " + str(section.size) + " " + str(section.addralign))
+        print(size)
+"""
 
 # usart    = serial.Serial(port=port, baudrate=baudrate, timeout=None)
 
 updater = dfu_updater()
 
 updater.print_arguments()
-updater.get_data_from_file()
+# updater.get_data_from_file()
 updater.segment_convert_to_little_endian(0x1000, 0x1498)
 updater.readelf_get_sections()
-updater.print_converted_hexdata()
+# updater.print_converted_hexdata()
 
 # byte = usart.read(size=1)
 # print(byte)
