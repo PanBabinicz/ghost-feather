@@ -3,19 +3,34 @@ import serial
 
 from elftools.elf.elffile import ELFFile
 
+class dfu_updater_segment:
+    def __init__(self, name, sections):
+        self.name     = name
+        self.sections = sections
+        self.size     = 0
+
+    def align4(self, size):
+        addition_bytes = self.size % 4
+        self.size = self.size + (4 - addition_bytes)
+
+    def calculate_size(self):
+        for section in self.sections:
+            self.size += section.data_size
+        self.align4(self.size)
+        print(self.size)
+
 class dfu_updater:
     def __init__(self):
         if ( len(sys.argv) < 4 ):
             print("Invalid usage: python3 dfu_usart.py <bin> <port> <baudrate>")
             sys.exit()
 
-        self.bin      = sys.argv[1]
-        self.port     = sys.argv[2]
-        self.baudrate = sys.argv[3]
-
+        self.bin               = sys.argv[1]
+        self.port              = sys.argv[2]
+        self.baudrate          = sys.argv[3]
         self.converted_hexdata = []
         self.raw_hexdata       = []
-        self.text              = []
+        self.text              = dfu_updater_segment(name = '.text', sections = [])
 
     def print_arguments(self):
         print("Bin:      " + self.bin)
@@ -35,34 +50,21 @@ class dfu_updater:
         for hexdata in self.converted_hexdata:
             print(hexdata)
 
-    def get_data_from_file(self):
-        with open(self.bin, 'rb') as bin_file:
-            self.elf = ELFFile(bin_file)
-
-    def readelf_get_sections(self):
+    def readelf_get_sections(self, segment):
         with open(self.bin, 'rb') as bin_file:
             self.elf = ELFFile(bin_file)
             for section in self.elf.iter_sections():
-                if (section.name.startswith('.text')):
-                    print(section)
-
-"""
-        size = 0
-        print(self.file.find_sections('.text'))
-        for section in self.file.segments[0].sections:
-            size += section.size
-            print(str(section) + ": " + str(section.size) + " " + str(section.addralign))
-        print(size)
-"""
+                if (section.name.startswith(segment.name)):
+                    segment.sections.append(section)
 
 # usart    = serial.Serial(port=port, baudrate=baudrate, timeout=None)
 
 updater = dfu_updater()
 
 updater.print_arguments()
-# updater.get_data_from_file()
 updater.segment_convert_to_little_endian(0x1000, 0x1498)
-updater.readelf_get_sections()
+updater.readelf_get_sections(updater.text)
+updater.text.calculate_size()
 # updater.print_converted_hexdata()
 
 # byte = usart.read(size=1)
