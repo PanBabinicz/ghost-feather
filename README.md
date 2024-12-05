@@ -85,3 +85,18 @@
 # Marco Paland printf implementation
 
 # DFU script
+
+> **Description**
+>
+> The script enables firmware update over USART. It allows users to upload binary firmware files to microcontroller-based devices with minimal effort.
+> The script handles communication setup, data formatting, and transmission to ensure reliable updates.
+
+> **Usage**
+>
+> ```console
+> ~ python3 dfu_usart.py <binary> <port> <baudrate>
+> ```
+>
+> <binary>:  The firmware to be uploaded.
+> <port>:    The name of the serial port connected to the target device (e.g., /dev/tty.usbmodem).
+> <baudrate: The communication speed in bits per second (e.g., 9600, 115200).
