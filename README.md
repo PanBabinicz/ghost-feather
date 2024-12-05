@@ -83,3 +83,5 @@
 > The second option is to use soft floating point numbers but the speed will be slower.
 
 # Marco Paland printf implementation
+
+# DFU script
