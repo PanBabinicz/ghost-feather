@@ -97,6 +97,6 @@
 > ~ python3 dfu_usart.py <binary> <port> <baudrate>
 > ```
 >
-> <binary>:  The firmware to be uploaded.
-> <port>:    The name of the serial port connected to the target device (e.g., /dev/tty.usbmodem).
-> <baudrate: The communication speed in bits per second (e.g., 9600, 115200).
+> - `<binary>`:   The firmware to be uploaded.
+> - `<port>`:     The name of the serial port connected to the target device (e.g., /dev/tty.usbmodem).
+> - `<baudrate>`: The communication speed in bits per second (e.g., 9600, 115200).
