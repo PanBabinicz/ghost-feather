@@ -1,13 +1,23 @@
 import sys
 import serial
+import ctypes
 
 from elftools.elf.elffile import ELFFile
+
+c_uint32 = ctypes.c_uint32
+
+class dust_header(ctypes.BigEndianStructure):
+    _fields_ = [("opcode", c_uint32, 2),
+                ("length", c_uint32, 2),
+                ("packet_number", c_uint32, 12),
+                ("checksum", c_uint32, 16)]
+
 
 class dfu_updater_segment:
     def __init__(self, name, sections):
         self.name              = name
         self.sections          = sections
-        self.size              = 0
+        self.size              = None
         self.raw_hexdata       = []
         self.converted_hexdata = []
 
@@ -16,6 +26,7 @@ class dfu_updater_segment:
         self.size = self.size + (4 - addition_bytes)
 
     def calculate_size(self):
+        self.size = 0
         for section in self.sections:
             self.size += section.data_size
         self.align4()
@@ -51,6 +62,27 @@ class dfu_updater_segment:
         for chunk in chunks:
             self.four_byte_convert_to_little_endian(chunk)
 
+
+class dfu_updater_packet:
+    def __init__(self):
+        self.header = dust_header()
+
+    def print_header(self):
+        print(self.header.opcode)
+
+    def create_header(self, opcode, length, packet_number, checksum):
+        self.opcode = (opcode & self.opcode_mask) << 13
+        self.length = (length & self.length_mask) << 11
+        self.packet_number = (packet_number & self.packet_number_mask)
+        pass
+
+    def send(self):
+        pass
+
+    def receive(self):
+        pass
+
+
 class dfu_updater:
     def __init__(self):
         if ( len(sys.argv) < 4 ):
@@ -60,6 +92,7 @@ class dfu_updater:
         self.port              = sys.argv[2]
         self.baudrate          = sys.argv[3]
         self.text              = dfu_updater_segment(name = '.text', sections = [])
+        self.packet            = dfu_updater_packet()
 
     def print_arguments(self):
         print("Bin:      " + self.bin)
@@ -74,6 +107,7 @@ class dfu_updater:
                     segment.sections.append(section)
             segment.get_raw_hexdata()
 
+
 # usart    = serial.Serial(port=port, baudrate=baudrate, timeout=None)
 
 updater = dfu_updater()
@@ -82,6 +116,7 @@ updater.print_arguments()
 updater.readelf_get_sections(updater.text)
 updater.text.calculate_size()
 updater.text.convert_to_little_endian()
+updater.packet.print_header()
 
 # byte = usart.read(size=1)
 # print(byte)
