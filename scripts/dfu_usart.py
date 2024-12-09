@@ -6,14 +6,74 @@ from elftools.elf.elffile import ELFFile
 
 c_uint32 = ctypes.c_uint32
 
-class dust_header(ctypes.BigEndianStructure):
+class dust_header_bits(ctypes.BigEndianStructure):
+    """Documentation for dust_header_bits structure.
+
+    More details.
+    """
+
     _fields_ = [("opcode", c_uint32, 2),
                 ("length", c_uint32, 2),
                 ("packet_number", c_uint32, 12),
                 ("checksum", c_uint32, 16)]
 
 
+class dust_header(ctypes.BigEndianUnion):
+    """Documentation for dust_header union.
+
+    More details.
+    """
+
+    _fields_ = [("bits", dust_header_bits),
+                ("whole_value", c_uint32)]
+
+
+class dust_packet:
+    """Documentation for dust_packet class.
+
+    More details.
+    """
+
+    def __init__(self):
+        self.header = dust_header()
+        self.data   = []
+        self.crc    = None
+
+    def calculate_checksum(self):
+        checksum = (self.header.bits.opcode << 14 |
+                    self.header.bits.length << 12 |
+                    self.header.bits.packet_number << 0)
+        checksum = ~(checksum) & 0xffff
+        return checksum
+
+    def calculate_crc(self):
+        return 1
+
+    def create(self, opcode, length, packet_number, data):
+        self.header.bits.opcode        = opcode
+        self.header.bits.length        = length
+        self.header.bits.packet_number = packet_number
+        self.header.bits.checksum      = self.calculate_checksum()
+        self.data                      = data
+        self.crc                       = self.calculate_crc()
+
+    def print_packet(self):
+        print("opcode: " + str(self.header.bits.opcode))
+        print("length: " + str(self.header.bits.length))
+        print("packet_number: " + str(self.header.bits.packet_number))
+        print("checksum: " + str(hex(self.header.bits.checksum)))
+        print("data: " + str(self.data))
+        print("crc: " + str(self.crc))
+        print("whole_value: " + str(self.header.whole_value))
+        self.calculate_checksum()
+
+
 class dfu_updater_segment:
+    """Documentation for dfu_updater_segment class.
+
+    More details.
+    """
+
     def __init__(self, name, sections):
         self.name              = name
         self.sections          = sections
@@ -63,36 +123,21 @@ class dfu_updater_segment:
             self.four_byte_convert_to_little_endian(chunk)
 
 
-class dfu_updater_packet:
-    def __init__(self):
-        self.header = dust_header()
-
-    def print_header(self):
-        print(self.header.opcode)
-
-    def create_header(self, opcode, length, packet_number, checksum):
-        self.opcode = (opcode & self.opcode_mask) << 13
-        self.length = (length & self.length_mask) << 11
-        self.packet_number = (packet_number & self.packet_number_mask)
-        pass
-
-    def send(self):
-        pass
-
-    def receive(self):
-        pass
-
-
 class dfu_updater:
+    """Documentation for dfu_updater class.
+
+    More details.
+    """
+
     def __init__(self):
         if ( len(sys.argv) < 4 ):
             print("Invalid usage: python3 dfu_usart.py <bin> <port> <baudrate>")
             sys.exit()
-        self.bin               = sys.argv[1]
-        self.port              = sys.argv[2]
-        self.baudrate          = sys.argv[3]
-        self.text              = dfu_updater_segment(name = '.text', sections = [])
-        self.packet            = dfu_updater_packet()
+        self.bin      = sys.argv[1]
+        self.port     = sys.argv[2]
+        self.baudrate = sys.argv[3]
+        self.text     = dfu_updater_segment(name = '.text', sections = [])
+        self.packet   = dust_packet()
 
     def print_arguments(self):
         print("Bin:      " + self.bin)
@@ -111,12 +156,15 @@ class dfu_updater:
 # usart    = serial.Serial(port=port, baudrate=baudrate, timeout=None)
 
 updater = dfu_updater()
-
 updater.print_arguments()
+
 updater.readelf_get_sections(updater.text)
+
 updater.text.calculate_size()
 updater.text.convert_to_little_endian()
-updater.packet.print_header()
+
+updater.packet.create(opcode = 1, length = 1, packet_number = 1, data = [1, 2, 3])
+updater.packet.print_packet()
 
 # byte = usart.read(size=1)
 # print(byte)
