@@ -35,9 +35,12 @@ class dust_packet:
     """
 
     def __init__(self):
-        self.header = dust_header()
-        self.data   = []
-        self.crc    = None
+        self.header             = dust_header()
+        self.data               = []
+        self.crc8               = None
+        self.crc8_lookup_table  = []
+        self.crc16              = None
+        self.crc16_lookup_table = []
 
     def calculate_checksum(self):
         checksum = (self.header.bits.opcode << 14 |
@@ -46,8 +49,39 @@ class dust_packet:
         checksum = ~(checksum) & 0xffff
         return checksum
 
-    def calculate_crc(self):
-        return 1
+    def crc8_lookup_table_generate(self, polynomial):
+        for i in range(0, 2**8):
+            byte = i
+            for b in range(0, 8):
+                if ((byte & 0x80) != 0):
+                    byte = byte << 1
+                    byte = byte ^ polynomial
+                else:
+                    byte = byte << 1
+            self.crc8_lookup_table.append(hex(byte & 0xff))
+
+    def crc8_calculate(self):
+        self.crc8 = 0x00
+        for byte in self.data:
+            position = self.crc8 ^ byte
+            self.crc8 = int(self.crc8_lookup_table[position], 16)
+
+    def crc16_lookup_table_generate(self, polynomial):
+        for i in range(0, 2**8):
+            byte = i << 8
+            for b in range(0, 8):
+                if ((byte & 0x8000) != 0):
+                    byte = byte << 1
+                    byte = byte ^ polynomial
+                else:
+                    byte = byte << 1
+            self.crc16_lookup_table.append(hex(byte & 0xffff))
+
+    def crc16_calculate(self):
+        self.crc16 = 0x00
+        for byte in self.data:
+            position   = ((self.crc16 >> 8) ^ byte) & 0xff
+            self.crc16 = ((self.crc16 << 8) ^ int(self.crc16_lookup_table[position], 16)) & 0xffff
 
     def create(self, opcode, length, packet_number, data):
         self.header.bits.opcode        = opcode
@@ -55,16 +89,15 @@ class dust_packet:
         self.header.bits.packet_number = packet_number
         self.header.bits.checksum      = self.calculate_checksum()
         self.data                      = data
-        self.crc                       = self.calculate_crc()
 
     def print_packet(self):
-        print("opcode: " + str(self.header.bits.opcode))
-        print("length: " + str(self.header.bits.length))
+        print("opcode:        " + str(self.header.bits.opcode))
+        print("length:        " + str(self.header.bits.length))
         print("packet_number: " + str(self.header.bits.packet_number))
-        print("checksum: " + str(hex(self.header.bits.checksum)))
-        print("data: " + str(self.data))
-        print("crc: " + str(self.crc))
-        print("whole_value: " + str(self.header.whole_value))
+        print("checksum:      " + str(hex(self.header.bits.checksum)))
+        print("data:          " + str(self.data))
+        print("crc8:          " + str(self.crc8))
+        print("whole_value:   " + str(self.header.whole_value))
         self.calculate_checksum()
 
 
@@ -163,8 +196,12 @@ updater.readelf_get_sections(updater.text)
 updater.text.calculate_size()
 updater.text.convert_to_little_endian()
 
-updater.packet.create(opcode = 1, length = 1, packet_number = 1, data = [1, 2, 3])
+updater.packet.create(opcode = 1, length = 1, packet_number = 1, data = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36])
 updater.packet.print_packet()
+updater.packet.crc8_lookup_table_generate(polynomial = 0x1d)
+updater.packet.crc16_lookup_table_generate(polynomial = 0x1021)
+updater.packet.crc8_calculate()
+updater.packet.crc16_calculate()
 
 # byte = usart.read(size=1)
 # print(byte)
