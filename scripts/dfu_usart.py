@@ -37,9 +37,10 @@ class dust_packet:
     def __init__(self):
         self.header             = dust_header()
         self.data               = []
+        self.serialized         = []
         self.crc8               = None
         self.crc8_lookup_table  = []
-        self.crc16              = None
+        self.crc16              = 0
         self.crc16_lookup_table = []
 
     def calculate_checksum(self):
@@ -58,13 +59,13 @@ class dust_packet:
                     byte = byte ^ polynomial
                 else:
                     byte = byte << 1
-            self.crc8_lookup_table.append(hex(byte & 0xff))
+            self.crc8_lookup_table.append(byte & 0xff)
 
     def crc8_calculate(self):
         self.crc8 = 0x00
-        for byte in self.data:
+        for byte in self.serialized:
             position = self.crc8 ^ byte
-            self.crc8 = int(self.crc8_lookup_table[position], 16)
+            self.crc8 = self.crc8_lookup_table[position]
 
     def crc16_lookup_table_generate(self, polynomial):
         for i in range(0, 2**8):
@@ -75,13 +76,14 @@ class dust_packet:
                     byte = byte ^ polynomial
                 else:
                     byte = byte << 1
-            self.crc16_lookup_table.append(hex(byte & 0xffff))
+            self.crc16_lookup_table.append(byte & 0xffff)
 
-    def crc16_calculate(self):
-        self.crc16 = 0x00
-        for byte in self.data:
-            position   = ((self.crc16 >> 8) ^ byte) & 0xff
-            self.crc16 = ((self.crc16 << 8) ^ int(self.crc16_lookup_table[position], 16)) & 0xffff
+    def crc16_calculate(self, data):
+        crc16       = 0x00
+        for byte in data:
+            position = ((crc16 >> 8) ^ byte) & 0xff
+            crc16    = ((crc16 << 8) ^ self.crc16_lookup_table[position]) & 0xffff
+        return crc16
 
     def create(self, opcode, length, packet_number, data):
         self.header.bits.opcode        = opcode
@@ -90,15 +92,31 @@ class dust_packet:
         self.header.bits.checksum      = self.calculate_checksum()
         self.data                      = data
 
+    def serialize(self):
+        self.serialized.append((self.header.whole_value & 0xff000000) >> 0x18)
+        self.serialized.append((self.header.whole_value & 0x00ff0000) >> 0x10)
+        self.serialized.append((self.header.whole_value & 0x0000ff00) >> 0x08)
+        self.serialized.append((self.header.whole_value & 0x000000ff) >> 0x00)
+        for byte in self.data:
+            self.serialized.append(byte)
+        self.crc16 = self.crc16_calculate(self.serialized)
+        self.serialized.append((self.crc16 & 0xff00) >> 0x08)
+        self.serialized.append((self.crc16 & 0x00ff) >> 0x00)
+
+    def deserialize(self, data):
+        if self.crc16_calculate(data) == 0:
+            print("OK!")
+        else:
+            print("WRONG!!!")
+
     def print_packet(self):
-        print("opcode:        " + str(self.header.bits.opcode))
-        print("length:        " + str(self.header.bits.length))
-        print("packet_number: " + str(self.header.bits.packet_number))
-        print("checksum:      " + str(hex(self.header.bits.checksum)))
-        print("data:          " + str(self.data))
-        print("crc8:          " + str(self.crc8))
-        print("whole_value:   " + str(self.header.whole_value))
-        self.calculate_checksum()
+        print("opcode:        " + str(f"{self.header.bits.opcode:#x}"))
+        print("length:        " + str(f"{self.header.bits.length:#x}"))
+        print("packet_number: " + str(f"{self.header.bits.packet_number:#x}"))
+        print("checksum:      " + str(f"{self.header.bits.checksum:#x}"))
+        print("data:          " + str(' '.join(f"{hex:#x}" for hex in self.data)))
+        print("whole_value:   " + str(f"{self.header.whole_value:#x}"))
+        print("serialized:    " + str(' '.join(f"{hex:#x}" for hex in self.serialized)))
 
 
 class dfu_updater_segment:
@@ -196,12 +214,12 @@ updater.readelf_get_sections(updater.text)
 updater.text.calculate_size()
 updater.text.convert_to_little_endian()
 
-updater.packet.create(opcode = 1, length = 1, packet_number = 1, data = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36])
+updater.packet.create(opcode = 3, length = 2, packet_number = 77, data = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36])
 updater.packet.print_packet()
-updater.packet.crc8_lookup_table_generate(polynomial = 0x1d)
-updater.packet.crc16_lookup_table_generate(polynomial = 0x1021)
-updater.packet.crc8_calculate()
-updater.packet.crc16_calculate()
+updater.packet.crc16_lookup_table_generate(0x1021)
+updater.packet.serialize()
+updater.packet.print_packet()
+updater.packet.deserialize(updater.packet.serialized)
 
 # byte = usart.read(size=1)
 # print(byte)
