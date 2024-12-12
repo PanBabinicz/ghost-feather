@@ -1,6 +1,7 @@
 import sys
 import serial
 import ctypes
+import time
 
 from elftools.elf.elffile import ELFFile
 
@@ -38,7 +39,7 @@ class dust_packet:
         self.header             = dust_header()
         self.data               = []
         self.serialized         = []
-        self.crc8               = None
+        self.crc8               = 0
         self.crc8_lookup_table  = []
         self.crc16              = 0
         self.crc16_lookup_table = []
@@ -93,6 +94,7 @@ class dust_packet:
         self.data                      = data
 
     def serialize(self):
+        self.serialized.clear()
         self.serialized.append((self.header.whole_value & 0xff000000) >> 0x18)
         self.serialized.append((self.header.whole_value & 0x00ff0000) >> 0x10)
         self.serialized.append((self.header.whole_value & 0x0000ff00) >> 0x08)
@@ -189,6 +191,7 @@ class dfu_updater:
         self.baudrate = sys.argv[3]
         self.text     = dfu_updater_segment(name = '.text', sections = [])
         self.packet   = dust_packet()
+        self.usart    = None
 
     def print_arguments(self):
         print("Bin:      " + self.bin)
@@ -203,6 +206,51 @@ class dfu_updater:
                     segment.sections.append(section)
             segment.get_raw_hexdata()
 
+    def init(self):
+        if isinstance(self.usart, serial.Serial):
+            print("The usart is already initialized...")
+        else:
+            print("Initializing...")
+            self.usart = serial.Serial(port = self.port, baudrate = self.baudrate, timeout = None)
+            if isinstance(self.usart, serial.Serial):
+                print("Initialization completed!")
+            else:
+                print("Initialization can not be completed..")
+
+    def deinit(self):
+        if isinstance(self.usart, serial.Serial):
+            print("Deinitialization...")
+            self.usart.close()
+            self.usart = None
+            if isinstance(self.usart, serial.Serial):
+                print("Deinitialization can not be completed..")
+            else:
+                print("Deinitialization completed!")
+
+    def connect(self):
+        if isinstance(self.usart, serial.Serial):
+            print("Trying to connect...")
+            self.packet.create(opcode = 0x00, length = 0x00, packet_number = 0x00, data = [0xCC] * 32)
+            self.packet.serialize()
+            self.transmit()
+            #self.receive()
+        else:
+            print("Usart is not initialized...")
+
+
+    def disconnect(self):
+        self.packet.create(opcode = 0x01, length = 0x00, packet_number = 0x00, data = [0xDD] * 32)
+        self.packet.serialize()
+        #self.transmit()
+        #self.receive()
+
+    def transmit(self):
+        for byte in self.packet.serialized:
+            self.usart.write(byte)
+
+    def receive(self):
+        pass
+
 
 # usart    = serial.Serial(port=port, baudrate=baudrate, timeout=None)
 
@@ -214,12 +262,14 @@ updater.readelf_get_sections(updater.text)
 updater.text.calculate_size()
 updater.text.convert_to_little_endian()
 
-updater.packet.create(opcode = 3, length = 2, packet_number = 77, data = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36])
-updater.packet.print_packet()
+# updater.packet.create(opcode = 0x00, length = 0x00, packet_number = 0x00, data = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36])
+# updater.packet.print_packet()
 updater.packet.crc16_lookup_table_generate(0x1021)
-updater.packet.serialize()
+updater.init()
+updater.connect()
 updater.packet.print_packet()
 updater.packet.deserialize(updater.packet.serialized)
+updater.deinit()
 
 # byte = usart.read(size=1)
 # print(byte)
