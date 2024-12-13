@@ -74,8 +74,13 @@ class dfu_updater:
         #self.receive()
 
     def transmit(self):
+        byte_string = ""
         for byte in self.packet.serialized:
-            self.usart.write(byte)
+            byte_string += hex(byte)
+            byte_string += " "
+        for byte in byte_string:
+            self.usart.write(byte.encode('utf-8'))
+        self.usart.write(b"\n\r")
 
     def receive(self):
         pass
