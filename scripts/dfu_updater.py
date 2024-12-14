@@ -61,8 +61,8 @@ class dfu_updater:
             print("Trying to connect...")
             self.packet.create(opcode = 0x00, length = 0x00, packet_number = 0x00, data = [0xCC] * 32)
             self.packet.serialize()
-            self.transmit()
-            #self.receive()
+            self.transmit_socat()
+            #self.receive_socat()
         else:
             print("Usart is not initialized...")
 
@@ -70,10 +70,13 @@ class dfu_updater:
     def disconnect(self):
         self.packet.create(opcode = 0x01, length = 0x00, packet_number = 0x00, data = [0xDD] * 32)
         self.packet.serialize()
-        #self.transmit()
-        #self.receive()
+        #self.transmit_socat()
+        #self.receive_socat()
 
-    def transmit(self):
+    def transmit_uc(self):
+        pass
+
+    def transmit_socat(self):
         byte_string = ""
         for byte in self.packet.serialized:
             byte_string += hex(byte)
@@ -82,7 +85,10 @@ class dfu_updater:
             self.usart.write(byte.encode('utf-8'))
         self.usart.write(b"\n\r")
 
-    def receive(self):
+    def receive_uc(self):
+        pass
+
+    def receive_socat(self):
         pass
 
 
