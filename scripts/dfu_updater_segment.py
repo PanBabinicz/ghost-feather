@@ -21,7 +21,7 @@ class dfu_updater_segment:
             self.size += section.data_size
         self.align4()
 
-    def get_raw_hexdata(self):
+    def fill_raw_hexdata(self):
         for section in self.sections:
             data = section.data()
             for byte in data:

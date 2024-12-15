@@ -1,6 +1,31 @@
 import ctypes
 
+from enum import Enum
+
 c_uint32 = ctypes.c_uint32
+
+class DUST_OPCODE(Enum):
+    """Documentation for DUST_OPCODE enum.
+
+    More details.
+    """
+
+    INIT   = 0x00
+    DEINIT = 0x01
+    DATA   = 0x02
+    ERROR  = 0x03
+
+class DUST_LENGTH(Enum):
+    """Documentation for DUST_LENGTH enum.
+
+    More details.
+    """
+
+    BYTES32  = 0x00
+    BYTES64  = 0x01
+    BYTES128 = 0x02
+    BYTES256 = 0x03
+
 
 class dust_header_bits(ctypes.BigEndianStructure):
     """Documentation for dust_header_bits structure.
@@ -88,23 +113,40 @@ class dust_packet:
         self.header.bits.checksum      = self.calculate_checksum()
         self.data                      = data
 
+    def serialize_header(self):
+        serialized_header = []
+        serialized_header.append(((self.header.whole_value & 0xff000000) >> 0x18))
+        serialized_header.append(((self.header.whole_value & 0x00ff0000) >> 0x10))
+        serialized_header.append(((self.header.whole_value & 0x0000ff00) >> 0x08))
+        serialized_header.append(((self.header.whole_value & 0x000000ff) >> 0x00))
+        return serialized_header
+
+    def deserialize_header(self, serialized_header):
+        deserialized_header = dust_header()
+        deserialized_header.whole_value |= (serialized_header[0] << 0x18)
+        deserialized_header.whole_value |= (serialized_header[1] << 0x10)
+        deserialized_header.whole_value |= (serialized_header[2] << 0x08)
+        deserialized_header.whole_value |= (serialized_header[3] << 0x00)
+        return deserialized_header
+
     def serialize(self):
         self.serialized.clear()
-        self.serialized.append((self.header.whole_value & 0xff000000) >> 0x18)
-        self.serialized.append((self.header.whole_value & 0x00ff0000) >> 0x10)
-        self.serialized.append((self.header.whole_value & 0x0000ff00) >> 0x08)
-        self.serialized.append((self.header.whole_value & 0x000000ff) >> 0x00)
-        for byte in self.data:
-            self.serialized.append(byte)
+        # Serialize header
+        self.serialized.extend(self.serialize_header())
+        self.serialized.extend(self.data)
         self.crc16 = self.crc16_calculate(self.serialized)
         self.serialized.append((self.crc16 & 0xff00) >> 0x08)
         self.serialized.append((self.crc16 & 0x00ff) >> 0x00)
 
-    def deserialize(self, data):
-        if self.crc16_calculate(data) == 0:
-            print("OK!")
+    def deserialize(self, serialized_packet):
+        if self.crc16_calculate(serialized_packet) == 0:
+            # Fill the header
+            self.header = self.deserialize_header(serialized_packet[0:4])
+            self.data.clear()
+            self.data.extend(serialized_packet[4:len(serialized_packet)-2])
+            print("Deserialization OK!")
         else:
-            print("WRONG!!!")
+            print("Deserialization wrong!")
 
     def print_packet(self):
         print("opcode:        " + str(f"{self.header.bits.opcode:#x}"))
@@ -114,4 +156,7 @@ class dust_packet:
         print("data:          " + str(' '.join(f"{hex:#x}" for hex in self.data)))
         print("whole_value:   " + str(f"{self.header.whole_value:#x}"))
         print("serialized:    " + str(' '.join(f"{hex:#x}" for hex in self.serialized)))
+
+    def print_serialized(self):
+        print("serialized #" + str(self.header.bits.packet_number) + ": " + str(' '.join(f"{hex:#x}" for hex in self.serialized)))
 

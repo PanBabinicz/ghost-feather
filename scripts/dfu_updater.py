@@ -1,9 +1,13 @@
 import sys
 import serial
-import dust_packet
-import dfu_updater_segment
 
 from elftools.elf.elffile import ELFFile
+
+from dust_packet import dust_packet
+from dust_packet import DUST_OPCODE
+from dust_packet import DUST_LENGTH
+
+from dfu_updater_segment import dfu_updater_segment
 
 class dfu_updater:
     """Documentation for dfu_updater class.
@@ -18,8 +22,8 @@ class dfu_updater:
         self.bin      = sys.argv[1]
         self.port     = sys.argv[2]
         self.baudrate = sys.argv[3]
-        self.text     = dfu_updater_segment.dfu_updater_segment(name = '.text', sections = [])
-        self.packet   = dust_packet.dust_packet()
+        self.text     = dfu_updater_segment(name = '.text', sections = [])
+        self.packet   = dust_packet()
         self.usart    = None
 
     def print_arguments(self):
@@ -33,7 +37,7 @@ class dfu_updater:
             for section in self.elf.iter_sections():
                 if (section.name.startswith(segment.name)):
                     segment.sections.append(section)
-            segment.get_raw_hexdata()
+            segment.fill_raw_hexdata()
 
     def init(self):
         if isinstance(self.usart, serial.Serial):
@@ -59,7 +63,7 @@ class dfu_updater:
     def connect(self):
         if isinstance(self.usart, serial.Serial):
             print("Trying to connect...")
-            self.packet.create(opcode = 0x00, length = 0x00, packet_number = 0x00, data = [0xCC] * 32)
+            self.packet.create(opcode = 0x00, length = 0x00, packet_number = 0x00, data = [0xcc] * 32)
             self.packet.serialize()
             self.transmit_socat()
             #self.receive_socat()
@@ -68,7 +72,7 @@ class dfu_updater:
 
 
     def disconnect(self):
-        self.packet.create(opcode = 0x01, length = 0x00, packet_number = 0x00, data = [0xDD] * 32)
+        self.packet.create(opcode = 0x01, length = 0x00, packet_number = 0x00, data = [0xdd] * 32)
         self.packet.serialize()
         #self.transmit_socat()
         #self.receive_socat()
@@ -92,8 +96,6 @@ class dfu_updater:
         pass
 
 
-# usart    = serial.Serial(port=port, baudrate=baudrate, timeout=None)
-
 updater = dfu_updater()
 updater.print_arguments()
 
@@ -101,17 +103,19 @@ updater.readelf_get_sections(updater.text)
 
 updater.text.calculate_size()
 updater.text.convert_to_little_endian()
-
-# updater.packet.create(opcode = 0x00, length = 0x00, packet_number = 0x00, data = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36])
-# updater.packet.print_packet()
 updater.packet.crc16_lookup_table_generate(0x1021)
-updater.init()
-updater.connect()
-updater.packet.print_packet()
-updater.packet.deserialize(updater.packet.serialized)
-updater.deinit()
+print(updater.text.converted_hexdata)
+print(hex(updater.text.size))
+print(hex(int(updater.text.size / 32)))
+print(hex(updater.text.size % 32))
 
-# byte = usart.read(size=1)
-# print(byte)
+last_packet_padding = updater.text.size % 32
+for packet_number in range(0, int(updater.text.size / 32)):
+    updater.packet.create(opcode = DUST_OPCODE.DATA.value,
+                          length = DUST_LENGTH.BYTES32.value,
+                          packet_number = packet_number,
+                          data = [int(hex, 16) for hex in updater.text.converted_hexdata[(packet_number * 32):((packet_number * 32) + 32)]])
+    updater.packet.serialize()
+    updater.packet.print_serialized()
+    print("")
 
-# usart.close()
