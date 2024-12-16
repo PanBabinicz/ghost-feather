@@ -81,21 +81,11 @@
 ```mermaid
 sequenceDiagram
     UPDATER->>DEVICE: CONNECT PACKET
-    DEVICE-->>UPDATER: ACK PACKET
+    DEVICE-->>UPDATER: CONNECT ACK PACKET
 ```
 
 ### CONNECT PACKET
 
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg .tg-wa1i{font-weight:bold;text-align:center;vertical-align:middle}
-.tg .tg-uzvj{border-color:inherit;font-weight:bold;text-align:center;vertical-align:middle}
-.tg .tg-7btt{border-color:inherit;font-weight:bold;text-align:center;vertical-align:top}
-</style>
 <table class="tg"><thead>
   <tr>
     <td class="tg-wa1i" rowspan="11">DUST<br>PACKET</td>
@@ -136,18 +126,8 @@ sequenceDiagram
   </tr></thead>
 </table>
 
-### ACK PACKET
+### CONNECT ACK PACKET
 
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg .tg-wa1i{font-weight:bold;text-align:center;vertical-align:middle}
-.tg .tg-uzvj{border-color:inherit;font-weight:bold;text-align:center;vertical-align:middle}
-.tg .tg-7btt{border-color:inherit;font-weight:bold;text-align:center;vertical-align:top}
-</style>
 <table class="tg"><thead>
   <tr>
     <td class="tg-wa1i" rowspan="11">DUST<br>PACKET</td>
