@@ -3,7 +3,8 @@
 
 #include <stdint.h>
 
-#define DUST_PACKET_DATA_BUFFER_MAX_SIZE    (256u)
+#define DUST_PACKET_DATA_BUFFER_MAX_SIZE    (0xffu)
+#define DUST_PACKET_HEADER_SIZE             (0x04u)
 
 ///
 /// \breif The dust result type.
@@ -62,11 +63,7 @@ typedef struct
 ///
 /// \param[in] polynomial The generator polynomial.
 ///
-/// \return dust_result_t       Result of the function.
-/// \retval DUST_RESULT_SUCCESS On success.
-/// \retval DUST_RESULT_ERROR   Otherwise.
-///
-dust_result_t dust_crc16_generate_lut(uint16_t polynomial);
+void dust_crc16_generate_lut(uint16_t polynomial);
 
 ///
 /// \brief Calculate the crc16.
