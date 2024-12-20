@@ -51,27 +51,6 @@ static dust_result_t dust_serialize_data(dust_packet_t *packet, uint8_t *seriali
 ///
 static dust_result_t dust_serialize_packet(dust_packet_t *packet, uint8_t *serialized_packet);
 
-///
-/// \breif The dust header type.
-///
-typedef struct
-{
-    uint32_t opcode        : 2;
-    uint32_t length        : 2;
-    uint32_t packet_number : 12;
-    uint32_t checksum      : 16;
-} dust_header_t;
-
-///
-/// \breif The dust packet type.
-///
-typedef struct
-{
-    dust_header_t header;
-    uint8_t       data[DUST_PACKET_DATA_BUFFER_MAX_SIZE];
-    uint16_t      crc16;
-} dust_packet_t;
-
 ///*************************************************************************************************
 /// Private functions - definition.
 ///*************************************************************************************************
