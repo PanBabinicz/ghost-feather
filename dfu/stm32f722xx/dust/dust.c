@@ -1,5 +1,9 @@
 #include "dust.h"
 
+#if (defined(DEBUG_DUST_PROTOCOL) && (DEBUG_DUST_PROTOCOL == 1))
+#include "printf.h"
+#endif  /* DEBUG_DUST_PROTOCOL */
+
 ///*************************************************************************************************
 /// Private objects - definition.
 ///*************************************************************************************************
@@ -11,18 +15,6 @@ static uint16_t dust_crc16_lut[DUST_CRC16_LUT_SIZE];
 ///*************************************************************************************************
 /// Private functions - declaration.
 ///*************************************************************************************************
-///
-/// \brief Calculate the crc16.
-///
-/// \param[in] packet                       The dust packet structure.
-///
-/// \return dust_result_t                   Result of the function.
-/// \retval DUST_RESULT_SUCCESS             On success.
-/// \retval DUST_RESULT_SERIALIZATION_ERROR On serialization error.
-/// \retval DUST_RESULT_ERROR               Otherwise.
-///
-static dust_result_t dust_crc16_calculate(dust_packet_t *const packet);
-
 ///
 /// \breif Serialize the packet header.
 ///
@@ -128,9 +120,6 @@ static dust_result_t dust_serialize_packet(const dust_packet_t *const packet,
 
     if ((packet != NULL) && (serialized_packet != NULL))
     {
-        uint8_t serialized_header[DUST_PACKET_HEADER_SIZE];
-        uint8_t serialized_data[packet->data_size];
-
         result = dust_serialize_header(&packet->header, &serialized_packet[DUST_SERIALIZED_HEADER_POSITION],
                                        DUST_PACKET_HEADER_SIZE);
         if (result != DUST_RESULT_ERROR)
@@ -141,10 +130,6 @@ static dust_result_t dust_serialize_packet(const dust_packet_t *const packet,
 
         if (result != DUST_RESULT_ERROR)
         {
-            memcpy(&serialized_packet[0], &serialized_header[0], DUST_PACKET_HEADER_SIZE);
-            memcpy(&serialized_packet[DUST_PACKET_HEADER_SIZE], &serialized_data[0],
-                   packet->data_size);
-
             serialized_packet[DUST_PACKET_HEADER_SIZE + packet->data_size]     = ((packet->crc16 & 0xff00) >> 0x08);
             serialized_packet[DUST_PACKET_HEADER_SIZE + packet->data_size + 1] = ((packet->crc16 & 0x00ff) >> 0x00);
 
@@ -196,11 +181,11 @@ dust_result_t dust_crc16_calculate(dust_packet_t *const packet)
         uint8_t  serialized_header_and_data[DUST_PACKET_HEADER_SIZE + packet->data_size];
 
         /* Get serialized header and data. */
-        result = dust_serialize_header(&packet->header, &serialized_header[0], DUST_PACKET_HEADER_SIZE);
+        result = dust_serialize_header(&packet->header, &serialized_header[0], sizeof(serialized_header));
 
         if (result != DUST_RESULT_ERROR)
         {
-            result = dust_serialize_data(packet, &serialized_data[0], packet->data_size);
+            result = dust_serialize_data(packet, &serialized_data[0], sizeof(serialized_data));
         }
 
         if (result != DUST_RESULT_ERROR)
@@ -210,7 +195,7 @@ dust_result_t dust_crc16_calculate(dust_packet_t *const packet)
             memcpy(&serialized_header_and_data[DUST_PACKET_HEADER_SIZE], &serialized_data[0],
                    packet->data_size);
 
-            for (uint32_t i = 0; i < (DUST_PACKET_HEADER_SIZE + packet->data_size); i++)
+            for (uint32_t i = 0; i < sizeof(serialized_header_and_data); i++)
             {
                 /* Equal to ((packet->crc16 ^ (b << 8)) >> 8) */
                 position      = ((packet->crc16 >> 8) ^ serialized_header_and_data[i]);
@@ -310,6 +295,10 @@ dust_result_t dust_header_printf(const dust_header_t *const header)
 
     if (header != NULL)
     {
+        printf("opcode:        0x%02x\n\r", header->opcode);
+        printf("length:        0x%02x\n\r", header->length);
+        printf("packet_number: 0x%04x\n\r", header->packet_number);
+        printf("checksum:      0x%04x\n\r", header->checksum);
     }
 
     return result;
@@ -321,6 +310,15 @@ dust_result_t dust_packet_printf(const dust_packet_t *const packet)
 
     if (packet != NULL)
     {
+        printf("header: 0x%08x\n\r", packet->header);
+        printf("data:   ");
+
+        for (uint32_t i = 0; i < packet->data_size; i++)
+        {
+            printf("0x%02x ", packet->data[i]);
+        }
+
+        printf("\n\rcrc16:  0x%04x\n\r", packet->crc16);
     }
 
     return result;

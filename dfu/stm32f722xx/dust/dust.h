@@ -2,6 +2,7 @@
 #define _DUST_H
 
 #include <stdint.h>
+#include <string.h>
 
 #define DUST_PACKET_DATA_BUFFER_MAX_SIZE    (0x0100u)
 #define DUST_PACKET_HEADER_SIZE             (0x0004u)
@@ -16,7 +17,7 @@
 typedef enum
 {
     DUST_RESULT_SUCCESS = 0,
-    DUST_RESULT_SERIALIZATION_ERROR;
+    DUST_RESULT_SERIALIZATION_ERROR,
     DUST_RESULT_ERROR,
 } dust_result_t;
 
@@ -70,6 +71,18 @@ typedef struct
 /// \param[in] polynomial The generator polynomial.
 ///
 void dust_crc16_generate_lut(const uint16_t polynomial);
+
+///
+/// \brief Calculate the crc16.
+///
+/// \param[in] packet                       The dust packet structure.
+///
+/// \return dust_result_t                   Result of the function.
+/// \retval DUST_RESULT_SUCCESS             On success.
+/// \retval DUST_RESULT_SERIALIZATION_ERROR On serialization error.
+/// \retval DUST_RESULT_ERROR               Otherwise.
+///
+dust_result_t dust_crc16_calculate(dust_packet_t *const packet);
 
 ///
 /// \brief Create dust header.
