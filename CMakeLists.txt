@@ -18,6 +18,7 @@ add_subdirectory(submodules)
 get_cmake_property(first_bootloader_sources FIRST_BOOTLOADER_SOURCES)
 get_cmake_property(second_bootloader_sources SECOND_BOOTLOADER_SOURCES)
 get_cmake_property(boot_updater BOOT_UPDATER_SOURCES)
+get_cmake_property(dust DUST_SOURCES)
 get_cmake_property(app_sources APP_SOURCES)
 get_cmake_property(stm32f722xx_first_bootloader_startup_sources STM32F722XX_FIRST_BOOTLOADER_STARTUP_SOURCES)
 get_cmake_property(stm32f722xx_second_bootloader_startup_sources STM32F722XX_SECOND_BOOTLOADER_STARTUP_SOURCES)
@@ -48,6 +49,7 @@ message(STATUS "Add ghost-feather-boot-updater executable")
 add_executable(
     ghost-feather-boot-updater
     ${boot_updater}
+    ${dust}
     ${stm32f722xx_boot_updater_startup_sources}
     ${vectortable_sources}
     ${usart_controller_sources}
@@ -89,6 +91,7 @@ target_link_directories(
     ${PROJECT_SOURCE_DIR}/lib
     ${PROJECT_SOURCE_DIR}/controller
     ${PROJECT_SOURCE_DIR}/submodules
+    ${PROJECT_SOURCE_DIR}/dfu
     /Applications/ArmGNUToolchain/13.3.rel1/arm-none-eabi/arm-none-eabi/lib/thumb/v7+fp/hard
     )
 
@@ -127,6 +130,7 @@ target_link_libraries(
     PRIVATE
     stm32f722xx_boot_updater_startup
     boot_updater
+    dust
     vectortable
     usart_controller
     printf
@@ -167,6 +171,7 @@ target_include_directories(
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/boot_updater
+    ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/dust
     ${PROJECT_SOURCE_DIR}/controller/usart
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     ${PROJECT_SOURCE_DIR}/submodules/printf
@@ -202,6 +207,7 @@ target_compile_definitions(
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     "$<$<COMPILE_LANGUAGE:C>:PRINTF_DISABLE_SUPPORT_LONG_LONG>"
+    "$<$<COMPILE_LANGUAGE:C>:DEBUG_DUST_PROTOCOL=1>"
     )
 
 message(STATUS "Add ghost-feather-app target compile definitions")
