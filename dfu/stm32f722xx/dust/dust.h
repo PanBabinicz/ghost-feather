@@ -3,12 +3,12 @@
 
 #include <stdint.h>
 
-#define DUST_PACKET_DATA_BUFFER_MAX_SIZE    (0xffu)
-#define DUST_PACKET_HEADER_SIZE             (0x04u)
-#define DUST_PACKET_CRC16_SIZE              (0x02u)
-#define DUST_SERIALIZED_HEADER_POSITION     (0x00u)
-#define DUST_SERIALIZED_DATA_POSITION       (0x04u)
-#define DUST_CRC16_LUT_SIZE                 (0xffu)
+#define DUST_PACKET_DATA_BUFFER_MAX_SIZE    (0x0100u)
+#define DUST_PACKET_HEADER_SIZE             (0x0004u)
+#define DUST_PACKET_CRC16_SIZE              (0x0002u)
+#define DUST_SERIALIZED_HEADER_POSITION     (0x0000u)
+#define DUST_SERIALIZED_DATA_POSITION       (0x0004u)
+#define DUST_CRC16_LUT_SIZE                 (0x0100u)
 
 ///
 /// \breif The dust result type.
@@ -16,6 +16,7 @@
 typedef enum
 {
     DUST_RESULT_SUCCESS = 0,
+    DUST_RESULT_SERIALIZATION_ERROR;
     DUST_RESULT_ERROR,
 } dust_result_t;
 
@@ -68,69 +69,99 @@ typedef struct
 ///
 /// \param[in] polynomial The generator polynomial.
 ///
-void dust_crc16_generate_lut(uint16_t polynomial);
-
-///
-/// \brief Calculate the crc16.
-///
-/// \param[in]  packet      The dust packet structure.
-///
-/// \return dust_result_t       Result of the function.
-/// \retval DUST_RESULT_SUCCESS On success.
-/// \retval DUST_RESULT_ERROR   Otherwise.
-///
-dust_result_t dust_crc16_calculate(dust_packet_t *packet)
+void dust_crc16_generate_lut(const uint16_t polynomial);
 
 ///
 /// \brief Create dust header.
 ///
-/// \param[out] header        The dust header structure.
-/// \param[in]  opcode        The dust header opcode.
-/// \param[in]  length        The dust header length.
-/// \param[in]  packet_number The dust header packet number.
+/// \param[out] header          The dust header structure.
+/// \param[in]  opcode          The dust header opcode.
+/// \param[in]  length          The dust header length.
+/// \param[in]  packet_number   The dust header packet number.
 ///
 /// \return dust_result_t       Result of the function.
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-dust_result_t dust_header_create(dust_header_t *header, dust_opcode_t opcode,
-                                 dust_length_t length, uint16_t packet_number);
+dust_result_t dust_header_create(dust_header_t *const header, const dust_opcode_t opcode,
+                                 const dust_length_t length, const uint16_t packet_number);
 
 ///
 /// \brief Create dust packet.
 ///
-/// \param[out] packet               The dust packet structure.
-/// \param[in]  header               The dust header structure.
-/// \param[in]  data                 The data buffer.
-/// \param[in]  initialize_data_size The data buffer size.
+/// \param[out] packet                      The dust packet structure.
+/// \param[in]  header                      The dust header structure.
+/// \param[in]  data                        The data buffer.
+/// \param[in]  initialize_data_size        The data buffer size.
 ///
-/// \return dust_result_t       Result of the function.
-/// \retval DUST_RESULT_SUCCESS On success.
-/// \retval DUST_RESULT_ERROR   Otherwise.
+/// \return dust_result_t                   Result of the function.
+/// \retval DUST_RESULT_SUCCESS             On success.
+/// \retval DUST_RESULT_SERIALIZATION_ERROR On serialization error.
+/// \retval DUST_RESULT_ERROR               Otherwise.
 ///
-dust_result_t dust_packet_create(dust_packet_t *packet, dust_header_t *header,
-                                 uint8_t *data, uint32_t initialize_data_size);
+dust_result_t dust_packet_create(dust_packet_t *const packet, const dust_header_t *const header,
+                                 const uint8_t *const data, const uint32_t initialize_data_size);
+
+///
+/// \brief Create dust packet.
+///
+/// \param[in]  packet                      The dust packet structure.
+/// \param[out] serialized_packet           The serialized packet.
+/// \param[in]  packet_size                 The dust packet size.
+///
+/// \return dust_result_t                   Result of the function.
+/// \retval DUST_RESULT_SUCCESS             On success.
+/// \retval DUST_RESULT_SERIALIZATION_ERROR On serialization error.
+/// \retval DUST_RESULT_ERROR               Otherwise.
+///
+dust_result_t dust_serialize(dust_packet_t *const packet, uint8_t *const serialized_packet,
+                             const uint32_t packet_size);
 
 ///
 /// \brief Transmit the packet.
 ///
-/// \param[in] packet The dust packet.
+/// \param[in] packet           The dust packet.
 ///
 /// \return dust_result_t       Result of the function.
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-dust_result_t dust_transmit(dust_packet_t *packet);
+dust_result_t dust_transmit(const dust_packet_t *const packet);
 
 ///
 /// \brief Receive the packet.
 ///
-/// \param[out] packet The received dust packet.
+/// \param[out] packet          The received dust packet.
 ///
 /// \return dust_result_t       Result of the function.
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
 dust_result_t dust_receive(dust_packet_t **packet);
+
+#if (defined(DEBUG_DUST_PROTOCOL) && (DEBUG_DUST_PROTOCOL == 1))
+///
+/// \brief Print the content of the dust header.
+///
+/// \param[in] packet           The dust header.
+///
+/// \return dust_result_t       Result of the function.
+/// \retval DUST_RESULT_SUCCESS On success.
+/// \retval DUST_RESULT_ERROR   Otherwise.
+///
+dust_result_t dust_header_printf(const dust_header_t *const header);
+
+///
+/// \brief Print the content of the dust packet.
+///
+/// \param[in] packet           The dust packet.
+///
+/// \return dust_result_t       Result of the function.
+/// \retval DUST_RESULT_SUCCESS On success.
+/// \retval DUST_RESULT_ERROR   Otherwise.
+///
+dust_result_t dust_packet_printf(const dust_packet_t *const packet);
+
+#endif  /* DEBUG_DUST_PROTOCOL */
 
 #endif  /* _DUST_H */
