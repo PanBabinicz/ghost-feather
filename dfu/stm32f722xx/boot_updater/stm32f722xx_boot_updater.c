@@ -123,8 +123,9 @@ void boot_updater_init(void)
 
     dust_result_t result = DUST_RESULT_ERROR;
 
-    dust_packet_t packet = { 0 };
-    dust_header_t header = { 0 };
+    dust_packet_t deserialized_packet = { 0 };
+    dust_packet_t packet              = { 0 };
+    dust_header_t header              = { 0 };
 
     uint8_t data[6] = { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36 };
 
@@ -134,11 +135,6 @@ void boot_updater_init(void)
     if (result != DUST_RESULT_ERROR)
     {
         result = dust_packet_create(&packet, &header, &data[0], 6);
-    }
-
-    if (result != DUST_RESULT_ERROR)
-    {
-        result = dust_crc16_calculate(&packet);
     }
 
     if (result != DUST_RESULT_ERROR)
@@ -154,6 +150,12 @@ void boot_updater_init(void)
         for (uint32_t i = 0; i < sizeof(serialized_packet); i++)
         {
             printf("0x%02x ", serialized_packet[i]);
+        }
+
+        result = dust_deserialize(&deserialized_packet, serialized_packet, sizeof(serialized_packet));
+        if (result == DUST_RESULT_SUCCESS)
+        {
+            dust_packet_printf(&deserialized_packet);
         }
     }
 }

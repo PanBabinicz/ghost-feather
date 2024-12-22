@@ -7,8 +7,8 @@
 #define DUST_PACKET_DATA_BUFFER_MAX_SIZE    (0x0100u)
 #define DUST_PACKET_HEADER_SIZE             (0x0004u)
 #define DUST_PACKET_CRC16_SIZE              (0x0002u)
-#define DUST_SERIALIZED_HEADER_POSITION     (0x0000u)
-#define DUST_SERIALIZED_DATA_POSITION       (0x0004u)
+#define DUST_PACKET_HEADER_POSITION         (0x0000u)
+#define DUST_PACKET_DATA_POSITION           (0x0004u)
 #define DUST_CRC16_LUT_SIZE                 (0x0100u)
 
 ///
@@ -18,6 +18,7 @@ typedef enum
 {
     DUST_RESULT_SUCCESS = 0,
     DUST_RESULT_SERIALIZATION_ERROR,
+    DUST_RESULT_SIZE_ERROR,
     DUST_RESULT_ERROR,
 } dust_result_t;
 
@@ -73,18 +74,6 @@ typedef struct
 void dust_crc16_generate_lut(const uint16_t polynomial);
 
 ///
-/// \brief Calculate the crc16.
-///
-/// \param[in] packet                       The dust packet structure.
-///
-/// \return dust_result_t                   Result of the function.
-/// \retval DUST_RESULT_SUCCESS             On success.
-/// \retval DUST_RESULT_SERIALIZATION_ERROR On serialization error.
-/// \retval DUST_RESULT_ERROR               Otherwise.
-///
-dust_result_t dust_crc16_calculate(dust_packet_t *const packet);
-
-///
 /// \brief Create dust header.
 ///
 /// \param[out] header          The dust header structure.
@@ -116,19 +105,34 @@ dust_result_t dust_packet_create(dust_packet_t *const packet, const dust_header_
                                  const uint8_t *const data, const uint32_t initialize_data_size);
 
 ///
-/// \brief Create dust packet.
+/// \brief Serialize dust packet into bytes stream.
 ///
 /// \param[in]  packet                      The dust packet structure.
-/// \param[out] serialized_packet           The serialized packet.
-/// \param[in]  packet_size                 The dust packet size.
+/// \param[out] serialized_packet           The serialized packet buffer.
+/// \param[in]  serialized_packet_size      The serialized packet buffer size.
 ///
 /// \return dust_result_t                   Result of the function.
 /// \retval DUST_RESULT_SUCCESS             On success.
 /// \retval DUST_RESULT_SERIALIZATION_ERROR On serialization error.
 /// \retval DUST_RESULT_ERROR               Otherwise.
 ///
-dust_result_t dust_serialize(dust_packet_t *const packet, uint8_t *const serialized_packet,
-                             const uint32_t packet_size);
+dust_result_t dust_serialize(const dust_packet_t *const packet, uint8_t *const serialized_packet,
+                             const uint32_t serialized_packet_size);
+
+///
+/// \brief Deseralize bytes stream into packet.
+///
+/// \param[out] packet                      The dust packet structure.
+/// \param[in]  data                        The data buffer.
+/// \param[in]  data_size                   The data buffer size.
+///
+/// \return dust_result_t                   Result of the function.
+/// \retval DUST_RESULT_SUCCESS             On success.
+/// \retval DUST_RESULT_SERIALIZATION_ERROR On serialization error.
+/// \retval DUST_RESULT_ERROR               Otherwise.
+///
+dust_result_t dust_deserialize(dust_packet_t *const packet, const uint8_t *const data,
+                               const uint32_t data_size);
 
 ///
 /// \brief Transmit the packet.
