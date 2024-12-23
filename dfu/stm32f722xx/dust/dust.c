@@ -1,4 +1,5 @@
 #include "dust.h"
+#include "libopencm3/stm32/usart.h"
 
 #if (defined(DEBUG_DUST_PROTOCOL) && (DEBUG_DUST_PROTOCOL == 1))
 #include "printf.h"
@@ -342,9 +343,20 @@ dust_result_t dust_deserialize(dust_packet_t *const packet, const uint8_t *const
     return result;
 }
 
-dust_result_t dust_transmit(const dust_packet_t *const packet)
+dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t serialized_packet_size)
 {
     dust_result_t result = DUST_RESULT_ERROR;
+
+    if (serialized_packet != NULL)
+    {
+        for (uint32_t i = 0; i < serialized_packet_size; i++)
+        {
+            usart_send(USART3, (uint16_t)serialized_packet[i]);
+            usart_wait_send_ready(USART3);
+        }
+
+        result = DUST_RESULT_SUCCESS;
+    }
 
     return result;
 }

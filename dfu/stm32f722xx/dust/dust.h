@@ -135,15 +135,16 @@ dust_result_t dust_deserialize(dust_packet_t *const packet, const uint8_t *const
                                const uint32_t data_size);
 
 ///
-/// \brief Transmit the packet.
+/// \brief Transmit the serialized packet.
 ///
-/// \param[in] packet           The dust packet.
+/// \param[in] serialized_packet      The serialized packet buffer.
+/// \param[in] serialized_packet_size The serialized packet buffer size.
 ///
-/// \return dust_result_t       Result of the function.
-/// \retval DUST_RESULT_SUCCESS On success.
-/// \retval DUST_RESULT_ERROR   Otherwise.
+/// \return dust_result_t             Result of the function.
+/// \retval DUST_RESULT_SUCCESS       On success.
+/// \retval DUST_RESULT_ERROR         Otherwise.
 ///
-dust_result_t dust_transmit(const dust_packet_t *const packet);
+dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t serialized_packet_size);
 
 ///
 /// \brief Receive the packet.
