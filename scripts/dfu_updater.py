@@ -4,6 +4,7 @@ import serial
 from elftools.elf.elffile import ELFFile
 
 from dust_packet import dust_packet
+from dust_packet import dust_header
 from dust_packet import DUST_OPCODE
 from dust_packet import DUST_LENGTH
 
@@ -44,7 +45,7 @@ class dfu_updater:
             print("The usart is already initialized...")
         else:
             print("Initializing...")
-            self.usart = serial.Serial(port = self.port, baudrate = self.baudrate, timeout = None)
+            self.usart = serial.Serial(port = self.port, baudrate = self.baudrate, timeout = 60.0)
             if isinstance(self.usart, serial.Serial):
                 print("Initialization completed!")
             else:
@@ -70,7 +71,6 @@ class dfu_updater:
         else:
             print("Usart is not initialized...")
 
-
     def disconnect(self):
         self.packet.create(opcode = 0x01, length = 0x00, packet_number = 0x00, data = [0xdd] * 32)
         self.packet.serialize()
@@ -78,7 +78,8 @@ class dfu_updater:
         #self.receive_socat()
 
     def transmit_uc(self):
-        pass
+        for byte in self.packet.serialized:
+            self.usart.write(byte)
 
     def transmit_socat(self):
         byte_string = ""
@@ -90,7 +91,17 @@ class dfu_updater:
         self.usart.write(b"\n\r")
 
     def receive_uc(self):
-        pass
+        bytes              = self.usart.read(size = 4)
+        self.packet.header = self.packet.deserialize_header(bytes)
+        if ( self.packet.header.bits.checksum == self.packet.calculate_checksum()):
+            print("Header checksum OK!")
+        packet_size  = self.packet.length_hash_table[self.packet.header.bits.length]
+        bytes       += self.usart.read(size = (packet_size + 2))
+        if self.packet.crc16_calculate(bytes) == 0:
+            print("Packet crc16 check OK!")
+        self.packet.data.clear()
+        self.packet.data  = self.packet.deserialize_data(bytes[4:(len(bytes) - 2)])
+        self.packet.crc16 = bytes[(len(bytes) - 2):]
 
     def receive_socat(self):
         pass
@@ -104,11 +115,19 @@ updater.readelf_get_sections(updater.text)
 updater.text.calculate_size()
 updater.text.convert_to_little_endian()
 updater.packet.crc16_lookup_table_generate(0x1021)
-print(updater.text.converted_hexdata)
-print(hex(updater.text.size))
-print(hex(int(updater.text.size / 32)))
-print(hex(updater.text.size % 32))
+updater.init()
+# print(updater.text.converted_hexdata)
+# print(hex(updater.text.size))
+# print(hex(int(updater.text.size / 32)))
+# print(hex(updater.text.size % 32))
 
+# updater.packet.create(opcode = 0x00, length = 0x00, packet_number = 0x00, data = [0xaa] * 32)
+# updater.packet.serialize()
+# updater.packet.print_serialized()
+
+updater.receive_uc()
+
+'''
 last_packet_padding = updater.text.size % 32
 for packet_number in range(0, int(updater.text.size / 32)):
     updater.packet.create(opcode = DUST_OPCODE.DATA.value,
@@ -118,4 +137,4 @@ for packet_number in range(0, int(updater.text.size / 32)):
     updater.packet.serialize()
     updater.packet.print_serialized()
     print("")
-
+'''

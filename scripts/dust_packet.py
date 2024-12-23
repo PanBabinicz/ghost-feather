@@ -10,10 +10,10 @@ class DUST_OPCODE(Enum):
     More details.
     """
 
-    INIT   = 0x00
-    DEINIT = 0x01
-    DATA   = 0x02
-    ERROR  = 0x03
+    CONNECT    = 0x00
+    DISCONNECT = 0x01
+    DATA       = 0x02
+    ERROR      = 0x03
 
 class DUST_LENGTH(Enum):
     """Documentation for DUST_LENGTH enum.
@@ -59,10 +59,12 @@ class dust_packet:
         self.header             = dust_header()
         self.data               = []
         self.serialized         = []
-        self.crc8               = 0
-        self.crc8_lookup_table  = []
         self.crc16              = 0
         self.crc16_lookup_table = []
+        self.length_hash_table  = { DUST_LENGTH.BYTES32.value:  0x20,
+                                    DUST_LENGTH.BYTES64.value:  0x40,
+                                    DUST_LENGTH.BYTES128.value: 0x80,
+                                    DUST_LENGTH.BYTES256.value: 0x100 }
 
     def calculate_checksum(self):
         checksum = (self.header.bits.opcode << 14 |
@@ -100,7 +102,7 @@ class dust_packet:
             self.crc16_lookup_table.append(byte & 0xffff)
 
     def crc16_calculate(self, data):
-        crc16       = 0x00
+        crc16 = 0x00
         for byte in data:
             position = ((crc16 >> 8) ^ byte) & 0xff
             crc16    = ((crc16 << 8) ^ self.crc16_lookup_table[position]) & 0xffff
@@ -129,6 +131,11 @@ class dust_packet:
         deserialized_header.whole_value |= (serialized_header[3] << 0x00)
         return deserialized_header
 
+    def deserialize_data(self, serialized_data):
+        deserialized_data = []
+        deserialized_data.extend(serialized_data)
+        return deserialized_data
+
     def serialize(self):
         self.serialized.clear()
         # Serialize header
@@ -154,6 +161,7 @@ class dust_packet:
         print("packet_number: " + str(f"{self.header.bits.packet_number:#x}"))
         print("checksum:      " + str(f"{self.header.bits.checksum:#x}"))
         print("data:          " + str(' '.join(f"{hex:#x}" for hex in self.data)))
+        print("crc16:         " + str(' '.join(f"{hex:#x}" for hex in self.crc16)))
         print("whole_value:   " + str(f"{self.header.whole_value:#x}"))
         print("serialized:    " + str(' '.join(f"{hex:#x}" for hex in self.serialized)))
 
