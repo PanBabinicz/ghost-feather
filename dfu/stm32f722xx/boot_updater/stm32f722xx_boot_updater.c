@@ -119,7 +119,7 @@ void boot_updater_init(void)
         systick_delay_ms(500);
     }
 
-    printf("Boot updater %d initialized...\n\r", 1);
+    //printf("Boot updater %d initialized...\n\r", 1);
 
     dust_result_t result = DUST_RESULT_ERROR;
 
@@ -143,6 +143,12 @@ void boot_updater_init(void)
         memset(&serialized_packet[0], 0, sizeof(serialized_packet));
         result = dust_serialize(&packet, &serialized_packet[0], sizeof(serialized_packet));
 
+        if (result != DUST_RESULT_ERROR)
+        {
+            dust_transmit(&serialized_packet[0], sizeof(serialized_packet));
+        }
+
+        /*
         dust_header_printf(&header);
         dust_packet_printf(&packet);
 
@@ -157,6 +163,7 @@ void boot_updater_init(void)
         {
             dust_packet_printf(&deserialized_packet);
         }
+        */
     }
 }
 
