@@ -139,23 +139,26 @@ dust_result_t dust_deserialize(dust_packet_t *const packet, const uint8_t *const
 ///
 /// \param[in] serialized_packet      The serialized packet buffer.
 /// \param[in] serialized_packet_size The serialized packet buffer size.
+/// \param[in] usart                  The usart block register address base.
 ///
 /// \return dust_result_t             Result of the function.
 /// \retval DUST_RESULT_SUCCESS       On success.
 /// \retval DUST_RESULT_ERROR         Otherwise.
 ///
-dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t serialized_packet_size);
+dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t serialized_packet_size,
+                            uint32_t usart);
 
 ///
 /// \brief Receive the packet.
 ///
 /// \param[out] packet          The received dust packet.
+/// \param[in]  usart           The usart block register address base.
 ///
 /// \return dust_result_t       Result of the function.
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-dust_result_t dust_receive(dust_packet_t **packet);
+dust_result_t dust_receive(uint8_t *const data, uint32_t usart);
 
 #if (defined(DEBUG_DUST_PROTOCOL) && (DEBUG_DUST_PROTOCOL == 1))
 ///
