@@ -359,12 +359,10 @@ dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t ser
 
     if (serialized_packet != NULL)
     {
-        uint16_t half_word;
-        for (uint32_t i = 0; i < serialized_packet_size; i += 2)
+        for (uint32_t i = 0; i < serialized_packet_size; i++)
         {
-            half_word = ((serialized_packet[i] << 0x08) | (serialized_packet[i+1]));
             usart_wait_send_ready(usart);
-            usart_send(usart, half_word);
+            usart_send(usart, (uint16_t)serialized_packet[i]);
         }
 
         result = DUST_RESULT_SUCCESS;
@@ -377,36 +375,33 @@ dust_result_t dust_receive(dust_packet_t *const packet, uint32_t usart)
 {
     dust_result_t result = DUST_RESULT_ERROR;
     uint16_t      half_word;
-    uint8_t       serialized_header[DUST_PACKET_HEADER_SIZE];
+    uint8_t       serialized_header[DUST_PACKET_HEADER_SIZE + 34];
 
     if (packet != NULL)
     {
-        for (uint32_t i = 0; i < DUST_PACKET_HEADER_SIZE; i += 2)
+        for (uint32_t i = 0; i < DUST_PACKET_HEADER_SIZE + 34; i++)
         {
             usart_wait_recv_ready(usart);
-            half_word = usart_recv(usart);
-
-            serialized_header[i]     = ((half_word & 0xff00) >> 0x08);
-            serialized_header[i + 1] = ((half_word & 0xff00) >> 0x08);
+            serialized_header[i] = usart_recv(usart);
         }
 
         dust_deserialize_header(&packet->header, &serialized_header[0], DUST_PACKET_HEADER_SIZE);
         dust_packet_calculate_payload_size(packet);
 
+        /*
         uint8_t serialized_data_and_crc16[packet->data_size + DUST_PACKET_CRC16_SIZE];
-        for (uint32_t i = 0; (packet->data_size + DUST_PACKET_CRC16_SIZE); i += 2)
+        for (uint32_t i = 0; (packet->data_size + DUST_PACKET_CRC16_SIZE); i++)
         {
             usart_wait_recv_ready(usart);
-            half_word = usart_recv(usart);
-
-            serialized_data_and_crc16[i]     = ((half_word & 0xff00) >> 0x08);
-            serialized_data_and_crc16[i + 1] = ((half_word & 0xff00) >> 0x08);
+            serialized_data_and_crc16[i] = usart_recv(usart);
         }
+        */
 
-        dust_deserialize_packet(packet, &serialized_data_and_crc16[0], packet->data_size);
+        //dust_deserialize_packet(packet, &serialized_data_and_crc16[0], packet->data_size);
+        dust_deserialize_packet(packet, &serialized_header[0], packet->data_size);
         packet->crc16  = 0;
-        packet->crc16 |= (serialized_data_and_crc16[packet->data_size]     << 0x08);
-        packet->crc16 |= (serialized_data_and_crc16[packet->data_size + 1] << 0x00);
+        packet->crc16 |= (serialized_header[packet->data_size]     << 0x08);
+        packet->crc16 |= (serialized_header[packet->data_size + 1] << 0x00);
 
         result = DUST_RESULT_SUCCESS;
     }

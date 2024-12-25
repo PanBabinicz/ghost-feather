@@ -158,7 +158,7 @@ dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t ser
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-dust_result_t dust_receive(uint8_t *const data, uint32_t usart);
+dust_result_t dust_receive(dust_packet_t *const packet, uint32_t usart);
 
 #if (defined(DEBUG_DUST_PROTOCOL) && (DEBUG_DUST_PROTOCOL == 1))
 ///
