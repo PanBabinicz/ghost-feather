@@ -63,7 +63,7 @@ typedef struct
     dust_header_t header;
     uint8_t       data[DUST_PACKET_DATA_BUFFER_MAX_SIZE];
     uint16_t      crc16;
-    uint16_t      data_size;
+    uint16_t      payload_size;
 } dust_packet_t;
 
 ///
@@ -159,6 +159,18 @@ dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t ser
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
 dust_result_t dust_receive(dust_packet_t *const packet, uint32_t usart);
+
+///
+/// \brief Dust handshake procedure.
+///
+/// \param[out] packet          The received dust packet.
+/// \param[in]  usart           The usart block register address base.
+///
+/// \return dust_result_t       Result of the function.
+/// \retval DUST_RESULT_SUCCESS On success.
+/// \retval DUST_RESULT_ERROR   Otherwise.
+///
+dust_result_t dust_handshake(dust_packet_t *const packet, uint32_t usart);
 
 #if (defined(DEBUG_DUST_PROTOCOL) && (DEBUG_DUST_PROTOCOL == 1))
 ///

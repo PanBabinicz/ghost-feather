@@ -2,7 +2,20 @@ import ctypes
 
 from enum import Enum
 
+DUST_PACKET_HEADER_SIZE = 4
+DUST_PACKET_CRC16_SIZE  = 2
+
 c_uint32 = ctypes.c_uint32
+
+class DUST_RESULT(Enum):
+    """Documentation for DUST_RESULT enum.
+
+    More details.
+    """
+
+    SUCCESS  = 0x00
+    ERROR    = 0x01
+
 
 class DUST_OPCODE(Enum):
     """Documentation for DUST_OPCODE enum.
@@ -14,6 +27,7 @@ class DUST_OPCODE(Enum):
     DISCONNECT = 0x01
     DATA       = 0x02
     ERROR      = 0x03
+
 
 class DUST_LENGTH(Enum):
     """Documentation for DUST_LENGTH enum.
@@ -145,15 +159,19 @@ class dust_packet:
         self.serialized.append((self.crc16 & 0xff00) >> 0x08)
         self.serialized.append((self.crc16 & 0x00ff) >> 0x00)
 
-    def deserialize(self, serialized_packet):
-        if self.crc16_calculate(serialized_packet) == 0:
-            # Fill the header
-            self.header = self.deserialize_header(serialized_packet[0:4])
-            self.data.clear()
-            self.data.extend(serialized_packet[4:len(serialized_packet)-2])
-            print("Deserialization OK!")
-        else:
-            print("Deserialization wrong!")
+    def deserialize(self, usart):
+        result           = DUST_RESULT.ERROR.value
+        serialized_bytes = usart.read(size = DUST_PACKET_HEADER_SIZE)
+        self.header      = self.deserialize_header(serialized_bytes)
+        if ( self.header.bits.checksum == self.calculate_checksum()):
+            packet_size       = self.length_hash_table[self.header.bits.length]
+            serialized_bytes += usart.read(size = (packet_size + DUST_PACKET_CRC16_SIZE))
+            if self.crc16_calculate(serialized_bytes) == 0:
+                self.data.clear()
+                self.data  = self.deserialize_data(serialized_bytes[DUST_PACKET_HEADER_SIZE:(len(serialized_bytes) - DUST_PACKET_CRC16_SIZE)])
+                self.crc16 = serialized_bytes[(len(serialized_bytes) - DUST_PACKET_CRC16_SIZE):]
+                result     = DUST_RESULT.SUCCESS.value
+        return result
 
     def print_packet(self):
         print("opcode:        " + str(f"{self.header.bits.opcode:#x}"))

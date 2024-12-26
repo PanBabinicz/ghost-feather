@@ -1,12 +1,16 @@
 import sys
 import serial
+import time
 
 from elftools.elf.elffile import ELFFile
 
 from dust_packet import dust_packet
 from dust_packet import dust_header
+from dust_packet import DUST_RESULT
 from dust_packet import DUST_OPCODE
 from dust_packet import DUST_LENGTH
+from dust_packet import DUST_PACKET_HEADER_SIZE
+from dust_packet import DUST_PACKET_CRC16_SIZE
 
 from dfu_updater_segment import dfu_updater_segment
 
@@ -66,8 +70,8 @@ class dfu_updater:
             print("Trying to connect...")
             self.packet.create(opcode = 0x00, length = 0x00, packet_number = 0x00, data = [0xcc] * 32)
             self.packet.serialize()
-            self.transmit_socat()
-            #self.receive_socat()
+            self.transmit_header()
+            self.receive_ack()
         else:
             print("Usart is not initialized...")
 
@@ -77,9 +81,13 @@ class dfu_updater:
         #self.transmit_socat()
         #self.receive_socat()
 
-    def transmit_uc(self):
-        for byte in self.packet.serialized:
-            self.usart.write(byte)
+    def transmit_header(self):
+        for i in range(0, DUST_PACKET_HEADER_SIZE):
+            self.usart.write(self.packet.serialized[i].to_bytes(1, byteorder = 'big'))
+
+    def transmit_packet(self):
+        frame = bytes(self.packet.serialized)
+        self.usart.write(frame)
 
     def transmit_socat(self):
         byte_string = ""
@@ -90,21 +98,14 @@ class dfu_updater:
             self.usart.write(byte.encode('utf-8'))
         self.usart.write(b"\n\r")
 
-    def receive_uc(self):
-        bytes              = self.usart.read(size = 4)
-        self.packet.header = self.packet.deserialize_header(bytes)
+    def receive_ack(self):
+        result             = DUST_RESULT.ERROR.value
+        ack                = self.usart.read(size = DUST_PACKET_HEADER_SIZE)
+        self.packet.header = self.packet.deserialize_header(ack)
         if ( self.packet.header.bits.checksum == self.packet.calculate_checksum()):
-            print("Header checksum OK!")
-        packet_size  = self.packet.length_hash_table[self.packet.header.bits.length]
-        bytes       += self.usart.read(size = (packet_size + 2))
-        if self.packet.crc16_calculate(bytes) == 0:
-            print("Packet crc16 check OK!")
-        self.packet.data.clear()
-        self.packet.data  = self.packet.deserialize_data(bytes[4:(len(bytes) - 2)])
-        self.packet.crc16 = bytes[(len(bytes) - 2):]
-
-    def receive_socat(self):
-        pass
+            print("ACK")
+            result = DUST_RESULT.SUCCESS.value
+        return result
 
 
 updater = dfu_updater()
@@ -116,16 +117,7 @@ updater.text.calculate_size()
 updater.text.convert_to_little_endian()
 updater.packet.crc16_lookup_table_generate(0x1021)
 updater.init()
-# print(updater.text.converted_hexdata)
-# print(hex(updater.text.size))
-# print(hex(int(updater.text.size / 32)))
-# print(hex(updater.text.size % 32))
-
-# updater.packet.create(opcode = 0x00, length = 0x00, packet_number = 0x00, data = [0xaa] * 32)
-# updater.packet.serialize()
-# updater.packet.print_serialized()
-
-updater.receive_uc()
+updater.connect()
 
 '''
 last_packet_padding = updater.text.size % 32
