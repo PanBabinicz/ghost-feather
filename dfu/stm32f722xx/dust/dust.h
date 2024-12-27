@@ -45,13 +45,23 @@ typedef enum
 } dust_length_t;
 
 ///
+/// \breif The dust length type.
+///
+typedef enum
+{
+    DUST_ACK_UNSET = 0,
+    DUST_ACK_SET,
+} dust_ack_t;
+
+///
 /// \breif The dust header type.
 ///
 typedef struct
 {
     uint32_t opcode        : 2;
     uint32_t length        : 2;
-    uint32_t packet_number : 12;
+    uint32_t ack           : 1;
+    uint32_t packet_number : 11;
     uint32_t checksum      : 16;
 } dust_header_t;
 
@@ -79,6 +89,7 @@ void dust_crc16_generate_lut(const uint16_t polynomial);
 /// \param[out] header          The dust header structure.
 /// \param[in]  opcode          The dust header opcode.
 /// \param[in]  length          The dust header length.
+/// \param[in]  ack             The dust header ack flag.
 /// \param[in]  packet_number   The dust header packet number.
 ///
 /// \return dust_result_t       Result of the function.
@@ -86,7 +97,8 @@ void dust_crc16_generate_lut(const uint16_t polynomial);
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
 dust_result_t dust_header_create(dust_header_t *const header, const dust_opcode_t opcode,
-                                 const dust_length_t length, const uint16_t packet_number);
+                                 const dust_length_t length, const dust_ack_t ack,
+                                 const uint16_t packet_number);
 
 ///
 /// \brief Create dust packet.
@@ -146,7 +158,7 @@ dust_result_t dust_deserialize(dust_packet_t *const packet, const uint8_t *const
 /// \retval DUST_RESULT_ERROR         Otherwise.
 ///
 dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t serialized_packet_size,
-                            uint32_t usart);
+                            const uint32_t usart);
 
 ///
 /// \brief Receive the packet.
@@ -158,7 +170,7 @@ dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t ser
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-dust_result_t dust_receive(dust_packet_t *const packet, uint32_t usart);
+dust_result_t dust_receive(dust_packet_t *const packet, const uint32_t usart);
 
 ///
 /// \brief Dust handshake procedure.
@@ -170,7 +182,7 @@ dust_result_t dust_receive(dust_packet_t *const packet, uint32_t usart);
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-dust_result_t dust_handshake(dust_packet_t *const packet, uint32_t usart);
+dust_result_t dust_handshake(dust_packet_t *const packet, const uint32_t usart);
 
 #if (defined(DEBUG_DUST_PROTOCOL) && (DEBUG_DUST_PROTOCOL == 1))
 ///
