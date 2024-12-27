@@ -41,16 +41,27 @@ class DUST_LENGTH(Enum):
     BYTES256 = 0x03
 
 
+class DUST_ACK(Enum):
+    """Documentation for DUST_ACK enum.
+
+    More details.
+    """
+
+    UNSET  = 0x00
+    SET    = 0x01
+
+
 class dust_header_bits(ctypes.BigEndianStructure):
     """Documentation for dust_header_bits structure.
 
     More details.
     """
 
-    _fields_ = [("opcode", c_uint32, 2),
-                ("length", c_uint32, 2),
-                ("packet_number", c_uint32, 12),
-                ("checksum", c_uint32, 16)]
+    _fields_ = [("opcode",        c_uint32, 2),
+                ("length",        c_uint32, 2),
+                ("ack",           c_uint32, 1),
+                ("packet_number", c_uint32, 11),
+                ("checksum",      c_uint32, 16)]
 
 
 class dust_header(ctypes.BigEndianUnion):
@@ -81,9 +92,10 @@ class dust_packet:
                                     DUST_LENGTH.BYTES256.value: 0x100 }
 
     def calculate_checksum(self):
-        checksum = (self.header.bits.opcode << 14 |
-                    self.header.bits.length << 12 |
-                    self.header.bits.packet_number << 0)
+        checksum = (self.header.bits.opcode        << 0x0e |
+                    self.header.bits.length        << 0x0c |
+                    self.header.bits.ack           << 0x0b |
+                    self.header.bits.packet_number << 0x00)
         checksum = ~(checksum) & 0xffff
         return checksum
 
@@ -122,9 +134,10 @@ class dust_packet:
             crc16    = ((crc16 << 8) ^ self.crc16_lookup_table[position]) & 0xffff
         return crc16
 
-    def create(self, opcode, length, packet_number, data):
+    def create(self, opcode, length, ack, packet_number, data):
         self.header.bits.opcode        = opcode
         self.header.bits.length        = length
+        self.header.bits.ack           = ack
         self.header.bits.packet_number = packet_number
         self.header.bits.checksum      = self.calculate_checksum()
         self.data                      = data
@@ -152,7 +165,6 @@ class dust_packet:
 
     def serialize(self):
         self.serialized.clear()
-        # Serialize header
         self.serialized.extend(self.serialize_header())
         self.serialized.extend(self.data)
         self.crc16 = self.crc16_calculate(self.serialized)
@@ -176,10 +188,11 @@ class dust_packet:
     def print_packet(self):
         print("opcode:        " + str(f"{self.header.bits.opcode:#x}"))
         print("length:        " + str(f"{self.header.bits.length:#x}"))
+        print("ack:           " + str(f"{self.header.bits.ack:#x}"))
         print("packet_number: " + str(f"{self.header.bits.packet_number:#x}"))
         print("checksum:      " + str(f"{self.header.bits.checksum:#x}"))
         print("data:          " + str(' '.join(f"{hex:#x}" for hex in self.data)))
-        print("crc16:         " + str(' '.join(f"{hex:#x}" for hex in self.crc16)))
+        print("crc16:         " + str(f"{self.crc16:#x}"))
         print("whole_value:   " + str(f"{self.header.whole_value:#x}"))
         print("serialized:    " + str(' '.join(f"{hex:#x}" for hex in self.serialized)))
 

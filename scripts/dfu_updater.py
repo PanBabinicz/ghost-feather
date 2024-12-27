@@ -9,6 +9,7 @@ from dust_packet import dust_header
 from dust_packet import DUST_RESULT
 from dust_packet import DUST_OPCODE
 from dust_packet import DUST_LENGTH
+from dust_packet import DUST_ACK
 from dust_packet import DUST_PACKET_HEADER_SIZE
 from dust_packet import DUST_PACKET_CRC16_SIZE
 
@@ -68,7 +69,8 @@ class dfu_updater:
     def connect(self):
         if isinstance(self.usart, serial.Serial):
             print("Trying to connect...")
-            self.packet.create(opcode = 0x00, length = 0x00, packet_number = 0x00, data = [0xcc] * 32)
+            self.packet.create(opcode = DUST_OPCODE.CONNECT.value, length = DUST_LENGTH.BYTES32.value,
+                               ack = DUST_ACK.UNSET.value, packet_number = 0x00, data=[])
             self.packet.serialize()
             self.transmit_header()
             self.receive_ack()
@@ -76,7 +78,8 @@ class dfu_updater:
             print("Usart is not initialized...")
 
     def disconnect(self):
-        self.packet.create(opcode = 0x01, length = 0x00, packet_number = 0x00, data = [0xdd] * 32)
+        self.packet.create(opcode = DUST_OPCODE.DISCONNECT.value, length = DUST_LENGTH.BYTES32.value,
+                           ack = DUST_ACK.UNSET.value, packet_number = 0x00, data=[])
         self.packet.serialize()
         #self.transmit_socat()
         #self.receive_socat()
@@ -86,8 +89,8 @@ class dfu_updater:
             self.usart.write(self.packet.serialized[i].to_bytes(1, byteorder = 'big'))
 
     def transmit_packet(self):
-        frame = bytes(self.packet.serialized)
-        self.usart.write(frame)
+        for byte in self.packet.serialized:
+            self.usart.write(byte.to_bytes(1, byteorder = 'big'))
 
     def transmit_socat(self):
         byte_string = ""
@@ -100,9 +103,10 @@ class dfu_updater:
 
     def receive_ack(self):
         result             = DUST_RESULT.ERROR.value
-        ack                = self.usart.read(size = DUST_PACKET_HEADER_SIZE)
-        self.packet.header = self.packet.deserialize_header(ack)
-        if ( self.packet.header.bits.checksum == self.packet.calculate_checksum()):
+        data               = self.usart.read(size = DUST_PACKET_HEADER_SIZE)
+        self.packet.header = self.packet.deserialize_header(data)
+        if (self.packet.header.bits.ack == DUST_ACK.SET.value and
+            self.packet.header.bits.checksum == self.packet.calculate_checksum()):
             print("ACK")
             result = DUST_RESULT.SUCCESS.value
         return result
@@ -118,6 +122,13 @@ updater.text.convert_to_little_endian()
 updater.packet.crc16_lookup_table_generate(0x1021)
 updater.init()
 updater.connect()
+updater.packet.create(opcode = DUST_OPCODE.DATA.value, length = DUST_LENGTH.BYTES32.value,
+                      ack = DUST_ACK.UNSET.value, packet_number = 0x00, data=[0xdd]*32)
+updater.packet.serialize()
+
+for i in range(0, 10):
+    updater.transmit_packet()
+    updater.receive_ack()
 
 '''
 last_packet_padding = updater.text.size % 32
