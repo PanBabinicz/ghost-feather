@@ -62,98 +62,80 @@
 | BYTE128    | 0x02  |
 | BYTE256    | 0x03  |
 
-### PACKET NUMBER (12 bits wide)
+### ACK (1 bits wide)
+
+| LENGTH     | VALUE |
+|------------|-------|
+| UNSET      | 0x00  |
+| SET        | 0x01  |
+
+### PACKET NUMBER (11 bits wide)
+
+> The packet number is used to enumerate the packets. When error occurs the transmitter is signaled which
+> packet was corrupted with the help of this filed.
 
 ### CHECKSUM (16 bits wide)
 
+> The checksum purpose is error detection that may have been introduced during header transmission.
+>
+> Algorithm used to calculate the checksum:
+>
+> ``` code
+> checksum = ((opcode << 0x0e) | (length << 0x0c) | (ack << 0x0b) | (packet_number << 0x00));
+> checksum = ~checksum;
+> ```
+
 ## Connection establishment (handshake)
+
+> The connection establishment sets the payload size for future data packets. In this process only header is sent.
+> The receiver calculates the checksum of the header and check it's correctness. It then sends an ACK header.
 
 ```mermaid
 sequenceDiagram
-    UPDATER->>DEVICE: CONNECT PACKET
-    DEVICE-->>UPDATER: CONNECT ACK PACKET
+    UPDATER->>DEVICE: CONNECT HEADER
+    DEVICE-->>UPDATER: CONNECT ACK HEADER
 ```
 
-### CONNECT PACKET
+### CONNECT HEADER
 
 <table class="tg"><thead>
   <tr>
-    <td class="tg-wa1i" rowspan="11">DUST<br>PACKET</td>
-    <td class="tg-uzvj" rowspan="4">HEADER<br>(4bytes)</td>
+    <td class="tg-uzvj" rowspan="5">DUST<br>PACKET</td>
+    <td class="tg-uzvj" rowspan="5">HEADER<br>(4bytes)</td>
     <td class="tg-7btt">0x00<br>(2bits)</td>
   </tr>
   <tr>
     <td class="tg-7btt">0x00<br>(2bits)</td>
   </tr>
   <tr>
-    <td class="tg-7btt">0x00<br>(12bits)</td>
+    <td class="tg-7btt">0x00<br>(1bit)</td>
+  </tr>
+  <tr>
+    <td class="tg-nrix"><span style="font-weight:bold">0x00</span><br><span style="font-weight:bold">(11bits)</span></td>
   </tr>
   <tr>
     <td class="tg-7btt">0xffff<br>(16bits)</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i" rowspan="6">PAYLOAD<br>(32-256bytes)</td>
-    <td class="tg-wa1i">0xcc</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i">0xcc</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i">0xcc</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i">...</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i">0xcc</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i">0xcc</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i">CRC16<br>(2bytes)</td>
-    <td class="tg-wa1i">0x56dd<br></td>
   </tr></thead>
 </table>
 
-### CONNECT ACK PACKET
+### CONNECT ACK HEADER
 
 <table class="tg"><thead>
   <tr>
-    <td class="tg-wa1i" rowspan="11">DUST<br>PACKET</td>
-    <td class="tg-uzvj" rowspan="4">HEADER<br>(4bytes)</td>
+    <td class="tg-uzvj" rowspan="5">DUST<br>PACKET</td>
+    <td class="tg-uzvj" rowspan="5">HEADER<br>(4bytes)</td>
     <td class="tg-7btt">0x00<br>(2bits)</td>
   </tr>
   <tr>
     <td class="tg-7btt">0x00<br>(2bits)</td>
   </tr>
   <tr>
-    <td class="tg-7btt">0x00<br>(12bits)</td>
+    <td class="tg-7btt">0x01<br>(1bit)</td>
   </tr>
   <tr>
-    <td class="tg-7btt">0xffff<br>(16bits)</td>
+    <td class="tg-nrix"><span style="font-weight:bold">0x00</span><br><span style="font-weight:bold">(11bits)</span></td>
   </tr>
   <tr>
-    <td class="tg-wa1i" rowspan="6">PAYLOAD<br>(32-256bytes)</td>
-    <td class="tg-wa1i">0xaa</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i">0xaa</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i">0xaa</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i">...</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i">0xaa</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i">0xaa</td>
-  </tr>
-  <tr>
-    <td class="tg-wa1i">CRC16<br>(2bytes)</td>
-    <td class="tg-wa1i">0xa17f<br></td>
+    <td class="tg-7btt">0xf7ff<br>(16bits)</td>
   </tr></thead>
 </table>
