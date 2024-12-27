@@ -120,13 +120,17 @@ void boot_updater_init(void)
     }
 
     dust_packet_t packet = { 0 };
+    dust_result_t result = DUST_RESULT_ERROR;
 
     dust_crc16_generate_lut(0x1021);
 
     result = dust_handshake(&packet, USART3);
     if (result != DUST_RESULT_ERROR)
     {
-        dust_receive(&packet, USART3);
+        for (uint32_t i = 0; i < 32; i++)
+        {
+            dust_receive(&packet, USART3);
+        }
     }
 }
 
