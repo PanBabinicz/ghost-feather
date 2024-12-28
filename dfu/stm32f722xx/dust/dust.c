@@ -62,6 +62,14 @@ static dust_result_t dust_packet_calculate_checksum(dust_packet_t *const packet)
 static void dust_transmit_ack(dust_packet_t *const packet, const uint32_t usart);
 
 ///
+/// \brief Transmit NACK header.
+///
+/// \param[in] packet The dust packet structure.
+/// \param[in] usart  The usart block register address base.
+///
+static void dust_transmit_nack(dust_packet_t *const packet, const uint32_t usart);
+
+///
 /// \breif Serialize the packet header.
 ///
 /// \param[in]  header                 The dust packet header.
@@ -208,6 +216,22 @@ static void dust_transmit_ack(dust_packet_t *const packet, const uint32_t usart)
     dust_serialize_header(&packet->header, &serialized_header[0], DUST_PACKET_HEADER_SIZE);
 
     /* Send ACK packet. */
+    for (uint32_t i = 0; i < DUST_PACKET_HEADER_SIZE; i++)
+    {
+        usart_wait_send_ready(usart);
+        usart_send(usart, (uint16_t)serialized_header[i]);
+    }
+}
+
+static void dust_transmit_nack(dust_packet_t *const packet, const uint32_t usart)
+{
+    uint8_t serialized_header[DUST_PACKET_HEADER_SIZE];
+
+    (void)dust_header_create(&packet->header, packet->header.opcode, packet->header.length,
+                             DUST_ACK_UNSET, packet->header.packet_number);
+    dust_serialize_header(&packet->header, &serialized_header[0], DUST_PACKET_HEADER_SIZE);
+
+    /* Send NACK packet. */
     for (uint32_t i = 0; i < DUST_PACKET_HEADER_SIZE; i++)
     {
         usart_wait_send_ready(usart);
@@ -427,13 +451,13 @@ dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t ser
     return result;
 }
 
-dust_result_t dust_receive(dust_packet_t *const packet, const uint32_t usart)
+dust_result_t dust_receive(dust_protocol_instance_t *const instance, const uint32_t usart)
 {
     dust_result_t result = DUST_RESULT_ERROR;
 
-    if (packet != NULL)
+    if (instance != NULL)
     {
-        uint16_t packet_size = (DUST_PACKET_HEADER_SIZE + packet->payload_size + DUST_PACKET_CRC16_SIZE);
+        uint16_t packet_size = (DUST_PACKET_HEADER_SIZE + instance->packet.payload_size + DUST_PACKET_CRC16_SIZE);
         uint8_t  serialized_packet[packet_size];
 
         for (uint32_t i = 0; i < packet_size; i++)
@@ -445,39 +469,41 @@ dust_result_t dust_receive(dust_packet_t *const packet, const uint32_t usart)
         result = dust_crc16_check(serialized_packet, packet_size);
         if (result != DUST_RESULT_ERROR)
         {
-            dust_deserialize_packet(packet, &serialized_packet[0], packet_size);
-            dust_transmit_ack(packet, usart);
+            dust_deserialize_packet(&instance->packet, &serialized_packet[0], packet_size);
+            dust_transmit_ack(&instance->packet, usart);
 
             result = DUST_RESULT_SUCCESS;
+        }
+        else
+        {
+            dust_transmit_nack(&instance->packet, usart);
+
+            result = DUST_RESULT_ERROR;
         }
     }
 
     return result;
 }
 
-dust_result_t dust_handshake(dust_packet_t *const packet, const uint32_t usart)
+dust_result_t dust_handshake(dust_protocol_instance_t *const instance, const uint32_t usart)
 {
     dust_result_t result = DUST_RESULT_ERROR;
 
-    if (packet != NULL)
+    if (instance != NULL)
     {
-        uint8_t serialized_header[DUST_PACKET_HEADER_SIZE];
+        /* Handshake packet payload has fixed size equal to 32 bytes. */
+        instance->packet.payload_size = 0x20;
 
-        /* Receive the header with communication options. */
-        for (uint32_t i = 0; i < DUST_PACKET_HEADER_SIZE; i++)
+        /* Receive the handshake packet. */
+        result = dust_receive(instance, usart);
+        if (result != DUST_RESULT_ERROR)
         {
-            usart_wait_recv_ready(usart);
-            serialized_header[i] = usart_recv(usart);
-        }
-
-        dust_deserialize_header(&packet->header, &serialized_header[0], DUST_PACKET_HEADER_SIZE);
-
-        if (dust_packet_calculate_checksum(packet) != DUST_RESULT_ERROR)
-        {
-            dust_packet_calculate_payload_size(packet);
-            dust_transmit_ack(packet, usart);
-
-            result = DUST_RESULT_SUCCESS;
+            instance->options.ack_frequency      = instance->packet.data[0];
+            instance->options.number_of_packets  = 0;
+            instance->options.number_of_packets |= instance->packet.data[1] << 0x18;
+            instance->options.number_of_packets |= instance->packet.data[2] << 0x10;
+            instance->options.number_of_packets |= instance->packet.data[3] << 0x08;
+            instance->options.number_of_packets |= instance->packet.data[4] << 0x00;
         }
     }
 

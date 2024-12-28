@@ -54,6 +54,21 @@ typedef enum
 } dust_ack_t;
 
 ///
+/// \breif The dust packet ACK frequency type.
+///
+typedef enum
+{
+    DUST_ACK_FREQUENCY_AFTER_EACH_PACKET = 0,
+    DUST_ACK_FREQUENCY_AFTER_8_PACKETS,
+    DUST_ACK_FREQUENCY_AFTER_16_PACKETS,
+    DUST_ACK_FREQUENCY_AFTER_32_PACKETS,
+    DUST_ACK_FREQUENCY_AFTER_64_PACKETS,
+    DUST_ACK_FREQUENCY_AFTER_128_PACKETS,
+    DUST_ACK_FREQUENCY_AFTER_256_PACKETS,
+    DUST_ACK_FREQUENCY_AFTER_512_PACKETS,
+} dust_ack_frequency_t;
+
+///
 /// \breif The dust header type.
 ///
 typedef struct
@@ -75,6 +90,24 @@ typedef struct
     uint16_t      crc16;
     uint16_t      payload_size;
 } dust_packet_t;
+
+///
+/// \breif The dust handshake options type.
+///
+typedef struct
+{
+    uint8_t  ack_frequency;
+    uint32_t number_of_packets;
+} dust_handshake_options_t;
+
+///
+/// \breif The dust protocol instance type.
+///
+typedef struct
+{
+    dust_handshake_options_t options;
+    dust_packet_t            packet;
+} dust_protocol_instance_t;
 
 ///
 /// \brief Generate lookup table for given crc16 generator polynomial.
@@ -163,18 +196,19 @@ dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t ser
 ///
 /// \brief Receive the packet.
 ///
-/// \param[out] packet          The received dust packet.
+/// \param[out] instance        The received dust packet.
 /// \param[in]  usart           The usart block register address base.
 ///
 /// \return dust_result_t       Result of the function.
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-dust_result_t dust_receive(dust_packet_t *const packet, const uint32_t usart);
+dust_result_t dust_receive(dust_protocol_instance_t *const instance, const uint32_t usart);
 
 ///
 /// \brief Dust handshake procedure.
 ///
+/// \param[out] options         The received handshake opitons.
 /// \param[out] packet          The received dust packet.
 /// \param[in]  usart           The usart block register address base.
 ///
@@ -182,7 +216,7 @@ dust_result_t dust_receive(dust_packet_t *const packet, const uint32_t usart);
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-dust_result_t dust_handshake(dust_packet_t *const packet, const uint32_t usart);
+dust_result_t dust_handshake(dust_protocol_instance_t *const instance, const uint32_t usart);
 
 #if (defined(DEBUG_DUST_PROTOCOL) && (DEBUG_DUST_PROTOCOL == 1))
 ///

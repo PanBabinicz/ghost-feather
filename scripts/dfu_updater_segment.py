@@ -25,18 +25,7 @@ class dfu_updater_segment:
         for section in self.sections:
             data = section.data()
             for byte in data:
-                self.raw_hexdata.append(hex(byte))
-
-    def print_size(self):
-        print(self.size)
-
-    def print_raw_hexdata(self):
-        for data in self.raw_hexdata:
-            print(hex(data))
-
-    def print_converted_hexdata(self):
-        for data in self.converted_hexdata:
-            print(hex(data))
+                self.raw_hexdata.append(byte)
 
     def four_byte_convert_to_little_endian(self, four_bytes_segment):
         for hex_byte in reversed(four_bytes_segment):
@@ -52,3 +41,13 @@ class dfu_updater_segment:
         for chunk in chunks:
             self.four_byte_convert_to_little_endian(chunk)
 
+    def print_size(self):
+        print(self.size)
+
+    def print_raw_hexdata(self):
+        for data in self.raw_hexdata:
+            print(data)
+
+    def print_converted_hexdata(self):
+        for data in self.converted_hexdata:
+            print(data)

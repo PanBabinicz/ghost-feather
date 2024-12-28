@@ -70,10 +70,13 @@ class dfu_updater:
         if isinstance(self.usart, serial.Serial):
             print("Trying to connect...")
             self.packet.create(opcode = DUST_OPCODE.CONNECT.value, length = DUST_LENGTH.BYTES32.value,
-                               ack = DUST_ACK.UNSET.value, packet_number = 0x00, data=[])
+                               ack = DUST_ACK.UNSET.value, packet_number = 0x00, data=[0x00, 0x00, 0x00, 0x00, 0x24] + [0x00] * 27)
             self.packet.serialize()
-            self.transmit_header()
-            self.receive_ack()
+            print(len(self.packet.serialized))
+            self.transmit_packet()
+            result = self.receive_ack()
+            if result == DUST_RESULT.SUCCESS.value:
+                print("Connected")
         else:
             print("Usart is not initialized...")
 
@@ -107,7 +110,6 @@ class dfu_updater:
         self.packet.header = self.packet.deserialize_header(data)
         if (self.packet.header.bits.ack == DUST_ACK.SET.value and
             self.packet.header.bits.checksum == self.packet.calculate_checksum()):
-            print("ACK")
             result = DUST_RESULT.SUCCESS.value
         return result
 
@@ -119,25 +121,31 @@ updater.readelf_get_sections(updater.text)
 
 updater.text.calculate_size()
 updater.text.convert_to_little_endian()
+updater.text.print_size()
 updater.packet.crc16_lookup_table_generate(0x1021)
+
 updater.init()
 updater.connect()
-updater.packet.create(opcode = DUST_OPCODE.DATA.value, length = DUST_LENGTH.BYTES32.value,
-                      ack = DUST_ACK.UNSET.value, packet_number = 0x00, data=[0xdd]*32)
-updater.packet.serialize()
 
-for i in range(0, 10):
-    updater.transmit_packet()
-    updater.receive_ack()
-
-'''
 last_packet_padding = updater.text.size % 32
-for packet_number in range(0, int(updater.text.size / 32)):
+print(last_packet_padding)
+
+flag = True
+packet_number = 0
+# Send without the last packet
+while packet_number < int(updater.text.size / 32):
     updater.packet.create(opcode = DUST_OPCODE.DATA.value,
                           length = DUST_LENGTH.BYTES32.value,
+                          ack = DUST_ACK.UNSET.value,
                           packet_number = packet_number,
-                          data = [int(hex, 16) for hex in updater.text.converted_hexdata[(packet_number * 32):((packet_number * 32) + 32)]])
+                          data = [hex for hex in updater.text.converted_hexdata[(packet_number * 32):((packet_number * 32) + 32)]])
     updater.packet.serialize()
-    updater.packet.print_serialized()
-    print("")
-'''
+    if (flag == True and packet_number == 17):
+        updater.packet.serialized[8] = 0xff
+        flag = False
+    updater.transmit_packet()
+    if (updater.receive_ack() == DUST_RESULT.SUCCESS.value):
+        print("#" + str(packet_number) + ": ACK")
+        packet_number += 1
+    else:
+        print("#" + str(packet_number) + ": NACK")

@@ -119,17 +119,23 @@ void boot_updater_init(void)
         systick_delay_ms(500);
     }
 
-    dust_packet_t packet = { 0 };
-    dust_result_t result = DUST_RESULT_ERROR;
+    dust_protocol_instance_t instance = { 0 };
+    dust_result_t result              = DUST_RESULT_ERROR;
 
     dust_crc16_generate_lut(0x1021);
 
-    result = dust_handshake(&packet, USART3);
+    result = dust_handshake(&instance, USART3);
     if (result != DUST_RESULT_ERROR)
     {
-        for (uint32_t i = 0; i < 32; i++)
+        /* How many packet should I receive? Handshake option. */
+        for (uint32_t i = 0; i < instance.options.number_of_packets; i++)
         {
-            dust_receive(&packet, USART3);
+            result = dust_receive(&instance, USART3);
+            if (result == DUST_RESULT_ERROR)
+            {
+                /* Try to receive wrong packet again. */
+                i--;
+            }
         }
     }
 }
