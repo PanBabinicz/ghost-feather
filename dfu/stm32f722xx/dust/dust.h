@@ -81,14 +81,22 @@ typedef struct
 } dust_header_t;
 
 ///
+/// \breif The dust payload type.
+///
+typedef struct
+{
+    uint8_t  buffer[DUST_PACKET_PAYLOAD_BUFFER_MAX_SIZE];
+    uint16_t buffer_size;
+} dust_payload_t;
+
+///
 /// \breif The dust packet type.
 ///
 typedef struct
 {
-    dust_header_t header;
-    uint8_t       data[DUST_PACKET_DATA_BUFFER_MAX_SIZE];
-    uint16_t      crc16;
-    uint16_t      payload_size;
+    dust_header_t  header;
+    dust_payload_t payload;
+    uint16_t       crc16;
 } dust_packet_t;
 
 ///
@@ -98,6 +106,7 @@ typedef struct
 {
     uint8_t  ack_frequency;
     uint32_t number_of_packets;
+    uint16_t payload_size;
 } dust_handshake_options_t;
 
 ///
@@ -134,6 +143,20 @@ dust_result_t dust_header_create(dust_header_t *const header, const dust_opcode_
                                  const uint16_t packet_number);
 
 ///
+/// \brief Create dust payload.
+///
+/// \param[out] payload                     The dust packet structure.
+/// \param[in]  data                        The data buffer.
+/// \param[in]  initialize_data_size        The data buffer size.
+///
+/// \return dust_result_t                   Result of the function.
+/// \retval DUST_RESULT_SUCCESS             On success.
+/// \retval DUST_RESULT_ERROR               Otherwise.
+///
+dust_result_t dust_payload_create(dust_payload_t *const payload, const uint8_t *const data,
+                                  const uint32_t initialize_data_size);
+
+///
 /// \brief Create dust packet.
 ///
 /// \param[out] packet                      The dust packet structure.
@@ -146,7 +169,7 @@ dust_result_t dust_header_create(dust_header_t *const header, const dust_opcode_
 /// \retval DUST_RESULT_SERIALIZATION_ERROR On serialization error.
 /// \retval DUST_RESULT_ERROR               Otherwise.
 ///
-dust_result_t dust_packet_create(dust_packet_t *const packet, const dust_header_t *const header,
+dust_result_t dust_packet_create(dust_protocol_instance_t *const instance, const dust_header_t *const header,
                                  const uint8_t *const data, const uint32_t initialize_data_size);
 
 ///
