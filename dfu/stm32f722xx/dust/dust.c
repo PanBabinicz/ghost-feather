@@ -98,7 +98,7 @@ static void dust_serialize_header(const dust_header_t *const header, uint8_t *co
 /// \param[in]  payload_size       The payload buffer size.
 ///
 static void dust_serialize_payload(const dust_packet_t *const packet, uint8_t *const serialized_payload,
-                                   const uint32_t payload_size)
+                                   const uint32_t payload_size);
 
 ///
 /// \breif Serialize the packet.
@@ -121,14 +121,14 @@ static void dust_deserialize_header(dust_header_t *const header, const uint8_t *
                                     const uint32_t data_size);
 
 ///
-/// \breif Deserialize bytes stream into packet data.
+/// \breif Deserialize payload bytes stream into packet data.
 ///
 /// \param[out] packet    The dust packet.
 /// \param[out] data      The data buffer.
 /// \param[in]  data_size The data buffer size.
 ///
-static void dust_deserialize_data(dust_packet_t *const packet, const uint8_t *const data,
-                                  const uint32_t data_size);
+static void dust_deserialize_payload(dust_packet_t *const packet, const uint8_t *const data,
+                                     const uint32_t data_size);
 
 ///
 /// \breif Deserialize bytes stream into packet.
@@ -147,17 +147,17 @@ static void dust_crc16_calculate(dust_packet_t *const packet)
 {
     uint32_t position = 0;
     uint8_t  serialized_header[DUST_PACKET_HEADER_SIZE];
-    uint8_t  serialized_data[options->payload_size];
-    uint8_t  serialized_header_and_data[DUST_PACKET_HEADER_SIZE + options->payload_size];
+    uint8_t  serialized_data[packet->payload.buffer_size];
+    uint8_t  serialized_header_and_data[DUST_PACKET_HEADER_SIZE + packet->payload.buffer_size];
 
     /* Get serialized header and data. */
     dust_serialize_header(&packet->header, &serialized_header[0], sizeof(serialized_header));
-    dust_serialize_data(packet, &serialized_data[0], sizeof(serialized_data));
+    dust_serialize_payload(packet, &serialized_data[0], sizeof(serialized_data));
 
     packet->crc16 = 0;
     memcpy(&serialized_header_and_data[0], &serialized_header[0], DUST_PACKET_HEADER_SIZE);
     memcpy(&serialized_header_and_data[DUST_PACKET_HEADER_SIZE], &serialized_data[0],
-            options->payload_size);
+            packet->payload.buffer_size);
 
     for (uint32_t i = 0; i < sizeof(serialized_header_and_data); i++)
     {
@@ -181,7 +181,7 @@ static dust_result_t dust_crc16_check(const uint8_t *const data, const uint8_t d
 
     if (crc16 != 0)
     {
-        return = DUST_RESULT_ERROR;
+        return DUST_RESULT_ERROR;
     }
 
     return DUST_RESULT_SUCCESS;
@@ -194,9 +194,8 @@ static dust_result_t dust_handshake_options_check(const dust_protocol_instance_t
         return DUST_RESULT_ERROR;
     }
 
-    if ((result == DUST_RESULT_ERROR) ||
-        (instance->options.payload_size % 0x20 != 0x00) ||
-        (instance->options.payload_size > 0x100))
+    if ((instance->packet.payload.buffer_size % 0x20 != 0x00) ||
+        (instance->packet.payload.buffer_size > 0x100))
     {
         return DUST_RESULT_ERROR;
     }
@@ -206,9 +205,9 @@ static dust_result_t dust_handshake_options_check(const dust_protocol_instance_t
 
 static void dust_packet_calculate_payload_size(dust_packet_t *const packet)
 {
-    options->payload_size = (packet->header.length == DUST_LENGTH_BYTES32)  ? 0x20 :
-                            (packet->header.length == DUST_LENGTH_BYTES64)  ? 0x40 :
-                            (packet->header.length == DUST_LENGTH_BYTES128) ? 0x80 : 0x100;
+    packet->payload.buffer_size = (packet->header.length == DUST_LENGTH_BYTES32)  ? 0x20 :
+                                  (packet->header.length == DUST_LENGTH_BYTES64)  ? 0x40 :
+                                  (packet->header.length == DUST_LENGTH_BYTES128) ? 0x80 : 0x100;
 }
 
 static dust_result_t dust_packet_calculate_checksum(dust_packet_t *const packet)
@@ -329,8 +328,8 @@ static void dust_deserialize_packet(dust_packet_t *const packet, const uint8_t *
     dust_deserialize_payload(packet, &data[DUST_PACKET_DATA_POSITION], data_size);
 
     packet->crc16  = 0;
-    packet->crc16 |= (data[DUST_PACKET_HEADER_SIZE + options->payload_size]     << 0x08);
-    packet->crc16 |= (data[DUST_PACKET_HEADER_SIZE + options->payload_size + 1] << 0x00);
+    packet->crc16 |= (data[DUST_PACKET_HEADER_SIZE + packet->payload.buffer_size]     << 0x08);
+    packet->crc16 |= (data[DUST_PACKET_HEADER_SIZE + packet->payload.buffer_size + 1] << 0x00);
 }
 
 ///*************************************************************************************************
@@ -362,231 +361,214 @@ dust_result_t dust_header_create(dust_header_t *const header, const dust_opcode_
                                  const dust_length_t length, const dust_ack_t ack,
                                  const uint16_t packet_number)
 {
-    dust_result_t result = DUST_RESULT_ERROR;
-
-    if (header != NULL)
+    if (header == NULL)
     {
-        header->opcode        = opcode;
-        header->length        = length;
-        header->ack           = ack;
-        header->packet_number = packet_number;
-        header->checksum      = ((opcode << 0x0e) | (length << 0x0c) | (ack << 0x0b) | (packet_number << 0x00));
-        header->checksum      = ~(header->checksum);
-
-        result = DUST_RESULT_SUCCESS;
+        return DUST_RESULT_ERROR;
     }
 
-    return result;
+    header->opcode        = opcode;
+    header->length        = length;
+    header->ack           = ack;
+    header->packet_number = packet_number;
+    header->checksum      = ((opcode << 0x0e) | (length << 0x0c) | (ack << 0x0b) | (packet_number << 0x00));
+    header->checksum      = ~(header->checksum);
+
+    return DUST_RESULT_SUCCESS;
 }
 
 dust_result_t dust_payload_create(dust_payload_t *const payload, const uint8_t *const data,
                                   const uint32_t initialize_data_size)
 {
-    dust_result_t result = DUST_RESULT_ERROR;
-
-    if ((payload != NULL) && (data != NULL))
+    if ((payload == NULL) || (data == NULL))
     {
-        for (uint32_t i = 0; i < initialize_data_size; i++)
-        {
-            if (i < initialize_data_size)
-            {
-                payload->buffer[i] = data[i];
-            }
-            else
-            {
-                /* Fill the rest of the packet data buffer with zeros. */
-                payload->buffer[i] = 0;
-            }
-        }
-
-        payload->buffer_size = initialize_data_size;
-        result = DUST_RESULT_SUCCESS;
+        return DUST_RESULT_ERROR;
     }
 
-    return result;
+    for (uint32_t i = 0; i < initialize_data_size; i++)
+    {
+        if (i < initialize_data_size)
+        {
+            payload->buffer[i] = data[i];
+        }
+        else
+        {
+            /* Fill the rest of the packet data buffer with zeros. */
+            payload->buffer[i] = 0;
+        }
+    }
+
+    payload->buffer_size = initialize_data_size;
+
+    return DUST_RESULT_SUCCESS;
 }
 
 dust_result_t dust_packet_create(dust_packet_t *const packet, const dust_header_t *const header,
-                                 const dust_payload_t *const payload);
+                                 const dust_payload_t *const payload)
 {
-    dust_result_t result = DUST_RESULT_ERROR;
-
-    if ((packet != NULL) && (header != NULL) && (payload != NULL))
+    if ((packet == NULL) || (header == NULL) || (payload == NULL))
     {
-        packet->header  = *header;
-        packet->payload = *payload;
-
-        dust_crc16_calculate(packet);
-        result = DUST_RESULT_SUCCESS;
+        return DUST_RESULT_ERROR;
     }
 
-    return result;
+    packet->header  = *header;
+    packet->payload = *payload;
+
+    dust_crc16_calculate(packet);
+
+    return DUST_RESULT_SUCCESS;
 }
 
 dust_result_t dust_serialize(const dust_packet_t *const packet, uint8_t *const serialized_packet,
                              const uint32_t serialized_packet_size)
 {
-    dust_result_t result = DUST_RESULT_ERROR;
-
-    if ((packet != NULL) && (serialized_packet != NULL))
+    if ((packet == NULL) || (serialized_packet == NULL))
     {
-        if (serialized_packet_size < (DUST_PACKET_HEADER_SIZE + packet->payload.buffer_size + DUST_PACKET_CRC16_SIZE))
-        {
-            result = DUST_RESULT_SIZE_ERROR;
-        }
-        else
-        {
-            dust_serialize_packet(packet, serialized_packet, serialized_packet_size);
-            result = DUST_RESULT_SUCCESS;
-        }
+        return DUST_RESULT_ERROR;
     }
 
-    return result;
+    if (serialized_packet_size < (DUST_PACKET_HEADER_SIZE + packet->payload.buffer_size + DUST_PACKET_CRC16_SIZE))
+    {
+        return DUST_RESULT_SIZE_ERROR;
+    }
+
+    dust_serialize_packet(packet, serialized_packet, serialized_packet_size);
+
+    return DUST_RESULT_SUCCESS;
 }
 
 dust_result_t dust_deserialize(dust_packet_t *const packet, const uint8_t *const data,
                                const uint32_t data_size)
 {
-    dust_result_t result = DUST_RESULT_ERROR;
-
-    if ((packet != NULL) && (data != NULL))
+    if ((packet == NULL) || (data == NULL))
     {
-        if (data_size < (DUST_PACKET_HEADER_SIZE + packet->payload.buffer_size + DUST_PACKET_CRC16_SIZE))
-        {
-            result = DUST_RESULT_SIZE_ERROR;
-        }
-        else
-        {
-            result = dust_crc16_check(data, data_size);
-            if (result == DUST_RESULT_SUCCESS)
-            {
-                dust_deserialize_packet(packet, data, data_size);
-            }
-        }
+        return DUST_RESULT_ERROR;
     }
 
-    return result;
+    if (data_size < (DUST_PACKET_HEADER_SIZE + packet->payload.buffer_size + DUST_PACKET_CRC16_SIZE))
+    {
+        return DUST_RESULT_SIZE_ERROR;
+    }
+
+    if (dust_crc16_check(data, data_size) != DUST_RESULT_SUCCESS)
+    {
+        return DUST_RESULT_ERROR;
+    }
+
+    dust_deserialize_packet(packet, data, data_size);
+
+    return DUST_RESULT_SUCCESS;
 }
 
 dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t serialized_packet_size,
                             const uint32_t usart)
 {
-    dust_result_t result = DUST_RESULT_ERROR;
-
-    if (serialized_packet != NULL)
+    if (serialized_packet == NULL)
     {
-        for (uint32_t i = 0; i < serialized_packet_size; i++)
-        {
-            usart_wait_send_ready(usart);
-            usart_send(usart, (uint16_t)serialized_packet[i]);
-        }
-
-        result = DUST_RESULT_SUCCESS;
+        return DUST_RESULT_ERROR;
     }
 
-    return result;
+    for (uint32_t i = 0; i < serialized_packet_size; i++)
+    {
+        usart_wait_send_ready(usart);
+        usart_send(usart, (uint16_t)serialized_packet[i]);
+    }
+
+    return DUST_RESULT_SUCCESS;
 }
 
-dust_result_t dust_receive(dust_protocol_instance_t *const instance, const uint32_t usart)
+dust_result_t dust_receive(dust_packet_t *const packet, const uint32_t usart)
 {
-    dust_result_t result = DUST_RESULT_ERROR;
-
-    if (instance != NULL)
+    if (packet == NULL)
     {
-        uint16_t packet_size = (DUST_PACKET_HEADER_SIZE + instance->options.payload_size + DUST_PACKET_CRC16_SIZE);
-        uint8_t  serialized_packet[packet_size];
-
-        for (uint32_t i = 0; i < packet_size; i++)
-        {
-            usart_wait_recv_ready(usart);
-            serialized_packet[i] = usart_recv(usart);
-        }
-
-        result = dust_crc16_check(serialized_packet, packet_size);
-        if (result != DUST_RESULT_ERROR)
-        {
-            dust_deserialize_packet(&instance->packet, &serialized_packet[0], packet_size);
-            dust_transmit_ack(&instance->packet, usart);
-
-            result = DUST_RESULT_SUCCESS;
-        }
-        else
-        {
-            dust_transmit_nack(&instance->packet, usart);
-
-            result = DUST_RESULT_ERROR;
-        }
+        return DUST_RESULT_ERROR;
     }
 
-    return result;
+    uint16_t packet_size = (DUST_PACKET_HEADER_SIZE + packet->payload.buffer_size + DUST_PACKET_CRC16_SIZE);
+    uint8_t  serialized_packet[packet_size];
+
+    for (uint32_t i = 0; i < packet_size; i++)
+    {
+        usart_wait_recv_ready(usart);
+        serialized_packet[i] = usart_recv(usart);
+    }
+
+    if (dust_crc16_check(serialized_packet, packet_size) != DUST_RESULT_SUCCESS)
+    {
+        dust_transmit_nack(packet, usart);
+        return DUST_RESULT_ERROR;
+    }
+
+    dust_deserialize_packet(packet, &serialized_packet[0], packet_size);
+    dust_transmit_ack(packet, usart);
+
+    return DUST_RESULT_SUCCESS;
 }
 
 dust_result_t dust_handshake(dust_protocol_instance_t *const instance, const uint32_t usart)
 {
-    dust_result_t result = DUST_RESULT_ERROR;
-
-    if (instance != NULL)
+    if (instance == NULL)
     {
-        /* Handshake packet payload has fixed size equal to 32 bytes. */
-        instance->options.payload_size = 0x20;
-
-        /* Receive the handshake packet. */
-        result = dust_receive(instance, usart);
-        if (result != DUST_RESULT_ERROR)
-        {
-            instance->options.ack_frequency      = instance->packet.data[0];
-
-            instance->options.number_of_packets  = 0;
-            instance->options.number_of_packets |= instance->packet.data[1] << 0x18;
-            instance->options.number_of_packets |= instance->packet.data[2] << 0x10;
-            instance->options.number_of_packets |= instance->packet.data[3] << 0x08;
-            instance->options.number_of_packets |= instance->packet.data[4] << 0x00;
-
-            instance->options.payload_size       = 0;
-            instance->options.payload_size      |= instance->packet.data[5] << 0x08;
-            instance->options.payload_size      |= instance->packet.data[6] << 0x00;
-
-            result = dust_handshake_options_check(instance);
-        }
+        return DUST_RESULT_ERROR;
     }
 
-    return result;
+    /* Handshake packet payload has fixed size equal to 32 bytes. */
+    instance->packet.payload.buffer_size = 0x20;
+
+    /* Receive the handshake packet. */
+    if (dust_receive(&instance->packet, usart) != DUST_RESULT_SUCCESS)
+    {
+        return DUST_RESULT_ERROR;
+    }
+
+    instance->options.ack_frequency      = instance->packet.payload.buffer[0];
+
+    instance->options.number_of_packets  = 0;
+    instance->options.number_of_packets |= instance->packet.payload.buffer[1] << 0x18;
+    instance->options.number_of_packets |= instance->packet.payload.buffer[2] << 0x10;
+    instance->options.number_of_packets |= instance->packet.payload.buffer[3] << 0x08;
+    instance->options.number_of_packets |= instance->packet.payload.buffer[4] << 0x00;
+
+    instance->options.payload_size       = 0;
+    instance->options.payload_size      |= instance->packet.payload.buffer[5] << 0x08;
+    instance->options.payload_size      |= instance->packet.payload.buffer[6] << 0x00;
+
+    return DUST_RESULT_SUCCESS;
 }
 
 #if (defined(DEBUG_DUST_PROTOCOL) && (DEBUG_DUST_PROTOCOL == 1))
 dust_result_t dust_header_printf(const dust_header_t *const header)
 {
-    dust_result_t result = DUST_RESULT_ERROR;
-
-    if (header != NULL)
+    if (header == NULL)
     {
-        printf("opcode:        0x%02x\n\r", header->opcode);
-        printf("length:        0x%02x\n\r", header->length);
-        printf("packet_number: 0x%04x\n\r", header->packet_number);
-        printf("checksum:      0x%04x\n\r", header->checksum);
+        return DUST_RESULT_ERROR;
     }
 
-    return result;
+    printf("opcode:        0x%02x\n\r", header->opcode);
+    printf("length:        0x%02x\n\r", header->length);
+    printf("packet_number: 0x%04x\n\r", header->packet_number);
+    printf("checksum:      0x%04x\n\r", header->checksum);
+
+    return DUST_RESULT_SUCCESS;
 }
 
 dust_result_t dust_packet_printf(const dust_packet_t *const packet)
 {
-    dust_result_t result = DUST_RESULT_ERROR;
-
-    if (packet != NULL)
+    if (packet == NULL)
     {
-        printf("header: 0x%08x\n\r", packet->header);
-        printf("data:   ");
-
-        for (uint32_t i = 0; i < options->payload_size; i++)
-        {
-            printf("0x%02x ", packet->data[i]);
-        }
-
-        printf("\n\rcrc16:  0x%04x\n\r", packet->crc16);
+        return DUST_RESULT_ERROR;
     }
 
-    return result;
+    printf("header: 0x%08x\n\r", packet->header);
+    printf("data:   ");
+
+    for (uint32_t i = 0; i < packet->payload.buffer_size; i++)
+    {
+        printf("0x%02x ", packet->payload.buffer[i]);
+    }
+
+    printf("\n\rcrc16:  0x%04x\n\r", packet->crc16);
+
+    return DUST_RESULT_SUCCESS;
 }
 
 #endif  /* DEBUG_DUST_PROTOCOL */

@@ -5,6 +5,7 @@ from enum import Enum
 DUST_PACKET_HEADER_SIZE = 4
 DUST_PACKET_CRC16_SIZE  = 2
 
+c_uint8  = ctypes.c_uint8
 c_uint32 = ctypes.c_uint32
 
 class DUST_RESULT(Enum):
@@ -74,6 +75,16 @@ class dust_header(ctypes.BigEndianUnion):
                 ("whole_value", c_uint32)]
 
 
+class dust_handshake_options(ctypes.BigEndianStructure):
+    """Documentation for dust_handshake_options structure.
+
+    More details.
+    """
+
+    _fields_ = [("ack_frequency",     c_uint8),
+                ("number_of_packets", c_uint32)]
+
+
 class dust_packet:
     """Documentation for dust_packet class.
 
@@ -86,6 +97,7 @@ class dust_packet:
         self.serialized         = []
         self.crc16              = 0
         self.crc16_lookup_table = []
+        self.payload_size       = 0
         self.length_hash_table  = { DUST_LENGTH.BYTES32.value:  0x20,
                                     DUST_LENGTH.BYTES64.value:  0x40,
                                     DUST_LENGTH.BYTES128.value: 0x80,
@@ -134,6 +146,9 @@ class dust_packet:
             crc16    = ((crc16 << 8) ^ self.crc16_lookup_table[position]) & 0xffff
         return crc16
 
+    def calculate_payload_size(self):
+        self.payload_size = self.length_hash_table[self.header.bits.length]
+
     def create(self, opcode, length, ack, packet_number, data):
         self.header.bits.opcode        = opcode
         self.header.bits.length        = length
@@ -165,8 +180,9 @@ class dust_packet:
 
     def serialize(self):
         self.serialized.clear()
+        self.calculate_payload_size()
         self.serialized.extend(self.serialize_header())
-        self.serialized.extend(self.data)
+        self.serialized.extend(self.data + ([0x00] * (self.payload_size - len(self.data))))
         self.crc16 = self.crc16_calculate(self.serialized)
         self.serialized.append((self.crc16 & 0xff00) >> 0x08)
         self.serialized.append((self.crc16 & 0x00ff) >> 0x00)
@@ -176,8 +192,8 @@ class dust_packet:
         serialized_bytes = usart.read(size = DUST_PACKET_HEADER_SIZE)
         self.header      = self.deserialize_header(serialized_bytes)
         if ( self.header.bits.checksum == self.calculate_checksum()):
-            packet_size       = self.length_hash_table[self.header.bits.length]
-            serialized_bytes += usart.read(size = (packet_size + DUST_PACKET_CRC16_SIZE))
+            self.calculate_payload_size()
+            serialized_bytes += usart.read(size = (self.payload_size + DUST_PACKET_CRC16_SIZE))
             if self.crc16_calculate(serialized_bytes) == 0:
                 self.data.clear()
                 self.data  = self.deserialize_data(serialized_bytes[DUST_PACKET_HEADER_SIZE:(len(serialized_bytes) - DUST_PACKET_CRC16_SIZE)])

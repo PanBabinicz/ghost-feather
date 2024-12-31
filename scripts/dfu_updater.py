@@ -6,6 +6,7 @@ from elftools.elf.elffile import ELFFile
 
 from dust_packet import dust_packet
 from dust_packet import dust_header
+from dust_packet import dust_handshake_options
 from dust_packet import DUST_RESULT
 from dust_packet import DUST_OPCODE
 from dust_packet import DUST_LENGTH
@@ -30,6 +31,7 @@ class dfu_updater:
         self.baudrate = sys.argv[3]
         self.text     = dfu_updater_segment(name = '.text', sections = [])
         self.packet   = dust_packet()
+        self.options  = dust_handshake_options()
         self.usart    = None
 
     def print_arguments(self):
@@ -70,9 +72,8 @@ class dfu_updater:
         if isinstance(self.usart, serial.Serial):
             print("Trying to connect...")
             self.packet.create(opcode = DUST_OPCODE.CONNECT.value, length = DUST_LENGTH.BYTES32.value,
-                               ack = DUST_ACK.UNSET.value, packet_number = 0x00, data=[0x00, 0x00, 0x00, 0x00, 0x24] + [0x00] * 27)
+                               ack = DUST_ACK.UNSET.value, packet_number = 0x00, data=[0x00, 0x00, 0x00, 0x00, 0x24, 0x00, 0x20] + [0x00] * 25)
             self.packet.serialize()
-            print(len(self.packet.serialized))
             self.transmit_packet()
             result = self.receive_ack()
             if result == DUST_RESULT.SUCCESS.value:
@@ -81,15 +82,32 @@ class dfu_updater:
             print("Usart is not initialized...")
 
     def disconnect(self):
-        self.packet.create(opcode = DUST_OPCODE.DISCONNECT.value, length = DUST_LENGTH.BYTES32.value,
-                           ack = DUST_ACK.UNSET.value, packet_number = 0x00, data=[])
-        self.packet.serialize()
-        #self.transmit_socat()
-        #self.receive_socat()
+        if isinstance(self.usart, serial.Serial):
+            print("Trying to disconnect...")
+            self.packet.create(opcode = DUST_OPCODE.DISCONNECT.value, length = DUST_LENGTH.BYTES32.value,
+                               ack = DUST_ACK.UNSET.value, packet_number = 0x00, data=[0x00] * 32)
+            self.packet.serialize()
+            #self.transmit_packet()
+            result = self.receive_ack()
+            if result == DUST_RESULT.SUCCESS.value:
+                print("Disconnected")
+        else:
+            print("Usart is not initialized...")
 
-    def transmit_header(self):
-        for i in range(0, DUST_PACKET_HEADER_SIZE):
-            self.usart.write(self.packet.serialized[i].to_bytes(1, byteorder = 'big'))
+    def update(self):
+        if isinstance(self.usart, serial.Serial):
+            print("Trying to update...")
+            number_of_packets
+            self.packet.create(opcode = DUST_OPCODE.DISCONNECT.value, length = DUST_LENGTH.BYTES32.value,
+                               ack = DUST_ACK.UNSET.value, packet_number = 0x00, data=[0x00] * 32)
+            self.packet.serialize()
+            #self.transmit_packet()
+            result = self.receive_ack()
+            if result == DUST_RESULT.SUCCESS.value:
+                print("Updated")
+        else:
+            print("Usart is not initialized...")
+
 
     def transmit_packet(self):
         for byte in self.packet.serialized:
@@ -118,17 +136,15 @@ updater = dfu_updater()
 updater.print_arguments()
 
 updater.readelf_get_sections(updater.text)
-
 updater.text.calculate_size()
 updater.text.convert_to_little_endian()
-updater.text.print_size()
 updater.packet.crc16_lookup_table_generate(0x1021)
 
 updater.init()
 updater.connect()
-
-last_packet_padding = updater.text.size % 32
-print(last_packet_padding)
+#updater.update()
+#updater.disconnect()
+#updater.deinit()
 
 flag = True
 packet_number = 0
@@ -140,7 +156,7 @@ while packet_number < int(updater.text.size / 32):
                           packet_number = packet_number,
                           data = [hex for hex in updater.text.converted_hexdata[(packet_number * 32):((packet_number * 32) + 32)]])
     updater.packet.serialize()
-    if (flag == True and packet_number == 17):
+    if (flag == True and packet_number == 23):
         updater.packet.serialized[8] = 0xff
         flag = False
     updater.transmit_packet()

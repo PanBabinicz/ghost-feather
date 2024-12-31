@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#define DUST_PACKET_DATA_BUFFER_MAX_SIZE    (0x0100u)
+#define DUST_PACKET_PAYLOAD_BUFFER_MAX_SIZE (0x0100u)
 #define DUST_PACKET_HEADER_SIZE             (0x0004u)
 #define DUST_PACKET_CRC16_SIZE              (0x0002u)
 #define DUST_PACKET_HEADER_POSITION         (0x0000u)
@@ -161,16 +161,15 @@ dust_result_t dust_payload_create(dust_payload_t *const payload, const uint8_t *
 ///
 /// \param[out] packet                      The dust packet structure.
 /// \param[in]  header                      The dust header structure.
-/// \param[in]  data                        The data buffer.
-/// \param[in]  initialize_data_size        The data buffer size.
+/// \param[in]  payload                     The payload structure.
 ///
 /// \return dust_result_t                   Result of the function.
 /// \retval DUST_RESULT_SUCCESS             On success.
 /// \retval DUST_RESULT_SERIALIZATION_ERROR On serialization error.
 /// \retval DUST_RESULT_ERROR               Otherwise.
 ///
-dust_result_t dust_packet_create(dust_protocol_instance_t *const instance, const dust_header_t *const header,
-                                 const uint8_t *const data, const uint32_t initialize_data_size);
+dust_result_t dust_packet_create(dust_packet_t *const packet, const dust_header_t *const header,
+                                 const dust_payload_t *const payload);
 
 ///
 /// \brief Serialize dust packet into bytes stream.
@@ -219,14 +218,14 @@ dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t ser
 ///
 /// \brief Receive the packet.
 ///
-/// \param[out] instance        The received dust packet.
+/// \param[out] packet          The received dust packet.
 /// \param[in]  usart           The usart block register address base.
 ///
 /// \return dust_result_t       Result of the function.
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-dust_result_t dust_receive(dust_protocol_instance_t *const instance, const uint32_t usart);
+dust_result_t dust_receive(dust_packet_t *const packet, const uint32_t usart);
 
 ///
 /// \brief Dust handshake procedure.
