@@ -192,3 +192,20 @@ sequenceDiagram
 >     <td class="tg-uzvj">0x3508<br></td>
 >   </tr></thead>
 > </table>
+
+## Data transmission
+
+> During data transmission, firmware bytes are sent in the payload.
+> The rate of ACK packets depends on the options passed during the handshake.
+
+ ```mermaid
+ sequenceDiagram
+     UPDATER->>DEVICE: DATA[0] PACKET
+     UPDATER->>DEVICE: DATA[1] PACKET
+     UPDATER->>DEVICE: DATA[2] PACKET
+     UPDATER->>DEVICE: ...
+     UPDATER->>DEVICE: DATA[n] PACKET
+     DEVICE-->>UPDATER: DATA ACK PACKET
+     UPDATER->>DEVICE: DATA[n+1] PACKET
+     UPDATER->>DEVICE: ...
+ ```
