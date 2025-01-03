@@ -6,6 +6,7 @@ DUST_PACKET_HEADER_SIZE = 4
 DUST_PACKET_CRC16_SIZE  = 2
 
 c_uint8  = ctypes.c_uint8
+c_uint16 = ctypes.c_uint16
 c_uint32 = ctypes.c_uint32
 
 class DUST_RESULT(Enum):
@@ -52,6 +53,22 @@ class DUST_ACK(Enum):
     SET    = 0x01
 
 
+class DUST_ACK_FREQUENCY(Enum):
+    """Documentation for DUST_ACK_FREQUENCY enum.
+
+    More details.
+    """
+
+    AFTER_EACH_PACKET = 0x00
+    AFTER_8_PACKETS   = 0x01
+    AFTER_16_PACKETS  = 0x02
+    AFTER_32_PACKETS  = 0x03
+    AFTER_64_PACKETS  = 0x04
+    AFTER_128_PACKETS = 0x05
+    AFTER_256_PACKETS = 0x06
+    AFTER_512_PACKETS = 0x07
+
+
 class dust_header_bits(ctypes.BigEndianStructure):
     """Documentation for dust_header_bits structure.
 
@@ -82,7 +99,8 @@ class dust_handshake_options(ctypes.BigEndianStructure):
     """
 
     _fields_ = [("ack_frequency",     c_uint8),
-                ("number_of_packets", c_uint32)]
+                ("number_of_packets", c_uint32),
+                ("payload_size",      c_uint16)]
 
 
 class dust_packet:
@@ -92,16 +110,24 @@ class dust_packet:
     """
 
     def __init__(self):
-        self.header             = dust_header()
-        self.data               = []
-        self.serialized         = []
-        self.crc16              = 0
-        self.crc16_lookup_table = []
-        self.payload_size       = 0
-        self.length_hash_table  = { DUST_LENGTH.BYTES32.value:  0x20,
-                                    DUST_LENGTH.BYTES64.value:  0x40,
-                                    DUST_LENGTH.BYTES128.value: 0x80,
-                                    DUST_LENGTH.BYTES256.value: 0x100 }
+        self.header                   = dust_header()
+        self.data                     = []
+        self.serialized               = []
+        self.crc16                    = 0
+        self.crc16_lookup_table       = []
+        self.payload_size             = 0
+        self.length_hash_table        = { DUST_LENGTH.BYTES32.value:  0x20,
+                                          DUST_LENGTH.BYTES64.value:  0x40,
+                                          DUST_LENGTH.BYTES128.value: 0x80,
+                                          DUST_LENGTH.BYTES256.value: 0x100 }
+        self.ack_frequency_hash_table = { DUST_ACK_FREQUENCY.AFTER_EACH_PACKET.value: 0x01,
+                                          DUST_ACK_FREQUENCY.AFTER_8_PACKETS.value:   0x08,
+                                          DUST_ACK_FREQUENCY.AFTER_16_PACKETS.value:  0x10,
+                                          DUST_ACK_FREQUENCY.AFTER_32_PACKETS.value:  0x20,
+                                          DUST_ACK_FREQUENCY.AFTER_64_PACKETS.value:  0x40,
+                                          DUST_ACK_FREQUENCY.AFTER_128_PACKETS.value: 0x80,
+                                          DUST_ACK_FREQUENCY.AFTER_256_PACKETS.value: 0x100,
+                                          DUST_ACK_FREQUENCY.AFTER_512_PACKETS.value: 0x200 }
 
     def calculate_checksum(self):
         checksum = (self.header.bits.opcode        << 0x0e |

@@ -66,6 +66,7 @@ typedef enum
     DUST_ACK_FREQUENCY_AFTER_128_PACKETS,
     DUST_ACK_FREQUENCY_AFTER_256_PACKETS,
     DUST_ACK_FREQUENCY_AFTER_512_PACKETS,
+    DUST_ACK_FREQUENCY_TOTAL_SIZE,
 } dust_ack_frequency_t;
 
 ///
@@ -124,6 +125,15 @@ typedef struct
 /// \param[in] polynomial The generator polynomial.
 ///
 void dust_crc16_generate_lut(const uint16_t polynomial);
+
+///
+/// \brief Get ack frequency from hash table.
+///
+/// \param[in] ack_frequency The ack frequency from handshake options.
+///
+/// \return uint16_t         The ack frequency from hash table.
+///
+uint16_t dust_get_ack_frequency(const uint8_t ack_frequency);
 
 ///
 /// \brief Create dust header.
@@ -226,6 +236,22 @@ dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t ser
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
 dust_result_t dust_receive(dust_packet_t *const packet, const uint32_t usart);
+
+///
+/// \brief Transmit ACK header.
+///
+/// \param[in] packet The dust packet structure.
+/// \param[in] usart  The usart block register address base.
+///
+void dust_transmit_ack(dust_packet_t *const packet, const uint32_t usart);
+
+///
+/// \brief Transmit NACK header.
+///
+/// \param[in] packet The dust packet structure.
+/// \param[in] usart  The usart block register address base.
+///
+void dust_transmit_nack(dust_packet_t *const packet, const uint32_t usart);
 
 ///
 /// \brief Dust handshake procedure.

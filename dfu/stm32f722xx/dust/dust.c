@@ -9,9 +9,27 @@
 /// Private objects - definition.
 ///*************************************************************************************************
 ///
-/// \breif Circular buffer data structure array.
+/// \breif Dust protocol crc16 look-up table.
 ///
 static uint16_t dust_crc16_lut[DUST_CRC16_LUT_SIZE];
+
+///*************************************************************************************************
+/// Global objects - definition.
+///*************************************************************************************************
+///
+/// \breif Dust handshake ack frequency option hash table.
+///
+static uint16_t dust_ack_frequency_hash_table[DUST_ACK_FREQUENCY_TOTAL_SIZE] =
+{
+    0x0001,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_EACH_PACKET */
+    0x0008,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_8_PACKETS   */
+    0x0010,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_16_PACKETS  */
+    0x0020,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_32_PACKETS  */
+    0x0040,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_64_PACKETS  */
+    0x0080,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_128_PACKETS */
+    0x0100,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_256_PACKETS */
+    0x0200          /* Corresponds to DUST_ACK_FREQUENCY_AFTER_512_PACKETS */
+};
 
 ///*************************************************************************************************
 /// Private functions - declaration.
@@ -63,22 +81,6 @@ static void dust_packet_calculate_payload_size(dust_packet_t *const packet);
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
 static dust_result_t dust_packet_calculate_checksum(dust_packet_t *const packet);
-
-///
-/// \brief Transmit ACK header.
-///
-/// \param[in] packet The dust packet structure.
-/// \param[in] usart  The usart block register address base.
-///
-static void dust_transmit_ack(dust_packet_t *const packet, const uint32_t usart);
-
-///
-/// \brief Transmit NACK header.
-///
-/// \param[in] packet The dust packet structure.
-/// \param[in] usart  The usart block register address base.
-///
-static void dust_transmit_nack(dust_packet_t *const packet, const uint32_t usart);
 
 ///
 /// \breif Serialize the packet header.
@@ -229,38 +231,6 @@ static dust_result_t dust_packet_calculate_checksum(dust_packet_t *const packet)
     return DUST_RESULT_SUCCESS;
 }
 
-static void dust_transmit_ack(dust_packet_t *const packet, const uint32_t usart)
-{
-    uint8_t serialized_header[DUST_PACKET_HEADER_SIZE];
-
-    (void)dust_header_create(&packet->header, packet->header.opcode, packet->header.length,
-                             DUST_ACK_SET, packet->header.packet_number);
-    dust_serialize_header(&packet->header, &serialized_header[0], DUST_PACKET_HEADER_SIZE);
-
-    /* Send ACK packet. */
-    for (uint32_t i = 0; i < DUST_PACKET_HEADER_SIZE; i++)
-    {
-        usart_wait_send_ready(usart);
-        usart_send(usart, (uint16_t)serialized_header[i]);
-    }
-}
-
-static void dust_transmit_nack(dust_packet_t *const packet, const uint32_t usart)
-{
-    uint8_t serialized_header[DUST_PACKET_HEADER_SIZE];
-
-    (void)dust_header_create(&packet->header, packet->header.opcode, packet->header.length,
-                             DUST_ACK_UNSET, packet->header.packet_number);
-    dust_serialize_header(&packet->header, &serialized_header[0], DUST_PACKET_HEADER_SIZE);
-
-    /* Send NACK packet. */
-    for (uint32_t i = 0; i < DUST_PACKET_HEADER_SIZE; i++)
-    {
-        usart_wait_send_ready(usart);
-        usart_send(usart, (uint16_t)serialized_header[i]);
-    }
-}
-
 static void dust_serialize_header(const dust_header_t *const header, uint8_t *const serialized_header,
                                   const uint32_t header_size)
 {
@@ -355,6 +325,11 @@ void dust_crc16_generate_lut(const uint16_t polynomial)
 
         dust_crc16_lut[byte] = crc16_value;
     }
+}
+
+uint16_t dust_get_ack_frequency(const uint8_t ack_frequency)
+{
+    return dust_ack_frequency_hash_table[ack_frequency];
 }
 
 dust_result_t dust_header_create(dust_header_t *const header, const dust_opcode_t opcode,
@@ -494,14 +469,44 @@ dust_result_t dust_receive(dust_packet_t *const packet, const uint32_t usart)
 
     if (dust_crc16_check(serialized_packet, packet_size) != DUST_RESULT_SUCCESS)
     {
-        dust_transmit_nack(packet, usart);
         return DUST_RESULT_ERROR;
     }
 
     dust_deserialize_packet(packet, &serialized_packet[0], packet_size);
-    dust_transmit_ack(packet, usart);
 
     return DUST_RESULT_SUCCESS;
+}
+
+void dust_transmit_ack(dust_packet_t *const packet, const uint32_t usart)
+{
+    uint8_t serialized_header[DUST_PACKET_HEADER_SIZE];
+
+    (void)dust_header_create(&packet->header, packet->header.opcode, packet->header.length,
+                             DUST_ACK_SET, packet->header.packet_number);
+    dust_serialize_header(&packet->header, &serialized_header[0], DUST_PACKET_HEADER_SIZE);
+
+    /* Send ACK packet. */
+    for (uint32_t i = 0; i < DUST_PACKET_HEADER_SIZE; i++)
+    {
+        usart_wait_send_ready(usart);
+        usart_send(usart, (uint16_t)serialized_header[i]);
+    }
+}
+
+void dust_transmit_nack(dust_packet_t *const packet, const uint32_t usart)
+{
+    uint8_t serialized_header[DUST_PACKET_HEADER_SIZE];
+
+    (void)dust_header_create(&packet->header, packet->header.opcode, packet->header.length,
+                             DUST_ACK_UNSET, packet->header.packet_number);
+    dust_serialize_header(&packet->header, &serialized_header[0], DUST_PACKET_HEADER_SIZE);
+
+    /* Send NACK packet. */
+    for (uint32_t i = 0; i < DUST_PACKET_HEADER_SIZE; i++)
+    {
+        usart_wait_send_ready(usart);
+        usart_send(usart, (uint16_t)serialized_header[i]);
+    }
 }
 
 dust_result_t dust_handshake(dust_protocol_instance_t *const instance, const uint32_t usart)
@@ -510,6 +515,8 @@ dust_result_t dust_handshake(dust_protocol_instance_t *const instance, const uin
     {
         return DUST_RESULT_ERROR;
     }
+
+    volatile uint16_t a = dust_ack_frequency_hash_table[0];
 
     /* Handshake packet payload has fixed size equal to 32 bytes. */
     instance->packet.payload.buffer_size = 0x20;

@@ -122,18 +122,39 @@ void boot_updater_init(void)
     dust_protocol_instance_t instance = { 0 };
     dust_crc16_generate_lut(0x1021);
 
-    if (dust_handshake(&instance, USART3) != DUST_RESULT_SUCCESS)
+    if ((dust_handshake(&instance, USART3) != DUST_RESULT_SUCCESS) ||
+        (instance.options.ack_frequency > DUST_ACK_FREQUENCY_TOTAL_SIZE))
     {
+        dust_transmit_nack(&instance.packet, USART3);
         return;
     }
+
+    /* Transmit handshake ACK. */
+    dust_transmit_ack(&instance.packet, USART3);
+
+    volatile uint16_t ack_frequency = dust_get_ack_frequency(instance.options.ack_frequency);
+    uint16_t number_of_nack = 0;
 
     /* How many packet should I receive? Handshake option. */
     for (uint32_t i = 0; i < instance.options.number_of_packets; i++)
     {
         if (dust_receive(&instance.packet, USART3) != DUST_RESULT_SUCCESS)
         {
-            /* Try to receive wrong packet again. */
-            i--;
+            number_of_nack++;
+        }
+
+        if (((i + 1) % ack_frequency) == 0)
+        {
+            if (number_of_nack != 0)
+            {
+                dust_transmit_nack(&instance.packet, USART3);
+                number_of_nack = 0;
+                i -= ack_frequency;
+            }
+            else
+            {
+                dust_transmit_ack(&instance.packet, USART3);
+            }
         }
     }
 }
