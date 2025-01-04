@@ -132,8 +132,10 @@ void boot_updater_init(void)
     /* Transmit handshake ACK. */
     dust_transmit_ack(&instance.packet, USART3);
 
-    volatile uint16_t ack_frequency = dust_get_ack_frequency(instance.options.ack_frequency);
-    uint16_t number_of_nack = 0;
+    uint16_t ack_frequency          = dust_get_ack_frequency(instance.options.ack_frequency);
+    uint16_t number_of_nack         = 0;
+    uint16_t serialized_packet_size = (DUST_PACKET_HEADER_SIZE + instance.packet.payload.buffer_size + DUST_PACKET_CRC16_SIZE);
+    uint8_t  serialized_packet[serialized_packet_size];
 
     /* How many packet should I receive? Handshake option. */
     for (uint32_t i = 0; i < instance.options.number_of_packets; i++)
@@ -143,7 +145,8 @@ void boot_updater_init(void)
             number_of_nack++;
         }
 
-        if (((i + 1) % ack_frequency) == 0)
+        if ((((i + 1)  % ack_frequency) == 0) ||
+             ((i + 1) == instance.options.number_of_packets))
         {
             if (number_of_nack != 0)
             {
@@ -154,6 +157,39 @@ void boot_updater_init(void)
             else
             {
                 dust_transmit_ack(&instance.packet, USART3);
+            }
+        }
+    }
+
+    /* Create disconnect packet. */
+    uint8_t disconnect_payload[32] = { 0 };
+
+    (void)dust_header_create(&instance.packet.header, DUST_OPCODE_DISCONNECT, DUST_LENGTH_BYTES32, DUST_ACK_UNSET, 0x00);
+    (void)dust_payload_create(&instance.packet.payload, &disconnect_payload[0], 32);
+    (void)dust_packet_create(&instance.packet, &instance.packet.header, &instance.packet.payload);
+    (void)dust_serialize(&instance.packet, &serialized_packet[0], serialized_packet_size);
+
+    /* Send disconnect packet. */
+    (void)dust_transmit(&serialized_packet[0], serialized_packet_size, USART3);
+
+    /* Wait for the ack packet. */
+    while (1)
+    {
+        if (dust_receive(&instance.packet, USART3) != DUST_RESULT_SUCCESS)
+        {
+            dust_transmit_nack(&instance.packet, USART3);
+        }
+        else
+        {
+            if ((instance.packet.header.opcode == DUST_OPCODE_DISCONNECT) &&
+                (instance.packet.header.ack == DUST_ACK_SET))
+            {
+                dust_transmit_ack(&instance.packet, USART3);
+                break;
+            }
+            else
+            {
+                dust_transmit_nack(&instance.packet, USART3);
             }
         }
     }

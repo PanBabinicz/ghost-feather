@@ -213,19 +213,16 @@ class dust_packet:
         self.serialized.append((self.crc16 & 0xff00) >> 0x08)
         self.serialized.append((self.crc16 & 0x00ff) >> 0x00)
 
-    def deserialize(self, usart):
-        result           = DUST_RESULT.ERROR.value
-        serialized_bytes = usart.read(size = DUST_PACKET_HEADER_SIZE)
-        self.header      = self.deserialize_header(serialized_bytes)
+    def deserialize(self, serialized_data):
+        self.header = self.deserialize_header(serialized_data)
         if ( self.header.bits.checksum == self.calculate_checksum()):
             self.calculate_payload_size()
-            serialized_bytes += usart.read(size = (self.payload_size + DUST_PACKET_CRC16_SIZE))
-            if self.crc16_calculate(serialized_bytes) == 0:
+            if self.crc16_calculate(serialized_data) == 0:
                 self.data.clear()
-                self.data  = self.deserialize_data(serialized_bytes[DUST_PACKET_HEADER_SIZE:(len(serialized_bytes) - DUST_PACKET_CRC16_SIZE)])
-                self.crc16 = serialized_bytes[(len(serialized_bytes) - DUST_PACKET_CRC16_SIZE):]
-                result     = DUST_RESULT.SUCCESS.value
-        return result
+                self.data  = self.deserialize_data(serialized_data[DUST_PACKET_HEADER_SIZE:(len(serialized_data) - DUST_PACKET_CRC16_SIZE)])
+                self.crc16 = serialized_data[(len(serialized_data) - DUST_PACKET_CRC16_SIZE):]
+                return DUST_RESULT.SUCCESS.value
+        return DUST_RESULT.ERROR.value
 
     def print_packet(self):
         print("opcode:        " + str(f"{self.header.bits.opcode:#x}"))

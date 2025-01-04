@@ -21,14 +21,14 @@ static uint16_t dust_crc16_lut[DUST_CRC16_LUT_SIZE];
 ///
 static uint16_t dust_ack_frequency_hash_table[DUST_ACK_FREQUENCY_TOTAL_SIZE] =
 {
-    0x0001,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_EACH_PACKET */
-    0x0008,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_8_PACKETS   */
-    0x0010,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_16_PACKETS  */
-    0x0020,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_32_PACKETS  */
-    0x0040,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_64_PACKETS  */
-    0x0080,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_128_PACKETS */
-    0x0100,         /* Corresponds to DUST_ACK_FREQUENCY_AFTER_256_PACKETS */
-    0x0200          /* Corresponds to DUST_ACK_FREQUENCY_AFTER_512_PACKETS */
+    0x0001,         /*!< Corresponds to DUST_ACK_FREQUENCY_AFTER_EACH_PACKET. */
+    0x0008,         /*!< Corresponds to DUST_ACK_FREQUENCY_AFTER_8_PACKETS.   */
+    0x0010,         /*!< Corresponds to DUST_ACK_FREQUENCY_AFTER_16_PACKETS.  */
+    0x0020,         /*!< Corresponds to DUST_ACK_FREQUENCY_AFTER_32_PACKETS.  */
+    0x0040,         /*!< Corresponds to DUST_ACK_FREQUENCY_AFTER_64_PACKETS.  */
+    0x0080,         /*!< Corresponds to DUST_ACK_FREQUENCY_AFTER_128_PACKETS. */
+    0x0100,         /*!< Corresponds to DUST_ACK_FREQUENCY_AFTER_256_PACKETS. */
+    0x0200          /*!< Corresponds to DUST_ACK_FREQUENCY_AFTER_512_PACKETS. */
 };
 
 ///*************************************************************************************************
@@ -458,25 +458,24 @@ dust_result_t dust_receive(dust_packet_t *const packet, const uint32_t usart)
         return DUST_RESULT_ERROR;
     }
 
-    uint16_t packet_size = (DUST_PACKET_HEADER_SIZE + packet->payload.buffer_size + DUST_PACKET_CRC16_SIZE);
-    uint8_t  serialized_packet[packet_size];
+    uint16_t serialized_packet_size = (DUST_PACKET_HEADER_SIZE + packet->payload.buffer_size + DUST_PACKET_CRC16_SIZE);
+    uint8_t  serialized_packet[serialized_packet_size];
 
-    for (uint32_t i = 0; i < packet_size; i++)
+    for (uint32_t i = 0; i < serialized_packet_size; i++)
     {
         usart_wait_recv_ready(usart);
         serialized_packet[i] = usart_recv(usart);
     }
 
-    if (dust_crc16_check(serialized_packet, packet_size) != DUST_RESULT_SUCCESS)
+    if (dust_deserialize(packet, serialized_packet, serialized_packet_size) != DUST_RESULT_SUCCESS)
     {
         return DUST_RESULT_ERROR;
     }
 
-    dust_deserialize_packet(packet, &serialized_packet[0], packet_size);
-
     return DUST_RESULT_SUCCESS;
 }
 
+/* TODO: Change the size of the ACK packet. */
 void dust_transmit_ack(dust_packet_t *const packet, const uint32_t usart)
 {
     uint8_t serialized_header[DUST_PACKET_HEADER_SIZE];
@@ -493,6 +492,7 @@ void dust_transmit_ack(dust_packet_t *const packet, const uint32_t usart)
     }
 }
 
+/* TODO: Change the size of the NACK packet. */
 void dust_transmit_nack(dust_packet_t *const packet, const uint32_t usart)
 {
     uint8_t serialized_header[DUST_PACKET_HEADER_SIZE];
@@ -515,8 +515,6 @@ dust_result_t dust_handshake(dust_protocol_instance_t *const instance, const uin
     {
         return DUST_RESULT_ERROR;
     }
-
-    volatile uint16_t a = dust_ack_frequency_hash_table[0];
 
     /* Handshake packet payload has fixed size equal to 32 bytes. */
     instance->packet.payload.buffer_size = 0x20;

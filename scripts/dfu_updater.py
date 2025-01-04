@@ -108,16 +108,28 @@ class dfu_updater:
 
     def disconnect(self):
         if isinstance(self.usart, serial.Serial):
-            print("Trying to disconnect...")
-            self.packet.create(opcode = DUST_OPCODE.DISCONNECT.value, length = DUST_LENGTH.BYTES32.value,
-                               ack = DUST_ACK.UNSET.value, packet_number = 0x00, data=[0x00] * 32)
-            self.packet.serialize()
-            #self.transmit_packet()
-            result = self.receive_ack()
-            if result == DUST_RESULT.SUCCESS.value:
-                print("Disconnected")
+            print("Waiting for disconnection...")
+            if (self.receive() != DUST_RESULT.SUCCESS.value):
+                print("Corrupted packet was received during disconnection process")
+                return DUST_RESULT.ERROR.value
+            if (self.packet.header.bits.opcode == DUST_OPCODE.DISCONNECT.value):
+                print("Send the disconnection ACK packet")
+                self.packet.create(opcode = DUST_OPCODE.DISCONNECT.value,
+                                   length = DUST_LENGTH.BYTES32.value,
+                                   ack = DUST_ACK.SET.value,
+                                   packet_number = 0x01,
+                                   data = [0x00] * 32)
+                self.packet.serialize()
+                while True:
+                    self.transmit_packet()
+                    if (self.receive_ack() == DUST_RESULT.SUCCESS.value):
+                        print("Disconnection receive ACK")
+                        break
+                    else:
+                        print("Disconnection receive NACK")
         else:
             print("Usart is not initialized...")
+            return DUST_RESULT.ERROR.value
 
     def update(self):
         if isinstance(self.usart, serial.Serial):
@@ -135,7 +147,8 @@ class dfu_updater:
                     self.packet.serialized[13] = 0xff
                     flag = False
                 self.transmit_packet()
-                if ((packet_number + 1) % self.packet.ack_frequency_hash_table[self.options.ack_frequency] == 0):
+                if ((((packet_number + 1)  % self.packet.ack_frequency_hash_table[self.options.ack_frequency]) == 0) or
+                     ((packet_number + 1) == self.options.number_of_packets)):
                     if (self.receive_ack() == DUST_RESULT.SUCCESS.value):
                         print("#" + str(packet_number) + ": ACK")
                     else:
@@ -149,6 +162,13 @@ class dfu_updater:
         for byte in self.packet.serialized:
             self.usart.write(byte.to_bytes(1, byteorder = 'big'))
 
+    def receive(self):
+        serialized_packet_size = DUST_PACKET_HEADER_SIZE + self.options.payload_size + DUST_PACKET_CRC16_SIZE
+        serialized_packet = self.usart.read(size = serialized_packet_size)
+        if (self.packet.deserialize(serialized_packet) != DUST_RESULT.SUCCESS.value):
+            return DUST_RESULT.ERROR.value
+        return DUST_RESULT.SUCCESS.value
+
     def transmit_socat(self):
         byte_string = ""
         for byte in self.packet.serialized:
@@ -159,13 +179,12 @@ class dfu_updater:
         self.usart.write(b"\n\r")
 
     def receive_ack(self):
-        result = DUST_RESULT.ERROR.value
         data = self.usart.read(size = DUST_PACKET_HEADER_SIZE)
         self.packet.header = self.packet.deserialize_header(data)
-        if (self.packet.header.bits.ack == DUST_ACK.SET.value and
-            self.packet.header.bits.checksum == self.packet.calculate_checksum()):
-            result = DUST_RESULT.SUCCESS.value
-        return result
+        if ((self.packet.header.bits.ack == DUST_ACK.SET.value) and
+            (self.packet.header.bits.checksum == self.packet.calculate_checksum())):
+            return DUST_RESULT.SUCCESS.value
+        return DUST_RESULT.ERROR.value
 
 
 updater = dfu_updater()
@@ -177,6 +196,7 @@ updater.text.convert_to_little_endian()
 updater.packet.crc16_lookup_table_generate(0x1021)
 
 updater.init()
-updater.connect(ack_frequency = DUST_ACK_FREQUENCY.AFTER_8_PACKETS.value, payload_size = DUST_LENGTH.BYTES32.value)
+updater.connect(ack_frequency = DUST_ACK_FREQUENCY.AFTER_EACH_PACKET.value, payload_size = DUST_LENGTH.BYTES32.value)
 updater.update()
+updater.disconnect()
 updater.deinit()
