@@ -209,3 +209,59 @@ sequenceDiagram
      UPDATER->>DEVICE: DATA[n+1] PACKET
      UPDATER->>DEVICE: ...
  ```
+
+## Disconnection
+
+> Disconnection is performed from slave side. The device that updates itself
+> sends the disconnection packet after the last data is received.
+
+ ```mermaid
+ sequenceDiagram
+     DEVICE-->>UPDATER: DISCONNECTION PACKET
+     UPDATER->>DEVICE: DISCONNECTION PACKET ACK
+ ```
+
+### DISCONNECTION PACKET
+
+> <table class="tg"><thead>
+>   <tr>
+>     <td class="tg-uzvj" rowspan="12">DUST<br>PACKET</td>
+>     <td class="tg-uzvj" rowspan="5">HEADER<br>(4bytes)</td>
+>     <td class="tg-c3ow">0x01</td>
+>   </tr>
+>   <tr>
+>     <td class="tg-c3ow">0x00</td>
+>   </tr>
+>   <tr>
+>     <td class="tg-c3ow">0x00</td>
+>   </tr>
+>   <tr>
+>     <td class="tg-9wq8">0x00</td>
+>   </tr>
+>   <tr>
+>     <td class="tg-c3ow">0xbfff</td>
+>   </tr>
+>   <tr>
+>     <td class="tg-uzvj" rowspan="6">PAYLOAD<br>(32-256bytes)</td>
+>     <td class="tg-9wq8">0x00</td>
+>   </tr>
+>   <tr>
+>     <td class="tg-9wq8">0x00</td>
+>   </tr>
+>   <tr>
+>     <td class="tg-9wq8"><span style="font-style:normal">0x00</span></td>
+>   </tr>
+>   <tr>
+>     <td class="tg-9wq8">...</td>
+>   </tr>
+>   <tr>
+>     <td class="tg-9wq8"><span style="font-style:normal">0x00</span></td>
+>   </tr>
+>   <tr>
+>     <td class="tg-9wq8"><span style="font-style:normal">0x00</span></td>
+>   </tr>
+>   <tr>
+>     <td class="tg-uzvj">CRC16<br>(2bytes)</td>
+>     <td class="tg-9wq8">0x0577</td>
+>   </tr></thead>
+> </table>
