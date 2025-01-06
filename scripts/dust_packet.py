@@ -215,7 +215,7 @@ class dust_packet:
 
     def deserialize(self, serialized_data):
         self.header = self.deserialize_header(serialized_data)
-        if ( self.header.bits.checksum == self.calculate_checksum()):
+        if (self.header.bits.checksum == self.calculate_checksum()):
             self.calculate_payload_size()
             if self.crc16_calculate(serialized_data) == 0:
                 self.data.clear()

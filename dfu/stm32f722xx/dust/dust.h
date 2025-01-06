@@ -87,7 +87,7 @@ typedef struct
 typedef struct
 {
     uint8_t  buffer[DUST_PACKET_PAYLOAD_BUFFER_MAX_SIZE];
-    uint16_t buffer_size;
+    uint32_t buffer_size;
 } dust_payload_t;
 
 ///
@@ -107,8 +107,17 @@ typedef struct
 {
     uint8_t  ack_frequency;
     uint32_t number_of_packets;
-    uint16_t payload_size;
+    uint32_t payload_size;
 } dust_handshake_options_t;
+
+///
+/// \breif The dust serialized packet type.
+///
+typedef struct
+{
+    uint8_t  buffer[sizeof(dust_packet_t)];
+    uint32_t buffer_size;
+} dust_serialized_t;
 
 ///
 /// \breif The dust protocol instance type.
@@ -117,6 +126,7 @@ typedef struct
 {
     dust_handshake_options_t options;
     dust_packet_t            packet;
+    dust_serialized_t        serialized;
 } dust_protocol_instance_t;
 
 ///
@@ -193,7 +203,7 @@ dust_result_t dust_packet_create(dust_packet_t *const packet, const dust_header_
 /// \retval DUST_RESULT_SERIALIZATION_ERROR On serialization error.
 /// \retval DUST_RESULT_ERROR               Otherwise.
 ///
-dust_result_t dust_serialize(const dust_packet_t *const packet, uint8_t *const serialized_packet,
+dust_result_t dust_serialize(dust_packet_t *const packet, uint8_t *const serialized_packet,
                              const uint32_t serialized_packet_size);
 
 ///
@@ -214,44 +224,53 @@ dust_result_t dust_deserialize(dust_packet_t *const packet, const uint8_t *const
 ///
 /// \brief Transmit the serialized packet.
 ///
-/// \param[in] serialized_packet      The serialized packet buffer.
-/// \param[in] serialized_packet_size The serialized packet buffer size.
+/// \param[in] serialized             The dust serialized packet structure.
 /// \param[in] usart                  The usart block register address base.
 ///
 /// \return dust_result_t             Result of the function.
 /// \retval DUST_RESULT_SUCCESS       On success.
 /// \retval DUST_RESULT_ERROR         Otherwise.
 ///
-dust_result_t dust_transmit(const uint8_t *serialized_packet, const uint32_t serialized_packet_size,
-                            const uint32_t usart);
+dust_result_t dust_transmit(const dust_serialized_t *const serialized, const uint32_t usart);
 
 ///
 /// \brief Receive the packet.
 ///
 /// \param[out] packet          The received dust packet.
-/// \param[in]  usart           The usart block register address base.
+/// \param[out] serialized      The dust serialized packet structure.
+/// \param[in] usart            The usart block register address base.
 ///
 /// \return dust_result_t       Result of the function.
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-dust_result_t dust_receive(dust_packet_t *const packet, const uint32_t usart);
+dust_result_t dust_receive(dust_packet_t *const packet, dust_serialized_t *const serialized, const uint32_t usart);
 
 ///
 /// \brief Transmit ACK header.
 ///
-/// \param[in] packet The dust packet structure.
-/// \param[in] usart  The usart block register address base.
+/// \param[in] packet           The dust packet structure.
+/// \param[in] serialized       The dust serialized packet structure.
+/// \param[in] usart            The usart block register address base.
 ///
-void dust_transmit_ack(dust_packet_t *const packet, const uint32_t usart);
+/// \return dust_result_t       Result of the function.
+/// \retval DUST_RESULT_SUCCESS On success.
+/// \retval DUST_RESULT_ERROR   Otherwise.
+///
+dust_result_t dust_transmit_ack(dust_packet_t *const packet, dust_serialized_t *const serialized, const uint32_t usart);
 
 ///
 /// \brief Transmit NACK header.
 ///
-/// \param[in] packet The dust packet structure.
-/// \param[in] usart  The usart block register address base.
+/// \param[in] packet           The dust packet structure.
+/// \param[in] serialized       The dust serialized packet structure.
+/// \param[in] usart            The usart block register address base.
 ///
-void dust_transmit_nack(dust_packet_t *const packet, const uint32_t usart);
+/// \return dust_result_t       Result of the function.
+/// \retval DUST_RESULT_SUCCESS On success.
+/// \retval DUST_RESULT_ERROR   Otherwise.
+///
+dust_result_t dust_transmit_nack(dust_packet_t *const packet, dust_serialized_t *const serialized, const uint32_t usart);
 
 ///
 /// \brief Dust handshake procedure.

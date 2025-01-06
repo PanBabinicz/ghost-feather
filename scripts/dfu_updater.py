@@ -100,9 +100,11 @@ class dfu_updater:
                                ack = DUST_ACK.UNSET.value, packet_number = 0x00, data = self.create_conntection_data())
             self.packet.serialize()
             self.transmit_packet()
-            result = self.receive_ack()
-            if result == DUST_RESULT.SUCCESS.value:
-                print("Connected")
+            if (self.receive() == DUST_RESULT.SUCCESS.value):
+                if (self.packet.header.bits.ack == DUST_ACK.SET.value):
+                    print("Connected")
+                else:
+                    print("ACK was not received")
         else:
             print("Usart is not initialized...")
 
@@ -122,11 +124,13 @@ class dfu_updater:
                 self.packet.serialize()
                 while True:
                     self.transmit_packet()
-                    if (self.receive_ack() == DUST_RESULT.SUCCESS.value):
-                        print("Disconnection receive ACK")
-                        break
-                    else:
-                        print("Disconnection receive NACK")
+                    if (self.receive() == DUST_RESULT.SUCCESS.value):
+                        if (self.packet.header.bits.ack == DUST_ACK.SET.value):
+                            print("Disconnection received ACK")
+                            break
+                        else:
+                            print("Disconnection received NACK")
+                return DUST_RESULT.SUCCESS.value
         else:
             print("Usart is not initialized...")
             return DUST_RESULT.ERROR.value
@@ -135,7 +139,8 @@ class dfu_updater:
         if isinstance(self.usart, serial.Serial):
             print("Trying to update...")
             packet_number = 0
-            flag = True
+            flag_17 = True
+            flag_32 = True
             while packet_number < self.options.number_of_packets:
                 self.packet.create(opcode = DUST_OPCODE.DATA.value,
                                    length = DUST_LENGTH.BYTES32.value,
@@ -143,18 +148,22 @@ class dfu_updater:
                                    packet_number = packet_number,
                                    data = self.fill_data(packet_number))
                 self.packet.serialize()
-                if flag and packet_number == 17:
+                if flag_17 and packet_number == 17:
                     self.packet.serialized[13] = 0xff
-                    flag = False
+                    flag_17 = False
+                elif flag_32 and packet_number == 32:
+                    self.packet.serialized[13] = 0xff
+                    flag_32 = False
                 self.transmit_packet()
                 if ((((packet_number + 1)  % self.packet.ack_frequency_hash_table[self.options.ack_frequency]) == 0) or
                      ((packet_number + 1) == self.options.number_of_packets)):
-                    if (self.receive_ack() == DUST_RESULT.SUCCESS.value):
-                        print("#" + str(packet_number) + ": ACK")
-                    else:
-                        print("#" + str(packet_number) + ": NACK")
-                        packet_number -= self.packet.ack_frequency_hash_table[self.options.ack_frequency]
-                packet_number += 1
+                    if (self.receive() == DUST_RESULT.SUCCESS.value):
+                        if (self.packet.header.bits.ack == DUST_ACK.SET.value):
+                            print("#" + str(packet_number) + ": ACK")
+                        else:
+                            print("#" + str(packet_number) + ": NACK")
+                            packet_number -= self.packet.ack_frequency_hash_table[self.options.ack_frequency]
+                    packet_number += 1
         else:
             print("Usart is not initialized...")
 
@@ -177,14 +186,6 @@ class dfu_updater:
         for byte in byte_string:
             self.usart.write(byte.encode('utf-8'))
         self.usart.write(b"\n\r")
-
-    def receive_ack(self):
-        data = self.usart.read(size = DUST_PACKET_HEADER_SIZE)
-        self.packet.header = self.packet.deserialize_header(data)
-        if ((self.packet.header.bits.ack == DUST_ACK.SET.value) and
-            (self.packet.header.bits.checksum == self.packet.calculate_checksum())):
-            return DUST_RESULT.SUCCESS.value
-        return DUST_RESULT.ERROR.value
 
 
 updater = dfu_updater()
