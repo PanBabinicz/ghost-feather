@@ -2,6 +2,10 @@
 
 ## Description
 
+## Protocol structures
+
+![alt text](https://github.com/PanBabinicz/ghost-feather/tree/feature/add_dfu_usart_script/doc/dust/dust-protocol-structures-layout.png?raw=true)
+
 ## Packet structure
 
 > <table class="tg"><thead>
