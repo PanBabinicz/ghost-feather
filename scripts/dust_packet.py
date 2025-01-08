@@ -141,7 +141,7 @@ class dust_header(ctypes.BigEndianUnion):
         serialized_header.append(((self.whole_value & 0x00ff0000) >> 0x10))
         serialized_header.append(((self.whole_value & 0x0000ff00) >> 0x08))
         serialized_header.append(((self.whole_value & 0x000000ff) >> 0x00))
-        return serialize_header
+        return serialized_header
 
     def deserialize(self, serialized_header):
         self.whole_value  = 0
