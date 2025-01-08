@@ -1,13 +1,39 @@
 import ctypes
+import numpy
 
 from enum import Enum
 
 DUST_PACKET_HEADER_SIZE = 4
 DUST_PACKET_CRC16_SIZE  = 2
+DUST_CRC16_LUT_SIZE     = 256
 
 c_uint8  = ctypes.c_uint8
 c_uint16 = ctypes.c_uint16
 c_uint32 = ctypes.c_uint32
+
+"""Documentation for dust_crc16_lut.
+
+More details.
+"""
+dust_crc16_lut = numpy.zeros(DUST_CRC16_LUT_SIZE, dtype=numpy.uint16)
+
+
+"""Documentation for dust_crc16_generate_lut.
+
+More details.
+"""
+def dust_crc16_generate_lut(polynomial):
+    global dust_crc16_lut
+    for i in range(0, 2**8):
+        byte = i << 8
+        for b in range(0, 8):
+            if ((byte & 0x8000) != 0):
+                byte = byte << 1
+                byte = byte ^ polynomial
+            else:
+                byte = byte << 1
+        dust_crc16_lut[i] = byte & 0xffff
+
 
 class DUST_RESULT(Enum):
     """Documentation for DUST_RESULT enum.
@@ -91,16 +117,62 @@ class dust_header(ctypes.BigEndianUnion):
     _fields_ = [("bits", dust_header_bits),
                 ("whole_value", c_uint32)]
 
+    def __init__(self):
+        self.whole_value = 0
 
-class dust_handshake_options(ctypes.BigEndianStructure):
-    """Documentation for dust_handshake_options structure.
+    def calculate_checksum(self):
+        checksum = (self.bits.opcode        << 0x0e
+                 |  self.bits.length        << 0x0c
+                 |  self.bits.ack           << 0x0b
+                 |  self.bits.packet_number << 0x00)
+        checksum = ~(checksum) & 0xffff
+        return checksum
+
+    def create(self, opcode, length, ack, packet_number):
+        self.bits.opcode   = opcode
+        self.bits.length   = length
+        self.bits.ack      = ack
+        self.packet_number = packet_number
+        self.checksum      = self.calculate_checksum()
+
+    def serialize(self):
+        serialized_header = []
+        serialized_header.append(((self.whole_value & 0xff000000) >> 0x18))
+        serialized_header.append(((self.whole_value & 0x00ff0000) >> 0x10))
+        serialized_header.append(((self.whole_value & 0x0000ff00) >> 0x08))
+        serialized_header.append(((self.whole_value & 0x000000ff) >> 0x00))
+        return serialize_header
+
+    def deserialize(self, serialized_header):
+        self.whole_value  = 0
+        self.whole_value |= (serialized_header[0] << 0x18)
+        self.whole_value |= (serialized_header[1] << 0x10)
+        self.whole_value |= (serialized_header[2] << 0x08)
+        self.whole_value |= (serialized_header[3] << 0x00)
+
+
+class dust_payload:
+    """Documentation for dust_packet class.
 
     More details.
     """
 
-    _fields_ = [("ack_frequency",     c_uint8),
-                ("number_of_packets", c_uint32),
-                ("payload_size",      c_uint16)]
+    def __init__(self):
+        self.buffer      = []
+        self.buffer_size = 0
+
+    def calculate_size(self):
+        self.buffer_size = len(self.buffer)
+
+    def create(self, buffer):
+        self.buffer = buffer
+        self.calculate_size()
+
+    def serialize(self):
+        return self.buffer
+
+    def deserialize(self, serialized_payload):
+        self.buffer = serialized_payload
 
 
 class dust_packet:
@@ -110,109 +182,34 @@ class dust_packet:
     """
 
     def __init__(self):
-        self.header                   = dust_header()
-        self.data                     = []
-        self.serialized               = []
-        self.crc16                    = 0
-        self.crc16_lookup_table       = []
-        self.payload_size             = 0
-        self.length_hash_table        = { DUST_LENGTH.BYTES32.value:  0x20,
-                                          DUST_LENGTH.BYTES64.value:  0x40,
-                                          DUST_LENGTH.BYTES128.value: 0x80,
-                                          DUST_LENGTH.BYTES256.value: 0x100 }
-        self.ack_frequency_hash_table = { DUST_ACK_FREQUENCY.AFTER_EACH_PACKET.value: 0x01,
-                                          DUST_ACK_FREQUENCY.AFTER_8_PACKETS.value:   0x08,
-                                          DUST_ACK_FREQUENCY.AFTER_16_PACKETS.value:  0x10,
-                                          DUST_ACK_FREQUENCY.AFTER_32_PACKETS.value:  0x20,
-                                          DUST_ACK_FREQUENCY.AFTER_64_PACKETS.value:  0x40,
-                                          DUST_ACK_FREQUENCY.AFTER_128_PACKETS.value: 0x80,
-                                          DUST_ACK_FREQUENCY.AFTER_256_PACKETS.value: 0x100,
-                                          DUST_ACK_FREQUENCY.AFTER_512_PACKETS.value: 0x200 }
-
-    def calculate_checksum(self):
-        checksum = (self.header.bits.opcode        << 0x0e |
-                    self.header.bits.length        << 0x0c |
-                    self.header.bits.ack           << 0x0b |
-                    self.header.bits.packet_number << 0x00)
-        checksum = ~(checksum) & 0xffff
-        return checksum
-
-    def crc8_lookup_table_generate(self, polynomial):
-        for i in range(0, 2**8):
-            byte = i
-            for b in range(0, 8):
-                if ((byte & 0x80) != 0):
-                    byte = byte << 1
-                    byte = byte ^ polynomial
-                else:
-                    byte = byte << 1
-            self.crc8_lookup_table.append(byte & 0xff)
-
-    def crc8_calculate(self):
-        self.crc8 = 0x00
-        for byte in self.serialized:
-            position = self.crc8 ^ byte
-            self.crc8 = self.crc8_lookup_table[position]
-
-    def crc16_lookup_table_generate(self, polynomial):
-        for i in range(0, 2**8):
-            byte = i << 8
-            for b in range(0, 8):
-                if ((byte & 0x8000) != 0):
-                    byte = byte << 1
-                    byte = byte ^ polynomial
-                else:
-                    byte = byte << 1
-            self.crc16_lookup_table.append(byte & 0xffff)
+        self.header  = dust_header()
+        self.payload = dust_payload()
+        self.crc16   = 0
 
     def crc16_calculate(self, data):
+        global dust_crc16_lut
         crc16 = 0x00
         for byte in data:
             position = ((crc16 >> 8) ^ byte) & 0xff
-            crc16    = ((crc16 << 8) ^ self.crc16_lookup_table[position]) & 0xffff
+            crc16    = ((crc16 << 8) ^ dust_crc16_lut[position]) & 0xffff
         return crc16
 
-    def calculate_payload_size(self):
-        self.payload_size = self.length_hash_table[self.header.bits.length]
-
-    def create(self, opcode, length, ack, packet_number, data):
-        self.header.bits.opcode        = opcode
-        self.header.bits.length        = length
-        self.header.bits.ack           = ack
-        self.header.bits.packet_number = packet_number
-        self.header.bits.checksum      = self.calculate_checksum()
-        self.data                      = data
-
-    def serialize_header(self):
-        serialized_header = []
-        serialized_header.append(((self.header.whole_value & 0xff000000) >> 0x18))
-        serialized_header.append(((self.header.whole_value & 0x00ff0000) >> 0x10))
-        serialized_header.append(((self.header.whole_value & 0x0000ff00) >> 0x08))
-        serialized_header.append(((self.header.whole_value & 0x000000ff) >> 0x00))
-        return serialized_header
-
-    def deserialize_header(self, serialized_header):
-        deserialized_header = dust_header()
-        deserialized_header.whole_value |= (serialized_header[0] << 0x18)
-        deserialized_header.whole_value |= (serialized_header[1] << 0x10)
-        deserialized_header.whole_value |= (serialized_header[2] << 0x08)
-        deserialized_header.whole_value |= (serialized_header[3] << 0x00)
-        return deserialized_header
-
-    def deserialize_data(self, serialized_data):
-        deserialized_data = []
-        deserialized_data.extend(serialized_data)
-        return deserialized_data
+    def create(self, header, payload):
+        data         = []
+        self.header  = header
+        self.payload = payload
+        data.append(self.header.serialize())
+        data.append(self.payload.serialize())
+        self.crc16 = self.crc16_calculate(data)
 
     def serialize(self):
-        self.serialized.clear()
-        self.calculate_payload_size()
-        self.serialized.extend(self.serialize_header())
-        self.serialized.extend(self.data + ([0x00] * (self.payload_size - len(self.data))))
-        self.crc16 = self.crc16_calculate(self.serialized)
+        self.serialized.buffer.clear()
+        self.serialized.buffer.append(self.header.serialize())
+        self.serialized.buffer.append(self.payload.serialize())
         self.serialized.append((self.crc16 & 0xff00) >> 0x08)
         self.serialized.append((self.crc16 & 0x00ff) >> 0x00)
 
+    # Stoped here
     def deserialize(self, serialized_data):
         self.header = self.deserialize_header(serialized_data)
         if (self.header.bits.checksum == self.calculate_checksum()):
@@ -238,3 +235,49 @@ class dust_packet:
     def print_serialized(self):
         print("serialized #" + str(self.header.bits.packet_number) + ": " + str(' '.join(f"{hex:#x}" for hex in self.serialized)))
 
+
+class dust_handshake_options(ctypes.BigEndianStructure):
+    """Documentation for dust_handshake_options structure.
+
+    More details.
+    """
+
+    _fields_ = [("ack_frequency",     c_uint8),
+                ("number_of_packets", c_uint32),
+                ("payload_size",      c_uint16)]
+
+    def __init__(self):
+        self.ack_frequency     = 0
+        self.number_of_packets = 0
+        self.payload_size      = 0
+
+    def create(self, ack_frequency, number_of_packets, payload_size):
+        self.ack_frequency     = ack_frequency
+        self.number_of_packets = number_of_packets
+        self.payload_size      = payload_size
+
+
+class dust_serialized:
+    """Documentation for dust_serialized class.
+
+    More details.
+    """
+
+    def __init__(self):
+        self.buffer      = []
+        self.buffer_size = 0
+
+    def calculate_size(self):
+        self.buffer_size = len(self.buffer)
+
+
+class dust_instance:
+    """Documentation for dust_instance class.
+
+    More details.
+    """
+
+    def __init__(self):
+        self.options     = dust_handshake_options()
+        self.packet      = dust_packet()
+        self.serialized  = dust_serialized()
