@@ -192,48 +192,32 @@ class dust_packet:
         for byte in data:
             position = ((crc16 >> 8) ^ byte) & 0xff
             crc16    = ((crc16 << 8) ^ dust_crc16_lut[position]) & 0xffff
-        return crc16
+        return int(crc16)
 
     def create(self, header, payload):
         data         = []
         self.header  = header
         self.payload = payload
-        data.append(self.header.serialize())
-        data.append(self.payload.serialize())
+        data += self.header.serialize()
+        data += self.payload.serialize()
         self.crc16 = self.crc16_calculate(data)
 
     def serialize(self):
-        self.serialized.buffer.clear()
-        self.serialized.buffer.append(self.header.serialize())
-        self.serialized.buffer.append(self.payload.serialize())
-        self.serialized.append((self.crc16 & 0xff00) >> 0x08)
-        self.serialized.append((self.crc16 & 0x00ff) >> 0x00)
+        serialized_packet = []
+        serialized_packet.clear()
+        serialized_packet += self.header.serialize()
+        serialized_packet += self.payload.serialize()
+        serialized_packet.append((self.crc16 & 0xff00) >> 0x08)
+        serialized_packet.append((self.crc16 & 0x00ff) >> 0x00)
+        return serialized_packet
 
-    # Stoped here
     def deserialize(self, serialized_data):
-        self.header = self.deserialize_header(serialized_data)
-        if (self.header.bits.checksum == self.calculate_checksum()):
-            self.calculate_payload_size()
-            if self.crc16_calculate(serialized_data) == 0:
-                self.data.clear()
-                self.data  = self.deserialize_data(serialized_data[DUST_PACKET_HEADER_SIZE:(len(serialized_data) - DUST_PACKET_CRC16_SIZE)])
-                self.crc16 = serialized_data[(len(serialized_data) - DUST_PACKET_CRC16_SIZE):]
-                return DUST_RESULT.SUCCESS.value
-        return DUST_RESULT.ERROR.value
-
-    def print_packet(self):
-        print("opcode:        " + str(f"{self.header.bits.opcode:#x}"))
-        print("length:        " + str(f"{self.header.bits.length:#x}"))
-        print("ack:           " + str(f"{self.header.bits.ack:#x}"))
-        print("packet_number: " + str(f"{self.header.bits.packet_number:#x}"))
-        print("checksum:      " + str(f"{self.header.bits.checksum:#x}"))
-        print("data:          " + str(' '.join(f"{hex:#x}" for hex in self.data)))
-        print("crc16:         " + str(f"{self.crc16:#x}"))
-        print("whole_value:   " + str(f"{self.header.whole_value:#x}"))
-        print("serialized:    " + str(' '.join(f"{hex:#x}" for hex in self.serialized)))
-
-    def print_serialized(self):
-        print("serialized #" + str(self.header.bits.packet_number) + ": " + str(' '.join(f"{hex:#x}" for hex in self.serialized)))
+        self.header.deserialize(serialized_data)
+        self.payload.deserialize(serialized_data[DUST_PACKET_HEADER_SIZE:(len(serialized_data) - DUST_PACKET_CRC16_SIZE)])
+        if self.crc16_calculate(serialized_data) != 0:
+            return DUST_RESULT.ERROR.value
+        self.crc16 = serialized_data[(len(serialized_data) - DUST_PACKET_CRC16_SIZE):]
+        return DUST_RESULT.SUCCESS.value
 
 
 class dust_handshake_options(ctypes.BigEndianStructure):
@@ -256,6 +240,18 @@ class dust_handshake_options(ctypes.BigEndianStructure):
         self.number_of_packets = number_of_packets
         self.payload_size      = payload_size
 
+    def serialize(self):
+        serialized_options = []
+        serialized_options.append(self.ack_frequency)
+        serialized_options.append(((self.number_of_packets & 0xff000000) >> 0x18))
+        serialized_options.append(((self.number_of_packets & 0x00ff0000) >> 0x10))
+        serialized_options.append(((self.number_of_packets & 0x0000ff00) >> 0x08))
+        serialized_options.append(((self.number_of_packets & 0x000000ff) >> 0x00))
+        serialized_options.append(((self.payload_size & 0xff00) >> 0x08))
+        serialized_options.append(((self.payload_size & 0x00ff) >> 0x00))
+        serialized_options.extend([0x00]*25)
+        return serialized_options
+
 
 class dust_serialized:
     """Documentation for dust_serialized class.
@@ -270,6 +266,10 @@ class dust_serialized:
     def calculate_size(self):
         self.buffer_size = len(self.buffer)
 
+    def create(self, buffer):
+        self.buffer = buffer
+        self.calculate_size()
+
 
 class dust_instance:
     """Documentation for dust_instance class.
@@ -281,3 +281,21 @@ class dust_instance:
         self.options     = dust_handshake_options()
         self.packet      = dust_packet()
         self.serialized  = dust_serialized()
+
+    def print_options(self):
+        print("ack_frequency:     " + str(f"{self.options.ack_frequency:#x}"))
+        print("number_of_packets: " + str(f"{self.options.number_of_packets:#x}"))
+        print("payload_size:      " + str(f"{self.options.payload_size:#x}"))
+
+    def print_packet(self):
+        print("opcode:        " + str(f"{self.packet.header.bits.opcode:#x}"))
+        print("length:        " + str(f"{self.packet.header.bits.length:#x}"))
+        print("ack:           " + str(f"{self.packet.header.bits.ack:#x}"))
+        print("packet_number: " + str(f"{self.packet.header.bits.packet_number:#x}"))
+        print("checksum:      " + str(f"{self.packet.header.bits.checksum:#x}"))
+        print("whole_value:   " + str(f"{self.packet.header.whole_value:#x}"))
+        print("data:          " + str(' '.join(f"{hex:#x}" for hex in self.packet.payload.buffer)))
+        print("crc16:         " + str(f"{self.packet.crc16:#x}"))
+
+    def print_serialized(self):
+        print("serialized #" + str(self.packet.header.bits.packet_number) + ": " + str(' '.join(f"{hex:#x}" for hex in self.serialized.buffer)))

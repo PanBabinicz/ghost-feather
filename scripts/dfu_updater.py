@@ -4,9 +4,11 @@ import time
 
 from elftools.elf.elffile import ELFFile
 
+from dust_packet import dust_crc16_generate_lut
 from dust_packet import dust_packet
 from dust_packet import dust_header
 from dust_packet import dust_handshake_options
+from dust_packet import dust_instance
 from dust_packet import DUST_RESULT
 from dust_packet import DUST_OPCODE
 from dust_packet import DUST_LENGTH
@@ -27,47 +29,28 @@ class dfu_updater:
         if ( len(sys.argv) < 4 ):
             print("Invalid usage: python3 dfu_usart.py <bin> <port> <baudrate>")
             sys.exit()
-        self.bin      = sys.argv[1]
-        self.port     = sys.argv[2]
-        self.baudrate = sys.argv[3]
-        self.text     = dfu_updater_segment(name = '.text', sections = [])
-        self.packet   = dust_packet()
-        self.options  = dust_handshake_options()
-        self.usart    = None
-
-    def print_arguments(self):
-        print("Bin:      " + self.bin)
-        print("Port:     " + self.port)
-        print("Baudrate: " + self.baudrate)
-
-    def readelf_get_sections(self, segment):
-        with open(self.bin, 'rb') as bin_file:
-            self.elf = ELFFile(bin_file)
-            for section in self.elf.iter_sections():
-                if (section.name.startswith(segment.name)):
-                    segment.sections.append(section)
-            segment.fill_raw_hexdata()
-
-    def create_conntection_data(self):
-        data = []
-        data.append(self.options.ack_frequency)
-        data.append((self.options.number_of_packets & 0xff000000) >> 0x18)
-        data.append((self.options.number_of_packets & 0x00ff0000) >> 0x10)
-        data.append((self.options.number_of_packets & 0x0000ff00) >> 0x08)
-        data.append((self.options.number_of_packets & 0x000000ff) >> 0x00)
-        data.append((self.options.payload_size & 0x0000ff00) >> 0x08)
-        data.append((self.options.payload_size & 0x000000ff) >> 0x00)
-        data.extend([0x00] * 25)
-        return data
-
-    def get_number_of_packets(self, firmware_size, payload_size):
-        if ((firmware_size % payload_size) != 0):
-            return int((firmware_size / payload_size) + 1)
-        else:
-            return int(firmware_size / payload_size)
-
-    def fill_data(self, packet_number):
-        return self.text.converted_hexdata[(packet_number * self.options.payload_size):((packet_number * self.options.payload_size) + self.options.payload_size)]
+        self.bin                      = sys.argv[1]
+        self.port                     = sys.argv[2]
+        self.baudrate                 = sys.argv[3]
+        self.text                     = dfu_updater_segment(name = '.text', sections = [])
+        self.usart             = None
+        self.instance          = dust_instance()
+        self.length_hash_table = {
+            0x20  : DUST_LENGTH.BYTES32.value,
+            0x40  : DUST_LENGTH.BYTES64.value,
+            0x80  : DUST_LENGTH.BYTES128.value,
+            0x100 : DUST_LENGTH.BYTES256.value
+        }
+        self.ack_frequency_hash_table = {
+            DUST_ACK_FREQUENCY.AFTER_EACH_PACKET.value : 0x01,
+            DUST_ACK_FREQUENCY.AFTER_8_PACKETS.value   : 0x08,
+            DUST_ACK_FREQUENCY.AFTER_16_PACKETS.value  : 0x10,
+            DUST_ACK_FREQUENCY.AFTER_32_PACKETS.value  : 0x20,
+            DUST_ACK_FREQUENCY.AFTER_64_PACKETS.value  : 0x40,
+            DUST_ACK_FREQUENCY.AFTER_128_PACKETS.value : 0x80,
+            DUST_ACK_FREQUENCY.AFTER_256_PACKETS.value : 0x100,
+            DUST_ACK_FREQUENCY.AFTER_512_PACKETS.value : 0x200
+        }
 
     def init(self):
         if isinstance(self.usart, serial.Serial):
@@ -90,18 +73,30 @@ class dfu_updater:
             else:
                 print("Deinitialization completed!")
 
+    def transmit(self):
+        for byte in self.instance.serialized.buffer:
+            self.usart.write(byte.to_bytes(1, byteorder = 'big'))
+
+    def receive(self):
+        serialized_packet_size = DUST_PACKET_HEADER_SIZE + self.instance.options.payload_size + DUST_PACKET_CRC16_SIZE
+        serialized_packet = self.usart.read(size=serialized_packet_size)
+        if (self.instance.packet.deserialize(serialized_packet) != DUST_RESULT.SUCCESS.value):
+            return DUST_RESULT.ERROR.value
+        return DUST_RESULT.SUCCESS.value
+
     def connect(self, ack_frequency, payload_size):
         if isinstance(self.usart, serial.Serial):
             print("Trying to connect...")
-            self.options.ack_frequency = ack_frequency
-            self.options.payload_size = self.packet.length_hash_table[payload_size]
-            self.options.number_of_packets = self.get_number_of_packets(self.text.size, self.options.payload_size)
-            self.packet.create(opcode = DUST_OPCODE.CONNECT.value, length = payload_size,
-                               ack = DUST_ACK.UNSET.value, packet_number = 0x00, data = self.create_conntection_data())
-            self.packet.serialize()
-            self.transmit_packet()
+            number_of_packets = self.calculate_number_of_packets(self.text.size, payload_size)
+            self.instance.options.create(ack_frequency, number_of_packets, payload_size)
+            self.instance.packet.header.create(DUST_OPCODE.CONNECT.value, DUST_LENGTH.BYTES32.value, DUST_ACK.UNSET.value, packet_number=0x00)
+            self.instance.packet.payload.create(buffer=self.instance.options.serialize())
+            self.instance.packet.create(self.instance.packet.header, self.instance.packet.payload)
+            self.instance.serialized.create(buffer=self.instance.packet.serialize())
+            self.instance.print_packet()
+            self.transmit()
             if (self.receive() == DUST_RESULT.SUCCESS.value):
-                if (self.packet.header.bits.ack == DUST_ACK.SET.value):
+                if (self.instance.packet.header.bits.ack == DUST_ACK.SET.value):
                     print("Connected")
                 else:
                     print("ACK was not received")
@@ -114,18 +109,16 @@ class dfu_updater:
             if (self.receive() != DUST_RESULT.SUCCESS.value):
                 print("Corrupted packet was received during disconnection process")
                 return DUST_RESULT.ERROR.value
-            if (self.packet.header.bits.opcode == DUST_OPCODE.DISCONNECT.value):
+            if (self.instance.packet.header.bits.opcode == DUST_OPCODE.DISCONNECT.value):
                 print("Send the disconnection ACK packet")
-                self.packet.create(opcode = DUST_OPCODE.DISCONNECT.value,
-                                   length = DUST_LENGTH.BYTES32.value,
-                                   ack = DUST_ACK.SET.value,
-                                   packet_number = 0x01,
-                                   data = [0x00] * 32)
-                self.packet.serialize()
+                self.instance.packet.header.create(DUST_OPCODE.DISCONNECT.value, DUST_LENGTH.BYTES32.value, DUST_ACK.SET.value, packet_number=0x01)
+                self.instance.packet.payload.create(buffer=[0x00]*self.instance.options.payload_size)
+                self.instance.packet.create(self.instance.packet.header, self.instance.packet.payload)
+                self.instance.serialized.create(buffer=self.instance.packet.serialize())
                 while True:
-                    self.transmit_packet()
+                    self.transmit()
                     if (self.receive() == DUST_RESULT.SUCCESS.value):
-                        if (self.packet.header.bits.ack == DUST_ACK.SET.value):
+                        if (self.instance.packet.header.bits.ack == DUST_ACK.SET.value):
                             print("Disconnection received ACK")
                             break
                         else:
@@ -141,51 +134,58 @@ class dfu_updater:
             packet_number = 0
             flag_17 = True
             flag_32 = True
-            while packet_number < self.options.number_of_packets:
-                self.packet.create(opcode = DUST_OPCODE.DATA.value,
-                                   length = DUST_LENGTH.BYTES32.value,
-                                   ack = DUST_ACK.UNSET.value,
-                                   packet_number = packet_number,
-                                   data = self.fill_data(packet_number))
-                self.packet.serialize()
-                if flag_17 and packet_number == 17:
-                    self.packet.serialized[13] = 0xff
+            payload_size = self.length_hash_table[self.instance.options.payload_size]
+            while packet_number < self.instance.options.number_of_packets:
+                self.instance.packet.header.create(DUST_OPCODE.DATA.value, payload_size, DUST_ACK.UNSET.value, packet_number)
+                self.instance.packet.payload.create(buffer=self.fill_data(packet_number))
+                self.instance.packet.create(self.instance.packet.header, self.instance.packet.payload)
+                self.instance.serialized.create(buffer=self.instance.packet.serialize())
+                if flag_17 and packet_number == 1:
+                    self.instance.serialized.buffer[13] = 0xff
                     flag_17 = False
-                elif flag_32 and packet_number == 32:
-                    self.packet.serialized[13] = 0xff
+                elif flag_32 and packet_number == 2:
+                    self.instance.serialized.buffer[13] = 0xff
                     flag_32 = False
-                self.transmit_packet()
-                if ((((packet_number + 1)  % self.packet.ack_frequency_hash_table[self.options.ack_frequency]) == 0) or
-                     ((packet_number + 1) == self.options.number_of_packets)):
+                self.transmit()
+                if ((((packet_number + 1)  % self.ack_frequency_hash_table[self.instance.options.ack_frequency]) == 0) or
+                     ((packet_number + 1) == self.instance.options.number_of_packets)):
                     if (self.receive() == DUST_RESULT.SUCCESS.value):
-                        if (self.packet.header.bits.ack == DUST_ACK.SET.value):
+                        if (self.instance.packet.header.bits.ack == DUST_ACK.SET.value):
                             print("#" + str(packet_number) + ": ACK")
                         else:
                             print("#" + str(packet_number) + ": NACK")
-                            packet_number -= self.packet.ack_frequency_hash_table[self.options.ack_frequency]
+                            packet_number -= self.ack_frequency_hash_table[self.instance.options.ack_frequency]
                     packet_number += 1
         else:
             print("Usart is not initialized...")
 
-    def transmit_packet(self):
-        for byte in self.packet.serialized:
-            self.usart.write(byte.to_bytes(1, byteorder = 'big'))
+    def readelf_get_sections(self, segment):
+        with open(self.bin, 'rb') as bin_file:
+            self.elf = ELFFile(bin_file)
+            for section in self.elf.iter_sections():
+                if (section.name.startswith(segment.name)):
+                    segment.sections.append(section)
+            segment.fill_raw_hexdata()
 
-    def receive(self):
-        serialized_packet_size = DUST_PACKET_HEADER_SIZE + self.options.payload_size + DUST_PACKET_CRC16_SIZE
-        serialized_packet = self.usart.read(size = serialized_packet_size)
-        if (self.packet.deserialize(serialized_packet) != DUST_RESULT.SUCCESS.value):
-            return DUST_RESULT.ERROR.value
-        return DUST_RESULT.SUCCESS.value
+    def calculate_number_of_packets(self, firmware_size, payload_size):
+        if ((firmware_size % payload_size) != 0):
+            return int((firmware_size / payload_size) + 1)
+        else:
+            return int(firmware_size / payload_size)
 
-    def transmit_socat(self):
-        byte_string = ""
-        for byte in self.packet.serialized:
-            byte_string += hex(byte)
-            byte_string += " "
-        for byte in byte_string:
-            self.usart.write(byte.encode('utf-8'))
-        self.usart.write(b"\n\r")
+    def prepare_data(self):
+        number_of_alignment_bytes = (self.instance.options.payload_size - (len(self.text.converted_hexdata) % self.instance.options.payload_size))
+        for i in range(0, number_of_alignment_bytes):
+            self.text.converted_hexdata.append(0xff)
+
+    def fill_data(self, packet_number):
+        payload_size = self.instance.options.payload_size
+        return self.text.converted_hexdata[(packet_number * payload_size):((packet_number * payload_size) + payload_size)]
+
+    def print_arguments(self):
+        print("Bin:      " + self.bin)
+        print("Port:     " + self.port)
+        print("Baudrate: " + self.baudrate)
 
 
 updater = dfu_updater()
@@ -194,10 +194,14 @@ updater.print_arguments()
 updater.readelf_get_sections(updater.text)
 updater.text.calculate_size()
 updater.text.convert_to_little_endian()
-updater.packet.crc16_lookup_table_generate(0x1021)
+
+dust_crc16_generate_lut(0x1021)
 
 updater.init()
-updater.connect(ack_frequency = DUST_ACK_FREQUENCY.AFTER_EACH_PACKET.value, payload_size = DUST_LENGTH.BYTES32.value)
+# There is some error with payload size equal to 256 (on uC side)
+# Check each of the ack frequency option
+updater.connect(DUST_ACK_FREQUENCY.AFTER_EACH_PACKET.value, 256)
+updater.prepare_data()
 updater.update()
 updater.disconnect()
 updater.deinit()
