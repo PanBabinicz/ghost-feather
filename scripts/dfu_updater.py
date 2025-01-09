@@ -29,10 +29,10 @@ class dfu_updater:
         if ( len(sys.argv) < 4 ):
             print("Invalid usage: python3 dfu_usart.py <bin> <port> <baudrate>")
             sys.exit()
-        self.bin                      = sys.argv[1]
-        self.port                     = sys.argv[2]
-        self.baudrate                 = sys.argv[3]
-        self.text                     = dfu_updater_segment(name = '.text', sections = [])
+        self.bin               = sys.argv[1]
+        self.port              = sys.argv[2]
+        self.baudrate          = sys.argv[3]
+        self.text              = dfu_updater_segment(name = '.text', sections = [])
         self.usart             = None
         self.instance          = dust_instance()
         self.length_hash_table = {
