@@ -200,6 +200,7 @@ dust_crc16_generate_lut(0x1021)
 updater.init()
 # There is some error with payload size equal to 256 (on uC side)
 # Check each of the ack frequency option
+# There is also problem with ack frequency
 updater.connect(DUST_ACK_FREQUENCY.AFTER_EACH_PACKET.value, 256)
 updater.prepare_data()
 updater.update()
