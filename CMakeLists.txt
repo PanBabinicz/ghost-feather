@@ -31,7 +31,7 @@ get_cmake_property(printf_sources PRINTF_SOURCES)
 
 message(STATUS "Add ghost-feather-first-bootloader executable")
 add_executable(
-    ghost-feather-first-bootloader
+    ghost-feather-first-bootloader.elf
     ${first_bootloader_sources}
     ${stm32f722xx_first_bootloader_startup_sources}
     ${vectortable_sources}
@@ -39,7 +39,7 @@ add_executable(
 
 message(STATUS "Add ghost-feather-second-bootloader executable")
 add_executable(
-    ghost-feather-second-bootloader
+    ghost-feather-second-bootloader.elf
     ${second_bootloader_sources}
     ${stm32f722xx_second_bootloader_startup_sources}
     ${vectortable_sources}
@@ -47,7 +47,7 @@ add_executable(
 
 message(STATUS "Add ghost-feather-boot-updater executable")
 add_executable(
-    ghost-feather-boot-updater
+    ghost-feather-boot-updater.elf
     ${boot_updater}
     ${dust}
     ${stm32f722xx_boot_updater_startup_sources}
@@ -58,7 +58,7 @@ add_executable(
 
 message(STATUS "Add ghost-feather-app executable")
 add_executable(
-    ghost-feather-app
+    ghost-feather-app.elf
     ${app_sources}
     ${stm32f722xx_app_startup_sources}
     ${vectortable_sources}
@@ -66,7 +66,7 @@ add_executable(
 
 message(STATUS "Add ghost-feather-first-bootloader target link directories")
 target_link_directories(
-    ghost-feather-first-bootloader
+    ghost-feather-first-bootloader.elf
     PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
@@ -75,7 +75,7 @@ target_link_directories(
 
 message(STATUS "Add ghost-feather-second-bootloader target link directories")
 target_link_directories(
-    ghost-feather-second-bootloader
+    ghost-feather-second-bootloader.elf
     PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
@@ -84,7 +84,7 @@ target_link_directories(
 
 message(STATUS "Add ghost-feather-boot-updater target link directories")
 target_link_directories(
-    ghost-feather-boot-updater
+    ghost-feather-boot-updater.elf
     PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
@@ -97,7 +97,7 @@ target_link_directories(
 
 message(STATUS "Add ghost-feather-app target link directories")
 target_link_directories(
-    ghost-feather-app
+    ghost-feather-app.elf
     PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
@@ -106,7 +106,7 @@ target_link_directories(
 
 message(STATUS "Add ghost-feather-first-bootloader target link libraries")
 target_link_libraries(
-    ghost-feather-first-bootloader
+    ghost-feather-first-bootloader.elf
     PRIVATE
     stm32f722xx_first_bootloader_startup
     first_bootloader
@@ -116,7 +116,7 @@ target_link_libraries(
 
 message(STATUS "Add ghost-feather-second-bootloader target link libraries")
 target_link_libraries(
-    ghost-feather-second-bootloader
+    ghost-feather-second-bootloader.elf
     PRIVATE
     stm32f722xx_second_bootloader_startup
     second_bootloader
@@ -126,7 +126,7 @@ target_link_libraries(
 
 message(STATUS "Add ghost-feather-boot-updater target link libraries")
 target_link_libraries(
-    ghost-feather-boot-updater
+    ghost-feather-boot-updater.elf
     PRIVATE
     stm32f722xx_boot_updater_startup
     boot_updater
@@ -139,7 +139,7 @@ target_link_libraries(
 
 message(STATUS "Add ghost-feather-app target link libraries")
 target_link_libraries(
-    ghost-feather-app
+    ghost-feather-app.elf
     PRIVATE
     stm32f722xx_app_startup
     app
@@ -149,7 +149,7 @@ target_link_libraries(
 
 message(STATUS "Add ghost-feather-first-bootloader target include directories")
 target_include_directories(
-    ghost-feather-first-bootloader
+    ghost-feather-first-bootloader.elf
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/bootloader/stm32f722xx/first_bootloader
@@ -158,7 +158,7 @@ target_include_directories(
 
 message(STATUS "Add ghost-feather-second-bootloader target include directories")
 target_include_directories(
-    ghost-feather-second-bootloader
+    ghost-feather-second-bootloader.elf
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/bootloader/stm32f722xx/second_bootloader
@@ -167,7 +167,7 @@ target_include_directories(
 
 message(STATUS "Add ghost-feather-boot-updater target include directories")
 target_include_directories(
-    ghost-feather-boot-updater
+    ghost-feather-boot-updater.elf
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/boot_updater
@@ -179,7 +179,7 @@ target_include_directories(
 
 message(STATUS "Add ghost-feather-app target include directories")
 target_include_directories(
-    ghost-feather-app
+    ghost-feather-app.elf
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/app/stm32f722xx
@@ -189,21 +189,21 @@ target_include_directories(
 
 message(STATUS "Add ghost-feather-first-bootloader target compile definitions")
 target_compile_definitions(
-    ghost-feather-first-bootloader
+    ghost-feather-first-bootloader.elf
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     )
 
 message(STATUS "Add ghost-feather-second-bootloader target compile definitions")
 target_compile_definitions(
-    ghost-feather-second-bootloader
+    ghost-feather-second-bootloader.elf
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     )
 
 message(STATUS "Add ghost-feather-boot-updater target compile definitions")
 target_compile_definitions(
-    ghost-feather-boot-updater
+    ghost-feather-boot-updater.elf
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     "$<$<COMPILE_LANGUAGE:C>:PRINTF_DISABLE_SUPPORT_LONG_LONG>"
@@ -212,14 +212,14 @@ target_compile_definitions(
 
 message(STATUS "Add ghost-feather-app target compile definitions")
 target_compile_definitions(
-    ghost-feather-app
+    ghost-feather-app.elf
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     )
 
 message(STATUS "Add ghost-feather-first-bootloader target compile options")
 target_compile_options(
-    ghost-feather-first-bootloader
+    ghost-feather-first-bootloader.elf
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
     "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-d16>"
@@ -230,7 +230,7 @@ target_compile_options(
 
 message(STATUS "Add ghost-feather-second-bootloader target compile options")
 target_compile_options(
-    ghost-feather-second-bootloader
+    ghost-feather-second-bootloader.elf
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
     "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-d16>"
@@ -241,7 +241,7 @@ target_compile_options(
 
 message(STATUS "Add ghost-feather-boot-updater target compile options")
 target_compile_options(
-    ghost-feather-boot-updater
+    ghost-feather-boot-updater.elf
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
     "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-d16>"
@@ -252,7 +252,7 @@ target_compile_options(
 
 message(STATUS "Add ghost-feather-app target compile options")
 target_compile_options(
-    ghost-feather-app
+    ghost-feather-app.elf
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
     "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-d16>"
@@ -263,7 +263,7 @@ target_compile_options(
 
 message(STATUS "Add ghost-feather-first-bootloader target compile options")
 target_link_options(
-    ghost-feather-first-bootloader
+    ghost-feather-first-bootloader.elf
     PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/stm32f722xx_first_bootloader.ld
     -nostartfiles
@@ -272,7 +272,7 @@ target_link_options(
 
 message(STATUS "Add ghost-feather-second-bootloader target compile options")
 target_link_options(
-    ghost-feather-second-bootloader
+    ghost-feather-second-bootloader.elf
     PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/stm32f722xx_second_bootloader.ld
     -nostartfiles
@@ -281,7 +281,7 @@ target_link_options(
 
 message(STATUS "Add ghost-feather-boot-updater target compile options")
 target_link_options(
-    ghost-feather-boot-updater
+    ghost-feather-boot-updater.elf
     PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/stm32f722xx_boot_updater.ld
     -nostartfiles
@@ -290,7 +290,7 @@ target_link_options(
 
 message(STATUS "Add ghost-feather-app target compile options")
 target_link_options(
-    ghost-feather-app
+    ghost-feather-app.elf
     PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/stm32f722xx_app.ld
     -nostartfiles
