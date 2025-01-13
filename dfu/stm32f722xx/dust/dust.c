@@ -51,7 +51,7 @@ static void dust_crc16_calculate(dust_packet_t *const packet);
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-static dust_result_t dust_crc16_check(const uint8_t *const data, const uint8_t data_size);
+static dust_result_t dust_crc16_check(const uint8_t *const data, const uint32_t data_size);
 
 ///
 /// \brief Check the handshake options.
@@ -169,10 +169,10 @@ static void dust_crc16_calculate(dust_packet_t *const packet)
     }
 }
 
-static dust_result_t dust_crc16_check(const uint8_t *const data, const uint8_t data_size)
+static dust_result_t dust_crc16_check(const uint8_t *const data, const uint32_t data_size)
 {
-    uint16_t      crc16    = 0;
-    uint32_t      position = 0;
+    uint16_t crc16    = 0;
+    uint32_t position = 0;
 
     for (uint32_t i = 0; i < data_size; i++)
     {
