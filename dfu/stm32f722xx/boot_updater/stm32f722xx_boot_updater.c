@@ -162,7 +162,7 @@ void boot_updater_init(void)
     memset(&instance.serialized.buffer[0], 0, instance.serialized.buffer_size);
 
     (void)dust_header_create(&instance.packet.header, DUST_OPCODE_DISCONNECT, DUST_LENGTH_BYTES32, DUST_ACK_UNSET, 0x00);
-    (void)dust_payload_create(&instance.packet.payload, &instance.serialized.buffer[0], instance.serialized.buffer_size);
+    (void)dust_payload_create(&instance.packet.payload, &instance.serialized.buffer[0], instance.packet.payload.buffer_size);
     (void)dust_serialize(&instance.packet, &instance.serialized.buffer[0], instance.serialized.buffer_size);
 
     /* Send disconnect packet. */

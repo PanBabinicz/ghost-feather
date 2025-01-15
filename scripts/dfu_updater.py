@@ -57,7 +57,7 @@ class dfu_updater:
             print("The usart is already initialized...")
         else:
             print("Initializing...")
-            self.usart = serial.Serial(port = self.port, baudrate = self.baudrate, timeout = 60.0)
+            self.usart = serial.Serial(port = self.port, baudrate = self.baudrate, timeout = 120.0)
             if isinstance(self.usart, serial.Serial):
                 print("Initialization completed!")
             else:
@@ -93,7 +93,6 @@ class dfu_updater:
             self.instance.packet.payload.create(buffer=self.instance.options.serialize())
             self.instance.packet.create(self.instance.packet.header, self.instance.packet.payload)
             self.instance.serialized.create(buffer=self.instance.packet.serialize())
-            self.instance.print_packet()
             self.transmit()
             if (self.receive() == DUST_RESULT.SUCCESS.value):
                 if (self.instance.packet.header.bits.ack == DUST_ACK.SET.value):
@@ -123,6 +122,8 @@ class dfu_updater:
                             break
                         else:
                             print("Disconnection received NACK")
+                    else:
+                        print("Receive result ERROR")
                 return DUST_RESULT.SUCCESS.value
         else:
             print("Usart is not initialized...")
@@ -155,7 +156,7 @@ class dfu_updater:
                         else:
                             print("#" + str(packet_number) + ": NACK")
                             packet_number -= self.ack_frequency_hash_table[self.instance.options.ack_frequency]
-                    packet_number += 1
+                packet_number += 1
         else:
             print("Usart is not initialized...")
 
@@ -201,7 +202,7 @@ updater.init()
 # There is some error with payload size equal to 256 (on uC side)
 # Check each of the ack frequency option
 # There is also problem with ack frequency
-updater.connect(DUST_ACK_FREQUENCY.AFTER_EACH_PACKET.value, 256)
+updater.connect(DUST_ACK_FREQUENCY.AFTER_EACH_PACKET.value, 32)
 updater.prepare_data()
 updater.update()
 updater.disconnect()

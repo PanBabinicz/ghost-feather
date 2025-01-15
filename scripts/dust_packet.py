@@ -121,6 +121,7 @@ class dust_header(ctypes.BigEndianUnion):
         self.whole_value = 0
 
     def calculate_checksum(self):
+        checksum = 0
         checksum = (self.bits.opcode        << 0x0e
                  |  self.bits.length        << 0x0c
                  |  self.bits.ack           << 0x0b
@@ -129,11 +130,11 @@ class dust_header(ctypes.BigEndianUnion):
         return checksum
 
     def create(self, opcode, length, ack, packet_number):
-        self.bits.opcode   = opcode
-        self.bits.length   = length
-        self.bits.ack      = ack
-        self.packet_number = packet_number
-        self.checksum      = self.calculate_checksum()
+        self.bits.opcode        = opcode
+        self.bits.length        = length
+        self.bits.ack           = ack
+        self.bits.packet_number = packet_number
+        self.bits.checksum      = self.calculate_checksum()
 
     def serialize(self):
         serialized_header = []
@@ -216,7 +217,9 @@ class dust_packet:
         self.payload.deserialize(serialized_data[DUST_PACKET_HEADER_SIZE:(len(serialized_data) - DUST_PACKET_CRC16_SIZE)])
         if self.crc16_calculate(serialized_data) != 0:
             return DUST_RESULT.ERROR.value
-        self.crc16 = serialized_data[(len(serialized_data) - DUST_PACKET_CRC16_SIZE):]
+        self.crc16  = 0
+        self.crc16 |= serialized_data[(len(serialized_data) - DUST_PACKET_CRC16_SIZE)]     << 0x08
+        self.crc16 |= serialized_data[(len(serialized_data) - DUST_PACKET_CRC16_SIZE + 1)] << 0x00
         return DUST_RESULT.SUCCESS.value
 
 
@@ -298,4 +301,4 @@ class dust_instance:
         print("crc16:         " + str(f"{self.packet.crc16:#x}"))
 
     def print_serialized(self):
-        print("serialized #" + str(self.packet.header.bits.packet_number) + ": " + str(' '.join(f"{hex:#x}" for hex in self.serialized.buffer)))
+        print("serialized #" + str(self.packet.header.bits.packet_number) + ": " + str(' '.join(f"{hex:02x}" for hex in self.serialized.buffer)))
