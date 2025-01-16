@@ -222,10 +222,10 @@ target_compile_options(
     ghost-feather-first-bootloader.elf
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-d16>"
+    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-sp-d16>"
     "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
     "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O1>"
+    "$<$<COMPILE_LANGUAGE:C>:-O3>"
     )
 
 message(STATUS "Add ghost-feather-second-bootloader target compile options")
@@ -233,10 +233,10 @@ target_compile_options(
     ghost-feather-second-bootloader.elf
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-d16>"
+    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-sp-d16>"
     "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
     "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O1>"
+    "$<$<COMPILE_LANGUAGE:C>:-O3>"
     )
 
 message(STATUS "Add ghost-feather-boot-updater target compile options")
@@ -244,10 +244,11 @@ target_compile_options(
     ghost-feather-boot-updater.elf
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-d16>"
+    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-sp-d16>"
     "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
     "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O1>"
+    "$<$<COMPILE_LANGUAGE:C>:-Wcast-align>"
+    "$<$<COMPILE_LANGUAGE:C>:-O3>"
     )
 
 message(STATUS "Add ghost-feather-app target compile options")
@@ -255,10 +256,10 @@ target_compile_options(
     ghost-feather-app.elf
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-d16>"
+    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-sp-d16>"
     "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
     "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O1>"
+    "$<$<COMPILE_LANGUAGE:C>:-O3>"
     )
 
 message(STATUS "Add ghost-feather-first-bootloader target compile options")

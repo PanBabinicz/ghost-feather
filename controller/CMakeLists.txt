@@ -35,5 +35,5 @@ target_compile_options(
     "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-d16>"
     "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
     "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O1>"
+    "$<$<COMPILE_LANGUAGE:C>:-O3>"
     )
