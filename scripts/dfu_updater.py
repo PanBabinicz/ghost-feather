@@ -133,20 +133,12 @@ class dfu_updater:
         if isinstance(self.usart, serial.Serial):
             print("Trying to update...")
             packet_number = 0
-            flag_17 = True
-            flag_32 = True
             payload_size = self.length_hash_table[self.instance.options.payload_size]
             while packet_number < self.instance.options.number_of_packets:
                 self.instance.packet.header.create(DUST_OPCODE.DATA.value, payload_size, DUST_ACK.UNSET.value, packet_number)
                 self.instance.packet.payload.create(buffer=self.fill_data(packet_number))
                 self.instance.packet.create(self.instance.packet.header, self.instance.packet.payload)
                 self.instance.serialized.create(buffer=self.instance.packet.serialize())
-                if flag_17 and packet_number == 1:
-                    self.instance.serialized.buffer[13] = 0xff
-                    flag_17 = False
-                elif flag_32 and packet_number == 2:
-                    self.instance.serialized.buffer[13] = 0xff
-                    flag_32 = False
                 self.transmit()
                 if ((((packet_number + 1)  % self.ack_frequency_hash_table[self.instance.options.ack_frequency]) == 0) or
                      ((packet_number + 1) == self.instance.options.number_of_packets)):
