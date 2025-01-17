@@ -2,8 +2,8 @@ MEMORY
 {
     bootrom1   (rx)  : ORIGIN = 0x00200000, LENGTH = 0x00004000
     bootrom2   (rx)  : ORIGIN = 0x00204000, LENGTH = 0x00004000
-    ubootrom   (rx)  : ORIGIN = 0x00208000, LENGTH = 0x00006000
-    approm     (rx)  : ORIGIN = 0x08014000, LENGTH = 0x00008000
+    ubootrom   (rx)  : ORIGIN = 0x00208000, LENGTH = 0x00008000
+    approm     (rx)  : ORIGIN = 0x00210000, LENGTH = 0x00008000
     sram_boot1 (rwx) : ORIGIN = 0x20010000, LENGTH = 0x00002000
     sram_boot2 (rwx) : ORIGIN = 0x20012000, LENGTH = 0x00002000
     sram_uboot (rwx) : ORIGIN = 0x20014000, LENGTH = 0x00008000
