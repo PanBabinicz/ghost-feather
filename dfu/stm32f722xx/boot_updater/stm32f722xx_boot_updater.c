@@ -5,6 +5,7 @@
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 #include "libopencm3/stm32/usart.h"
+#include "libopencm3/stm32/flash.h"
 #include "libopencm3/cm3/systick.h"
 
 #define PROCESSOR_FREQUENCY (216000000u)
@@ -118,6 +119,14 @@ void boot_updater_init(void)
         led_on();
         systick_delay_ms(500);
     }
+
+    /* Unlock the flash erase/program functionality. */
+    FLASH_KEYR = 0x45670123;
+    FLASH_KEYR = 0xcdef89ab;
+
+    /* Erase the app 4 and 5 sectors. */
+    flash_erase_sector(4, 2);
+    flash_erase_sector(5, 2);
 
     dust_protocol_instance_t instance = { 0 };
     dust_crc16_generate_lut(0x1021);
