@@ -11,6 +11,11 @@
 #define PROCESSOR_FREQUENCY (216000000u)
 #define CYCLE_TIME          (((1.0f / PROCESSOR_FREQUENCY) * 1000000000.0f))
 
+#define PSIZE_X8            (0x00u)
+#define PSIZE_X16           (0x01u)
+#define PSIZE_X32           (0x02u)
+#define PSIZE_X64           (0x03u)
+
 ///*************************************************************************************************
 /// Private functions - declaration.
 ///*************************************************************************************************
@@ -43,6 +48,26 @@ static void led_off(void);
 /// \brief
 ///
 static void systick_delay_ms(uint32_t ms);
+
+///
+/// \brief
+///
+static void init(void);
+
+///
+/// \brief
+///
+static void deinit(void);
+
+///
+/// \brief
+///
+static void prepare_flash(void);
+
+///
+/// \brief
+///
+static void update(void);
 
 ///*************************************************************************************************
 /// Private functions - definition.
@@ -100,10 +125,7 @@ static void systick_delay_ms(uint32_t ms)
     while (!systick_get_countflag());
 }
 
-///*************************************************************************************************
-/// Global functions - definition.
-///*************************************************************************************************
-void boot_updater_init(void)
+static void init(void)
 {
     uint32_t *usart_instance;
 
@@ -119,15 +141,29 @@ void boot_updater_init(void)
         led_on();
         systick_delay_ms(500);
     }
+}
 
+static void deinit(void)
+{
+}
+
+static void prepare_flash(void)
+{
     /* Unlock the flash erase/program functionality. */
     FLASH_KEYR = 0x45670123;
     FLASH_KEYR = 0xcdef89ab;
 
     /* Erase the app 4 and 5 sectors. */
-    flash_erase_sector(4, 2);
-    flash_erase_sector(5, 2);
+    flash_erase_sector(4, PSIZE_X32);
+    flash_erase_sector(5, PSIZE_X32);
+}
 
+static void update(void)
+{
+    /* AXIM interface is used to program the memory.
+     * RM0431 3.3.1 Flash memory organization:
+     * Write accesses are not supported on ITCM interface. */
+    volatile uint32_t app_memory = 0x08010000;
     dust_protocol_instance_t instance = { 0 };
     dust_crc16_generate_lut(0x1021);
 
@@ -150,6 +186,20 @@ void boot_updater_init(void)
         if (dust_receive(&instance.packet, &instance.serialized, USART3) != DUST_RESULT_SUCCESS)
         {
             number_of_nack++;
+        }
+        else
+        {
+            /* Program the app memory. */
+            for (uint32_t payload_index = 0; payload_index < instance.packet.payload.buffer_size; payload_index += 4)
+            {
+                uint32_t word = instance.packet.payload.buffer[payload_index + 0] << 0x00
+                              | instance.packet.payload.buffer[payload_index + 1] << 0x08
+                              | instance.packet.payload.buffer[payload_index + 2] << 0x10
+                              | instance.packet.payload.buffer[payload_index + 3] << 0x18;
+
+                flash_program_word(app_memory, word);
+                app_memory += 4;
+            }
         }
 
         if ((((i + 1)  % ack_frequency) == 0) ||
@@ -200,15 +250,15 @@ void boot_updater_init(void)
     }
 }
 
-/*
-boot_updater_result_t boot_updater_deinit(void)
-{
-}
-*/
+///*************************************************************************************************
+/// Global functions - definition.
+///*************************************************************************************************
 
 void boot_updater_start(void)
 {
-    boot_updater_init();
+    init();
+    prepare_flash();
+    update();
 
     /* Never return */
     while (1);
