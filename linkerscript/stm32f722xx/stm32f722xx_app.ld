@@ -8,9 +8,9 @@ SECTIONS
     {
         . = ALIGN(4);
         _stext = .;
-        KEEP(*(.vector_table))
-        *(.text)
-        *(.rodata)
+        KEEP(*(._vector_table))
+        *(.text*)
+        *(.rodata*)
         . = ALIGN(4);
         _etext = .;
     } > approm
@@ -19,20 +19,20 @@ SECTIONS
     {
         . = ALIGN(4);
         _sbss = .;
-        *(.bss)
+        *(.bss*)
         *(COMMON)
-        . = ALIGN(4)
+        . = ALIGN(4);
         _ebss = .;
-    } > sram1
+    } > sram_app
 
     .data :
     {
         . = ALIGN(4);
         _sdata = .;
-        *(.data)
+        *(.data*)
         . = ALIGN(4);
         _edata = .;
-    } > sram1 AT > approm
+    } > sram_app AT > approm
 
     .stack (NOLOAD) :
     {
@@ -41,7 +41,7 @@ SECTIONS
         . = . + STACK_SIZE;
         . = ALIGN(8);
         _estack = .;
-    } > sram1
+    } > sram_app
 
     . = ALIGN(4);
     _end = .;
