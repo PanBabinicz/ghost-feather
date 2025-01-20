@@ -1,13 +1,20 @@
 #include "stm32f722xx_boot_updater.h"
 #include "usart_controller.h"
+#include "dust.h"
 #include "printf.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 #include "libopencm3/stm32/usart.h"
+#include "libopencm3/stm32/flash.h"
 #include "libopencm3/cm3/systick.h"
 
 #define PROCESSOR_FREQUENCY (216000000u)
 #define CYCLE_TIME          (((1.0f / PROCESSOR_FREQUENCY) * 1000000000.0f))
+
+#define PSIZE_X8            (0x00u)
+#define PSIZE_X16           (0x01u)
+#define PSIZE_X32           (0x02u)
+#define PSIZE_X64           (0x03u)
 
 ///*************************************************************************************************
 /// Private functions - declaration.
@@ -41,6 +48,26 @@ static void led_off(void);
 /// \brief
 ///
 static void systick_delay_ms(uint32_t ms);
+
+///
+/// \brief
+///
+static void init(void);
+
+///
+/// \brief
+///
+static void deinit(void);
+
+///
+/// \brief
+///
+static void prepare_flash(void);
+
+///
+/// \brief
+///
+static void update(void);
 
 ///*************************************************************************************************
 /// Private functions - definition.
@@ -98,10 +125,7 @@ static void systick_delay_ms(uint32_t ms)
     while (!systick_get_countflag());
 }
 
-///*************************************************************************************************
-/// Global functions - definition.
-///*************************************************************************************************
-void boot_updater_init(void)
+static void init(void)
 {
     uint32_t *usart_instance;
 
@@ -117,19 +141,124 @@ void boot_updater_init(void)
         led_on();
         systick_delay_ms(500);
     }
-
-    printf("Boot updater %d initialized...\n\r", 1);
 }
 
-/*
-boot_updater_result_t boot_updater_deinit(void)
+static void deinit(void)
 {
 }
-*/
+
+static void prepare_flash(void)
+{
+    /* Unlock the flash erase/program functionality. */
+    FLASH_KEYR = 0x45670123;
+    FLASH_KEYR = 0xcdef89ab;
+
+    /* Erase the app 4 and 5 sectors. */
+    flash_erase_sector(4, PSIZE_X32);
+    flash_erase_sector(5, PSIZE_X32);
+}
+
+static void update(void)
+{
+    /* AXIM interface is used to program the memory.
+     * RM0431 3.3.1 Flash memory organization:
+     * Write accesses are not supported on ITCM interface. */
+    volatile uint32_t app_memory = 0x08010000;
+    dust_protocol_instance_t instance = { 0 };
+    dust_crc16_generate_lut(0x1021);
+
+    if ((dust_handshake(&instance, USART3) != DUST_RESULT_SUCCESS) ||
+        (instance.options.ack_frequency > DUST_ACK_FREQUENCY_TOTAL_SIZE))
+    {
+        dust_transmit_nack(&instance.packet, &instance.serialized, USART3);
+        return;
+    }
+
+    /* Transmit handshake ACK. */
+    dust_transmit_ack(&instance.packet, &instance.serialized, USART3);
+
+    uint16_t ack_frequency  = dust_get_ack_frequency(instance.options.ack_frequency);
+    uint16_t number_of_nack = 0;
+
+    /* How many packet should I receive? Handshake option. */
+    for (uint32_t i = 0; i < instance.options.number_of_packets; i++)
+    {
+        if (dust_receive(&instance.packet, &instance.serialized, USART3) != DUST_RESULT_SUCCESS)
+        {
+            number_of_nack++;
+        }
+        else
+        {
+            /* Program the app memory. */
+            for (uint32_t payload_index = 0; payload_index < instance.packet.payload.buffer_size; payload_index += 4)
+            {
+                uint32_t word = instance.packet.payload.buffer[payload_index + 0] << 0x00
+                              | instance.packet.payload.buffer[payload_index + 1] << 0x08
+                              | instance.packet.payload.buffer[payload_index + 2] << 0x10
+                              | instance.packet.payload.buffer[payload_index + 3] << 0x18;
+
+                flash_program_word(app_memory, word);
+                app_memory += 4;
+            }
+        }
+
+        if ((((i + 1)  % ack_frequency) == 0) ||
+             ((i + 1) == instance.options.number_of_packets))
+        {
+            if (number_of_nack != 0)
+            {
+                dust_transmit_nack(&instance.packet, &instance.serialized, USART3);
+                number_of_nack = 0;
+                i -= ack_frequency;
+            }
+            else
+            {
+                dust_transmit_ack(&instance.packet, &instance.serialized, USART3);
+            }
+        }
+    }
+
+    memset(&instance.serialized.buffer[0], 0, instance.serialized.buffer_size);
+
+    (void)dust_header_create(&instance.packet.header, DUST_OPCODE_DISCONNECT, DUST_LENGTH_BYTES32, DUST_ACK_UNSET, 0x00);
+    (void)dust_payload_create(&instance.packet.payload, &instance.serialized.buffer[0], instance.packet.payload.buffer_size);
+    (void)dust_serialize(&instance.packet, &instance.serialized.buffer[0], instance.serialized.buffer_size);
+
+    /* Send disconnect packet. */
+    (void)dust_transmit(&instance.serialized, USART3);
+
+    /* Wait for the ack packet. */
+    while (1)
+    {
+        if (dust_receive(&instance.packet, &instance.serialized, USART3) != DUST_RESULT_SUCCESS)
+        {
+            dust_transmit_nack(&instance.packet, &instance.serialized, USART3);
+        }
+        else
+        {
+            if ((instance.packet.header.opcode == DUST_OPCODE_DISCONNECT) &&
+                (instance.packet.header.ack == DUST_ACK_SET))
+            {
+                dust_transmit_ack(&instance.packet, &instance.serialized, USART3);
+                break;
+            }
+            else
+            {
+                dust_transmit_nack(&instance.packet, &instance.serialized, USART3);
+            }
+        }
+    }
+}
+
+///*************************************************************************************************
+/// Global functions - definition.
+///*************************************************************************************************
 
 void boot_updater_start(void)
 {
-    (void)boot_updater_init();
+    init();
+    prepare_flash();
+    update();
 
     /* Never return */
     while (1);

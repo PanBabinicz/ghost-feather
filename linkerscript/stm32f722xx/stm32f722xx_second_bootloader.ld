@@ -9,8 +9,8 @@ SECTIONS
         . = ALIGN(4);
         _stext = .;
         KEEP(*(._vector_table))
-        *(.text)
-        *(.rodata)
+        *(.text*)
+        *(.rodata*)
         . = ALIGN(4);
         _etext = .;
     } > bootrom2
@@ -19,7 +19,7 @@ SECTIONS
     {
         . = ALIGN(4);
         _sbss = .;
-        *(.bss)
+        *(.bss*)
         *(COMMON)
         . = ALIGN(4);
         _ebss = .;
@@ -29,7 +29,7 @@ SECTIONS
     {
         . = ALIGN(4);
         _sdata = .;
-        *(.data)
+        *(.data*)
         . = ALIGN(4);
         _edata = .;
     } > sram_boot2 AT > bootrom2

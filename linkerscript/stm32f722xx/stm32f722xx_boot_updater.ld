@@ -1,6 +1,6 @@
 INCLUDE "stm32f722xx_memory_map.ld"
 
-STACK_SIZE = DEFINED(STACK_SIZE) ? STACK_SIZE : DEFINED(__stack_size__) ? __stack_size__ : 0x2000;
+STACK_SIZE = DEFINED(STACK_SIZE) ? STACK_SIZE : DEFINED(__stack_size__) ? __stack_size__ : 0x4000;
 
 SECTIONS
 {
@@ -9,8 +9,8 @@ SECTIONS
         . = ALIGN(4);
         _stext = .;
         KEEP(*(._vector_table))
-        *(.text)
-        *(.rodata)
+        *(.text*)
+        *(.rodata*)
         . = ALIGN(4);
         _etext = .;
     } > ubootrom
@@ -19,7 +19,7 @@ SECTIONS
     {
         . = ALIGN(4);
         _sbss = .;
-        *(.bss)
+        *(.bss*)
         *(COMMON)
         . = ALIGN(4);
         _ebss = .;
@@ -29,7 +29,7 @@ SECTIONS
     {
         . = ALIGN(4);
         _sdata = .;
-        *(.data)
+        *(.data*)
         . = ALIGN(4);
         _edata = .;
     } > sram_uboot AT > ubootrom
