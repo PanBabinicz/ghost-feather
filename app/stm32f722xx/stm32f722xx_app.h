@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 ///
-/// \brief
+/// \brief Start the application.
 ///
 void app_start(void);
 
