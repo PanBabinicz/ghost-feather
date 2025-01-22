@@ -8,7 +8,7 @@
 /// Private objects - declaration.
 ///*************************************************************************************************
 ///
-/// \brief The usart controller.
+/// \brief The usart controller structure.
 ///
 typedef struct
 {

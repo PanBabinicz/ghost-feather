@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 ///
-/// \brief
+/// \brief The boot updater results type.
 ///
 typedef enum
 {
@@ -13,7 +13,7 @@ typedef enum
 } boot_updater_result_t;
 
 ///
-/// \brief
+/// \brief Starts the boot updater.
 ///
 void boot_updater_start(void);
 
