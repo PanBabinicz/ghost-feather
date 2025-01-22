@@ -4,7 +4,7 @@
 /// Private objects - declaration.
 ///*************************************************************************************************
 ///
-/// \brief
+/// \brief The circular buffer structure.
 ///
 typedef struct
 {
@@ -18,7 +18,7 @@ typedef struct
 /// Private objects - definition.
 ///*************************************************************************************************
 ///
-/// \breif Circular buffer data structure array.
+/// \breif The circular buffer structure array.
 ///
 static circular_buffer_t circular_buffer_array[CIRCULAR_BUFFER_INSTANCE_TOTAL];
 
@@ -26,7 +26,7 @@ static circular_buffer_t circular_buffer_array[CIRCULAR_BUFFER_INSTANCE_TOTAL];
 /// Private functions - declaration.
 ///*************************************************************************************************
 ///
-/// \breif Get the circular buffer data structure from given instance.
+/// \breif Gets the circular buffer structure from given instance.
 ///
 /// \param[in] instance        The instance of the circular buffer data structure.
 /// \param[in] circular_buffer The address of the circular buffer pointer which will point to the
@@ -48,7 +48,7 @@ static circular_buffer_result_t circular_buffer_get(circular_buffer_instance_t i
 {
     circular_buffer_result_t result = CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE;
 
-    // Check if you don't dereference NULL pointer. Undefined behavior.
+    /* Check if you don't dereference NULL pointer. Undefined behavior. */
     if (circular_buffer == NULL)
     {
         result = CIRCULAR_BUFFER_RESULT_NULL_POINTER;
