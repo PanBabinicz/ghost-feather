@@ -1,7 +1,10 @@
 class dfu_updater_segment:
-    """Documentation for dfu_updater_segment class.
+    """
+    @class dfu_updater_segment
+    @brief Represents a segment in the DFU (Device Firmware Update) updater.
 
-    More details.
+    This class provides methods to manage firmware update segments, including
+    memory alignment, size calculation, and hex data conversion to little-endian format.
     """
 
     def __init__(self, name, sections):
