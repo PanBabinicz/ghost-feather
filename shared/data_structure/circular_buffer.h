@@ -12,7 +12,7 @@
 typedef enum
 {
     CIRCULAR_BUFFER_INSTANCE_NONE = -1,
-    CIRCULAR_BUFFER_INSTANCE_0    = 0,
+    CIRCULAR_BUFFER_INSTANCE_0    =  0,
     CIRCULAR_BUFFER_INSTANCE_1,
     CIRCULAR_BUFFER_INSTANCE_2,
     CIRCULAR_BUFFER_INSTANCE_TOTAL,
@@ -34,7 +34,7 @@ typedef enum
 /// Global functions - definition.
 ///*************************************************************************************************
 ///
-/// \biref Clear the circular buffer instance.
+/// \biref Clears the circular buffer instance.
 ///
 /// \param[in] instance The instance of the circular buffer data structure.
 ///
@@ -45,7 +45,7 @@ typedef enum
 circular_buffer_result_t circular_buffer_clear(circular_buffer_instance_t instance);
 
 ///
-/// \biref Clear all of the cicrular buffer instances.
+/// \biref Clears all of the cicrular buffer instances.
 ///
 /// \return circular_buffer_result_t       Result of the function.
 /// \retval CIRCULAR_BUFFER_RESULT_SUCCESS On success.
@@ -54,7 +54,7 @@ circular_buffer_result_t circular_buffer_clear(circular_buffer_instance_t instan
 circular_buffer_result_t circular_buffer_clear_all(void);
 
 ///
-/// \biref Push the element to given instance of the circular buffer.
+/// \biref Pushes the element to given instance of the circular buffer.
 ///
 /// \param[in] instance The instance of the circular buffer data structure.
 /// \param[in] element  The element which will be pushed to ciruclar buffer.
@@ -66,7 +66,7 @@ circular_buffer_result_t circular_buffer_clear_all(void);
 circular_buffer_result_t circular_buffer_push(circular_buffer_instance_t instance, uint8_t element);
 
 ///
-/// \biref Pop the oldest element from given instance of the circular buffer.
+/// \biref Pops the oldest element from given instance of the circular buffer.
 ///
 /// \param[in]  instance The instance of the circular buffer data structure.
 /// \param[out] element  The address where the element will be placed.

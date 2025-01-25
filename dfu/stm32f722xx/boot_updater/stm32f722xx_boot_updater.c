@@ -20,52 +20,80 @@
 /// Private functions - declaration.
 ///*************************************************************************************************
 ///
-/// \brief
+/// \brief Sets the Reset and Clock Control registers.
+///
+/// This function initializes the system's clock configuration by setting up
+/// the Reset and Clock Control (RCC) registers for the desired system
+/// performance and peripheral clock settings.
 ///
 static void rcc_setup(void);
 
 ///
-/// \brief
+/// \brief Sets GPIO pins for the first bootloader.
+///
+/// This function initializes the General Purpose Input/Output (GPIO) pins
+/// required by the first bootloader.
 ///
 static void gpio_setup(void);
 
 ///
-/// \brief
+/// \brief Initializes the system tick timer.
+///
+/// This function configures and starts the system tick timer (SysTick),
+/// which is used for generating periodic interrupts and keeping
+/// track of system time.
 ///
 static void systick_init(void);
 
 ///
-/// \brief
+/// \brief Turns the LED on.
 ///
 static void led_on(void);
 
 ///
-/// \brief
+/// \brief Turn the LED off.
 ///
 static void led_off(void);
 
 ///
-/// \brief
+/// \brief The systick delay.
+///
+/// \param[in] ms The delay value in miliseconds.
 ///
 static void systick_delay_ms(uint32_t ms);
 
 ///
-/// \brief
+/// \brief Initializes the system peripherals and debug USART.
+///
+/// This function performs the initial setup required for the boot updater to operate.
+/// It includes configuring the RCC (Reset and Clock Control), initializing the
+/// system tick timer, setting up GPIO, and initializing the debug USART controller.
+///
+/// Additionally, it provides a visual indicator of initialization through
+/// an LED blinking sequence.
 ///
 static void init(void);
 
 ///
-/// \brief
+/// \brief Deinitializes system peripherals.
 ///
 static void deinit(void);
 
 ///
-/// \brief
+/// \brief Prepares the flash memory for updates.
+///
+/// This function unlocks the flash erase and program functionality by
+/// writing specific keys to the flash key register. It then erases the
+/// app sectors (sectors 4 and 5) to ensure a clean state for new data.
 ///
 static void prepare_flash(void);
 
 ///
-/// \brief
+/// \brief Initiates the update process.
+///
+/// This function begins the update procedure, during which data is received
+/// using the dust protocol. It handles the necessary steps to retrieve and
+/// process the update data, ensuring that the system is updated correctly.
 ///
 static void update(void);
 

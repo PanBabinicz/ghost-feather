@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 ///
-/// \brief
+/// \brief Starts the first bootloader.
 ///
 void first_bootloader_start(void);
 

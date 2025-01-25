@@ -11,18 +11,24 @@ c_uint8  = ctypes.c_uint8
 c_uint16 = ctypes.c_uint16
 c_uint32 = ctypes.c_uint32
 
-"""Documentation for dust_crc16_lut.
+"""
+@brief Lookup table for CRC-16 calculation.
 
-More details.
+This table stores precomputed CRC-16 values for efficiency. The table is generated using
+the `dust_crc16_generate_lut` function and the provided polynomial.
 """
 dust_crc16_lut = numpy.zeros(DUST_CRC16_LUT_SIZE, dtype=numpy.uint16)
 
 
-"""Documentation for dust_crc16_generate_lut.
-
-More details.
-"""
 def dust_crc16_generate_lut(polynomial):
+    """
+    @brief Generates a lookup table for CRC-16 calculations.
+
+    This function computes a CRC-16 lookup table using the specified polynomial. The table
+    is used to accelerate CRC-16 calculations during runtime.
+
+    @param polynomial The polynomial used for CRC-16 calculations (e.g., 0x1021).
+    """
     global dust_crc16_lut
     for i in range(0, 2**8):
         byte = i << 8
@@ -36,21 +42,21 @@ def dust_crc16_generate_lut(polynomial):
 
 
 class DUST_RESULT(Enum):
-    """Documentation for DUST_RESULT enum.
-
-    More details.
     """
+    @brief Enum for DUST_RESULT.
 
+    Defines the possible results of dust protocol operations.
+    """
     SUCCESS  = 0x00
     ERROR    = 0x01
 
 
 class DUST_OPCODE(Enum):
-    """Documentation for DUST_OPCODE enum.
-
-    More details.
     """
+    @brief Enum for DUST_OPCODE.
 
+    Represents the opcodes used in dust protocol packets.
+    """
     CONNECT    = 0x00
     DISCONNECT = 0x01
     DATA       = 0x02
@@ -58,11 +64,11 @@ class DUST_OPCODE(Enum):
 
 
 class DUST_LENGTH(Enum):
-    """Documentation for DUST_LENGTH enum.
-
-    More details.
     """
+    @brief Enum for DUST_LENGTH.
 
+    Specifies the lengths of payloads used in dust protocol packets.
+    """
     BYTES32  = 0x00
     BYTES64  = 0x01
     BYTES128 = 0x02
@@ -70,21 +76,21 @@ class DUST_LENGTH(Enum):
 
 
 class DUST_ACK(Enum):
-    """Documentation for DUST_ACK enum.
-
-    More details.
     """
+    @brief Enum for DUST_ACK.
 
+    Defines the acknowledgment status in dust protocol packets.
+    """
     UNSET  = 0x00
     SET    = 0x01
 
 
 class DUST_ACK_FREQUENCY(Enum):
-    """Documentation for DUST_ACK_FREQUENCY enum.
-
-    More details.
     """
+    @brief Enum for DUST_ACK_FREQUENCY.
 
+    Specifies how often acknowledgments are sent during data transmission in the dust protocol.
+    """
     AFTER_EACH_PACKET = 0x00
     AFTER_8_PACKETS   = 0x01
     AFTER_16_PACKETS  = 0x02
@@ -96,11 +102,12 @@ class DUST_ACK_FREQUENCY(Enum):
 
 
 class dust_header_bits(ctypes.BigEndianStructure):
-    """Documentation for dust_header_bits structure.
-
-    More details.
     """
+    @brief Structure representing the individual bits of a dust header.
 
+    This structure defines the bit fields for the dust protocol header, allowing easy access
+    to individual components such as opcode, length, acknowledgment flag, packet number, and checksum.
+    """
     _fields_ = [("opcode",        c_uint32, 2),
                 ("length",        c_uint32, 2),
                 ("ack",           c_uint32, 1),
@@ -109,18 +116,32 @@ class dust_header_bits(ctypes.BigEndianStructure):
 
 
 class dust_header(ctypes.BigEndianUnion):
-    """Documentation for dust_header union.
-
-    More details.
     """
+    @brief Union representing a dust header.
 
+    This union allows the dust header to be accessed either as individual bit fields
+    (using the `dust_header_bits` structure) or as a single 32-bit value (`whole_value`).
+    """
     _fields_ = [("bits", dust_header_bits),
                 ("whole_value", c_uint32)]
 
     def __init__(self):
+        """
+        @brief Initializes the dust header.
+
+        Sets the `whole_value` to 0, effectively clearing all fields.
+        """
         self.whole_value = 0
 
     def calculate_checksum(self):
+        """
+        @brief Calculates the checksum for the dust header.
+
+        Combines the opcode, length, acknowledgment flag, and packet number fields to compute
+        the checksum, ensuring the header's integrity.
+
+        @return Computed checksum (16 bits).
+        """
         checksum = 0
         checksum = (self.bits.opcode        << 0x0e
                  |  self.bits.length        << 0x0c
@@ -130,6 +151,16 @@ class dust_header(ctypes.BigEndianUnion):
         return checksum
 
     def create(self, opcode, length, ack, packet_number):
+        """
+        @brief Creates a dust header with the specified parameters.
+
+        Prepares the header fields and computes the checksum.
+
+        @param opcode        Operation code for the header.
+        @param length        Payload length.
+        @param ack           Acknowledgment flag.
+        @param packet_number Packet number.
+        """
         self.bits.opcode        = opcode
         self.bits.length        = length
         self.bits.ack           = ack
@@ -137,6 +168,13 @@ class dust_header(ctypes.BigEndianUnion):
         self.bits.checksum      = self.calculate_checksum()
 
     def serialize(self):
+        """
+        @brief Serializes the dust header into a byte array.
+
+        Converts the 32-bit `whole_value` into four separate bytes for transmission.
+
+        @return A list of 4 bytes representing the serialized header.
+        """
         serialized_header = []
         serialized_header.append(((self.whole_value & 0xff000000) >> 0x18))
         serialized_header.append(((self.whole_value & 0x00ff0000) >> 0x10))
@@ -145,6 +183,13 @@ class dust_header(ctypes.BigEndianUnion):
         return serialized_header
 
     def deserialize(self, serialized_header):
+        """
+        @brief Deserializes a byte array into a dust header.
+
+        Populates the `whole_value` field using the serialized byte array.
+
+        @param serialized_header A list of 4 bytes representing the serialized header.
+        """
         self.whole_value  = 0
         self.whole_value |= (serialized_header[0] << 0x18)
         self.whole_value |= (serialized_header[1] << 0x10)
@@ -153,41 +198,88 @@ class dust_header(ctypes.BigEndianUnion):
 
 
 class dust_payload:
-    """Documentation for dust_packet class.
+    """
+    @brief Class representing the payload of a dust packet.
 
-    More details.
+    This class provides methods for creating, serializing, and deserializing payload data.
     """
 
     def __init__(self):
+        """
+        @brief Initializes the payload.
+
+        Sets the buffer to an empty list and the buffer size to 0.
+        """
         self.buffer      = []
         self.buffer_size = 0
 
     def calculate_size(self):
+        """
+        @brief Calculates the size of the payload.
+
+        Updates the buffer size based on the length of the buffer.
+        """
         self.buffer_size = len(self.buffer)
 
     def create(self, buffer):
+        """
+        @brief Creates a payload with the specified data.
+
+        Initializes the buffer with the provided data and calculates its size.
+
+        @param buffer List of bytes representing the payload data.
+        """
         self.buffer = buffer
         self.calculate_size()
 
     def serialize(self):
+        """
+        @brief Serializes the payload data.
+
+        Converts the payload buffer into a byte array for transmission.
+
+        @return A list of bytes representing the serialized payload.
+        """
         return self.buffer
 
     def deserialize(self, serialized_payload):
+        """
+        @brief Deserializes a byte array into a payload.
+
+        Populates the buffer with the deserialized payload data.
+
+        @param serialized_payload A list of bytes representing the serialized payload.
+        """
         self.buffer = serialized_payload
 
 
 class dust_packet:
-    """Documentation for dust_packet class.
+    """
+    @brief Class representing a dust packet.
 
-    More details.
+    This class provides methods to create, serialize, and deserialize dust packets. Each packet
+    consists of a header, a payload, and a CRC16 checksum for data integrity.
     """
 
     def __init__(self):
+        """
+        @brief Initializes a dust packet.
+
+        Creates an empty dust packet with a default header, payload, and CRC16 checksum set to 0.
+        """
         self.header  = dust_header()
         self.payload = dust_payload()
         self.crc16   = 0
 
     def crc16_calculate(self, data):
+        """
+        @brief Calculates the CRC16 checksum for a given data array.
+
+        Uses the dust CRC16 lookup table to compute the checksum.
+
+        @param data A list of bytes representing the data to calculate the CRC16 checksum for.
+        @return The computed CRC16 checksum as an integer.
+        """
         global dust_crc16_lut
         crc16 = 0x00
         for byte in data:
@@ -196,6 +288,14 @@ class dust_packet:
         return int(crc16)
 
     def create(self, header, payload):
+        """
+        @brief Creates a dust packet with the given header and payload.
+
+        Combines the serialized header and payload to compute the CRC16 checksum.
+
+        @param header  A `dust_header` object representing the packet header.
+        @param payload A `dust_payload` object representing the packet payload.
+        """
         data         = []
         self.header  = header
         self.payload = payload
@@ -204,6 +304,13 @@ class dust_packet:
         self.crc16 = self.crc16_calculate(data)
 
     def serialize(self):
+        """
+        @brief Serializes the dust packet into a byte array.
+
+        Combines the serialized header, payload, and CRC16 checksum into a single byte array for transmission.
+
+        @return A list of bytes representing the serialized packet.
+        """
         serialized_packet = []
         serialized_packet.clear()
         serialized_packet += self.header.serialize()
@@ -213,6 +320,16 @@ class dust_packet:
         return serialized_packet
 
     def deserialize(self, serialized_data):
+        """
+        @brief Deserializes a byte array into a dust packet.
+
+        Populates the header, payload, and CRC16 checksum fields from the serialized data.
+        Verifies the integrity of the packet using the CRC16 checksum.
+
+        @param serialized_data A list of bytes representing the serialized packet.
+        @return `DUST_RESULT.SUCCESS` If deserialization is successful.
+        @return `DUST_RESULT.ERROR`   If the CRC16 checksum fails.
+        """
         self.header.deserialize(serialized_data)
         self.payload.deserialize(serialized_data[DUST_PACKET_HEADER_SIZE:(len(serialized_data) - DUST_PACKET_CRC16_SIZE)])
         if self.crc16_calculate(serialized_data) != 0:
@@ -224,26 +341,46 @@ class dust_packet:
 
 
 class dust_handshake_options(ctypes.BigEndianStructure):
-    """Documentation for dust_handshake_options structure.
-
-    More details.
     """
+    @brief Structure representing dust handshake options.
 
+    This structure contains the settings for the handshake process, including acknowledgment frequency,
+    number of packets, and payload size.
+    """
     _fields_ = [("ack_frequency",     c_uint8),
                 ("number_of_packets", c_uint32),
                 ("payload_size",      c_uint16)]
 
     def __init__(self):
+        """
+        @brief Initializes the handshake options.
+
+        Sets all fields (`ack_frequency`, `number_of_packets`, and `payload_size`) to 0.
+        """
         self.ack_frequency     = 0
         self.number_of_packets = 0
         self.payload_size      = 0
 
     def create(self, ack_frequency, number_of_packets, payload_size):
+        """
+        @brief Creates handshake options with the specified parameters.
+
+        @param ack_frequency     The acknowledgment frequency setting.
+        @param number_of_packets The total number of packets for the handshake.
+        @param payload_size      The size of the payload in bytes.
+        """
         self.ack_frequency     = ack_frequency
         self.number_of_packets = number_of_packets
         self.payload_size      = payload_size
 
     def serialize(self):
+        """
+        @brief Serializes the handshake options into a byte array.
+
+        Converts the handshake options fields into a list of bytes for transmission.
+
+        @return A list of bytes representing the serialized handshake options.
+        """
         serialized_options = []
         serialized_options.append(self.ack_frequency)
         serialized_options.append(((self.number_of_packets & 0xff000000) >> 0x18))
@@ -257,40 +394,75 @@ class dust_handshake_options(ctypes.BigEndianStructure):
 
 
 class dust_serialized:
-    """Documentation for dust_serialized class.
+    """
+    @brief Class representing serialized data for dust packets.
 
-    More details.
+    This class manages a buffer and its size, providing functionality to create and
+    calculate the size of the serialized data.
     """
 
     def __init__(self):
+        """
+        @brief Initializes an empty dust serialized object.
+
+        Creates an empty buffer with size set to 0.
+        """
         self.buffer      = []
         self.buffer_size = 0
 
     def calculate_size(self):
+        """
+        @brief Calculates the size of the buffer.
+
+        Updates the `buffer_size` field to match the current length of the buffer.
+        """
         self.buffer_size = len(self.buffer)
 
     def create(self, buffer):
+        """
+        @brief Creates the serialized buffer from the given data.
+
+        Assigns the provided buffer and calculates its size.
+
+        @param buffer A list of bytes to populate the serialized buffer.
+        """
         self.buffer = buffer
         self.calculate_size()
 
 
 class dust_instance:
-    """Documentation for dust_instance class.
+    """
+    @brief Class representing a dust instance.
 
-    More details.
+    This class encapsulates the handshake options, packet data, and serialized data for a dust protocol instance.
     """
 
     def __init__(self):
+        """
+        @brief Initializes a dust instance.
+
+        Creates default objects for handshake options, packet data, and serialized data.
+        """
         self.options     = dust_handshake_options()
         self.packet      = dust_packet()
         self.serialized  = dust_serialized()
 
     def print_options(self):
+        """
+        @brief Prints the handshake options of the instance.
+
+        Displays the acknowledgment frequency, number of packets, and payload size in hexadecimal format.
+        """
         print("ack_frequency:     " + str(f"{self.options.ack_frequency:#x}"))
         print("number_of_packets: " + str(f"{self.options.number_of_packets:#x}"))
         print("payload_size:      " + str(f"{self.options.payload_size:#x}"))
 
     def print_packet(self):
+        """
+        @brief Prints the details of the dust packet.
+
+        Displays the header fields, payload buffer data, and CRC16 checksum in hexadecimal format.
+        """
         print("opcode:        " + str(f"{self.packet.header.bits.opcode:#x}"))
         print("length:        " + str(f"{self.packet.header.bits.length:#x}"))
         print("ack:           " + str(f"{self.packet.header.bits.ack:#x}"))
@@ -301,4 +473,9 @@ class dust_instance:
         print("crc16:         " + str(f"{self.packet.crc16:#x}"))
 
     def print_serialized(self):
+        """
+        @brief Prints the serialized representation of the dust packet.
+
+        Displays the serialized data buffer along with the packet number.
+        """
         print("serialized #" + str(self.packet.header.bits.packet_number) + ": " + str(' '.join(f"{hex:02x}" for hex in self.serialized.buffer)))
