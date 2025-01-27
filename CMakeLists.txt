@@ -13,7 +13,6 @@ add_subdirectory(startup)
 add_subdirectory(vectortable)
 add_subdirectory(controller)
 add_subdirectory(submodules)
-#add_subdirectory(lib)
 
 get_cmake_property(first_bootloader_sources FIRST_BOOTLOADER_SOURCES)
 get_cmake_property(second_bootloader_sources SECOND_BOOTLOADER_SOURCES)
