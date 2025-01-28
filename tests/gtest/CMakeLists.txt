@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.30.2)
 
 project(
-    hello_test
+    ghost-feather-tests
     VERSION 1.0.0
     )
 
@@ -12,4 +12,5 @@ find_package(
 
 enable_testing()
 
-add_subdirectory(hello_test)
+add_subdirectory(controller/usart)
+add_subdirectory(dfu/dust)

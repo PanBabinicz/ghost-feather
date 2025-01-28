@@ -1,10 +1,10 @@
 add_executable(
-    hello_test
-    hello_test.cc
+    usart-test1
+    test1.cc
     )
 
 target_compile_options(
-    hello_test
+    usart-test1
     PRIVATE
     --coverage
     -g
@@ -12,16 +12,16 @@ target_compile_options(
     )
 
 target_link_options(
-    hello_test
+    usart-test1
     PRIVATE
     --coverage
     )
 
 target_link_libraries(
-    hello_test
+    usart-test1
     PRIVATE
     GTest::gtest_main
     )
 
 include(GoogleTest)
-gtest_discover_tests(hello_test)
+gtest_discover_tests(usart-test1)
