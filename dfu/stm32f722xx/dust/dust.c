@@ -166,6 +166,11 @@ static void dust_crc16_calculate(dust_packet_t *const packet)
     }
 }
 
+const uint16_t* dust_crc16_get_lut_address(void)
+{
+    return &dust_crc16_lut[0];
+}
+
 static dust_result_t dust_crc16_check(const uint8_t *const data, const uint32_t data_size)
 {
     uint16_t crc16    = 0;
