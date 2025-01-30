@@ -1,6 +1,10 @@
 #ifndef _DUST_H
 #define _DUST_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif  /* __cplusplus */
+
 #include <stdint.h>
 #include <string.h>
 
@@ -135,6 +139,13 @@ typedef struct
 /// \param[in] polynomial The generator polynomial.
 ///
 void dust_crc16_generate_lut(const uint16_t polynomial);
+
+///
+/// \brief Gets the look-up table address.
+///
+/// \return The look-up table address.
+///
+const uint16_t* dust_crc16_get_lut_address(void);
 
 ///
 /// \brief Get ack frequency from hash table.
@@ -309,5 +320,9 @@ dust_result_t dust_header_printf(const dust_header_t *const header);
 dust_result_t dust_packet_printf(const dust_packet_t *const packet);
 
 #endif  /* DEBUG_DUST_PROTOCOL */
+
+#ifdef __cplusplus
+}
+#endif  /* __cplusplus */
 
 #endif  /* _DUST_H */
