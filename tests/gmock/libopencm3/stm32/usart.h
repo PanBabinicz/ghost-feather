@@ -13,7 +13,7 @@ extern "C" {
 ///
 static inline void usart_wait_send_ready(uint32_t usart)
 {
-    printf("GMOCK: %s(usart = %d)\n", __func__, usart);
+    return;
 }
 
 ///
@@ -21,7 +21,7 @@ static inline void usart_wait_send_ready(uint32_t usart)
 ///
 static inline void usart_wait_recv_ready(uint32_t usart)
 {
-    printf("GMOCK: %s(usart = %d\n", __func__, usart);
+    return;
 }
 
 ///
@@ -37,8 +37,7 @@ static inline void usart_send(uint32_t usart, uint16_t data)
 ///
 static inline uint16_t usart_recv(uint32_t usart)
 {
-    printf("GMOCK: %s(usart = %d\n", __func__, usart);
-    return 0;
+    return 1;
 }
 
 #ifdef __cplusplus
