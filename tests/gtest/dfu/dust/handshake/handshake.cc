@@ -22,3 +22,15 @@ TEST(handshake, procedure) {
     EXPECT_EQ(instance.options.number_of_packets, expected_number_of_packets);
     EXPECT_EQ(instance.options.payload_size, expected_payload_size);
 }
+
+///
+/// \brief This test checks the null pointer protection inside handshake function.
+///
+TEST(handshake, null_pointer_protection) {
+    uint32_t usart = 3;
+    dust_result_t result;
+
+    result = dust_handshake(NULL, usart);
+
+    EXPECT_EQ(result, DUST_RESULT_ERROR);
+}
