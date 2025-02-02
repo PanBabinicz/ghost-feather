@@ -31,7 +31,7 @@ TEST(header, create)
 }
 
 ///
-/// \brief This test checks the null pointer protection inside header function.
+/// \brief This test checks the null pointer protection inside create header function.
 ///
 TEST(header, null_pointer_protection)
 {
