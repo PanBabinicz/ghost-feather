@@ -247,7 +247,6 @@ dust_result_t dust_transmit(const dust_serialized_t *const serialized, const uin
 ///
 /// \brief Receive the packet.
 ///
-/// \param[out] packet          The received dust packet.
 /// \param[out] serialized      The dust serialized packet structure.
 /// \param[in] usart            The usart block register address base.
 ///
@@ -255,7 +254,7 @@ dust_result_t dust_transmit(const dust_serialized_t *const serialized, const uin
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-dust_result_t dust_receive(dust_packet_t *const packet, dust_serialized_t *const serialized, const uint32_t usart);
+dust_result_t dust_receive(dust_serialized_t *const serialized, const uint32_t usart);
 
 ///
 /// \brief Transmit ACK header.
