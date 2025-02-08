@@ -4,24 +4,36 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#define USART3              (0x00000000)
+#define USART3                  (0x00000000)
 
-#define USART_CR1_M0        (1 << 0x0c)
-#define USART_CR1_PCE       (1 << 0x0a)
-#define USART_CR1_PS        (1 << 0x09)
-#define USART_CR1_TE        (1 << 0x03)
-#define USART_CR1_RE        (1 << 0x02)
-#define USART_CR1_UE        (1 << 0x00)
+///
+/// \brief USART control register 1.
+///
+#define USART_CR1_M0            (0x01 << 0x0c)
+#define USART_CR1_PCE           (0x01 << 0x0a)
+#define USART_CR1_PS            (0x01 << 0x09)
+#define USART_CR1_TE            (0x01 << 0x03)
+#define USART_CR1_RE            (0x01 << 0x02)
+#define USART_CR1_UE            (0x01 << 0x00)
 
-#define USART_PARITY_NONE   (0x00)
-#define USART_PARITY_EVEN   (USART_CR1_PCE)
-#define USART_PARITY_ODD    (USART_CR1_PS | USART_CR1_PCE)
-#define USART_PARITY_MASK   (USART_CR1_PS | USART_CR1_PCE)
+#define USART_PARITY_NONE       (0x00)
+#define USART_PARITY_EVEN       (USART_CR1_PCE)
+#define USART_PARITY_ODD        (USART_CR1_PS | USART_CR1_PCE)
+#define USART_PARITY_MASK       (USART_CR1_PS | USART_CR1_PCE)
 
-#define USART_MODE_RX       (USART_CR1_RE)
-#define USART_MODE_TX       (USART_CR1_TE)
-#define USART_MODE_TX_RX    (USART_CR1_RE | USART_CR1_TE)
-#define USART_MODE_MASK     (USART_CR1_RE | USART_CR1_TE)
+#define USART_MODE_RX           (USART_CR1_RE)
+#define USART_MODE_TX           (USART_CR1_TE)
+#define USART_MODE_TX_RX        (USART_CR1_RE | USART_CR1_TE)
+#define USART_MODE_MASK         (USART_CR1_RE | USART_CR1_TE)
+
+///
+/// \brief USART control register 2.
+///
+#define USART_CR2_STOPBITS_1    (0x00 << 0x0c)
+#define USART_CR2_STOPBITS_0_5  (0x01 << 0x0c)
+#define USART_CR2_STOPBITS_2    (0x02 << 0x0c)
+#define USART_CR2_STOPBITS_1_5  (0x03 << 0x0c)
+#define USART_CR2_STOPBITS_MASK (0x03 << 0x0c)
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,17 +42,17 @@ extern "C" {
 ///
 /// \breif Mock definition of USART control register 1.
 ///
-static uint32_t USART_CR1 = 0x00000000;
+extern uint32_t USART_CR1;
 
 ///
 /// \breif Mock definition of USART control register 2.
 ///
-static uint32_t USART_CR2 = 0x00000000;
+extern uint32_t USART_CR2;
 
 ///
 /// \breif Mock definition of USART baud rate register.
 ///
-static uint32_t USART_BRR = 0x00000000;
+extern uint32_t USART_BRR;
 
 ///
 /// \breif Mock implementation of usart_wait_send_ready function.
@@ -141,6 +153,18 @@ static inline void usart_set_mode(uint32_t usart, uint32_t mode)
 	reg32 = USART_CR1;
 	reg32 = (reg32 & ~USART_MODE_MASK) | mode;
 	USART_CR1 = reg32;
+}
+
+///
+/// \breif Mock implementation of usart_set_stopbits function.
+///
+static inline void usart_set_stopbits(uint32_t usart, uint32_t stopbits)
+{
+	uint32_t reg32;
+
+	reg32 = USART_CR2;
+	reg32 = (reg32 & ~USART_CR2_STOPBITS_MASK) | stopbits;
+	USART_CR2 = reg32;
 }
 
 #ifdef __cplusplus
