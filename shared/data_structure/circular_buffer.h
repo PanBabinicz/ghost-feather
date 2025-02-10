@@ -6,6 +6,10 @@
 
 #define CIRCULAR_BUFFER_LENGTH  (64U)
 
+#ifdef __cplusplus
+extern "C" {
+#endif  /* __cplusplus */
+
 ///
 /// \breif The circular buffer instance type.
 ///
@@ -77,5 +81,9 @@ circular_buffer_result_t circular_buffer_push(circular_buffer_instance_t instanc
 /// \retval CIRCULAR_BUFFER_RESULT_NULL_POINTER On null pointer.
 ///
 circular_buffer_result_t circular_buffer_pop(circular_buffer_instance_t instance, uint8_t *element);
+
+#ifdef __cplusplus
+}
+#endif  /* __cplusplus */
 
 #endif /* _CIRCULAR_BUFFER_H */
