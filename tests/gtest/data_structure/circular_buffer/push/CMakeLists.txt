@@ -1,19 +1,19 @@
 file(GLOB_RECURSE CIRCULAR_BUFFER ${PROJECT_ROOT_DIR}/shared/data_structure/*.c)
 
 add_executable(
-    clear
-    clear.cc
+    push
+    push.cc
     ${CIRCULAR_BUFFER}
     )
 
 target_include_directories(
-    clear
+    push
     PRIVATE
     ${PROJECT_ROOT_DIR}/shared
     )
 
 target_compile_options(
-    clear
+    push
     PRIVATE
     --coverage
     -g
@@ -21,16 +21,16 @@ target_compile_options(
     )
 
 target_link_options(
-    clear
+    push
     PRIVATE
     --coverage
     )
 
 target_link_libraries(
-    clear
+    push
     PRIVATE
     GTest::gtest_main
     )
 
 include(GoogleTest)
-gtest_discover_tests(clear)
+gtest_discover_tests(push)
