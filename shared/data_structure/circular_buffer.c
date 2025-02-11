@@ -65,6 +65,26 @@ static circular_buffer_result_t circular_buffer_get(circular_buffer_instance_t i
 ///*************************************************************************************************
 /// Global functions - definition.
 ///*************************************************************************************************
+circular_buffer_result_t circular_buffer_get_data(const circular_buffer_instance_t instance,
+                                                  uint8_t *const buffer, const uint32_t buffer_size)
+{
+    if (buffer == NULL)
+    {
+        return CIRCULAR_BUFFER_RESULT_NULL_POINTER;
+    }
+
+    circular_buffer_t *circular_buffer;
+
+    if (circular_buffer_get(instance, &circular_buffer) != CIRCULAR_BUFFER_RESULT_SUCCESS)
+    {
+        return CIRCULAR_BUFFER_RESULT_ERROR;
+    }
+
+    memcpy(&buffer[0], &(circular_buffer->data[0]), buffer_size);
+
+    return CIRCULAR_BUFFER_RESULT_SUCCESS;
+}
+
 circular_buffer_result_t circular_buffer_clear(circular_buffer_instance_t instance)
 {
     circular_buffer_result_t result = CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE;
