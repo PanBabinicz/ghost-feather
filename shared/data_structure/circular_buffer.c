@@ -80,7 +80,54 @@ circular_buffer_result_t circular_buffer_get_data(const circular_buffer_instance
         return CIRCULAR_BUFFER_RESULT_ERROR;
     }
 
-    memcpy(&buffer[0], &(circular_buffer->data[0]), buffer_size);
+    if (buffer_size != sizeof(circular_buffer->data))
+    {
+        return CIRCULAR_BUFFER_RESULT_ERROR;
+    }
+
+    memcpy(&buffer[0], &circular_buffer->data[0], buffer_size);
+
+    return CIRCULAR_BUFFER_RESULT_SUCCESS;
+}
+
+circular_buffer_result_t circular_buffer_set_data(const circular_buffer_instance_t instance,
+                                                  const uint8_t *const buffer, const uint32_t buffer_size)
+{
+    if (buffer == NULL)
+    {
+        return CIRCULAR_BUFFER_RESULT_NULL_POINTER;
+    }
+
+    circular_buffer_t *circular_buffer;
+
+    if (circular_buffer_get(instance, &circular_buffer) != CIRCULAR_BUFFER_RESULT_SUCCESS)
+    {
+        return CIRCULAR_BUFFER_RESULT_ERROR;
+    }
+
+    if (buffer_size != sizeof(circular_buffer->data))
+    {
+        return CIRCULAR_BUFFER_RESULT_ERROR;
+    }
+
+    memcpy(&circular_buffer->data[0], &buffer[0], buffer_size);
+
+    return CIRCULAR_BUFFER_RESULT_SUCCESS;
+}
+
+circular_buffer_result_t circular_buffer_set_state(const circular_buffer_instance_t instance, const uint8_t rear,
+                                                   const uint8_t front, const uint8_t overflow)
+{
+    circular_buffer_t *circular_buffer;
+
+    if (circular_buffer_get(instance, &circular_buffer) != CIRCULAR_BUFFER_RESULT_SUCCESS)
+    {
+        return CIRCULAR_BUFFER_RESULT_ERROR;
+    }
+
+    circular_buffer->rear     = rear;
+    circular_buffer->front    = front;
+    circular_buffer->overflow = overflow;
 
     return CIRCULAR_BUFFER_RESULT_SUCCESS;
 }

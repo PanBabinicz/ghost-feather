@@ -52,6 +52,35 @@ circular_buffer_result_t circular_buffer_get_data(const circular_buffer_instance
                                                   uint8_t *const buffer, const uint32_t buffer_size);
 
 ///
+/// \biref Sets the circular buffer content.
+///
+/// \param[in] instance    The instance of the circular buffer data structure.
+/// \param[in] buffer      The buffer where the content goes to.
+/// \param[in] buffer_size The buffer size.
+///
+/// \return circular_buffer_result_t                Result of the function.
+/// \retval CIRCULAR_BUFFER_RESULT_SUCCESS          On success.
+/// \retval CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE On invalid instance.
+///
+circular_buffer_result_t circular_buffer_set_data(const circular_buffer_instance_t instance,
+                                                  const uint8_t *const buffer, const uint32_t buffer_size);
+
+///
+/// \biref Sets the circular buffer state.
+///
+/// \param[in] instance The instance of the circular buffer data structure.
+/// \param[in] rear     The buffer where the content goes to.
+/// \param[in] front    The buffer size.
+/// \param[in] overflow The buffer size.
+///
+/// \return circular_buffer_result_t                Result of the function.
+/// \retval CIRCULAR_BUFFER_RESULT_SUCCESS          On success.
+/// \retval CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE On invalid instance.
+///
+circular_buffer_result_t circular_buffer_set_state(const circular_buffer_instance_t instance, const uint8_t rear,
+                                                   const uint8_t front, const uint8_t overflow);
+
+///
 /// \biref Clears the circular buffer instance.
 ///
 /// \param[in] instance The instance of the circular buffer data structure.
