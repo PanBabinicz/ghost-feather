@@ -13,4 +13,5 @@ find_package(
 enable_testing()
 
 add_subdirectory(controller/usart)
+add_subdirectory(data_structure/circular_buffer)
 add_subdirectory(dfu/dust)
