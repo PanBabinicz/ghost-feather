@@ -187,7 +187,6 @@ circular_buffer_result_t circular_buffer_push(circular_buffer_instance_t instanc
 
 circular_buffer_result_t circular_buffer_pop(circular_buffer_instance_t instance, uint8_t *element)
 {
-    circular_buffer_result_t result = CIRCULAR_BUFFER_RESULT_EMPTY;
     circular_buffer_t *circular_buffer;
 
     if (element == NULL)
