@@ -192,25 +192,25 @@ circular_buffer_result_t circular_buffer_pop(circular_buffer_instance_t instance
 
     if (element == NULL)
     {
-        result = CIRCULAR_BUFFER_RESULT_NULL_POINTER;
-    }
-    else if (circular_buffer_get(instance, &circular_buffer) == CIRCULAR_BUFFER_RESULT_SUCCESS)
-    {
-        if ((circular_buffer->rear < circular_buffer->front) ||
-           ((circular_buffer->rear > circular_buffer->front) && (circular_buffer->overflow == 1)))
-        {
-            *element = circular_buffer->data[circular_buffer->rear];
-            circular_buffer->rear = (circular_buffer->rear + 1) % CIRCULAR_BUFFER_LENGTH;
-            result = CIRCULAR_BUFFER_RESULT_SUCCESS;
-        }
-        else if ((circular_buffer->rear == circular_buffer->front) && (circular_buffer->overflow == 1))
-        {
-            *element                  = circular_buffer->data[circular_buffer->rear];
-            circular_buffer->rear     = (circular_buffer->rear + 1) % CIRCULAR_BUFFER_LENGTH;
-            circular_buffer->overflow = 0;
-            result                    = CIRCULAR_BUFFER_RESULT_SUCCESS;
-        }
+        return CIRCULAR_BUFFER_RESULT_NULL_POINTER;
     }
 
-    return result;
+    if (circular_buffer_get(instance, &circular_buffer) != CIRCULAR_BUFFER_RESULT_SUCCESS)
+    {
+        return CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE;
+    }
+
+    if ((circular_buffer->rear == circular_buffer->front) && (circular_buffer->overflow == 0))
+    {
+        return CIRCULAR_BUFFER_RESULT_EMPTY;
+    }
+    else if ((circular_buffer->rear == circular_buffer->front) && (circular_buffer->overflow == 1))
+    {
+        circular_buffer->overflow = 0;
+    }
+
+    *element              = circular_buffer->data[circular_buffer->rear];
+    circular_buffer->rear = (circular_buffer->rear + 1) % CIRCULAR_BUFFER_LENGTH;
+
+    return CIRCULAR_BUFFER_RESULT_SUCCESS;
 }
