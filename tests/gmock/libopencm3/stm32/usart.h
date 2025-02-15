@@ -91,7 +91,7 @@ static inline uint16_t usart_recv(uint32_t usart)
 ///
 static inline void usart_enable(uint32_t usart)
 {
-	USART_CR1 |= USART_CR1_UE;
+    USART_CR1 |= USART_CR1_UE;
 }
 
 ///
@@ -99,7 +99,7 @@ static inline void usart_enable(uint32_t usart)
 ///
 static inline void usart_disable(uint32_t usart)
 {
-	USART_CR1 &= ~USART_CR1_UE;
+    USART_CR1 &= ~USART_CR1_UE;
 }
 
 ///
@@ -108,9 +108,9 @@ static inline void usart_disable(uint32_t usart)
 static inline void usart_set_baudrate(uint32_t usart, uint32_t baud)
 {
     /* Lets say that we use HSI as sysclk. */
-	uint32_t clock = 16000000U;
+    uint32_t clock = 16000000U;
 
-	USART_BRR = (clock + baud / 2) / baud;
+    USART_BRR = (clock + baud / 2) / baud;
 }
 
 ///
@@ -135,11 +135,11 @@ static inline void usart_set_databits(uint32_t usart, uint32_t bits)
 ///
 static inline void usart_set_parity(uint32_t usart, uint32_t parity)
 {
-	uint32_t reg32;
+    uint32_t reg32;
 
-	reg32 = USART_CR1;
-	reg32 = (reg32 & ~USART_PARITY_MASK) | parity;
-	USART_CR1 = reg32;
+    reg32 = USART_CR1;
+    reg32 = (reg32 & ~USART_PARITY_MASK) | parity;
+    USART_CR1 = reg32;
 }
 
 
@@ -148,11 +148,11 @@ static inline void usart_set_parity(uint32_t usart, uint32_t parity)
 ///
 static inline void usart_set_mode(uint32_t usart, uint32_t mode)
 {
-	uint32_t reg32;
+    uint32_t reg32;
 
-	reg32 = USART_CR1;
-	reg32 = (reg32 & ~USART_MODE_MASK) | mode;
-	USART_CR1 = reg32;
+    reg32 = USART_CR1;
+    reg32 = (reg32 & ~USART_MODE_MASK) | mode;
+    USART_CR1 = reg32;
 }
 
 ///
@@ -160,11 +160,11 @@ static inline void usart_set_mode(uint32_t usart, uint32_t mode)
 ///
 static inline void usart_set_stopbits(uint32_t usart, uint32_t stopbits)
 {
-	uint32_t reg32;
+    uint32_t reg32;
 
-	reg32 = USART_CR2;
-	reg32 = (reg32 & ~USART_CR2_STOPBITS_MASK) | stopbits;
-	USART_CR2 = reg32;
+    reg32 = USART_CR2;
+    reg32 = (reg32 & ~USART_CR2_STOPBITS_MASK) | stopbits;
+    USART_CR2 = reg32;
 }
 
 #ifdef __cplusplus
