@@ -64,3 +64,15 @@ TEST(push, overflow)
         EXPECT_EQ(buffer[i], i + CIRCULAR_BUFFER_LENGTH);
     }
 }
+
+///
+/// \brief This test checks the invalid instance protection inside push function.
+///
+TEST(push, invalid_instance)
+{
+    circular_buffer_result_t result;
+    uint8_t element;
+
+    result = circular_buffer_push((circular_buffer_instance_t)0xff, element);
+    EXPECT_EQ(result, CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE);
+}

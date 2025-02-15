@@ -23,3 +23,14 @@ TEST(clear, all)
     result = circular_buffer_clear_all();
     EXPECT_EQ(result, CIRCULAR_BUFFER_RESULT_SUCCESS);
 }
+
+///
+/// \brief This test checks the invalid instance protection inside clear function.
+///
+TEST(clear, invalid_instance)
+{
+    circular_buffer_result_t result;
+
+    result = circular_buffer_clear((circular_buffer_instance_t)0xff);
+    EXPECT_EQ(result, CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE);
+}
