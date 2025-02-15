@@ -118,16 +118,16 @@ static inline void usart_set_baudrate(uint32_t usart, uint32_t baud)
 ///
 static inline void usart_set_databits(uint32_t usart, uint32_t bits)
 {
-	if (bits == 8)
+    if (bits == 8)
     {
         /* 8 data bits. */
-		USART_CR1 &= ~USART_CR1_M0;
-	}
+        USART_CR1 &= ~USART_CR1_M0;
+    }
     else
     {
         /* 9 data bits. */
-		USART_CR1 |= USART_CR1_M0;
-	}
+        USART_CR1 |= USART_CR1_M0;
+    }
 }
 
 ///
