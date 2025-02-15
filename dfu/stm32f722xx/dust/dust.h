@@ -1,6 +1,10 @@
 #ifndef _DUST_H
 #define _DUST_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif  /* __cplusplus */
+
 #include <stdint.h>
 #include <string.h>
 
@@ -137,6 +141,13 @@ typedef struct
 void dust_crc16_generate_lut(const uint16_t polynomial);
 
 ///
+/// \brief Gets the look-up table address.
+///
+/// \return The look-up table address.
+///
+const uint16_t* dust_crc16_get_lut_address(void);
+
+///
 /// \brief Get ack frequency from hash table.
 ///
 /// \param[in] ack_frequency The ack frequency from handshake options.
@@ -236,7 +247,6 @@ dust_result_t dust_transmit(const dust_serialized_t *const serialized, const uin
 ///
 /// \brief Receive the packet.
 ///
-/// \param[out] packet          The received dust packet.
 /// \param[out] serialized      The dust serialized packet structure.
 /// \param[in] usart            The usart block register address base.
 ///
@@ -244,7 +254,7 @@ dust_result_t dust_transmit(const dust_serialized_t *const serialized, const uin
 /// \retval DUST_RESULT_SUCCESS On success.
 /// \retval DUST_RESULT_ERROR   Otherwise.
 ///
-dust_result_t dust_receive(dust_packet_t *const packet, dust_serialized_t *const serialized, const uint32_t usart);
+dust_result_t dust_receive(dust_serialized_t *const serialized, const uint32_t usart);
 
 ///
 /// \brief Transmit ACK header.
@@ -309,5 +319,9 @@ dust_result_t dust_header_printf(const dust_header_t *const header);
 dust_result_t dust_packet_printf(const dust_packet_t *const packet);
 
 #endif  /* DEBUG_DUST_PROTOCOL */
+
+#ifdef __cplusplus
+}
+#endif  /* __cplusplus */
 
 #endif  /* _DUST_H */

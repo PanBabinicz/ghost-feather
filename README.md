@@ -110,3 +110,23 @@
 > ~ stty -f /dev/ttysxxx 115200
 > ~ screen /dev/ttysxxx 115200
 > ```
+
+# Unit tests
+
+> **Description**
+>
+> The unit tests verify the functionality, reliability, and error handling of embedded system controllers using Google Test (GTest).
+>
+> They cover various scenarios, including:
+> - Core functionality validation.
+> - Boundary condition testing.
+> - Error handling and fault tolerance.
+> - Performance and efficiency checks.
+
+> **Usage**
+>
+>
+
+> **Instalation**
+>
+>

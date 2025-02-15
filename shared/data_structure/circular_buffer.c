@@ -35,7 +35,7 @@ static circular_buffer_t circular_buffer_array[CIRCULAR_BUFFER_INSTANCE_TOTAL];
 /// \return circular_buffer_result_t                Result of the function.
 /// \retval CIRCULAR_BUFFER_RESULT_SUCCESS          On success.
 /// \retval CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE On invalid instace.
-/// \retval CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE On null pointer.
+/// \retval CIRCULAR_BUFFER_RESULT_NULL_POINTER     On null pointer.
 ///
 static circular_buffer_result_t circular_buffer_get(circular_buffer_instance_t instance,
                                                     circular_buffer_t **circular_buffer);
@@ -46,104 +46,166 @@ static circular_buffer_result_t circular_buffer_get(circular_buffer_instance_t i
 static circular_buffer_result_t circular_buffer_get(circular_buffer_instance_t instance,
                                                     circular_buffer_t **circular_buffer)
 {
-    circular_buffer_result_t result = CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE;
-
     /* Check if you don't dereference NULL pointer. Undefined behavior. */
     if (circular_buffer == NULL)
     {
-        result = CIRCULAR_BUFFER_RESULT_NULL_POINTER;
-    }
-    else if ((instance >= CIRCULAR_BUFFER_INSTANCE_0) && (instance < CIRCULAR_BUFFER_INSTANCE_TOTAL))
-    {
-        *circular_buffer = &circular_buffer_array[instance];
-        result           = CIRCULAR_BUFFER_RESULT_SUCCESS;
+        return CIRCULAR_BUFFER_RESULT_NULL_POINTER;
     }
 
-    return result;
+    if ((instance < CIRCULAR_BUFFER_INSTANCE_0) || (instance >= CIRCULAR_BUFFER_INSTANCE_TOTAL))
+    {
+        return CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE;
+    }
+
+    *circular_buffer = &circular_buffer_array[instance];
+
+    return CIRCULAR_BUFFER_RESULT_SUCCESS;
 }
 
 ///*************************************************************************************************
 /// Global functions - definition.
 ///*************************************************************************************************
-circular_buffer_result_t circular_buffer_clear(circular_buffer_instance_t instance)
+circular_buffer_result_t circular_buffer_get_data(const circular_buffer_instance_t instance,
+                                                  uint8_t *const buffer, const uint32_t buffer_size)
 {
-    circular_buffer_result_t result = CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE;
-    circular_buffer_t *circular_buffer;
-
-    if (circular_buffer_get(instance, &circular_buffer) == CIRCULAR_BUFFER_RESULT_SUCCESS)
+    if (buffer == NULL)
     {
-        memset(circular_buffer, 0, sizeof(*circular_buffer));
-        result = CIRCULAR_BUFFER_RESULT_SUCCESS;
+        return CIRCULAR_BUFFER_RESULT_NULL_POINTER;
     }
 
-    return result;
+    circular_buffer_t *circular_buffer;
+
+    if (circular_buffer_get(instance, &circular_buffer) != CIRCULAR_BUFFER_RESULT_SUCCESS)
+    {
+        return CIRCULAR_BUFFER_RESULT_ERROR;
+    }
+
+    if (buffer_size != sizeof(circular_buffer->data))
+    {
+        return CIRCULAR_BUFFER_RESULT_ERROR;
+    }
+
+    memcpy(&buffer[0], &circular_buffer->data[0], buffer_size);
+
+    return CIRCULAR_BUFFER_RESULT_SUCCESS;
+}
+
+circular_buffer_result_t circular_buffer_set_data(const circular_buffer_instance_t instance,
+                                                  const uint8_t *const buffer, const uint32_t buffer_size)
+{
+    if (buffer == NULL)
+    {
+        return CIRCULAR_BUFFER_RESULT_NULL_POINTER;
+    }
+
+    circular_buffer_t *circular_buffer;
+
+    if (circular_buffer_get(instance, &circular_buffer) != CIRCULAR_BUFFER_RESULT_SUCCESS)
+    {
+        return CIRCULAR_BUFFER_RESULT_ERROR;
+    }
+
+    if (buffer_size != sizeof(circular_buffer->data))
+    {
+        return CIRCULAR_BUFFER_RESULT_ERROR;
+    }
+
+    memcpy(&circular_buffer->data[0], &buffer[0], buffer_size);
+
+    return CIRCULAR_BUFFER_RESULT_SUCCESS;
+}
+
+circular_buffer_result_t circular_buffer_set_state(const circular_buffer_instance_t instance, const uint8_t rear,
+                                                   const uint8_t front, const uint8_t overflow)
+{
+    circular_buffer_t *circular_buffer;
+
+    if (circular_buffer_get(instance, &circular_buffer) != CIRCULAR_BUFFER_RESULT_SUCCESS)
+    {
+        return CIRCULAR_BUFFER_RESULT_ERROR;
+    }
+
+    circular_buffer->rear     = rear;
+    circular_buffer->front    = front;
+    circular_buffer->overflow = overflow;
+
+    return CIRCULAR_BUFFER_RESULT_SUCCESS;
+}
+
+circular_buffer_result_t circular_buffer_clear(circular_buffer_instance_t instance)
+{
+    circular_buffer_t *circular_buffer;
+
+    if (circular_buffer_get(instance, &circular_buffer) != CIRCULAR_BUFFER_RESULT_SUCCESS)
+    {
+        return CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE;
+    }
+
+    memset(circular_buffer, 0, sizeof(*circular_buffer));
+
+    return CIRCULAR_BUFFER_RESULT_SUCCESS;
 }
 
 circular_buffer_result_t circular_buffer_clear_all(void)
 {
-    circular_buffer_result_t result = CIRCULAR_BUFFER_RESULT_SUCCESS;
-
-    for (size_t instance = CIRCULAR_BUFFER_INSTANCE_0; instance < CIRCULAR_BUFFER_INSTANCE_TOTAL;
-         instance++)
+    for (uint32_t i = CIRCULAR_BUFFER_INSTANCE_0; i < CIRCULAR_BUFFER_INSTANCE_TOTAL; i++)
     {
-        if (circular_buffer_clear(instance) != CIRCULAR_BUFFER_RESULT_SUCCESS)
+        if (circular_buffer_clear(i) != CIRCULAR_BUFFER_RESULT_SUCCESS)
         {
-            result = CIRCULAR_BUFFER_RESULT_ERROR;
-            break;
+            return CIRCULAR_BUFFER_RESULT_ERROR;
         }
     }
 
-    return result;
+    return CIRCULAR_BUFFER_RESULT_SUCCESS;
 }
 
 circular_buffer_result_t circular_buffer_push(circular_buffer_instance_t instance, uint8_t element)
 {
-    circular_buffer_result_t result = CIRCULAR_BUFFER_RESULT_ERROR;
     circular_buffer_t *circular_buffer;
 
-    if (circular_buffer_get(instance, &circular_buffer) == CIRCULAR_BUFFER_RESULT_SUCCESS)
+    if (circular_buffer_get(instance, &circular_buffer) != CIRCULAR_BUFFER_RESULT_SUCCESS)
     {
-        circular_buffer->data[circular_buffer->front] = element;
-
-        if (((circular_buffer->front + 1) % CIRCULAR_BUFFER_LENGTH) == circular_buffer->rear)
-        {
-            circular_buffer->rear     = (circular_buffer->rear + 1) % CIRCULAR_BUFFER_LENGTH;
-            circular_buffer->overflow = 1;
-        }
-
-        circular_buffer->front = (circular_buffer->front + 1) % CIRCULAR_BUFFER_LENGTH;
-        result                 = CIRCULAR_BUFFER_RESULT_SUCCESS;
+        return CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE;
     }
 
-    return result;
+    circular_buffer->data[circular_buffer->front] = element;
+
+    if (((circular_buffer->front + 1) % CIRCULAR_BUFFER_LENGTH) == circular_buffer->rear)
+    {
+        circular_buffer->rear     = (circular_buffer->rear + 1) % CIRCULAR_BUFFER_LENGTH;
+        circular_buffer->overflow = 1;
+    }
+
+    circular_buffer->front = (circular_buffer->front + 1) % CIRCULAR_BUFFER_LENGTH;
+
+    return CIRCULAR_BUFFER_RESULT_SUCCESS;
 }
 
 circular_buffer_result_t circular_buffer_pop(circular_buffer_instance_t instance, uint8_t *element)
 {
-    circular_buffer_result_t result = CIRCULAR_BUFFER_RESULT_EMPTY;
     circular_buffer_t *circular_buffer;
 
     if (element == NULL)
     {
-        result = CIRCULAR_BUFFER_RESULT_NULL_POINTER;
-    }
-    else if (circular_buffer_get(instance, &circular_buffer) == CIRCULAR_BUFFER_RESULT_SUCCESS)
-    {
-        if ((circular_buffer->rear < circular_buffer->front) ||
-           ((circular_buffer->rear > circular_buffer->front) && (circular_buffer->overflow == 1)))
-        {
-            *element = circular_buffer->data[circular_buffer->rear];
-            circular_buffer->rear = (circular_buffer->rear + 1) % CIRCULAR_BUFFER_LENGTH;
-            result = CIRCULAR_BUFFER_RESULT_SUCCESS;
-        }
-        else if ((circular_buffer->rear == circular_buffer->front) && (circular_buffer->overflow == 1))
-        {
-            *element                  = circular_buffer->data[circular_buffer->rear];
-            circular_buffer->rear     = (circular_buffer->rear + 1) % CIRCULAR_BUFFER_LENGTH;
-            circular_buffer->overflow = 0;
-            result                    = CIRCULAR_BUFFER_RESULT_SUCCESS;
-        }
+        return CIRCULAR_BUFFER_RESULT_NULL_POINTER;
     }
 
-    return result;
+    if (circular_buffer_get(instance, &circular_buffer) != CIRCULAR_BUFFER_RESULT_SUCCESS)
+    {
+        return CIRCULAR_BUFFER_RESULT_INVALID_INSTANCE;
+    }
+
+    if ((circular_buffer->rear == circular_buffer->front) && (circular_buffer->overflow == 0))
+    {
+        return CIRCULAR_BUFFER_RESULT_EMPTY;
+    }
+    else if ((circular_buffer->rear == circular_buffer->front) && (circular_buffer->overflow == 1))
+    {
+        circular_buffer->overflow = 0;
+    }
+
+    *element              = circular_buffer->data[circular_buffer->rear];
+    circular_buffer->rear = (circular_buffer->rear + 1) % CIRCULAR_BUFFER_LENGTH;
+
+    return CIRCULAR_BUFFER_RESULT_SUCCESS;
 }
