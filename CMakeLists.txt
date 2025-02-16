@@ -207,6 +207,7 @@ target_compile_definitions(
     "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     "$<$<COMPILE_LANGUAGE:C>:PRINTF_DISABLE_SUPPORT_LONG_LONG>"
     "$<$<COMPILE_LANGUAGE:C>:DEBUG_DUST_PROTOCOL=1>"
+    "$<$<COMPILE_LANGUAGE:C>:DEBUG=1>"
     )
 
 message(STATUS "Add ghost-feather-app target compile definitions")
