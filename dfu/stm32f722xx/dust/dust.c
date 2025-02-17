@@ -464,60 +464,6 @@ dust_result_t dust_receive(dust_serialized_t *const serialized, const uint32_t u
     return DUST_RESULT_SUCCESS;
 }
 
-/* TODO: Think if dust_transmit_ack should be defined here. Maybe is it better to allow user to define such function. */
-dust_result_t dust_transmit_ack(dust_packet_t *const packet, dust_serialized_t *const serialized, const uint32_t usart)
-{
-    if ((packet == NULL) || (serialized == NULL))
-    {
-        return DUST_RESULT_ERROR;
-    }
-
-    (void)dust_header_create(&packet->header, packet->header.opcode, packet->header.length,
-                             DUST_ACK_SET, packet->header.packet_number);
-
-    /* Clear the payload. The payload buffer can be used in the future to send the information about corrupted packets. */
-    memset(&packet->payload.buffer[0], 0, packet->payload.buffer_size);
-
-    dust_crc16_calculate(packet);
-    dust_serialize_packet(packet, &serialized->buffer[0]);
-
-    /* Send ACK packet. */
-    for (uint32_t i = 0; i < serialized->buffer_size; i++)
-    {
-        usart_wait_send_ready(usart);
-        usart_send(usart, (uint16_t)serialized->buffer[i]);
-    }
-
-    return DUST_RESULT_SUCCESS;
-}
-
-/* TODO: Think if dust_transmit_nack should be defined here. Maybe is it better to allow user to define such function. */
-dust_result_t dust_transmit_nack(dust_packet_t *const packet, dust_serialized_t *const serialized, const uint32_t usart)
-{
-    if ((packet == NULL) || (serialized == NULL))
-    {
-        return DUST_RESULT_ERROR;
-    }
-
-    (void)dust_header_create(&packet->header, packet->header.opcode, packet->header.length,
-                             DUST_ACK_UNSET, packet->header.packet_number);
-
-    /* Clear the payload. The payload buffer can be used in the future to send the information about corrupted packets. */
-    memset(&packet->payload.buffer[0], 0, packet->payload.buffer_size);
-
-    dust_crc16_calculate(packet);
-    dust_serialize_packet(packet, &serialized->buffer[0]);
-
-    /* Send ACK packet. */
-    for (uint32_t i = 0; i < serialized->buffer_size; i++)
-    {
-        usart_wait_send_ready(usart);
-        usart_send(usart, (uint16_t)serialized->buffer[i]);
-    }
-
-    return DUST_RESULT_SUCCESS;
-}
-
 dust_result_t dust_handshake(dust_protocol_instance_t *const instance, const uint32_t usart)
 {
     if (instance == NULL)
