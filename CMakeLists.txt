@@ -13,7 +13,6 @@ add_subdirectory(startup)
 add_subdirectory(vectortable)
 add_subdirectory(controller)
 add_subdirectory(submodules)
-#add_subdirectory(lib)
 
 get_cmake_property(first_bootloader_sources FIRST_BOOTLOADER_SOURCES)
 get_cmake_property(second_bootloader_sources SECOND_BOOTLOADER_SOURCES)
@@ -27,7 +26,6 @@ get_cmake_property(stm32f722xx_app_startup_sources STM32F722XX_APP_STARTUP_SOURC
 get_cmake_property(vectortable_sources VECTORTABLE_SOURCES)
 get_cmake_property(usart_controller_sources USART_CONTROLLER_SOURCES)
 get_cmake_property(printf_sources PRINTF_SOURCES)
-#get_cmake_property(stm32f722xx_syscall_sources STM32F722XX_SYSCALL_SOURCES)
 
 message(STATUS "Add ghost-feather-first-bootloader executable")
 add_executable(
@@ -208,6 +206,7 @@ target_compile_definitions(
     "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     "$<$<COMPILE_LANGUAGE:C>:PRINTF_DISABLE_SUPPORT_LONG_LONG>"
     "$<$<COMPILE_LANGUAGE:C>:DEBUG_DUST_PROTOCOL=1>"
+    "$<$<COMPILE_LANGUAGE:C>:DEBUG=1>"
     )
 
 message(STATUS "Add ghost-feather-app target compile definitions")

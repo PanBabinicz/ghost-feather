@@ -2,7 +2,10 @@
 #define _USART_CONTROLLER_H
 
 #include <stdint.h>
-#include "libopencm3/stm32/usart.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif  /* __cplusplus */
 
 ///
 /// \brief The usart controller result type.
@@ -32,6 +35,13 @@ typedef enum
 usart_controller_status_t usart_controller_is_initialized(void);
 
 ///
+/// \brief Sets the usart controller status.
+///
+/// \param[in] status The status to be set.
+///
+void usart_controller_set_init_status(usart_controller_status_t status);
+
+///
 /// \brief Initialize the usart controller debug interface.
 ///
 void usart_controller_debug_init(void);
@@ -41,4 +51,8 @@ void usart_controller_debug_init(void);
 ///
 void usart_controller_debug_deinit(void);
 
-#endif /* _USART_CONTROLLER_H */
+#ifdef __cplusplus
+}
+#endif  /* __cplusplus */
+
+#endif  /* _USART_CONTROLLER_H */
