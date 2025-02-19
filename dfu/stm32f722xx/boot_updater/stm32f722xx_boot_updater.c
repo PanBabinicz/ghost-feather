@@ -63,6 +63,12 @@ static void led_off(void);
 static void systick_delay_ms(uint32_t ms);
 
 ///
+/// \brief Transmits the packet.
+///
+static void transmit_ack(dust_packet_t *const packet, dust_serialized_t * serialized,
+                         dust_ack_t ack, const uint32_t usart);
+
+///
 /// \brief Initializes the system peripherals and debug USART.
 ///
 /// This function performs the initial setup required for the boot updater to operate.
@@ -153,6 +159,24 @@ static void systick_delay_ms(uint32_t ms)
     while (!systick_get_countflag());
 }
 
+static void transmit_ack(dust_packet_t *const packet, dust_serialized_t *serialized,
+                         dust_ack_t ack, const uint32_t usart)
+{
+    if ((packet == NULL) || (serialized == NULL))
+    {
+        return;
+    }
+
+    (void)dust_header_create(&packet->header, packet->header.opcode, packet->header.length, ack, packet->header.packet_number);
+
+    /* Clear the payload. */
+    memset(&packet->payload.buffer[0], 0, packet->payload.buffer_size);
+
+    dust_serialize(packet, &serialized->buffer[0], serialized->buffer_size);
+    dust_transmit(serialized, usart);
+}
+
+
 static void init(void)
 {
     uint32_t *usart_instance;
@@ -198,12 +222,12 @@ static void update(void)
     if ((dust_handshake(&instance, USART3) != DUST_RESULT_SUCCESS) ||
         (instance.options.ack_frequency > DUST_ACK_FREQUENCY_TOTAL_SIZE))
     {
-        dust_transmit_nack(&instance.packet, &instance.serialized, USART3);
+        transmit_ack(&instance.packet, &instance.serialized, DUST_ACK_UNSET, USART3);
         return;
     }
 
     /* Transmit handshake ACK. */
-    dust_transmit_ack(&instance.packet, &instance.serialized, USART3);
+    transmit_ack(&instance.packet, &instance.serialized, DUST_ACK_SET, USART3);
 
     uint16_t ack_frequency  = dust_get_ack_frequency(instance.options.ack_frequency);
     uint16_t number_of_nack = 0;
@@ -211,7 +235,8 @@ static void update(void)
     /* How many packet should I receive? Handshake option. */
     for (uint32_t i = 0; i < instance.options.number_of_packets; i++)
     {
-        if (dust_receive(&instance.packet, &instance.serialized, USART3) != DUST_RESULT_SUCCESS)
+        if ((dust_receive(&instance.serialized, USART3) != DUST_RESULT_SUCCESS) &&
+            (dust_deserialize(&instance.packet, &instance.serialized.buffer[0], instance.serialized.buffer_size) != DUST_RESULT_SUCCESS))
         {
             number_of_nack++;
         }
@@ -235,18 +260,18 @@ static void update(void)
         {
             if (number_of_nack != 0)
             {
-                dust_transmit_nack(&instance.packet, &instance.serialized, USART3);
+                transmit_ack(&instance.packet, &instance.serialized, DUST_ACK_UNSET, USART3);
                 number_of_nack = 0;
                 i -= ack_frequency;
             }
             else
             {
-                dust_transmit_ack(&instance.packet, &instance.serialized, USART3);
+                transmit_ack(&instance.packet, &instance.serialized, DUST_ACK_SET, USART3);
             }
         }
     }
 
-    memset(&instance.serialized.buffer[0], 0, instance.serialized.buffer_size);
+    //memset(&instance.serialized.buffer[0], 0, instance.serialized.buffer_size);
 
     (void)dust_header_create(&instance.packet.header, DUST_OPCODE_DISCONNECT, DUST_LENGTH_BYTES32, DUST_ACK_UNSET, 0x00);
     (void)dust_payload_create(&instance.packet.payload, &instance.serialized.buffer[0], instance.packet.payload.buffer_size);
@@ -258,21 +283,22 @@ static void update(void)
     /* Wait for the ack packet. */
     while (1)
     {
-        if (dust_receive(&instance.packet, &instance.serialized, USART3) != DUST_RESULT_SUCCESS)
+        if (dust_receive(&instance.serialized, USART3) != DUST_RESULT_SUCCESS)
         {
-            dust_transmit_nack(&instance.packet, &instance.serialized, USART3);
+            transmit_ack(&instance.packet, &instance.serialized, DUST_ACK_UNSET, USART3);
         }
         else
         {
+            dust_deserialize(&instance.packet, &instance.serialized.buffer[0], instance.serialized.buffer_size);
             if ((instance.packet.header.opcode == DUST_OPCODE_DISCONNECT) &&
                 (instance.packet.header.ack == DUST_ACK_SET))
             {
-                dust_transmit_ack(&instance.packet, &instance.serialized, USART3);
+                transmit_ack(&instance.packet, &instance.serialized, DUST_ACK_SET, USART3);
                 break;
             }
             else
             {
-                dust_transmit_nack(&instance.packet, &instance.serialized, USART3);
+                transmit_ack(&instance.packet, &instance.serialized, DUST_ACK_UNSET, USART3);
             }
         }
     }

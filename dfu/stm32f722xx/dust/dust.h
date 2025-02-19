@@ -257,32 +257,6 @@ dust_result_t dust_transmit(const dust_serialized_t *const serialized, const uin
 dust_result_t dust_receive(dust_serialized_t *const serialized, const uint32_t usart);
 
 ///
-/// \brief Transmit ACK header.
-///
-/// \param[in] packet           The dust packet structure.
-/// \param[in] serialized       The dust serialized packet structure.
-/// \param[in] usart            The usart block register address base.
-///
-/// \return dust_result_t       Result of the function.
-/// \retval DUST_RESULT_SUCCESS On success.
-/// \retval DUST_RESULT_ERROR   Otherwise.
-///
-dust_result_t dust_transmit_ack(dust_packet_t *const packet, dust_serialized_t *const serialized, const uint32_t usart);
-
-///
-/// \brief Transmit NACK header.
-///
-/// \param[in] packet           The dust packet structure.
-/// \param[in] serialized       The dust serialized packet structure.
-/// \param[in] usart            The usart block register address base.
-///
-/// \return dust_result_t       Result of the function.
-/// \retval DUST_RESULT_SUCCESS On success.
-/// \retval DUST_RESULT_ERROR   Otherwise.
-///
-dust_result_t dust_transmit_nack(dust_packet_t *const packet, dust_serialized_t *const serialized, const uint32_t usart);
-
-///
 /// \brief Dust handshake procedure.
 ///
 /// \param[out] options         The received handshake opitons.
