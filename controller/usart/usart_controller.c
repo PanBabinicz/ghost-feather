@@ -1,5 +1,8 @@
 #include "usart_controller.h"
+#include "libopencm3/stm32/usart.h"
+#if (defined(DEBUG) && (DEBUG == 1))
 #include "printf.h"
+#endif  /* DEBUG */
 
 #define USART_CONTROLLER_DEBUG_BAUDRATE  (115200u)
 #define USART_CONTROLLER_DEBUG_INTERFACE (USART3)
@@ -8,7 +11,7 @@
 /// Private objects - declaration.
 ///*************************************************************************************************
 ///
-/// \brief The usart controller.
+/// \brief The usart controller structure.
 ///
 typedef struct
 {
@@ -28,14 +31,21 @@ static usart_controller_t usart_controller;
 ///*************************************************************************************************
 /// Global functions - definition.
 ///*************************************************************************************************
+#if (defined(DEBUG) && (DEBUG == 1))
 void _putchar(char character)
 {
     usart_send_blocking(USART_CONTROLLER_DEBUG_INTERFACE, (uint16_t)character);
 }
+#endif  /* DEBUG */
 
 usart_controller_status_t usart_controller_is_initialized(void)
 {
     return usart_controller.is_initialized;
+}
+
+void usart_controller_set_init_status(usart_controller_status_t status)
+{
+    usart_controller.is_initialized = status;
 }
 
 void usart_controller_debug_init(void)
@@ -58,7 +68,7 @@ void usart_controller_debug_init(void)
 
         usart_enable(usart_controller.interface);
 
-        usart_controller.is_initialized = 1;
+        usart_controller.is_initialized = USART_CONTROLLER_STATUS_INIT;
     }
 }
 

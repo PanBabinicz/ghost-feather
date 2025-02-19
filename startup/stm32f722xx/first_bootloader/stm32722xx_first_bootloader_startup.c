@@ -2,28 +2,47 @@
 
 #define CPACR   (*(volatile uint32_t*)(0xe000ed88))
 
+///*************************************************************************************************
+/// Private objects - declaration.
+///*************************************************************************************************
 extern uint32_t _sbss;
 extern uint32_t _ebss;
 extern uint32_t _sdata;
 extern uint32_t _edata;
 extern uint32_t _etext;
 
-extern void _reset_handler(void);
-
+///*************************************************************************************************
+/// Private functions - declaration.
+///*************************************************************************************************
 ///
-/// \breif Unlock the FPU on Cortex M7.
+/// \breif Unlocks the FPU.
 ///
 static void fpu_unlock();
 
+///*************************************************************************************************
+/// Global functions - declaration.
+///*************************************************************************************************
+///
+/// \brief The reset handler which initializes memory and start the
+///        first bootloader.
+///
+/// This function clears the BSS section, initializes global and static
+/// variables.
+///
+extern void _reset_handler(void);
+
+///*************************************************************************************************
+/// Private functions - definition.
+///*************************************************************************************************
 static void fpu_unlock()
 {
     /* CP11 and CP10 are (23-22) and (21-20) bits respectively. */
     CPACR |= ((0x03 << 0x16) | (0x03 <<0x14));
 }
 
-///
-/// \breif This reset handler function is used to prepare for the first bootloader.
-///
+///*************************************************************************************************
+/// Global functions - definition.
+///*************************************************************************************************
 void _reset_handler(void)
 {
     /* Clear the bss section. */
@@ -49,6 +68,6 @@ void _reset_handler(void)
 
     first_bootloader_start();
 
-    /* Never return */
+    /* Never return. */
     while (1);
 }
