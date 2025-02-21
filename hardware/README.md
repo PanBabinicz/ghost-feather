@@ -11,3 +11,10 @@
 > Over-the-Air DFU procedure
 >
 > https://onlinedocs.microchip.com/oxy/GUID-26457D23-798C-47B0-9F40-C5DA6E995C6F-en-US-2/GUID-79B3231C-7BD0-4459-80A5-A198A4F1B366.html
+
+## 🖥 PCB Design Software
+
+> KiCad
+>
+> KiCad is a free and open-source software suite for designing schematics and PCB layouts.
+> It is widely used in the electronics community for both hobbyist and professional projects.
