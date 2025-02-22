@@ -212,10 +212,10 @@ class dfu_updater:
         """
         # TODO: Check the retransmission machanism
         if isinstance(self.usart, serial.Serial):
-            print("\nTrying to update...")
+            print("")
             packet_number = 0
             payload_size = self.length_hash_table[self.instance.options.payload_size]
-            for packet_number in tqdm(range(self.instance.options.number_of_packets)):
+            for packet_number in tqdm(range(self.instance.options.number_of_packets), desc = "Update"):
                 self.instance.packet.header.create(DUST_OPCODE.DATA.value, payload_size, DUST_ACK.UNSET.value, packet_number)
                 self.instance.packet.payload.create(buffer=self.fill_data(packet_number))
                 self.instance.packet.create(self.instance.packet.header, self.instance.packet.payload)
