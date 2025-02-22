@@ -3,6 +3,7 @@ import serial
 import time
 
 from elftools.elf.elffile import ELFFile
+from tqdm import tqdm
 
 from dust_packet import dust_crc16_generate_lut
 from dust_packet import dust_packet
@@ -81,7 +82,7 @@ class dfu_updater:
         if isinstance(self.usart, serial.Serial):
             print("The usart is already initialized...")
         else:
-            print("Initializing...")
+            print("\nInitializing...")
             self.usart = serial.Serial(port = self.port, baudrate = self.baudrate, timeout = 120.0)
             if isinstance(self.usart, serial.Serial):
                 print("Initialization completed!")
@@ -96,7 +97,7 @@ class dfu_updater:
         It prints status messages indicating whether the deinitialization was successful.
         """
         if isinstance(self.usart, serial.Serial):
-            print("Deinitialization...")
+            print("\nDeinitialization...")
             self.usart.close()
             self.usart = None
             if isinstance(self.usart, serial.Serial):
@@ -146,7 +147,7 @@ class dfu_updater:
         @note Ensure that the USART connection is initialized before calling this method.
         """
         if isinstance(self.usart, serial.Serial):
-            print("Trying to connect...")
+            print("\nTrying to connect...")
             number_of_packets = self.calculate_number_of_packets(self.text.size, payload_size)
             self.instance.options.create(ack_frequency, number_of_packets, payload_size)
             self.instance.packet.header.create(DUST_OPCODE.CONNECT.value, DUST_LENGTH.BYTES32.value, DUST_ACK.UNSET.value, packet_number=0x00)
@@ -174,7 +175,7 @@ class dfu_updater:
         @return DUST_RESULT.ERROR.value   If the disconnection fails or an error occurs.
         """
         if isinstance(self.usart, serial.Serial):
-            print("Waiting for disconnection...")
+            print("\nWaiting for disconnection...")
             if (self.receive() != DUST_RESULT.SUCCESS.value):
                 print("Corrupted packet was received during disconnection process")
                 return DUST_RESULT.ERROR.value
@@ -209,11 +210,12 @@ class dfu_updater:
 
         @note Ensure that the USART connection is initialized before calling this method.
         """
+        # TODO: Check the retransmission machanism
         if isinstance(self.usart, serial.Serial):
-            print("Trying to update...")
+            print("\nTrying to update...")
             packet_number = 0
             payload_size = self.length_hash_table[self.instance.options.payload_size]
-            while packet_number < self.instance.options.number_of_packets:
+            for packet_number in tqdm(range(self.instance.options.number_of_packets)):
                 self.instance.packet.header.create(DUST_OPCODE.DATA.value, payload_size, DUST_ACK.UNSET.value, packet_number)
                 self.instance.packet.payload.create(buffer=self.fill_data(packet_number))
                 self.instance.packet.create(self.instance.packet.header, self.instance.packet.payload)
@@ -222,12 +224,8 @@ class dfu_updater:
                 if ((((packet_number + 1)  % self.ack_frequency_hash_table[self.instance.options.ack_frequency]) == 0) or
                      ((packet_number + 1) == self.instance.options.number_of_packets)):
                     if (self.receive() == DUST_RESULT.SUCCESS.value):
-                        if (self.instance.packet.header.bits.ack == DUST_ACK.SET.value):
-                            print("#" + str(packet_number) + ": ACK")
-                        else:
-                            print("#" + str(packet_number) + ": NACK")
+                        if (self.instance.packet.header.bits.ack != DUST_ACK.SET.value):
                             packet_number -= self.ack_frequency_hash_table[self.instance.options.ack_frequency]
-                packet_number += 1
         else:
             print("Usart is not initialized...")
 
