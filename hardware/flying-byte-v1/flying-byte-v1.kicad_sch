@@ -4,6 +4,13 @@
 
   (paper "A4")
 
+  (title_block
+    (title "Flying Byte")
+    (date "2025-03-06")
+    (rev "1.0")
+    (comment 1 "The flying byte prototype v1")
+  )
+
   (lib_symbols
     (symbol "Connector:Conn_ARM_SWD_TagConnect_TC2030" (in_bom no) (on_board yes)
       (property "Reference" "J" (at 2.54 11.43 0)
@@ -2837,6 +2844,10 @@
     (uuid ff90c345-8ae8-4f3c-94f9-14a4002cf4c7)
   )
 
+  (text "Flying Byte V1" (at 236.22 21.59 0)
+    (effects (font (size 4 4) (thickness 0.8) bold) (justify left bottom))
+    (uuid 160143c6-616f-4fdf-982e-7dbdd27b484d)
+  )
   (text "RF Front-End & u.FL Connector" (at 231.14 74.93 0)
     (effects (font (size 1.9 1.9)) (justify left bottom))
     (uuid 1ead2cdb-8c53-4aed-b890-ff5c6f857847)
