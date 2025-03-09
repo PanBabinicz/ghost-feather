@@ -2925,6 +2925,10 @@
     (effects (font (size 0.6 0.6) (thickness 0.21) bold) (justify left bottom))
     (uuid 434327eb-d1d8-43b8-8e0d-18a90ca1461e)
   )
+  (label "BOOT0_SW" (at 243.84 111.76 0) (fields_autoplaced)
+    (effects (font (size 0.6 0.6) (thickness 0.21) bold) (justify left bottom))
+    (uuid 48968fad-37e3-4c95-a21a-b9dd6076d4e7)
+  )
   (label "SMPS_L" (at 193.04 68.58 0) (fields_autoplaced)
     (effects (font (size 0.6 0.6) (thickness 0.21) bold) (justify left bottom))
     (uuid 4943522a-a9e4-419c-843a-f4ff8ef446c2)
@@ -2945,13 +2949,25 @@
     (effects (font (size 0.6 0.6) (thickness 0.21) bold) (justify right bottom))
     (uuid 63df5f54-ef69-41f3-8256-237e2a3d0414)
   )
+  (label "UART_RXC" (at 102.87 71.12 0) (fields_autoplaced)
+    (effects (font (size 0.6 0.6) (thickness 0.21) bold) (justify left bottom))
+    (uuid 664b3823-51e2-41dc-9b73-e1e02507e690)
+  )
   (label "SMPS_VLX" (at 181.61 68.58 0) (fields_autoplaced)
     (effects (font (size 0.6 0.6) (thickness 0.21) bold) (justify left bottom))
     (uuid 7224fb38-ee26-4a81-aa10-ef51358a097b)
   )
+  (label "LSE_OUT_R" (at 186.69 111.76 0) (fields_autoplaced)
+    (effects (font (size 0.6 0.6) (thickness 0.21) bold) (justify left bottom))
+    (uuid 7df75bde-632b-4db5-8be0-76b2523c59a3)
+  )
   (label "UART_RX" (at 133.35 71.12 0) (fields_autoplaced)
     (effects (font (size 0.6 0.6) (thickness 0.21) bold) (justify left bottom))
     (uuid 93ae4821-df23-4635-b94e-f3d6acfdb222)
+  )
+  (label "UART_TXC" (at 102.87 68.58 0) (fields_autoplaced)
+    (effects (font (size 0.6 0.6) (thickness 0.21) bold) (justify left bottom))
+    (uuid 97f556b9-5974-4a6e-b3bd-2cec5a2d12b8)
   )
   (label "USBC_CC1" (at 50.8 77.47 0) (fields_autoplaced)
     (effects (font (size 0.6 0.6) (thickness 0.21) bold) (justify left bottom))
@@ -3602,8 +3618,8 @@
     (property "Manufaturer" "SEI Stackpole" (at 120.65 71.12 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid d4bd8ec0-c357-40b5-af1d-778b9c67d7ba))
-    (pin "2" (uuid b7e762a4-b28f-4efb-ab6d-ce400617fa4c))
+    (pin "1" (uuid afde6a72-5621-4227-8e4c-81b7d8773ef9))
+    (pin "2" (uuid 5456639b-5204-47e0-bd40-86fe0ab74d8c))
     (instances
       (project "flying-byte-v1"
         (path "/89251f6d-2a03-4ee6-93f4-15acd18dfc68"
@@ -3622,7 +3638,7 @@
     (property "Value" "Conn_01x04" (at 96.52 76.2 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "Connector_Molex:Molex_PicoBlade_53047-0410_1x04_P1.25mm_Vertical" (at 96.52 71.12 0)
+    (property "Footprint" "Connector_Molex:Molex_PicoBlade_53048-0410_1x04_P1.25mm_Horizontal" (at 96.52 71.12 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 96.52 71.12 0)
@@ -3809,8 +3825,8 @@
     (property "Manufaturer" "Wurth Elektronik" (at 120.65 46.99 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 255cbf5b-61dc-46ea-9048-fc000663633b))
-    (pin "2" (uuid c0c863b4-ca4e-480b-94e9-2964001f891b))
+    (pin "1" (uuid bed11748-89d5-4cd5-85c2-612df024cea2))
+    (pin "2" (uuid 95a2a7bd-04b7-4a65-98c8-7028063c6be5))
     (instances
       (project "flying-byte-v1"
         (path "/89251f6d-2a03-4ee6-93f4-15acd18dfc68"
@@ -4075,8 +4091,8 @@
     (property "Manufaturer" "Murata Electronics" (at 22.86 39.37 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 5a0bf418-96eb-410e-9e2c-eee06f83c995))
-    (pin "2" (uuid 75c6481d-e918-425b-9785-69076f2900e7))
+    (pin "1" (uuid ea61d017-591c-4eba-bc90-6e9d1fa60328))
+    (pin "2" (uuid c7fd03cd-77ea-48d6-afe3-f53f17cf22e4))
     (instances
       (project "flying-byte-v1"
         (path "/89251f6d-2a03-4ee6-93f4-15acd18dfc68"
@@ -4110,10 +4126,10 @@
     (property "Manufaturer" "NDK" (at 193.04 74.93 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 09e0ca5a-5e35-4eed-b251-e993684c96fa))
-    (pin "2" (uuid 2c5f4aa5-6219-444e-ad26-3bcd74a3a3ff))
-    (pin "3" (uuid 67aaa3de-c67b-447c-9c58-658cf9d5855f))
-    (pin "4" (uuid 032061c7-295b-42f8-93f1-44936bab5b70))
+    (pin "1" (uuid dc30b451-731c-44d9-9e00-5898644c9762))
+    (pin "2" (uuid 7e94ea0e-c323-42d2-85e6-844328d1a905))
+    (pin "3" (uuid 16cc7a68-507c-498b-bc72-0b8cd53ae049))
+    (pin "4" (uuid cd51188d-a6e5-4307-a254-6f807eda354d))
     (instances
       (project "flying-byte-v1"
         (path "/89251f6d-2a03-4ee6-93f4-15acd18dfc68"
@@ -4347,8 +4363,8 @@
     (property "Manufaturer" "Stanley Electric" (at 66.04 35.56 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 895f6d8d-c42b-4c97-beae-bcb180bbc0df))
-    (pin "2" (uuid 93b36681-c2de-40d8-b2da-bf5957fc1d36))
+    (pin "1" (uuid 57b5d68e-e0a6-4e28-b357-46d413e917db))
+    (pin "2" (uuid e2f9bf49-0582-4448-b67a-f25e8ccd8abf))
     (instances
       (project "flying-byte-v1"
         (path "/89251f6d-2a03-4ee6-93f4-15acd18dfc68"
@@ -4656,8 +4672,8 @@
     (property "Manufaturer" "Vishay / Beyschlag" (at 185.42 107.95 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid ba6777bb-e909-4f92-8e32-79b61b872ac8))
-    (pin "2" (uuid 79d02a9e-7959-4248-84b1-01e1191a5d63))
+    (pin "1" (uuid 5d8d1d19-1923-41bb-ad32-e6da237e0e8c))
+    (pin "2" (uuid cc585b8c-0fda-4d0f-a977-fd98dff9335f))
     (instances
       (project "flying-byte-v1"
         (path "/89251f6d-2a03-4ee6-93f4-15acd18dfc68"
@@ -4751,8 +4767,8 @@
     (property "Manufaturer" "SEI Stackpole" (at 57.15 107.95 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 630dba95-3662-46d9-a7d5-42a284e405c9))
-    (pin "2" (uuid db7f1e78-22f3-435b-8d7b-106fd43c9e2a))
+    (pin "1" (uuid 1755fc12-7357-4a0c-99cb-1886779f6ef8))
+    (pin "2" (uuid 1cf4e4b4-20d1-44cd-bba8-90a21525bd5f))
     (instances
       (project "flying-byte-v1"
         (path "/89251f6d-2a03-4ee6-93f4-15acd18dfc68"
@@ -5139,8 +5155,8 @@
     (property "Manufaturer" "Hirose Connector" (at 260.35 86.36 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 40fffb97-61ce-4f62-a099-58ab0b4e9d26))
-    (pin "2" (uuid 193394b5-8d97-41a5-8f3e-18c3b2470d27))
+    (pin "1" (uuid 85a52b31-8d5b-44d2-8670-964e7f34a9aa))
+    (pin "2" (uuid 1a600093-840f-4141-a840-9e52ed438511))
     (instances
       (project "flying-byte-v1"
         (path "/89251f6d-2a03-4ee6-93f4-15acd18dfc68"
@@ -5199,8 +5215,8 @@
     (property "Manufaturer" "Murata Electronics" (at 215.9 91.44 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 558bd7af-4aa6-4ba5-b73d-71fc8d228a4d))
-    (pin "2" (uuid d33297c4-4309-44a5-b11e-0afd3031e358))
+    (pin "1" (uuid 51a18ca7-a621-449b-bca0-2cc768af9496))
+    (pin "2" (uuid b43db9ec-caaf-469c-a783-20e331a3673a))
     (instances
       (project "flying-byte-v1"
         (path "/89251f6d-2a03-4ee6-93f4-15acd18dfc68"
