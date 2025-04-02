@@ -4069,7 +4069,7 @@
     (uuid fe9baf2e-bf2c-4d47-b7bd-265dd429ca6a)
   )
 
-  (text "THINK ABOUT:\n- NOISE FILTERS\n- STARTUP TIMING ISSUES"
+  (text "THINK ABOUT:\n- BETTER WAY IS TO USE PMIC?\n- NOISE FILTERS\n- STARTUP TIMING ISSUES"
     (at 100.33 44.45 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 0d575a37-9d2f-4a79-8424-a0ff05a90486)
