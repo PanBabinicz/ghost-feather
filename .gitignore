@@ -5,6 +5,7 @@ tags
 *.bin
 *.hex
 *.elf
+*.zip
 
 # ignore build dir
 build
