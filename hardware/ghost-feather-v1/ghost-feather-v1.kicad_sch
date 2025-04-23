@@ -4198,6 +4198,10 @@
     (uuid ff5b1e92-527c-46a4-b643-4d15480bb05b)
   )
 
+  (text "Add the battery connectors" (at 39.37 96.52 0)
+    (effects (font (size 4 4) (thickness 0.8) bold) (justify left bottom))
+    (uuid 68a720d3-08ec-43f2-b93a-61616f622c4b)
+  )
   (text "ESC PROBRABLY WILL HAVE THE 5V LOGIC LEVEL\nUSE THE SINGLE MOSFET LOGIC LEVEL SHIFTER\nFOR EACH ESCs\n"
     (at 160.02 170.18 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
