@@ -4522,7 +4522,7 @@
   )
 
   (symbol (lib_id "Mechanical:Fiducial") (at 34.29 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 0097a47a-9d1c-4f26-ab60-87e62c8d2dbf)
     (property "Reference" "FID5" (at 32.131 254.9906 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -4778,7 +4778,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 77.47 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 158a5714-2fff-4efc-8ecc-5be690f1282b)
     (property "Reference" "H3" (at 76.1492 248.6152 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -5527,7 +5527,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 96.52 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 4baf3270-685a-4627-97fe-dd8e0f046d56)
     (property "Reference" "H6" (at 95.1992 248.6152 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -5586,7 +5586,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 90.17 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 510712a8-98c1-4e3d-a3c1-03550210bf80)
     (property "Reference" "H13" (at 88.8492 254.9652 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -5635,7 +5635,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 109.22 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 545a1adb-a62c-42d1-ae02-34854178839f)
     (property "Reference" "H8" (at 107.8992 248.6152 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6080,7 +6080,7 @@
   )
 
   (symbol (lib_id "Mechanical:Fiducial") (at 46.99 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 78227f2f-1545-426b-8843-113e311ac986)
     (property "Reference" "FID7" (at 44.831 254.9906 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6104,7 +6104,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 71.12 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 785d5fed-44f1-40e6-9696-ad1c1d937427)
     (property "Reference" "H2" (at 69.7992 248.6152 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6305,7 +6305,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 64.77 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 800c14ca-21fd-45ea-a451-444399f388d4)
     (property "Reference" "H9" (at 63.4492 254.9652 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6329,7 +6329,7 @@
   )
 
   (symbol (lib_id "Mechanical:Fiducial") (at 53.34 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 81146c78-cae5-4e24-8416-6db3b7c3c092)
     (property "Reference" "FID4" (at 51.181 248.6406 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6428,7 +6428,7 @@
   )
 
   (symbol (lib_id "Mechanical:Fiducial") (at 53.34 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 871faea0-e41e-4ab7-b01a-c9b1a60b9640)
     (property "Reference" "FID8" (at 51.181 254.9906 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6711,7 +6711,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 90.17 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 905e813c-5f10-49fd-9b43-d42201c97c76)
     (property "Reference" "H5" (at 88.8492 248.6152 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6804,7 +6804,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 83.82 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 94200050-a0e7-4131-967a-662dbad511a4)
     (property "Reference" "H4" (at 82.4992 248.6152 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -7064,7 +7064,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 77.47 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 9fe8b3cd-a2e8-4096-b8c3-73cc9c989e5d)
     (property "Reference" "H11" (at 76.1492 254.9652 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -7183,7 +7183,7 @@
   )
 
   (symbol (lib_id "Mechanical:Fiducial") (at 40.64 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid a564be17-ae97-4512-840d-28f53efe5e89)
     (property "Reference" "FID6" (at 38.481 254.9906 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -7292,7 +7292,7 @@
   )
 
   (symbol (lib_id "Mechanical:Fiducial") (at 46.99 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid b1a0802d-40fa-4698-bafe-298c9082b1b2)
     (property "Reference" "FID3" (at 44.831 248.6406 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -7446,7 +7446,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 71.12 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid b8f17930-568a-432d-a386-24c02ad2303f)
     (property "Reference" "H10" (at 69.7992 254.9652 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -7565,7 +7565,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 102.87 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid bf688aa8-daec-4dfb-badc-2b14204d4d6c)
     (property "Reference" "H15" (at 101.5492 254.9652 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -7589,7 +7589,7 @@
   )
 
   (symbol (lib_id "Mechanical:Fiducial") (at 40.64 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid bf93cbbe-63eb-4e64-8613-f7a492a08b0a)
     (property "Reference" "FID2" (at 38.481 248.6406 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -7828,7 +7828,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 102.87 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid ca344bbc-8975-4b25-8d5a-bb2f5491f964)
     (property "Reference" "H7" (at 101.5492 248.6152 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -8197,7 +8197,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 83.82 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid d992c149-a963-4a37-93f1-9cc8c5085da5)
     (property "Reference" "H12" (at 82.4992 254.9652 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -8618,7 +8618,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 64.77 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid ee9d23d7-7f2d-4402-b311-fb376c5f7179)
     (property "Reference" "H1" (at 63.4492 248.6152 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -8803,7 +8803,7 @@
   )
 
   (symbol (lib_id "Mechanical:Fiducial") (at 34.29 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid f4513421-7611-439e-a944-3c50816deac4)
     (property "Reference" "FID1" (at 32.131 248.6406 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -8852,7 +8852,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 109.22 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid fbd3ebb0-6099-4ec7-95e0-fb82eaa2c374)
     (property "Reference" "H16" (at 107.8992 254.9652 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -8946,7 +8946,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 96.52 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid fdba0e20-cc37-4752-bfe1-b6d399b2b09d)
     (property "Reference" "H14" (at 95.1992 254.9652 0)
       (effects (font (size 1.27 1.27)) (justify left))
