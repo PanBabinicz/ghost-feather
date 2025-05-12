@@ -26,3 +26,10 @@
 > - 🔌 4x PicoBlade Connectors – For connecting ESCs (Electronic Speed Controllers)
 >
 > - 📡 1x PicoBlade Connector – For connecting an RF radio module
+
+## 📃 Schematic
+
+> This section includes the complete schematic of the board, created with KiCad.
+> It outlines the core circuitry, microcontroller wiring, level shifters, connectors, and power.
+
+![Schematic](https://github.com/PanBabinicz/ghost-feather/blob/doc/hardware/ghost-feather-v1/screenshots/ghost-feather-v1-kicad-schematic.png)
