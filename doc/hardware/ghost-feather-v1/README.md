@@ -32,7 +32,7 @@
 > This section includes the complete schematic of the board, created with KiCad.
 > It outlines the core circuitry, microcontroller wiring, level shifters, connectors, and power.
 
-![Schematic](https://github.com/PanBabinicz/ghost-feather/blob/hardware/add_ghost_feather_v1_docs/doc/hardware/ghost-feather-v1/screenshots/ghost-feather-v1-kicad-schematic.png)
+![Schematic](https://github.com/PanBabinicz/ghost-feather/blob/develop/doc/hardware/ghost-feather-v1/screenshots/ghost-feather-v1-kicad-schematic.png)
 
 ## 🛠️ PCB
 
@@ -40,5 +40,5 @@
 > These models provide a clear visual reference for component placement,
 > board layout, and connector orientation.
 
-![Front](https://github.com/PanBabinicz/ghost-feather/blob/hardware/add_ghost_feather_v1_docs/doc/hardware/ghost-feather-v1/screenshots/ghost-feather-v1-pcb-front.png)
-![Rear](https://github.com/PanBabinicz/ghost-feather/blob/hardware/add_ghost_feather_v1_docs/doc/hardware/ghost-feather-v1/screenshots/ghost-feather-v1-pcb-rear.png)
+![Front](https://github.com/PanBabinicz/ghost-feather/blob/develop/doc/hardware/ghost-feather-v1/screenshots/ghost-feather-v1-pcb-front.png)
+![Rear](https://github.com/PanBabinicz/ghost-feather/blob/develop/doc/hardware/ghost-feather-v1/screenshots/ghost-feather-v1-pcb-rear.png)
