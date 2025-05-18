@@ -61,51 +61,51 @@
 #define BMI270_REG_FEATURES_13          (0x3d)      /*!< Input register for feature configuration.          */
 #define BMI270_REG_FEATURES_14          (0x3e)      /*!< Input register for feature configuration.          */
 #define BMI270_REG_FEATURES_15          (0x3f)      /*!< Input register for feature configuration.          */
-#define BMI270_REG_ACC_CONF             (0x40)      /*!< Accel ODR, bandwidth, and mode config.             */
+#define BMI270_REG_ACC_CONF             (0x40)      /*!< Accelerometer ODR, bandwidth, mode config.         */
 #define BMI270_REG_ACC_RANGE            (0x41)      /*!< Selection of the accelerometer g-range.            */
-#define BMI270_REG_GYRO_CONF            (0x42)      /*!< .                      */
-#define BMI270_REG_GYRO_RANGE           (0x43)      /*!< .                      */
-#define BMI270_REG_AUX_CONF             (0x44)      /*!< .                      */
-#define BMI270_REG_FIFO_DOWNS           (0x45)      /*!< .                      */
-#define BMI270_REG_FIFO_WTM_0           (0x46)      /*!< .                      */
-#define BMI270_REG_FIFO_WTM_1           (0x47)      /*!< .                      */
-#define BMI270_REG_FIFO_FIG_0           (0x48)      /*!< .                      */
-#define BMI270_REG_FIFO_FIG_1           (0x49)      /*!< .                      */
-#define BMI270_REG_SATURATION           (0x4a)      /*!< .                      */
-#define BMI270_REG_AUX_DEV_ID           (0x4b)      /*!< .                      */
-#define BMI270_REG_AUX_IF_CONF          (0x4c)      /*!< .                      */
-#define BMI270_REG_AUX_RD_ADDR          (0x4d)      /*!< .                      */
-#define BMI270_REG_AUX_WR_ADDR          (0x4e)      /*!< .                      */
-#define BMI270_REG_AUX_WR_DATA          (0x4f)      /*!< .                      */
-#define BMI270_REG_ERR_REG_MSK          (0x52)      /*!< .                      */
-#define BMI270_REG_INT1_IO_CTRL         (0x53)      /*!< .                      */
-#define BMI270_REG_INT2_IO_CTRL         (0x54)      /*!< .                      */
-#define BMI270_REG_INT_LATCH            (0x55)      /*!< .                      */
-#define BMI270_REG_INT1_MAP_FEAT        (0x56)      /*!< .                      */
-#define BMI270_REG_INT2_MAP_FEAT        (0x57)      /*!< .                      */
-#define BMI270_REG_INT_MAP_DATA         (0x58)      /*!< .                      */
-#define BMI270_REG_INIT_CTRL            (0x59)      /*!< .                      */
-#define BMI270_REG_INIT_ADDR_0          (0x5b)      /*!< .                      */
-#define BMI270_REG_INIT_ADDR_1          (0x5c)      /*!< .                      */
-#define BMI270_REG_INIT_DATA            (0x5e)      /*!< .                      */
-#define BMI270_REG_INTERNAL_ERROR       (0x5f)      /*!< .                      */
-#define BMI270_REG_AUX_IF_TRIM          (0x68)      /*!< .                      */
-#define BMI270_REG_GYR_CRT_CONF         (0x69)      /*!< .                      */
-#define BMI270_REG_NVM_CONF             (0x6a)      /*!< .                      */
-#define BMI270_REG_IF_CONF              (0x6b)      /*!< .                      */
-#define BMI270_REG_DRV                  (0x6c)      /*!< .                      */
-#define BMI270_REG_ACC_SELF_TEST        (0x6d)      /*!< .                      */
-#define BMI270_REG_GYR_SELF_TEST_AXES   (0x6e)      /*!< .                      */
-#define BMI270_REG_NV_CONF              (0x70)      /*!< .                      */
-#define BMI270_REG_OFFSET_0             (0x71)      /*!< .                      */
-#define BMI270_REG_OFFSET_1             (0x72)      /*!< .                      */
-#define BMI270_REG_OFFSET_2             (0x73)      /*!< .                      */
-#define BMI270_REG_OFFSET_3             (0x74)      /*!< .                      */
-#define BMI270_REG_OFFSET_4             (0x75)      /*!< .                      */
-#define BMI270_REG_OFFSET_5             (0x76)      /*!< .                      */
-#define BMI270_REG_OFFSET_6             (0x77)      /*!< .                      */
-#define BMI270_REG_PWR_CONF             (0x7c)      /*!< .                      */
-#define BMI270_REG_PWR_CTRL             (0x7d)      /*!< .                      */
-#define BMI270_REG_CMD                  (0x7e)      /*!< .                      */
+#define BMI270_REG_GYRO_CONF            (0x42)      /*!< Gyroscope ODR, bandwidth, mode config.             */
+#define BMI270_REG_GYRO_RANGE           (0x43)      /*!< Gyroscope angular rate measurement range.          */
+#define BMI270_REG_AUX_CONF             (0x44)      /*!< Auxiliary sensor interface ODR.                    */
+#define BMI270_REG_FIFO_DOWNS           (0x45)      /*!< Gyroe and accel downsampling rates for FIFO.       */
+#define BMI270_REG_FIFO_WTM_0           (0x46)      /*!< FIFO watermark level (LSB).                        */
+#define BMI270_REG_FIFO_WTM_1           (0x47)      /*!< FIFO watermark level (MSB) and frame content conf. */
+#define BMI270_REG_FIFO_CONFIG_0        (0x48)      /*!< FIFO frame content configuration.                  */
+#define BMI270_REG_FIFO_CONFIG_1        (0x49)      /*!< FIFO frame content configuration.                  */
+#define BMI270_REG_SATURATION           (0x4a)      /*!< Saturation information.                            */
+#define BMI270_REG_AUX_DEV_ID           (0x4b)      /*!< Auxiliary interface device id.                     */
+#define BMI270_REG_AUX_IF_CONF          (0x4c)      /*!< Auxiliary interface configuration register.        */
+#define BMI270_REG_AUX_RD_ADDR          (0x4d)      /*!< Auxiliray interface read address.                  */
+#define BMI270_REG_AUX_WR_ADDR          (0x4e)      /*!< Auxiliary include write address.                   */
+#define BMI270_REG_AUX_WR_DATA          (0x4f)      /*!< Auxiliary include write data.                      */
+#define BMI270_REG_ERR_REG_MSK          (0x52)      /*!< Error flag which triggers error interrupt.         */
+#define BMI270_REG_INT1_IO_CTRL         (0x53)      /*!< Electrical behavior of the interrupt pin INT1.     */
+#define BMI270_REG_INT2_IO_CTRL         (0x54)      /*!< Electrical behavior of the interrupt pin INT2.     */
+#define BMI270_REG_INT_LATCH            (0x55)      /*!< Interrupt latch modes.                             */
+#define BMI270_REG_INT1_MAP_FEAT        (0x56)      /*!< Interrupt/feature mapping on INT1.                 */
+#define BMI270_REG_INT2_MAP_FEAT        (0x57)      /*!< Interrupt/feature mapping on INT2.                 */
+#define BMI270_REG_INT_MAP_DATA         (0x58)      /*!< Data interrupt mapping for both INT pins.          */
+#define BMI270_REG_INIT_CTRL            (0x59)      /*!< Start initialization.                              */
+#define BMI270_REG_INIT_ADDR_0          (0x5b)      /*!< Base address of the initialization data.           */
+#define BMI270_REG_INIT_ADDR_1          (0x5c)      /*!< Base address of the initialization data.           */
+#define BMI270_REG_INIT_DATA            (0x5e)      /*!< Initialization register.                           */
+#define BMI270_REG_INTERNAL_ERROR       (0x5f)      /*!< Internal error flags.                              */
+#define BMI270_REG_AUX_IF_TRIM          (0x68)      /*!< Auxiliary interface trim register (NVM backend).   */
+#define BMI270_REG_GYR_CRT_CONF         (0x69)      /*!< Component retrimming for gyroscope.                */
+#define BMI270_REG_NVM_CONF             (0x6a)      /*!< NVM configuration.                                 */
+#define BMI270_REG_IF_CONF              (0x6b)      /*!< Serial interface settings.                         */
+#define BMI270_REG_DRV                  (0x6c)      /*!< Drive strenght control register (NVM backend).     */
+#define BMI270_REG_ACC_SELF_TEST        (0x6d)      /*!< Accelerometer self-test configuration and trigger. */
+#define BMI270_REG_GYR_SELF_TEST_AXES   (0x6e)      /*!< Gyro axes self-test configuration and trigger.     */
+#define BMI270_REG_NV_CONF              (0x70)      /*!< NVM backend configuration bits.                    */
+#define BMI270_REG_OFFSET_0             (0x71)      /*!< Offset compensation for accelerometer X-axis.      */
+#define BMI270_REG_OFFSET_1             (0x72)      /*!< Offset compensation for accelerometer Y-axis.      */
+#define BMI270_REG_OFFSET_2             (0x73)      /*!< Offset compensation for accelerometer Z-axis.      */
+#define BMI270_REG_OFFSET_3             (0x74)      /*!< Offset compensation for gyroscope X-axis.          */
+#define BMI270_REG_OFFSET_4             (0x75)      /*!< Offset compensation for gyroscope Y-axis.          */
+#define BMI270_REG_OFFSET_5             (0x76)      /*!< Offset compensation for gyroscope Z-axis.          */
+#define BMI270_REG_OFFSET_6             (0x77)      /*!< Offset copmensation (MSB gyroscope, enables).      */
+#define BMI270_REG_PWR_CONF             (0x7c)      /*!< Power mode configuration register.                 */
+#define BMI270_REG_PWR_CTRL             (0x7d)      /*!< Power mode control register.                       */
+#define BMI270_REG_CMD                  (0x7e)      /*!< Command register.                                  */
 
 #endif  /* _BMI270_H */
