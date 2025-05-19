@@ -108,4 +108,74 @@
 #define BMI270_REG_PWR_CTRL             (0x7d)      /*!< Power mode control register.                       */
 #define BMI270_REG_CMD                  (0x7e)      /*!< Command register.                                  */
 
+///
+/// \brief The bmi270 accelerometer data.
+///
+typedef struct
+{
+    uint16_t x;                     /*!< The x-axis value. */
+    uint16_t y;                     /*!< The y-axis value. */
+    uint16_t z;                     /*!< The z-axis value. */
+} bmi270_accel_data_t;
+
+///
+/// \brief The bmi270 accelerometer config.
+///
+typedef struct
+{
+    uint8_t filter_perf : 1;        /*!< The x-axis value. */
+    uint8_t bwp         : 3;        /*!< The x-axis value. */
+    uint8_t odr         : 4;        /*!< The x-axis value. */
+} bmi270_accel_conf_t;
+
+///
+/// \brief The bmi270 accelerometer range.
+///
+typedef struct
+{
+    uint8_t reserved : 6;           /*!< Reserved. */
+    uint8_t value    : 2;           /*!< The range value. */
+} bmi270_accel_range_t;
+
+///
+/// \brief The bmi270 accelerometer instance.
+///
+typedef struct
+{
+    bmi270_accel_data_t  data;      /*!< The bmi270 accelerometer data. */
+    bmi270_accel_conf_t  conf;      /*!< The bmi270 accelerometer configuration. */
+    bmi270_accel_range_t range;     /*!< The bmi270 accelerometer range. */
+} bmi270_accel_t;
+
+///
+/// \brief The bmi270 gyroscope instance.
+///
+typedef struct
+{
+    uint16_t x;                     /*!< The x-axis value. */
+    uint16_t y;                     /*!< The y-axis value. */
+    uint16_t z;                     /*!< The z-axis value. */
+} bmi270_gyro_t;
+
+///
+/// \brief The bmi270 temperature sensor instance.
+///
+typedef struct
+{
+    uint16_t value;                 /*!< The temperature value. */
+} bmi270_temp_t;
+
+///
+/// \brief The bmi270 imu instance.
+///
+typedef struct
+{
+    bmi270_accel_t accel;           /*!< The accelerometer instance.        */
+    bmi270_gyro_t  gyro;            /*!< The gyroscope instance.            */
+    bmi270_temp_t  temp;            /*!< The temperature sensor instance.   */
+    uint8_t        is_initialized;  /*!< The is initialized flag.           */
+} bmi270_t;
+
+
+
 #endif  /* _BMI270_H */
