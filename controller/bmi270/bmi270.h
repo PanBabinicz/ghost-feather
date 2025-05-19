@@ -123,9 +123,9 @@ typedef struct
 ///
 typedef struct
 {
-    uint8_t filter_perf : 1;        /*!< The x-axis value. */
-    uint8_t bwp         : 3;        /*!< The x-axis value. */
-    uint8_t odr         : 4;        /*!< The x-axis value. */
+    uint8_t filter_perf : 1;        /*!< The filter performance mode. */
+    uint8_t bwp         : 3;        /*!< The bandwidth. */
+    uint8_t odr         : 4;        /*!< The output data rate. */
 } bmi270_accel_conf_t;
 
 ///
