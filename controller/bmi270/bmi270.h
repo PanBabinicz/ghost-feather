@@ -113,9 +113,9 @@
 ///
 typedef struct
 {
-    uint16_t x;                     /*!< The x-axis value.                          */
-    uint16_t y;                     /*!< The y-axis value.                          */
-    uint16_t z;                     /*!< The z-axis value.                          */
+    uint16_t x;                                     /*!< The x-axis value.                                  */
+    uint16_t y;                                     /*!< The y-axis value.                                  */
+    uint16_t z;                                     /*!< The z-axis value.                                  */
 } bmi270_accel_data_t;
 
 ///
@@ -123,9 +123,9 @@ typedef struct
 ///
 typedef struct
 {
-    uint8_t filter_perf : 1;        /*!< The filter performance mode.               */
-    uint8_t bwp         : 3;        /*!< The bandwidth.                             */
-    uint8_t odr         : 4;        /*!< The output data rate.                      */
+    uint8_t filter_perf : 1;                        /*!< The filter performance mode.                       */
+    uint8_t bwp         : 3;                        /*!< The bandwidth.                                     */
+    uint8_t odr         : 4;                        /*!< The output data rate.                              */
 } bmi270_accel_conf_t;
 
 ///
@@ -133,8 +133,8 @@ typedef struct
 ///
 typedef struct
 {
-    uint8_t reserved    : 6;        /*!< Reserved.                                  */
-    uint8_t acc_range   : 2;        /*!< The accelerometer g-range.                 */
+    uint8_t reserved    : 6;                        /*!< Reserved.                                          */
+    uint8_t acc_range   : 2;                        /*!< The accelerometer g-range.                         */
 } bmi270_accel_range_t;
 
 ///
@@ -142,9 +142,9 @@ typedef struct
 ///
 typedef struct
 {
-    bmi270_accel_data_t  data;      /*!< The bmi270 accelerometer data.             */
-    bmi270_accel_conf_t  conf;      /*!< The bmi270 accelerometer configuration.    */
-    bmi270_accel_range_t range;     /*!< The bmi270 accelerometer range.            */
+    bmi270_accel_data_t  data;                      /*!< The bmi270 accelerometer data.                     */
+    bmi270_accel_conf_t  conf;                      /*!< The bmi270 accelerometer configuration.            */
+    bmi270_accel_range_t range;                     /*!< The bmi270 accelerometer range.                    */
 } bmi270_accel_t;
 
 ///
@@ -152,9 +152,9 @@ typedef struct
 ///
 typedef struct
 {
-    uint16_t x;                     /*!< The x-axis value.                          */
-    uint16_t y;                     /*!< The y-axis value.                          */
-    uint16_t z;                     /*!< The z-axis value.                          */
+    uint16_t x;                                     /*!< The x-axis value.                                  */
+    uint16_t y;                                     /*!< The y-axis value.                                  */
+    uint16_t z;                                     /*!< The z-axis value.                                  */
 } bmi270_gyro_data_t;
 
 ///
@@ -162,10 +162,10 @@ typedef struct
 ///
 typedef struct
 {
-    uint8_t filter_perf : 1;        /*!< The filter performance mode.               */
-    uint8_t noise_perf  : 1;        /*!< The noise performance mode.                */
-    uint8_t bwp         : 2;        /*!< The bandwidth coefficient.                 */
-    uint8_t odr         : 4;        /*!< The output data rate.                      */
+    uint8_t filter_perf : 1;                        /*!< The filter performance mode.                       */
+    uint8_t noise_perf  : 1;                        /*!< The noise performance mode.                        */
+    uint8_t bwp         : 2;                        /*!< The bandwidth coefficient.                         */
+    uint8_t odr         : 4;                        /*!< The output data rate.                              */
 } bmi270_gyro_conf_t;
 
 ///
@@ -173,9 +173,9 @@ typedef struct
 ///
 typedef struct
 {
-    uint8_t reserved    : 4;        /*!< Reserved.                                  */
-    uint8_t ois_range   : 1;        /*!< Pre-filtered FIFO data and OIS data.       */
-    uint8_t gyr_range   : 3;        /*!< Filtered FIFO data and DATA registers.     */
+    uint8_t reserved    : 4;                        /*!< Reserved.                                          */
+    uint8_t ois_range   : 1;                        /*!< Pre-filtered FIFO data and OIS data.               */
+    uint8_t gyr_range   : 3;                        /*!< Filtered FIFO data and DATA registers.             */
 } bmi270_gyro_range_t;
 
 ///
@@ -183,9 +183,9 @@ typedef struct
 ///
 typedef struct
 {
-    bmi270_gyro_data_t  data;       /*!< The bmi270 gyroscope data.                 */
-    bmi270_gyro_conf_t  conf;       /*!< The bmi270 gyroscope configuration.        */
-    bmi270_gyro_range_t range;      /*!< The bmi270 gyroscope range.                */
+    bmi270_gyro_data_t  data;                       /*!< The bmi270 gyroscope data.                         */
+    bmi270_gyro_conf_t  conf;                       /*!< The bmi270 gyroscope configuration.                */
+    bmi270_gyro_range_t range;                      /*!< The bmi270 gyroscope range.                        */
 } bmi270_gyro_t;
 
 ///
@@ -193,7 +193,7 @@ typedef struct
 ///
 typedef struct
 {
-    uint16_t value;                 /*!< The temperature value.                     */
+    uint16_t value;                                 /*!< The temperature value.                             */
 } bmi270_temp_t;
 
 ///
@@ -201,10 +201,10 @@ typedef struct
 ///
 typedef struct
 {
-    bmi270_accel_t accel;           /*!< The accelerometer instance.                */
-    bmi270_gyro_t  gyro;            /*!< The gyroscope instance.                    */
-    bmi270_temp_t  temp;            /*!< The temperature sensor instance.           */
-    uint8_t        is_init;         /*!< The is initialized flag.                   */
+    bmi270_accel_t accel;                           /*!< The accelerometer instance.                        */
+    bmi270_gyro_t  gyro;                            /*!< The gyroscope instance.                            */
+    bmi270_temp_t  temp;                            /*!< The temperature sensor instance.                   */
+    uint8_t        is_init;                         /*!< The is initialized flag.                           */
 } bmi270_t;
 
 #endif  /* _BMI270_H */
