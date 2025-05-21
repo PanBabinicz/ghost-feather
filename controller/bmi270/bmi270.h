@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 ///
-/// \breif BMI270 registers definition.
+/// \breif The bmi270 registers definition.
 ///
 #define BMI270_REG_CHIP_ID              (0x00)      /*!< Chip identification code.                          */
 #define BMI270_REG_ERR_REG              (0x02)      /*!< Reports sensor error condition.                    */
@@ -107,6 +107,26 @@
 #define BMI270_REG_PWR_CONF             (0x7c)      /*!< Power mode configuration register.                 */
 #define BMI270_REG_PWR_CTRL             (0x7d)      /*!< Power mode control register.                       */
 #define BMI270_REG_CMD                  (0x7e)      /*!< Command register.                                  */
+
+///
+/// \brief The bmi270 ACC_CONF register output data rate field in Hz.
+///
+#define BMI270_ACC_ODR_MASK     (0x0f << 0x00)      /*!< The output data rate mask.                         */
+#define BMI270_ACC_ODR_0P78     (0x01 << 0x00)      /*!< The output data rate equal to 25/32 Hz.            */
+#define BMI270_ACC_ODR_1P5      (0x02 << 0x00)      /*!< The output data rate equal to 25/16 Hz.            */
+#define BMI270_ACC_ODR_3P1      (0x03 << 0x00)      /*!< The output data rate equal to 25/8  Hz.            */
+#define BMI270_ACC_ODR_6P25     (0x04 << 0x00)      /*!< The output data rate equal to 25/4  Hz.            */
+#define BMI270_ACC_ODR_12P5     (0x05 << 0x00)      /*!< The output data rate equal to 25/2  Hz.            */
+#define BMI270_ACC_ODR_25       (0x06 << 0x00)      /*!< The output data rate equal to 25    Hz.            */
+#define BMI270_ACC_ODR_50       (0x07 << 0x00)      /*!< The output data rate equal to 50    Hz.            */
+#define BMI270_ACC_ODR_100      (0x08 << 0x00)      /*!< The output data rate equal to 100   Hz.            */
+#define BMI270_ACC_ODR_200      (0x09 << 0x00)      /*!< The output data rate equal to 200   Hz.            */
+#define BMI270_ACC_ODR_400      (0x0a << 0x00)      /*!< The output data rate equal to 400   Hz.            */
+#define BMI270_ACC_ODR_800      (0x0b << 0x00)      /*!< The output data rate equal to 800   Hz.            */
+#define BMI270_ACC_ODR_1k6      (0x0c << 0x00)      /*!< The output data rate equal to 1600  Hz.            */
+#define BMI270_ACC_ODR_3k2      (0x0d << 0x00)      /*!< Reserved.                                          */
+#define BMI270_ACC_ODR_6k4      (0x0e << 0x00)      /*!< Reserved.                                          */
+#define BMI270_ACC_ODR_12k8     (0x0f << 0x00)      /*!< Reserved.                                          */
 
 ///
 /// \brief The bmi270 accelerometer data.
