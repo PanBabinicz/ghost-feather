@@ -111,22 +111,40 @@
 ///
 /// \brief The bmi270 ACC_CONF register output data rate field in Hz.
 ///
-#define BMI270_ACC_ODR_MASK     (0x0f << 0x00)      /*!< The output data rate mask.                         */
-#define BMI270_ACC_ODR_0P78     (0x01 << 0x00)      /*!< The output data rate equal to 25/32 Hz.            */
-#define BMI270_ACC_ODR_1P5      (0x02 << 0x00)      /*!< The output data rate equal to 25/16 Hz.            */
-#define BMI270_ACC_ODR_3P1      (0x03 << 0x00)      /*!< The output data rate equal to 25/8  Hz.            */
-#define BMI270_ACC_ODR_6P25     (0x04 << 0x00)      /*!< The output data rate equal to 25/4  Hz.            */
-#define BMI270_ACC_ODR_12P5     (0x05 << 0x00)      /*!< The output data rate equal to 25/2  Hz.            */
-#define BMI270_ACC_ODR_25       (0x06 << 0x00)      /*!< The output data rate equal to 25    Hz.            */
-#define BMI270_ACC_ODR_50       (0x07 << 0x00)      /*!< The output data rate equal to 50    Hz.            */
-#define BMI270_ACC_ODR_100      (0x08 << 0x00)      /*!< The output data rate equal to 100   Hz.            */
-#define BMI270_ACC_ODR_200      (0x09 << 0x00)      /*!< The output data rate equal to 200   Hz.            */
-#define BMI270_ACC_ODR_400      (0x0a << 0x00)      /*!< The output data rate equal to 400   Hz.            */
-#define BMI270_ACC_ODR_800      (0x0b << 0x00)      /*!< The output data rate equal to 800   Hz.            */
-#define BMI270_ACC_ODR_1k6      (0x0c << 0x00)      /*!< The output data rate equal to 1600  Hz.            */
-#define BMI270_ACC_ODR_3k2      (0x0d << 0x00)      /*!< Reserved.                                          */
-#define BMI270_ACC_ODR_6k4      (0x0e << 0x00)      /*!< Reserved.                                          */
-#define BMI270_ACC_ODR_12k8     (0x0f << 0x00)      /*!< Reserved.                                          */
+#define BMI270_ACC_ODR_MASK         (0x0f << 0x00)  /*!< The output data rate mask.                         */
+#define BMI270_ACC_ODR_0P78         (0x01 << 0x00)  /*!< The output data rate equal to 25/32 Hz.            */
+#define BMI270_ACC_ODR_1P5          (0x02 << 0x00)  /*!< The output data rate equal to 25/16 Hz.            */
+#define BMI270_ACC_ODR_3P1          (0x03 << 0x00)  /*!< The output data rate equal to 25/8  Hz.            */
+#define BMI270_ACC_ODR_6P25         (0x04 << 0x00)  /*!< The output data rate equal to 25/4  Hz.            */
+#define BMI270_ACC_ODR_12P5         (0x05 << 0x00)  /*!< The output data rate equal to 25/2  Hz.            */
+#define BMI270_ACC_ODR_25           (0x06 << 0x00)  /*!< The output data rate equal to 25    Hz.            */
+#define BMI270_ACC_ODR_50           (0x07 << 0x00)  /*!< The output data rate equal to 50    Hz.            */
+#define BMI270_ACC_ODR_100          (0x08 << 0x00)  /*!< The output data rate equal to 100   Hz.            */
+#define BMI270_ACC_ODR_200          (0x09 << 0x00)  /*!< The output data rate equal to 200   Hz.            */
+#define BMI270_ACC_ODR_400          (0x0a << 0x00)  /*!< The output data rate equal to 400   Hz.            */
+#define BMI270_ACC_ODR_800          (0x0b << 0x00)  /*!< The output data rate equal to 800   Hz.            */
+#define BMI270_ACC_ODR_1k6          (0x0c << 0x00)  /*!< The output data rate equal to 1600  Hz.            */
+#define BMI270_ACC_ODR_3k2          (0x0d << 0x00)  /*!< Reserved.                                          */
+#define BMI270_ACC_ODR_6k4          (0x0e << 0x00)  /*!< Reserved.                                          */
+#define BMI270_ACC_ODR_12k8         (0x0f << 0x00)  /*!< Reserved.                                          */
+
+/// \brief The bmi270 ACC_CONF register bandwidth field.
+///
+#define BMI270_ACC_BWP_MASK         (0x07 << 0x04)  /*!< The bandwidth mask.                                */
+#define BMI270_ACC_BWP_OSR4_AVG1    (0x00 << 0x04)  /*!< The OSR4 mode or no averaging.                     */
+#define BMI270_ACC_BWP_OSR2_AVG2    (0x01 << 0x04)  /*!< The OSR2 mode or average 2 samples.                */
+#define BMI270_ACC_BWP_NORM_AVG4    (0x02 << 0x04)  /*!< The normal mode or average 4 samples.              */
+#define BMI270_ACC_BWP_CIC_AVG8     (0x03 << 0x04)  /*!< The CIC mode or average 8 samples.                 */
+#define BMI270_ACC_BWP_RES_AVG16    (0x04 << 0x04)  /*!< Reserved mode or average 16 samples.               */
+#define BMI270_ACC_BWP_RES_AVG32    (0x05 << 0x04)  /*!< Reserved mode or average 32 samples.               */
+#define BMI270_ACC_BWP_RES_AVG64    (0x06 << 0x04)  /*!< Reserved mode or average 64 samples.               */
+#define BMI270_ACC_BWP_RES_AVG128   (0x07 << 0x04)  /*!< Reserved mode or average 128 samples.              */
+
+/// \brief The bmi270 ACC_CONF filter performance field.
+///
+#define BMI270_ACC_FILT_PERF_MASK   (0x01 << 0x07)  /*!< The filter perfromance mask.                       */
+#define BMI270_ACC_FILT_PERF_ULP    (0x00 << 0x07)  /*!< The power optimized mode.                          */
+#define BMI270_ACC_FILT_PERF_HP     (0x01 << 0x07)  /*!< The perfomance optimazed mode.                     */
 
 ///
 /// \brief The bmi270 accelerometer data.
