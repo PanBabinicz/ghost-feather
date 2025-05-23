@@ -111,40 +111,111 @@
 ///
 /// \brief The bmi270 ACC_CONF register output data rate field in Hz.
 ///
-#define BMI270_ACC_ODR_MASK         (0x0f << 0x00)  /*!< The output data rate mask.                         */
-#define BMI270_ACC_ODR_0P78         (0x01 << 0x00)  /*!< The output data rate equal to 25/32 Hz.            */
-#define BMI270_ACC_ODR_1P5          (0x02 << 0x00)  /*!< The output data rate equal to 25/16 Hz.            */
-#define BMI270_ACC_ODR_3P1          (0x03 << 0x00)  /*!< The output data rate equal to 25/8  Hz.            */
-#define BMI270_ACC_ODR_6P25         (0x04 << 0x00)  /*!< The output data rate equal to 25/4  Hz.            */
-#define BMI270_ACC_ODR_12P5         (0x05 << 0x00)  /*!< The output data rate equal to 25/2  Hz.            */
-#define BMI270_ACC_ODR_25           (0x06 << 0x00)  /*!< The output data rate equal to 25    Hz.            */
-#define BMI270_ACC_ODR_50           (0x07 << 0x00)  /*!< The output data rate equal to 50    Hz.            */
-#define BMI270_ACC_ODR_100          (0x08 << 0x00)  /*!< The output data rate equal to 100   Hz.            */
-#define BMI270_ACC_ODR_200          (0x09 << 0x00)  /*!< The output data rate equal to 200   Hz.            */
-#define BMI270_ACC_ODR_400          (0x0a << 0x00)  /*!< The output data rate equal to 400   Hz.            */
-#define BMI270_ACC_ODR_800          (0x0b << 0x00)  /*!< The output data rate equal to 800   Hz.            */
-#define BMI270_ACC_ODR_1k6          (0x0c << 0x00)  /*!< The output data rate equal to 1600  Hz.            */
+#define BMI270_ACC_ODR_MASK         (0x0f << 0x00)  /*!< The accelerometer ODR mask.                        */
+#define BMI270_ACC_ODR_0P78         (0x01 << 0x00)  /*!< The accelerometer ODR equal to 25/32 Hz.           */
+#define BMI270_ACC_ODR_1P5          (0x02 << 0x00)  /*!< The accelerometer ODR equal to 25/16 Hz.           */
+#define BMI270_ACC_ODR_3P1          (0x03 << 0x00)  /*!< The accelerometer ODR equal to 25/8  Hz.           */
+#define BMI270_ACC_ODR_6P25         (0x04 << 0x00)  /*!< The accelerometer ODR equal to 25/4  Hz.           */
+#define BMI270_ACC_ODR_12P5         (0x05 << 0x00)  /*!< The accelerometer ODR equal to 25/2  Hz.           */
+#define BMI270_ACC_ODR_25           (0x06 << 0x00)  /*!< The accelerometer ODR equal to 25    Hz.           */
+#define BMI270_ACC_ODR_50           (0x07 << 0x00)  /*!< The accelerometer ODR equal to 50    Hz.           */
+#define BMI270_ACC_ODR_100          (0x08 << 0x00)  /*!< The accelerometer ODR equal to 100   Hz.           */
+#define BMI270_ACC_ODR_200          (0x09 << 0x00)  /*!< The accelerometer ODR equal to 200   Hz.           */
+#define BMI270_ACC_ODR_400          (0x0a << 0x00)  /*!< The accelerometer ODR equal to 400   Hz.           */
+#define BMI270_ACC_ODR_800          (0x0b << 0x00)  /*!< The accelerometer ODR equal to 800   Hz.           */
+#define BMI270_ACC_ODR_1k6          (0x0c << 0x00)  /*!< The accelerometer ODR equal to 1600  Hz.           */
 #define BMI270_ACC_ODR_3k2          (0x0d << 0x00)  /*!< Reserved.                                          */
 #define BMI270_ACC_ODR_6k4          (0x0e << 0x00)  /*!< Reserved.                                          */
 #define BMI270_ACC_ODR_12k8         (0x0f << 0x00)  /*!< Reserved.                                          */
 
+///
 /// \brief The bmi270 ACC_CONF register bandwidth field.
 ///
-#define BMI270_ACC_BWP_MASK         (0x07 << 0x04)  /*!< The bandwidth mask.                                */
-#define BMI270_ACC_BWP_OSR4_AVG1    (0x00 << 0x04)  /*!< The OSR4 mode or no averaging.                     */
-#define BMI270_ACC_BWP_OSR2_AVG2    (0x01 << 0x04)  /*!< The OSR2 mode or average 2 samples.                */
-#define BMI270_ACC_BWP_NORM_AVG4    (0x02 << 0x04)  /*!< The normal mode or average 4 samples.              */
-#define BMI270_ACC_BWP_CIC_AVG8     (0x03 << 0x04)  /*!< The CIC mode or average 8 samples.                 */
-#define BMI270_ACC_BWP_RES_AVG16    (0x04 << 0x04)  /*!< Reserved mode or average 16 samples.               */
-#define BMI270_ACC_BWP_RES_AVG32    (0x05 << 0x04)  /*!< Reserved mode or average 32 samples.               */
-#define BMI270_ACC_BWP_RES_AVG64    (0x06 << 0x04)  /*!< Reserved mode or average 64 samples.               */
-#define BMI270_ACC_BWP_RES_AVG128   (0x07 << 0x04)  /*!< Reserved mode or average 128 samples.              */
+#define BMI270_ACC_BWP_MASK         (0x07 << 0x04)  /*!< The accelerometer bandwidth mask.                  */
+#define BMI270_ACC_BWP_OSR4_AVG1    (0x00 << 0x04)  /*!< The accelerometer OSR4 mode / no averaging.        */
+#define BMI270_ACC_BWP_OSR2_AVG2    (0x01 << 0x04)  /*!< The accelerometer OSR2 mode / average 2 samples.   */
+#define BMI270_ACC_BWP_NORM_AVG4    (0x02 << 0x04)  /*!< The accelerometer normal mode / average 4 samples. */
+#define BMI270_ACC_BWP_CIC_AVG8     (0x03 << 0x04)  /*!< The accelerometer CIC mode / average 8 samples.    */
+#define BMI270_ACC_BWP_RES_AVG16    (0x04 << 0x04)  /*!< Reserved mode / average 16 samples.                */
+#define BMI270_ACC_BWP_RES_AVG32    (0x05 << 0x04)  /*!< Reserved mode / average 32 samples.                */
+#define BMI270_ACC_BWP_RES_AVG64    (0x06 << 0x04)  /*!< Reserved mode / average 64 samples.                */
+#define BMI270_ACC_BWP_RES_AVG128   (0x07 << 0x04)  /*!< Reserved mode / average 128 samples.               */
 
-/// \brief The bmi270 ACC_CONF filter performance field.
 ///
-#define BMI270_ACC_FILT_PERF_MASK   (0x01 << 0x07)  /*!< The filter perfromance mask.                       */
-#define BMI270_ACC_FILT_PERF_ULP    (0x00 << 0x07)  /*!< The power optimized mode.                          */
-#define BMI270_ACC_FILT_PERF_HP     (0x01 << 0x07)  /*!< The perfomance optimazed mode.                     */
+/// \brief The bmi270 ACC_CONF register filter performance field.
+///
+#define BMI270_ACC_FILT_PERF_MASK   (0x01 << 0x07)  /*!< The accelerometer filter perfromance mask.         */
+#define BMI270_ACC_FILT_PERF_ULP    (0x00 << 0x07)  /*!< The accelerometer filter power optimized mode.     */
+#define BMI270_ACC_FILT_PERF_HP     (0x01 << 0x07)  /*!< The accelerometer filter perf optimized mode.      */
+
+///
+/// \brief The bmi270 ACC_RANGE register g-range field.
+///
+#define BMI270_ACC_RANGE_MASK       (0x03 << 0x00)  /*!< The accelerometer g-range mask.                    */
+#define BMI270_ACC_RANGE_2G         (0x00 << 0x00)  /*!< The accelerometer g-range +/-2g.                   */
+#define BMI270_ACC_RANGE_4G         (0x01 << 0x00)  /*!< The accelerometer g-range +/-4g.                   */
+#define BMI270_ACC_RANGE_8G         (0x02 << 0x00)  /*!< The accelerometer g-range +/-8g.                   */
+#define BMI270_ACC_RANGE_16G        (0x03 << 0x00)  /*!< The accelerometer g-range +/-16g.                  */
+
+///
+/// \brief The bmi270 GYR_CONF register output data rate field in Hz.
+///
+#define BMI270_GYR_ODR_MASK         (0x0f << 0x00)  /*!< The gyroscope ODR mask.                            */
+#define BMI270_GYR_ODR_0P78         (0x01 << 0x00)  /*!< Reserved.                                          */
+#define BMI270_GYR_ODR_1P5          (0x02 << 0x00)  /*!< Reserved.                                          */
+#define BMI270_GYR_ODR_3P1          (0x03 << 0x00)  /*!< Reserved.                                          */
+#define BMI270_GYR_ODR_6P25         (0x04 << 0x00)  /*!< Reserved.                                          */
+#define BMI270_GYR_ODR_12P5         (0x05 << 0x00)  /*!< Reserved.                                          */
+#define BMI270_GYR_ODR_25           (0x06 << 0x00)  /*!< The gyroscope ODR equal to 25    Hz.               */
+#define BMI270_GYR_ODR_50           (0x07 << 0x00)  /*!< The gyroscope ODR equal to 50    Hz.               */
+#define BMI270_GYR_ODR_100          (0x08 << 0x00)  /*!< The gyroscope ODR equal to 100   Hz.               */
+#define BMI270_GYR_ODR_200          (0x09 << 0x00)  /*!< The gyroscope ODR equal to 200   Hz.               */
+#define BMI270_GYR_ODR_400          (0x0a << 0x00)  /*!< The gyroscope ODR equal to 400   Hz.               */
+#define BMI270_GYR_ODR_800          (0x0b << 0x00)  /*!< The gyroscope ODR equal to 800   Hz.               */
+#define BMI270_GYR_ODR_1k6          (0x0c << 0x00)  /*!< The gyroscope ODR equal to 1600  Hz.               */
+#define BMI270_GYR_ODR_3k2          (0x0d << 0x00)  /*!< The gyroscope ODR equal to 3200  HZ.               */
+#define BMI270_GYR_ODR_6k4          (0x0e << 0x00)  /*!< Reserved.                                          */
+#define BMI270_GYR_ODR_12k8         (0x0f << 0x00)  /*!< Reserved.                                          */
+
+///
+/// \brief The bmi270 GYR_CONF register bandwidth field.
+///
+#define BMI270_GYR_BWP_MASK         (0x03 << 0x04)  /*!< The gyroscope bandwidth mask.                      */
+#define BMI270_GYR_BWP_OSR4         (0x00 << 0x04)  /*!< The gyroscope OSR4 mode.                           */
+#define BMI270_GYR_BWP_OSR2         (0x01 << 0x04)  /*!< The gyroscope OSR2 mode.                           */
+#define BMI270_GYR_BWP_NORM         (0x02 << 0x04)  /*!< The gyroscope normal mode.                         */
+#define BMI270_GYR_BWP_RES          (0x03 << 0x04)  /*!< Reserved.                                          */
+
+///
+/// \brief The bmi270 GYR_CONF register noise perfomance field.
+///
+#define BMI270_GYR_NOISE_PERF_MASK  (0x01 << 0x06)  /*!< The gyroscope noise performance mask.              */
+#define BMI270_GYR_NOISE_PERF_ULP   (0x00 << 0x06)  /*!< The gyroscope noise power optimized mode.          */
+#define BMI270_GYR_NOISE_PERF_HP    (0x01 << 0x06)  /*!< The gyroscope noise perf optimized mode.           */
+
+///
+/// \brief The bmi270 GYR_CONF register filter perfomance field.
+///
+#define BMI270_GYR_NOISE_PERF_MASK  (0x01 << 0x07)  /*!< The gyroscope filter performance mask.             */
+#define BMI270_GYR_NOISE_PERF_ULP   (0x00 << 0x07)  /*!< The gyroscope filter power optimized mode.         */
+#define BMI270_GYR_NOISE_PERF_HP    (0x01 << 0x07)  /*!< The gyroscope filter perf optimized mode.          */
+
+///
+/// \brief The bmi270 GYR_RANGE register range field.
+///
+#define BMI270_GYR_RANGE_MASK       (0x07 << 0x00)  /*!< The gyroscope range mask.                          */
+#define BMI270_GYR_RANGE_2000       (0x00 << 0x00)  /*!< The gyroscope range +/-2000dps, 16.4  LSB/dps.     */
+#define BMI270_GYR_RANGE_1000       (0x01 << 0x00)  /*!< The gyroscope range +/-1000dps, 32.8  LSB/dps.     */
+#define BMI270_GYR_RANGE_500        (0x02 << 0x00)  /*!< The gyroscope range +/-500 dps, 65.6  LSB/dps.     */
+#define BMI270_GYR_RANGE_250        (0x03 << 0x00)  /*!< The gyroscope range +/-250 dps, 131.2 LSB/dps.     */
+#define BMI270_GYR_RANGE_125        (0x04 << 0x00)  /*!< The gyroscope range +/-125 dps, 262.4 LSB/dps.     */
+
+///
+/// \brief The bmi270 GYR_RANGE register ois field.
+///
+#define BMI270_GYR_OIS_MASK         (0x01 << 0x03)  /*!< The gyroscope ois range mask.                      */
+#define BMI270_GYR_OIS_250          (0x00 << 0x03)  /*!< The gyroscope ois +/-250dps,  131.2 LSB/dps.       */
+#define BMI270_GYR_OIS_2000         (0x01 << 0x03)  /*!< The gyroscope ois +/-2000dps, 16.4  LSB/dps.       */
 
 ///
 /// \brief The bmi270 accelerometer data.
