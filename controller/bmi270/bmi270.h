@@ -218,6 +218,13 @@
 #define BMI270_GYR_OIS_2000         (0x01 << 0x03)  /*!< The gyroscope ois +/-2000dps, 16.4  LSB/dps.       */
 
 ///
+/// \brief The bmi270 PWR_CTRL register auxiliary sensor field.
+///
+#define BMI270_PWR_CTRL_AUX_MASK    (0x01 << 0x00)  /*!< The bmi270 power control auxiliary sensor mask.    */
+#define BMI270_PWR_CTRL_AUX_OFF     (0x00 << 0x00)  /*!< The auxiliary sensor off.                          */
+#define BMI270_PWR_CTRL_AUX_ON      (0x01 << 0x00)  /*!< The auxiliary sensor on.                           */
+
+///
 /// \brief The bmi270 accelerometer data.
 ///
 typedef struct
