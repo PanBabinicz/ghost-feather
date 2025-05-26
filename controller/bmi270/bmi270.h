@@ -2,6 +2,7 @@
 #define _BMI270_H
 
 #include <stdint.h>
+#include <string.h>
 
 ///
 /// \breif The bmi270 registers definition.
@@ -307,7 +308,7 @@ typedef struct
 ///
 typedef struct
 {
-    uint16_t value;                                 /*!< The temperature value.                             */
+    uint16_t data;                                  /*!< The temperature data.                              */
 } bmi270_temp_t;
 
 ///
@@ -320,5 +321,25 @@ typedef struct
     bmi270_temp_t  temp;                            /*!< The temperature sensor instance.                   */
     uint8_t        is_init;                         /*!< The is initialized flag.                           */
 } bmi270_t;
+
+///
+/// \breif The bmi270 result type.
+///
+typedef enum
+{
+    BMI270_RESULT_SUCCESS = 0,
+    BMI270_RESULT_ERROR,
+} bmi270_result_t;
+
+///
+/// \breif Initializes the bmi270.
+///
+/// \param[in] bmi270             The bmi270 instance.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_init(bmi270_t *const bmi270);
 
 #endif  /* _BMI270_H */
