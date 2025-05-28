@@ -231,11 +231,20 @@ typedef struct bmi270 bmi270_t;
 ///
 /// \breif The bmi270 result type.
 ///
-typedef enum
+typedef enum bmi270_result
 {
     BMI270_RESULT_SUCCESS = 0,
     BMI270_RESULT_ERROR,
 } bmi270_result_t;
+
+///
+/// \breif The bmi270 status type.
+///
+typedef enum bmi270_status
+{
+    BMI270_STATUS_DEINIT = 0,
+    BMI270_STATUS_INIT,
+} bmi270_status_t;
 
 ///
 /// \breif Gets the bmi270 instance.
@@ -254,5 +263,16 @@ bmi270_t* bmi270_get_instance(void);
 /// \retval BMI270_RESULT_ERROR   Otherwise.
 ///
 bmi270_result_t bmi270_init(bmi270_t *const bmi270);
+
+///
+/// \breif Deinitializes the bmi270.
+///
+/// \param[in] bmi270             The bmi270 instance.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_deinit(bmi270_t *const bmi270);
 
 #endif  /* _BMI270_H */

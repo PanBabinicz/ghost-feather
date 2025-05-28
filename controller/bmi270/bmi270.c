@@ -135,5 +135,21 @@ bmi270_result_t bmi270_init(bmi270_t *const bmi270)
 
     memset(bmi270, 0, sizeof(bmi270));
 
+    /* TODO: The device initialization, needs spi. */
+
+    bmi270->is_init = BMI270_STATUS_INIT;
+
+    return BMI270_RESULT_SUCCESS;
+}
+
+bmi270_result_t bmi270_deinit(bmi270_t *const bmi270)
+{
+    if (bmi270 == NULL)
+    {
+        return BMI270_RESULT_ERROR;
+    }
+
+    bmi270->is_init = BMI270_STATUS_DEINIT;
+
     return BMI270_RESULT_SUCCESS;
 }
