@@ -275,4 +275,22 @@ bmi270_result_t bmi270_init(bmi270_t *const bmi270);
 ///
 bmi270_result_t bmi270_deinit(bmi270_t *const bmi270);
 
+///
+/// \brief Self-tests accelerometer.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_accel_self_test(void);
+
+///
+/// \brief Self-tests gyroscope.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_gyro_self_test(void);
+
 #endif  /* _BMI270_H */

@@ -153,3 +153,11 @@ bmi270_result_t bmi270_deinit(bmi270_t *const bmi270)
 
     return BMI270_RESULT_SUCCESS;
 }
+
+bmi270_result_t bmi270_accel_self_test(void)
+{
+}
+
+bmi270_result_t bmi270_gyro_self_test(void)
+{
+}
