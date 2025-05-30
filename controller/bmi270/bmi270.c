@@ -156,8 +156,10 @@ bmi270_result_t bmi270_deinit(bmi270_t *const bmi270)
 
 bmi270_result_t bmi270_accel_self_test(void)
 {
+    /* TODO: The accelerometer initialization, needs spi. */
 }
 
 bmi270_result_t bmi270_gyro_self_test(void)
 {
+    /* TODO: The gyroscope self-test, needs spi. */
 }
