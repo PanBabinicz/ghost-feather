@@ -229,6 +229,11 @@
 typedef struct bmi270 bmi270_t;
 
 ///
+/// \breif The bmi270 power mode configuration type.
+///
+typedef struct bmi270_power_mode_config bmi270_power_mode_config_t;
+
+///
 /// \breif The bmi270 result type.
 ///
 typedef enum bmi270_result
@@ -247,11 +252,39 @@ typedef enum bmi270_status
 } bmi270_status_t;
 
 ///
+/// \breif The bmi270 power mode type.
+///
+typedef enum bmi270_power_mode
+{
+    BMI270_POWER_MODE_SUSPEND = 0,
+    BMI270_POWER_MODE_CONFIGURATION,
+    BMI270_POWER_MODE_LOW_ACCEL_ONLY,
+    BMI270_POWER_MODE_LOW_GYRO_ONLY,
+    BMI270_POWER_MODE_LOW_IMU,
+    BMI270_POWER_MODE_NORMAL_ACCEL_ONLY,
+    BMI270_POWER_MODE_NORMAL_GYRO_ONLY,
+    BMI270_POWER_MODE_NORMAL_IMU,
+    BMI270_POWER_MODE_PERF_ACCEL_ONLY,
+    BMI270_POWER_MODE_PERF_GYRO_ONLY,
+    BMI270_POWER_MODE_PERF_IMU,
+    BMI270_POWER_MODE_TOTAL,
+} bmi270_power_mode_t;
+
+///
 /// \breif Gets the bmi270 instance.
 ///
 /// \return bmi270_t The bmi270 instance address.
 ///
 bmi270_t* bmi270_get_instance(void);
+
+///
+/// \breif Gets the bmi270 power mode config.
+///
+/// \param[in] power_mode              The selected power mode.
+///
+/// \return bmi270_power_mode_config_t The power mode config.
+///
+const bmi270_power_mode_config_t* bmi270_get_power_mode_config(const bmi270_power_mode_t power_mode);
 
 ///
 /// \breif Initializes the bmi270.
@@ -274,6 +307,15 @@ bmi270_result_t bmi270_init(bmi270_t *const bmi270);
 /// \retval BMI270_RESULT_ERROR   Otherwise.
 ///
 bmi270_result_t bmi270_deinit(bmi270_t *const bmi270);
+
+///
+/// \brief Sets the power mode.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_gyro_self_test();
 
 ///
 /// \brief Self-tests accelerometer.

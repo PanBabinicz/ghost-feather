@@ -102,6 +102,19 @@ typedef struct bmi270
     uint8_t        is_init;                         /*!< The is initialized flag.                           */
 } bmi270_t;
 
+///
+/// \breif The bmi270 power mode config type.
+///
+typedef sturct bmi270_power_mode_config
+{
+    uint8_t acc_en;
+    uint8_t gyr_en;
+    uint8_t acc_filter_perf;
+    uint8_t gyr_filter_perf;
+    uint8_t gyr_noise_perf;
+    uint8_t adv_power_save;
+} bmi270_power_mode_config_t;
+
 ///***********************************************************************************************************
 /// Private objects - definition.
 ///***********************************************************************************************************
@@ -109,6 +122,21 @@ typedef struct bmi270
 /// \breif The bmi270 instance.
 ///
 static bmi270_t bmi270 = { 0 };
+
+///
+/// \breif The bmi270 power mode configuration look-up table.
+///
+static const bmi270_power_mode_config_t bmi270_power_mode_configs[BMI270_POWER_MODE_TOTAL] =
+{
+    {
+        .acc_en          = 0,
+        .gyr_en          = 0,
+        .acc_filter_perf = 0,
+        .gyr_filter_perf = 0,
+        .gyr_noise_perf  = 0,
+        .adv_power_save  = 1,
+    },
+};
 
 ///***********************************************************************************************************
 /// Private functions - declaration.
@@ -124,6 +152,10 @@ static bmi270_t bmi270 = { 0 };
 bmi270_t* bmi270_get_instance(void)
 {
     return &bmi270;
+}
+
+const bmi270_power_mode_config_t* bmi270_get_power_mode_config(const bmi270_power_mode_t power_mode)
+{
 }
 
 bmi270_result_t bmi270_init(bmi270_t *const bmi270)
