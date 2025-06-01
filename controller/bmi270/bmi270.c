@@ -107,12 +107,14 @@ typedef struct bmi270
 ///
 typedef sturct bmi270_power_mode_config
 {
-    uint8_t acc_en;
-    uint8_t gyr_en;
-    uint8_t acc_filter_perf;
-    uint8_t gyr_filter_perf;
-    uint8_t gyr_noise_perf;
-    uint8_t adv_power_save;
+    uint8_t pwr_ctrl_mask;
+    uint8_t pwr_ctrl_value;
+    uint8_t acc_conf_mask;
+    uint8_t acc_conf_value;
+    uint8_t gyr_conf_mask;
+    uint8_t gyr_conf_value;
+    uint8_t pwr_conf_mask;
+    uint8_t pwr_conf_value;
 } bmi270_power_mode_config_t;
 
 ///***********************************************************************************************************
@@ -129,12 +131,14 @@ static bmi270_t bmi270 = { 0 };
 static const bmi270_power_mode_config_t bmi270_power_mode_configs[BMI270_POWER_MODE_TOTAL] =
 {
     {
-        .acc_en          = 0,
-        .gyr_en          = 0,
-        .acc_filter_perf = 0,
-        .gyr_filter_perf = 0,
-        .gyr_noise_perf  = 0,
-        .adv_power_save  = 1,
+        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_GYR_MASK | BMI270_PWR_CTRL_ACC_MASK),
+        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_OFF),
+        .acc_conf_mask  = (0x00),
+        .acc_conf_value = (0x00),
+        .gyr_conf_mask  = (0x00),
+        .gyr_conf_value = (0x00),
+        .pwr_conf_mask  = (BMI270_PWR_CONF_APS_MASK),
+        .pwr_conf_value = (BMI270_PWR_CONF_APS_ON),
     },
 };
 

@@ -112,6 +112,7 @@
 ///
 /// \brief The bmi270 ACC_CONF register fields.
 ///
+#define BMI270_ACC_MASK             (0xff << 0x00)  /*!< The accelerometer mask.                            */
 #define BMI270_ACC_ODR_MASK         (0x0f << 0x00)  /*!< The accelerometer ODR mask.                        */
 #define BMI270_ACC_ODR_0P78         (0x01 << 0x00)  /*!< The accelerometer ODR equal to 25/32 Hz.           */
 #define BMI270_ACC_ODR_1P5          (0x02 << 0x00)  /*!< The accelerometer ODR equal to 25/16 Hz.           */
@@ -153,6 +154,7 @@
 ///
 /// \brief The bmi270 GYR_CONF register fields.
 ///
+#define BMI270_GYR_MASK             (0xff << 0x00)  /*!< The gyroscope mask.                                */
 #define BMI270_GYR_ODR_MASK         (0x0f << 0x00)  /*!< The gyroscope ODR mask.                            */
 #define BMI270_GYR_ODR_0P78         (0x01 << 0x00)  /*!< Reserved.                                          */
 #define BMI270_GYR_ODR_1P5          (0x02 << 0x00)  /*!< Reserved.                                          */
@@ -197,6 +199,7 @@
 ///
 /// \brief The bmi270 PWR_CONF register fields.
 ///
+#define BMI270_PWR_CONF_MASK        (0x07 << 0x00)  /*!< The power conf mask.                               */
 #define BMI270_PWR_CONF_APS_MASK    (0x01 << 0x00)  /*!< The power conf advanced power save mask.           */
 #define BMI270_PWR_CONF_APS_OFF     (0x00 << 0x00)  /*!< The advanced power save off.                       */
 #define BMI270_PWR_CONF_APS_ON      (0x01 << 0x00)  /*!< The advanced power save on.                        */
@@ -210,6 +213,7 @@
 ///
 /// \brief The bmi270 PWR_CTRL register fields.
 ///
+#define BMI270_PWR_CTRL_MASK        (0x0f << 0x00)  /*!< The bmi270 power control mask.                     */
 #define BMI270_PWR_CTRL_AUX_MASK    (0x01 << 0x00)  /*!< The bmi270 power control auxiliary sensor mask.    */
 #define BMI270_PWR_CTRL_AUX_OFF     (0x00 << 0x00)  /*!< The auxiliary sensor off.                          */
 #define BMI270_PWR_CTRL_AUX_ON      (0x01 << 0x00)  /*!< The auxiliary sensor on.                           */
