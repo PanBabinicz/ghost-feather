@@ -179,9 +179,9 @@
 #define BMI270_GYR_NOISE_PERF_MASK  (0x01 << 0x06)  /*!< The gyroscope noise performance mask.              */
 #define BMI270_GYR_NOISE_PERF_ULP   (0x00 << 0x06)  /*!< The gyroscope noise power optimized mode.          */
 #define BMI270_GYR_NOISE_PERF_HP    (0x01 << 0x06)  /*!< The gyroscope noise perf optimized mode.           */
-#define BMI270_GYR_NOISE_PERF_MASK  (0x01 << 0x07)  /*!< The gyroscope filter performance mask.             */
-#define BMI270_GYR_NOISE_PERF_ULP   (0x00 << 0x07)  /*!< The gyroscope filter power optimized mode.         */
-#define BMI270_GYR_NOISE_PERF_HP    (0x01 << 0x07)  /*!< The gyroscope filter perf optimized mode.          */
+#define BMI270_GYR_FILTER_PERF_MASK (0x01 << 0x07)  /*!< The gyroscope filter performance mask.             */
+#define BMI270_GYR_FILTER_PERF_ULP  (0x00 << 0x07)  /*!< The gyroscope filter power optimized mode.         */
+#define BMI270_GYR_FILTER_PERF_HP   (0x01 << 0x07)  /*!< The gyroscope filter perf optimized mode.          */
 
 ///
 /// \brief The bmi270 GYR_RANGE register fields.
