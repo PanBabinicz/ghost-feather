@@ -190,7 +190,7 @@ static const bmi270_power_mode_config_t bmi270_power_mode_configs[BMI270_POWER_M
         .pwr_conf_value = (BMI270_PWR_CONF_APS_ON),
     },
 
-    /* Normal power mode. Accelerometer only. */
+    /* Normal mode. Accelerometer only. */
     {
         .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
         .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_OFF),
@@ -202,7 +202,7 @@ static const bmi270_power_mode_config_t bmi270_power_mode_configs[BMI270_POWER_M
         .pwr_conf_value = (0x00),
     },
 
-    /* Normal power mode. Gyroscope only. */
+    /* Normal mode. Gyroscope only. */
     {
         .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
         .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_ON),
@@ -214,14 +214,50 @@ static const bmi270_power_mode_config_t bmi270_power_mode_configs[BMI270_POWER_M
         .pwr_conf_value = (0x00),
     },
 
-    /* Normal power mode. IMU. */
+    /* Normal mode. IMU. */
     {
         .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
-        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_ON),
+        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_ON),
         .acc_conf_mask  = (BMI270_ACC_FILT_PERF_MASK),
         .acc_conf_value = (BMI270_ACC_FILT_PERF_HP),
         .gyr_conf_mask  = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILTER_PERF_MASK),
         .gyr_conf_value = (BMI270_GYR_NOISE_PERF_ULP | BMI270_GYR_FILTER_PERF_HP),
+        .pwr_conf_mask  = (0x00),
+        .pwr_conf_value = (0x00),
+    },
+
+    /* Performance mode. Accelerometer only. */
+    {
+        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_OFF),
+        .acc_conf_mask  = (BMI270_ACC_FILT_PERF_MASK),
+        .acc_conf_value = (BMI270_ACC_FILT_PERF_HP),
+        .gyr_conf_mask  = (0x00),
+        .gyr_conf_value = (0x00),
+        .pwr_conf_mask  = (0x00),
+        .pwr_conf_value = (0x00),
+    },
+
+    /* Performance mode. Gyroscope only. */
+    {
+        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_ON),
+        .acc_conf_mask  = (0x00),
+        .acc_conf_value = (0x00),
+        .gyr_conf_mask  = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILTER_PERF_MASK),
+        .gyr_conf_value = (BMI270_GYR_NOISE_PERF_HP | BMI270_GYR_FILTER_PERF_HP),
+        .pwr_conf_mask  = (0x00),
+        .pwr_conf_value = (0x00),
+    },
+
+    /* Performance mode. IMU. */
+    {
+        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_ON),
+        .acc_conf_mask  = (BMI270_ACC_FILT_PERF_MASK),
+        .acc_conf_value = (BMI270_ACC_FILT_PERF_HP),
+        .gyr_conf_mask  = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILTER_PERF_MASK),
+        .gyr_conf_value = (BMI270_GYR_NOISE_PERF_HP | BMI270_GYR_FILTER_PERF_HP),
         .pwr_conf_mask  = (0x00),
         .pwr_conf_value = (0x00),
     },
