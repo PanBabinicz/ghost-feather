@@ -281,6 +281,12 @@ bmi270_t* bmi270_get_instance(void)
 
 const bmi270_power_mode_config_t* bmi270_get_power_mode_config(const bmi270_power_mode_t power_mode)
 {
+    if ((power_mode >= BMI270_POWER_MODE_BEGIN) && (power_mode < BMI270_POWER_MODE_TOTAL))
+    {
+        return &bmi270_power_mode_configs[power_mode];
+    }
+
+    return NULL;
 }
 
 bmi270_result_t bmi270_init(bmi270_t *const bmi270)
@@ -307,6 +313,36 @@ bmi270_result_t bmi270_deinit(bmi270_t *const bmi270)
     }
 
     bmi270->is_init = BMI270_STATUS_DEINIT;
+
+    return BMI270_RESULT_SUCCESS;
+}
+
+bmi270_result_t bmi270_set_power_mode(const bmi270_power_mode_config_t *const power_mode_config)
+{
+    if (power_mode_config == NULL)
+    {
+        return BMI270_RESULT_ERROR;
+    }
+
+    /* TODO: Get registers value via spi. */
+    uint8_t pwr_ctrl_reg;
+    uint8_t acc_conf_reg;
+    uint8_t gyr_conf_reg;
+    uint8_t pwr_conf_reg;
+
+    pwr_ctrl_reg &= ~(power_mode_config->pwr_ctrl_mask);
+    pwr_ctrl_reg |=  (power_mode_config->pwr_ctrl_value);
+
+    acc_conf_reg &= ~(power_mode_config->acc_conf_mask);
+    acc_conf_reg |=  (power_mode_config->acc_conf_value);
+
+    gyr_conf_reg &= ~(power_mode_config->gyr_conf_mask);
+    gyr_conf_reg |=  (power_mode_config->gyr_conf_value);
+
+    pwr_conf_reg &= ~(power_mode_config->pwr_conf_mask);
+    pwr_conf_reg |=  (power_mode_config->pwr_conf_value);
+
+    /* TODO: Set the registers via spi. */
 
     return BMI270_RESULT_SUCCESS;
 }

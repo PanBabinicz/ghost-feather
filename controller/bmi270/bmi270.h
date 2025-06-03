@@ -260,6 +260,7 @@ typedef enum bmi270_status
 ///
 typedef enum bmi270_power_mode
 {
+    BMI270_POWER_MODE_BEGIN = 0,
     BMI270_POWER_MODE_SUSPEND = 0,
     BMI270_POWER_MODE_CONFIGURATION,
     BMI270_POWER_MODE_LOW_ACCEL_ONLY,
@@ -315,11 +316,13 @@ bmi270_result_t bmi270_deinit(bmi270_t *const bmi270);
 ///
 /// \brief Sets the power mode.
 ///
+/// \param[in] power_mode_config  The pointer to power mode config.
+///
 /// \return bmi270_result_t       The bmi270 result.
 /// \retval BMI270_RESULT_SUCCESS On success.
 /// \retval BMI270_RESULT_ERROR   Otherwise.
 ///
-bmi270_result_t bmi270_gyro_self_test();
+bmi270_result_t bmi270_set_power_mode(const bmi270_power_mode_config_t *const power_mode_config);
 
 ///
 /// \brief Self-tests accelerometer.
