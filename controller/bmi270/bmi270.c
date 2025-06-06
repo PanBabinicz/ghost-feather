@@ -356,3 +356,54 @@ bmi270_result_t bmi270_gyro_self_test(void)
 {
     /* TODO: The gyroscope self-test, needs spi. */
 }
+
+bmi270_result_t bmi270_accel_read(bmi270_t *const bmi270)
+{
+    if (bmi270 == NULL)
+    {
+        return BMI270_RESULT_ERROR;
+    }
+
+    /* TODO: Read the accelerometer data via spi. */
+    bmi270->accel.data.x = 
+    bmi270->accel.data.y = 
+    bmi270->accel.data.z = 
+
+    return BMI270_RESULT_SUCCESS;
+}
+
+bmi270_result_t bmi270_accel_get_x(bmi270_t *const bmi270, int16_t *const x)
+{
+    if ((bmi270 == NULL) || (x == NULL))
+    {
+        return BMI270_RESULT_ERROR;
+    }
+
+    *x = bmi270->accel.data.x;
+
+    return BMI270_RESULT_SUCCESS;
+}
+
+bmi270_result_t bmi270_accel_get_y(bmi270_t *const bmi270, int16_t *const y)
+{
+    if ((bmi270 == NULL) || (y == NULL))
+    {
+        return BMI270_RESULT_ERROR;
+    }
+
+    *y = bmi270->accel.data.y;
+
+    return BMI270_RESULT_SUCCESS;
+}
+
+bmi270_result_t bmi270_accel_get_z(bmi270_t *const bmi270, int16_t *const z)
+{
+    if ((bmi270 == NULL) || (z == NULL))
+    {
+        return BMI270_RESULT_ERROR;
+    }
+
+    *z = bmi270->accel.data.z;
+
+    return BMI270_RESULT_SUCCESS;
+}

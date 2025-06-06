@@ -342,4 +342,48 @@ bmi270_result_t bmi270_accel_self_test(void);
 ///
 bmi270_result_t bmi270_gyro_self_test(void);
 
+///
+/// \brief Reads the accelerometer data.
+///
+/// \param[in] bmi270             The bmi270 instance.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_accel_read(bmi270_t *const bmi270);
+
+///
+/// \brief Gets the accelerometer x axis value.
+///
+/// \param[in] bmi270             The bmi270 instance.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_accel_get_x(bmi270_t *const bmi270, int16_t *const x);
+
+///
+/// \brief Gets the accelerometer y axis value.
+///
+/// \param[in] bmi270             The bmi270 instance.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_accel_get_y(bmi270_t *const bmi270, int16_t *const y);
+
+///
+/// \brief Gets the accelerometer z axis value.
+///
+/// \param[in] bmi270             The bmi270 instance.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_accel_get_z(bmi270_t *const bmi270, int16_t *const z);
+
 #endif  /* _BMI270_H */
