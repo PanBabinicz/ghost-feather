@@ -372,7 +372,7 @@ bmi270_result_t bmi270_accel_read(bmi270_t *const bmi270)
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_accel_get_x(bmi270_t *const bmi270, int16_t *const x)
+bmi270_result_t bmi270_accel_get_x(const bmi270_t *const bmi270, int16_t *const x)
 {
     if ((bmi270 == NULL) || (x == NULL))
     {
@@ -384,7 +384,7 @@ bmi270_result_t bmi270_accel_get_x(bmi270_t *const bmi270, int16_t *const x)
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_accel_get_y(bmi270_t *const bmi270, int16_t *const y)
+bmi270_result_t bmi270_accel_get_y(const bmi270_t *const bmi270, int16_t *const y)
 {
     if ((bmi270 == NULL) || (y == NULL))
     {
@@ -396,7 +396,7 @@ bmi270_result_t bmi270_accel_get_y(bmi270_t *const bmi270, int16_t *const y)
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_accel_get_z(bmi270_t *const bmi270, int16_t *const z)
+bmi270_result_t bmi270_accel_get_z(const bmi270_t *const bmi270, int16_t *const z)
 {
     if ((bmi270 == NULL) || (z == NULL))
     {

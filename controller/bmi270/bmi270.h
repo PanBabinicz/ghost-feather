@@ -362,7 +362,7 @@ bmi270_result_t bmi270_accel_read(bmi270_t *const bmi270);
 /// \retval BMI270_RESULT_SUCCESS On success.
 /// \retval BMI270_RESULT_ERROR   Otherwise.
 ///
-bmi270_result_t bmi270_accel_get_x(bmi270_t *const bmi270, int16_t *const x);
+bmi270_result_t bmi270_accel_get_x(const bmi270_t *const bmi270, int16_t *const x);
 
 ///
 /// \brief Gets the accelerometer y axis value.
@@ -373,7 +373,7 @@ bmi270_result_t bmi270_accel_get_x(bmi270_t *const bmi270, int16_t *const x);
 /// \retval BMI270_RESULT_SUCCESS On success.
 /// \retval BMI270_RESULT_ERROR   Otherwise.
 ///
-bmi270_result_t bmi270_accel_get_y(bmi270_t *const bmi270, int16_t *const y);
+bmi270_result_t bmi270_accel_get_y(const bmi270_t *const bmi270, int16_t *const y);
 
 ///
 /// \brief Gets the accelerometer z axis value.
@@ -384,6 +384,6 @@ bmi270_result_t bmi270_accel_get_y(bmi270_t *const bmi270, int16_t *const y);
 /// \retval BMI270_RESULT_SUCCESS On success.
 /// \retval BMI270_RESULT_ERROR   Otherwise.
 ///
-bmi270_result_t bmi270_accel_get_z(bmi270_t *const bmi270, int16_t *const z);
+bmi270_result_t bmi270_accel_get_z(const bmi270_t *const bmi270, int16_t *const z);
 
 #endif  /* _BMI270_H */
