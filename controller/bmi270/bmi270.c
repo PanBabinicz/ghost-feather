@@ -408,6 +408,21 @@ bmi270_result_t bmi270_accel_get_z(const bmi270_t *const bmi270, int16_t *const 
     return BMI270_RESULT_SUCCESS;
 }
 
+bmi270_result_t bmi270_gyro_read(bmi270_t *const bmi270)
+{
+    if (bmi270 == NULL)
+    {
+        return BMI270_RESULT_ERROR;
+    }
+
+    /* TODO: Read the gyroscope data via spi. */
+    bmi270->gyro.data.x =
+    bmi270->gyro.data.y =
+    bmi270->gyro.data.z =
+
+    return BMI270_RESULT_SUCCESS;
+}
+
 bmi270_result_t bmi270_gyro_get_x(const bmi270_t *const bmi270, int16_t *const x)
 {
     if ((bmi270 == NULL) || (x == NULL))
