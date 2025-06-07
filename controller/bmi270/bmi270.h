@@ -356,7 +356,8 @@ bmi270_result_t bmi270_accel_read(bmi270_t *const bmi270);
 ///
 /// \brief Gets the accelerometer x axis value.
 ///
-/// \param[in] bmi270             The bmi270 instance.
+/// \param[in]  bmi270            The bmi270 instance.
+/// \param[out] x                 The x axis value.
 ///
 /// \return bmi270_result_t       The bmi270 result.
 /// \retval BMI270_RESULT_SUCCESS On success.
@@ -367,7 +368,8 @@ bmi270_result_t bmi270_accel_get_x(const bmi270_t *const bmi270, int16_t *const 
 ///
 /// \brief Gets the accelerometer y axis value.
 ///
-/// \param[in] bmi270             The bmi270 instance.
+/// \param[in]  bmi270            The bmi270 instance.
+/// \param[out] y                 The y axis value.
 ///
 /// \return bmi270_result_t       The bmi270 result.
 /// \retval BMI270_RESULT_SUCCESS On success.
@@ -378,12 +380,60 @@ bmi270_result_t bmi270_accel_get_y(const bmi270_t *const bmi270, int16_t *const 
 ///
 /// \brief Gets the accelerometer z axis value.
 ///
-/// \param[in] bmi270             The bmi270 instance.
+/// \param[in]  bmi270            The bmi270 instance.
+/// \param[out] z                 The z axis value.
 ///
 /// \return bmi270_result_t       The bmi270 result.
 /// \retval BMI270_RESULT_SUCCESS On success.
 /// \retval BMI270_RESULT_ERROR   Otherwise.
 ///
 bmi270_result_t bmi270_accel_get_z(const bmi270_t *const bmi270, int16_t *const z);
+
+///
+/// \brief Reads the gyroscope data.
+///
+/// \param[in] bmi270             The bmi270 instance.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_gyro_read(bmi270_t *const bmi270);
+
+///
+/// \brief Gets the gyroscope x axis value.
+///
+/// \param[in]  bmi270            The bmi270 instance.
+/// \param[out] x                 The x axis value.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_gyro_get_x(const bmi270_t *const bmi270, int16_t *const x);
+
+///
+/// \brief Gets the gyroscope y axis value.
+///
+/// \param[in]  bmi270            The bmi270 instance.
+/// \param[out] y                 The y axis value.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_gyro_get_y(const bmi270_t *const bmi270, int16_t *const y);
+
+///
+/// \brief Gets the gyroscope z axis value.
+///
+/// \param[in]  bmi270            The bmi270 instance.
+/// \param[out] z                 The z axis value.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_gyro_get_z(const bmi270_t *const bmi270, int16_t *const z);
 
 #endif  /* _BMI270_H */

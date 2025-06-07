@@ -407,3 +407,39 @@ bmi270_result_t bmi270_accel_get_z(const bmi270_t *const bmi270, int16_t *const 
 
     return BMI270_RESULT_SUCCESS;
 }
+
+bmi270_result_t bmi270_gyro_get_x(const bmi270_t *const bmi270, int16_t *const x)
+{
+    if ((bmi270 == NULL) || (x == NULL))
+    {
+        return BMI270_RESULT_ERROR;
+    }
+
+    *x = bmi270->gyro.data.x;
+
+    return BMI270_RESULT_SUCCESS;
+}
+
+bmi270_result_t bmi270_gyro_get_y(const bmi270_t *const bmi270, int16_t *const y)
+{
+    if ((bmi270 == NULL) || (y == NULL))
+    {
+        return BMI270_RESULT_ERROR;
+    }
+
+    *y = bmi270->gyro.data.y;
+
+    return BMI270_RESULT_SUCCESS;
+}
+
+bmi270_result_t bmi270_gyro_get_z(const bmi270_t *const bmi270, int16_t *const z)
+{
+    if ((bmi270 == NULL) || (z == NULL))
+    {
+        return BMI270_RESULT_ERROR;
+    }
+
+    *z = bmi270->gyro.data.z;
+
+    return BMI270_RESULT_SUCCESS;
+}
