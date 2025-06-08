@@ -436,4 +436,15 @@ bmi270_result_t bmi270_gyro_get_y(const bmi270_t *const bmi270, int16_t *const y
 ///
 bmi270_result_t bmi270_gyro_get_z(const bmi270_t *const bmi270, int16_t *const z);
 
+///
+/// \brief Reads the temperature data.
+///
+/// \param[in] bmi270             The bmi270 instance.
+///
+/// \return bmi270_result_t       The bmi270 result.
+/// \retval BMI270_RESULT_SUCCESS On success.
+/// \retval BMI270_RESULT_ERROR   Otherwise.
+///
+bmi270_result_t bmi270_temp_read(bmi270_t *const bmi270);
+
 #endif  /* _BMI270_H */

@@ -458,3 +458,16 @@ bmi270_result_t bmi270_gyro_get_z(const bmi270_t *const bmi270, int16_t *const z
 
     return BMI270_RESULT_SUCCESS;
 }
+
+bmi270_result_t bmi270_temp_read(bmi270_t *const bmi270)
+{
+    if (bmi270 == NULL)
+    {
+        return BMI270_RESULT_ERROR;
+    }
+
+    /* TODO: Read the temperature data via spi. */
+    bmi270->temp.data =
+
+    return BMI270_RESULT_SUCCESS;
+}
