@@ -471,3 +471,15 @@ bmi270_result_t bmi270_temp_read(bmi270_t *const bmi270)
 
     return BMI270_RESULT_SUCCESS;
 }
+
+bmi270_result_t bmi270_temp_get(const bmi270_t *const bmi270, int16_t *const temp)
+{
+    if ((bmi270 == NULL) || (temp == NULL))
+    {
+        return BMI270_RESULT_ERROR;
+    }
+
+    *temp = bmi270->temp.data;
+
+    return BMI270_RESULT_SUCCESS;
+}
