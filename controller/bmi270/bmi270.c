@@ -1,4 +1,6 @@
 #include "bmi270.h"
+#include <stdbool.h>
+#include <string.h>
 
 ///***********************************************************************************************************
 /// Private objects - declaration.
@@ -99,7 +101,7 @@ typedef struct bmi270
     bmi270_accel_t accel;                           /*!< The accelerometer instance.                        */
     bmi270_gyro_t  gyro;                            /*!< The gyroscope instance.                            */
     bmi270_temp_t  temp;                            /*!< The temperature sensor instance.                   */
-    uint8_t        is_init;                         /*!< The is initialized flag.                           */
+    bool           is_init;                         /*!< The is initialized flag.                           */
 } bmi270_t;
 
 ///

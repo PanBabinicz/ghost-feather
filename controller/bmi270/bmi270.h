@@ -2,7 +2,6 @@
 #define _BMI270_H
 
 #include <stdint.h>
-#include <string.h>
 
 ///
 /// \breif The bmi270 registers definition.
