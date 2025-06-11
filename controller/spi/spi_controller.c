@@ -10,13 +10,18 @@
 ///
 typedef struct spi_controller
 {
-    bool is_init;                                   /*!< The is initialized flag.                           */
+    uint32_t spi                                    /*!< The spi peripheral identifier.                     */
+    bool     is_init;                               /*!< The is initialized flag.                           */
 } spi_controller_t;
 
 ///***********************************************************************************************************
 /// Private objects - definition.
 ///***********************************************************************************************************
-static spi_controller_t spi_controller;
+static spi_controller_t spi_controller =
+{
+    .spi     = SPI1,
+    .is_init = false,
+};
 
 ///***********************************************************************************************************
 /// Private functions - declaration.
@@ -36,6 +41,7 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const spi_controll
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
+    spi_enable(spi_controller->spi);
     spi_controller->is_init = true;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
@@ -48,6 +54,7 @@ spi_controller_result_t spi_controller_deinit(spi_controller_t *const spi_contro
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
+    spi_disable(spi_controller->spi);
     spi_controller->is_init = false;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
