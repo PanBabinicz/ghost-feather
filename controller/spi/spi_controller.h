@@ -17,9 +17,6 @@ typedef enum spi_controller_result
     SPI_CONTROLLER_RESULT_ERROR,
 } spi_controller_result_t;
 
-///***********************************************************************************************************
-    bool                            is_init;        /*!< The is initialized flag.                           */
-
 ///
 /// \brief The spi controller clock phase type.
 ///
