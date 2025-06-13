@@ -13,6 +13,7 @@ typedef struct spi_controller
     uint32_t                        interface       /*!< The spi peripheral interface.                      */
     spi_controller_clock_phase_t    clock_phase     /*!< The clock phase index.                             */
     spi_controller_clock_polarity_t clock_polarity  /*!< The clock polarity index.                          */
+    spi_controller_bidimode_t       bidimode        /*!< The bidirectional data mode index.                 */
     bool                            is_init;        /*!< The is initialized flag.                           */
 } spi_controller_t;
 
@@ -33,7 +34,7 @@ static spi_controller_t spi_controller =
 static void (*const spi_controller_set_clock_phase_array[SPI_CONTROLLER_CLOCK_PHASE_TOTAL])(uint32_t interface) =
 {
     spi_set_clock_phase_0,
-    spi_set_clock_phase_1
+    spi_set_clock_phase_1,
 };
 
 ///
@@ -42,7 +43,16 @@ static void (*const spi_controller_set_clock_phase_array[SPI_CONTROLLER_CLOCK_PH
 static void (*const spi_controller_set_clock_polarity_array[SPI_CONTROLLER_CLOCK_POLARITY_TOTAL])(uint32_t interface) =
 {
     spi_set_clock_polarity_0,
-    spi_set_clock_polarity_1
+    spi_set_clock_polarity_1,
+};
+
+///
+/// \brief Contains function pointers that allow the bidirectional data mode to be set using the libopencm3 functions.
+///
+static void (*const spi_controller_set_bidimode_array[SPI_CONTROLLER_BIDIMODE_TOTAL])(uint32_t interface) =
+{
+    spi_set_unidirectional_mode,
+    spi_set_bidirectional_mode,
 };
 
 ///***********************************************************************************************************
@@ -60,32 +70,33 @@ static spi_controller_result_t spi_controller
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-spi_controller_result_t spi_controller_init(spi_controller_t *const spi_controller)
+spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
 {
-    if (spi_controller == NULL)
+    if (instance == NULL)
     {
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    spi_disable(spi_controller->interface);
-    spi_controller_set_clock_phase_array[spi_controller->clock_phase](spi_controller->interface);
-    spi_controller_set_clock_polarity_array[spi_controller->clock_polarity](spi_controller->interface);
-    spi_enable(spi_controller->interface);
+    spi_disable(instance->interface);
+    spi_controller_set_clock_phase_array[instance->clock_phase](instance->interface);
+    spi_controller_set_clock_polarity_array[instance->clock_polarity](instance->interface);
+    spi_controller_set_bidimode_array[instance->bidimode](instance->interface);
+    spi_enable(instance->interface);
 
-    spi_controller->is_init = true;
+    instance->is_init = true;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
 
-spi_controller_result_t spi_controller_deinit(spi_controller_t *const spi_controller)
+spi_controller_result_t spi_controller_deinit(spi_controller_t *const instance)
 {
-    if (spi_controller == NULL)
+    if (instance == NULL)
     {
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    spi_disable(spi_controller->spi);
-    spi_controller->is_init = false;
+    spi_disable(instance->spi);
+    instance->is_init = false;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -125,6 +136,20 @@ spi_controller_result_t spi_controller_set_clock_polarity(spi_controller_t *cons
     }
 
     instance->clock_polarity = clock_polarity;
+
+    return SPI_CONTROLLER_RESULT_ERROR;
+}
+
+spi_controller_result_t spi_controller_set_bidimode(spi_controller_t *const instance,
+                                                    const spi_controller_bidimode_t bidimode)
+{
+    if ((bidimode < SPI_CONTROLLER_BIDIMODE_BEGIN) || (bidimode >= SPI_CONTROLLER_BIDIMODE_TOTAL)
+        (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->bidimode = bidimode;
 
     return SPI_CONTROLLER_RESULT_ERROR;
 }
