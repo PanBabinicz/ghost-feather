@@ -51,6 +51,17 @@ typedef enum spi_controller_bidimode
 } spi_controller_bidimode_t;
 
 ///
+/// \brief The spi controller output enable in bidirectional mode type.
+///
+typedef enum spi_controller_bidioe
+{
+    SPI_CONTROLLER_BIDIOE_BEGIN = 0,              /*!< The OE in bidirectional mode begin indicator.        */
+    SPI_CONTROLLER_BIDIOE_0     = 0,              /*!< Output disabled (receive-only mode).                 */
+    SPI_CONTROLLER_BIDIOE_1,                      /*!< Output enabled (transmit-only mode).                 */
+    SPI_CONTROLLER_BIDIOE_TOTAL,                  /*!< The OE in bidirectional mode total indicator.        */
+} spi_controller_bidioe_t;
+
+///
 /// \brief Initializes the spi controller.
 ///
 /// \param[in] instance                   The spi controller instance.
@@ -121,5 +132,17 @@ spi_controller_result_t spi_controller_set_clock_polarity(spi_controller_t *cons
 ///
 spi_controller_result_t spi_controller_set_bidimode(spi_controller_t *const instance,
                                                     const spi_controller_bidimode_t bidimode);
+
+///
+/// \brief Sets the spi output enable in bidirectional mode index inside instance.
+///
+/// \param[in] instance                   The spi controller instance.
+/// \param[in] bidioe                     The spi controller output enable in bidirectional mode index.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_set_bidioe(spi_controller_t *const instance, const spi_controller_bidioe_t bidioe);
 
 #endif  /* _SPI_CONTROLLER_H */
