@@ -10,12 +10,16 @@
 ///
 typedef struct spi_controller
 {
-    uint32_t                        interface       /*!< The spi peripheral interface.                      */
-    spi_controller_clock_phase_t    clock_phase     /*!< The clock phase index.                             */
-    spi_controller_clock_polarity_t clock_polarity  /*!< The clock polarity index.                          */
-    spi_controller_bidimode_t       bidimode        /*!< The bidirectional data mode index.                 */
-    spi_controller_bidioe_t         bidioe          /*!< The output enable in bidirectional mode index.     */
-    bool                            is_init;        /*!< The is initialized flag.                           */
+    uint32_t interface;                             /*!< The spi peripheral interface.                      */
+    uint8_t  clock_phase    : 1;                    /*!< The clock phase index.                             */
+    uint8_t  clock_polarity : 1;                    /*!< The clock polarity index.                          */
+    uint8_t  bidimode       : 1;                    /*!< The bidirectional data mode index.                 */
+    uint8_t  bidioe         : 1;                    /*!< The output enable in bidirectional mode index.     */  
+    uint8_t  lsbfirst       : 1;                    /*!< The frame format index.                            */
+    uint8_t  crcen          : 1;                    /*!< The hardware CRC calculation index.                */
+    uint8_t  crcl           : 1;                    /*!< The CRC length index.                              */
+    uint8_t  ssm            : 1;                    /*!< The software slave management index.               */
+    bool     is_init;                               /*!< The is initialized flag.                           */
 } spi_controller_t;
 
 ///***********************************************************************************************************
@@ -31,6 +35,9 @@ static spi_controller_t spi_controller_instance =
     .clock_polarity = SPI_CONTROLLER_CLOCK_POLARITY_1,
     .bidimode       = SPI_CONTROLLER_BIDIMODE_0,
     .bidioe         = SPI_CONTROLLER_BIDIOE_0,
+    .lsbfirst       = SPI_CONTROLLER_LSBFIRST_0,
+    .crcen          = SPI_CONTROLLER_CRCEN_0,
+    .ssm            = SPI_CONTROLLER_SSM_0,
     .is_init        = false,
 };
 
@@ -71,6 +78,44 @@ static void (*const spi_controller_set_bidioe_array[SPI_CONTROLLER_BIDIOE_TOTAL]
     spi_set_bidirectional_transmit_only_mode,
 };
 
+///
+/// \brief Contains function pointers that allow the frame format to be set using the libopencm3 functions.
+///
+static void (*const spi_controller_set_lsbfirst_array[SPI_CONTROLLER_LSBFIRST_TOTAL])(uint32_t interface) =
+{
+    spi_send_msb_first,
+    spi_send_lsb_first,
+};
+
+///
+/// \brief Contains function pointers that allow the hardware CRC calculation to be set using the libopencm3
+///        functions.
+///
+static void (*const spi_controller_set_crcen_array[SPI_CONTROLLER_CRCEN_TOTAL])(uint32_t interface) =
+{
+    spi_disable_crc,
+    spi_enable_crc,
+};
+
+///
+/// \brief Contains function pointers that allow the CRC length to be set using the libopencm3 functions.
+///
+static void (*const spi_controller_set_crcl_array[SPI_CONTROLLER_CRCL_TOTAL])(uint32_t interface) =
+{
+    spi_set_crcl_8bit,
+    spi_set_crcl_16bit,
+};
+
+///
+/// \brief Contains function pointers that allow the software slave management to be set using the
+///        libopencm3 functions.
+///
+static void (*const spi_controller_set_ssm_array[SPI_CONTROLLER_SSM_TOTAL])(uint32_t interface) =
+{
+    spi_set_crcl_8bit,
+    spi_set_crcl_16bit,
+};
+
 ///***********************************************************************************************************
 /// Private functions - declaration.
 ///***********************************************************************************************************
@@ -94,6 +139,10 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
     spi_controller_set_clock_polarity_array[instance->clock_polarity](instance->interface);
     spi_controller_set_bidimode_array[instance->bidimode](instance->interface);
     spi_controller_set_bidioe_array[instance->bidioe](instance->interface);
+    spi_controller_set_lsbfirst_array[instance->lsbfirst](instance->interface);
+    spi_controller_set_crcen_array[instance->crcen](instance->interface);
+    spi_controller_set_crcl_array[instance->crcl](instance->interface);
+    spi_controller_set_ssm_array[instance->ssm](instance->interface);
     spi_enable(instance->interface);
 
     instance->is_init = true;
@@ -176,6 +225,55 @@ spi_controller_result_t spi_controller_set_bidioe(spi_controller_t *const instan
     }
 
     instance->bidioe = bidioe;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_lsbfirst(spi_controller_t *const instance, const spi_controller_lsbfirst_t lsbfirst)
+{
+    if ((lsbfirst < SPI_CONTROLLER_LSBFIRST_BEGIN) || (lsbfirst >= SPI_CONTROLLER_LSBFIRST_TOTAL) ||
+        (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->lsbfirst = lsbfirst;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_crcen(spi_controller_t *const instance, const spi_controller_crcen_t crcen)
+{
+    if ((crcen < SPI_CONTROLLER_CRCEN_BEGIN) || (crcen >= SPI_CONTROLLER_CRCEN_TOTAL) || (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->crcen = crcen;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_crcl(spi_controller_t *const instance, const spi_controller_crcl_t crcl)
+{
+    if ((crcl < SPI_CONTROLLER_CRCL_BEGIN) || (crcl >= SPI_CONTROLLER_CRCL_TOTAL) || (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->crcl = crcl;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_ssm(spi_controller_t *const instance, const spi_controller_ssm_t ssm)
+{
+    if ((ssm < SPI_CONTROLLER_SSM_BEGIN) || (ssm >= SPI_CONTROLLER_SSM_TOTAL) || (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->ssm = ssm;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
