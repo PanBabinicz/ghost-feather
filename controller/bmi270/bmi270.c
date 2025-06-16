@@ -125,7 +125,7 @@ typedef sturct bmi270_power_mode_config
 ///
 /// \breif The bmi270 instance.
 ///
-static bmi270_t bmi270 = { 0 };
+static bmi270_t bmi270_instance = { 0 };
 
 ///
 /// \breif The bmi270 power mode configuration look-up table.
@@ -283,38 +283,38 @@ bmi270_t* bmi270_get_instance(void)
 
 const bmi270_power_mode_config_t* bmi270_get_power_mode_config(const bmi270_power_mode_t power_mode)
 {
-    if ((power_mode >= BMI270_POWER_MODE_BEGIN) && (power_mode < BMI270_POWER_MODE_TOTAL))
+    if ((power_mode < BMI270_POWER_MODE_BEGIN) || (power_mode >= BMI270_POWER_MODE_TOTAL))
     {
-        return &bmi270_power_mode_configs[power_mode];
+        return NULL;
     }
 
-    return NULL;
+    return &bmi270_power_mode_configs[power_mode];
 }
 
-bmi270_result_t bmi270_init(bmi270_t *const bmi270)
+bmi270_result_t bmi270_init(bmi270_t *const instance)
 {
-    if (bmi270 == NULL)
+    if (instance == NULL)
     {
         return BMI270_RESULT_ERROR;
     }
 
-    memset(bmi270, 0, sizeof(bmi270));
+    memset(instance, 0, sizeof(instance));
 
     /* TODO: The device initialization, needs spi. */
 
-    bmi270->is_init = BMI270_STATUS_INIT;
+    instance->is_init = BMI270_STATUS_INIT;
 
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_deinit(bmi270_t *const bmi270)
+bmi270_result_t bmi270_deinit(bmi270_t *const instance)
 {
-    if (bmi270 == NULL)
+    if (instance == NULL)
     {
         return BMI270_RESULT_ERROR;
     }
 
-    bmi270->is_init = BMI270_STATUS_DEINIT;
+    instance->is_init = BMI270_STATUS_DEINIT;
 
     return BMI270_RESULT_SUCCESS;
 }
@@ -359,129 +359,129 @@ bmi270_result_t bmi270_gyro_self_test(void)
     /* TODO: The gyroscope self-test, needs spi. */
 }
 
-bmi270_result_t bmi270_accel_read(bmi270_t *const bmi270)
+bmi270_result_t bmi270_accel_read(bmi270_t *const instance)
 {
-    if (bmi270 == NULL)
+    if (instance == NULL)
     {
         return BMI270_RESULT_ERROR;
     }
 
     /* TODO: Read the accelerometer data via spi. */
-    bmi270->accel.data.x = 
-    bmi270->accel.data.y = 
-    bmi270->accel.data.z = 
+    instance->accel.data.x =
+    instance->accel.data.y =
+    instance->accel.data.z =
 
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_accel_get_x(const bmi270_t *const bmi270, int16_t *const x)
+bmi270_result_t bmi270_accel_get_x(const bmi270_t *const instance, int16_t *const x)
 {
-    if ((bmi270 == NULL) || (x == NULL))
+    if ((instance == NULL) || (x == NULL))
     {
         return BMI270_RESULT_ERROR;
     }
 
-    *x = bmi270->accel.data.x;
+    *x = instance->accel.data.x;
 
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_accel_get_y(const bmi270_t *const bmi270, int16_t *const y)
+bmi270_result_t bmi270_accel_get_y(const bmi270_t *const instance, int16_t *const y)
 {
-    if ((bmi270 == NULL) || (y == NULL))
+    if ((instance == NULL) || (y == NULL))
     {
         return BMI270_RESULT_ERROR;
     }
 
-    *y = bmi270->accel.data.y;
+    *y = instance->accel.data.y;
 
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_accel_get_z(const bmi270_t *const bmi270, int16_t *const z)
+bmi270_result_t bmi270_accel_get_z(const bmi270_t *const instance, int16_t *const z)
 {
-    if ((bmi270 == NULL) || (z == NULL))
+    if ((instance == NULL) || (z == NULL))
     {
         return BMI270_RESULT_ERROR;
     }
 
-    *z = bmi270->accel.data.z;
+    *z = instance->accel.data.z;
 
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_gyro_read(bmi270_t *const bmi270)
+bmi270_result_t bmi270_gyro_read(bmi270_t *const instance)
 {
-    if (bmi270 == NULL)
+    if (instance == NULL)
     {
         return BMI270_RESULT_ERROR;
     }
 
     /* TODO: Read the gyroscope data via spi. */
-    bmi270->gyro.data.x =
-    bmi270->gyro.data.y =
-    bmi270->gyro.data.z =
+    instance->gyro.data.x =
+    instance->gyro.data.y =
+    instance->gyro.data.z =
 
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_gyro_get_x(const bmi270_t *const bmi270, int16_t *const x)
+bmi270_result_t bmi270_gyro_get_x(const bmi270_t *const instance, int16_t *const x)
 {
-    if ((bmi270 == NULL) || (x == NULL))
+    if ((instance == NULL) || (x == NULL))
     {
         return BMI270_RESULT_ERROR;
     }
 
-    *x = bmi270->gyro.data.x;
+    *x = instance->gyro.data.x;
 
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_gyro_get_y(const bmi270_t *const bmi270, int16_t *const y)
+bmi270_result_t bmi270_gyro_get_y(const bmi270_t *const instance, int16_t *const y)
 {
-    if ((bmi270 == NULL) || (y == NULL))
+    if ((instance == NULL) || (y == NULL))
     {
         return BMI270_RESULT_ERROR;
     }
 
-    *y = bmi270->gyro.data.y;
+    *y = instance->gyro.data.y;
 
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_gyro_get_z(const bmi270_t *const bmi270, int16_t *const z)
+bmi270_result_t bmi270_gyro_get_z(const bmi270_t *const instance, int16_t *const z)
 {
-    if ((bmi270 == NULL) || (z == NULL))
+    if ((instance == NULL) || (z == NULL))
     {
         return BMI270_RESULT_ERROR;
     }
 
-    *z = bmi270->gyro.data.z;
+    *z = instance->gyro.data.z;
 
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_temp_read(bmi270_t *const bmi270)
+bmi270_result_t bmi270_temp_read(bmi270_t *const instance)
 {
-    if (bmi270 == NULL)
+    if (instance == NULL)
     {
         return BMI270_RESULT_ERROR;
     }
 
     /* TODO: Read the temperature data via spi. */
-    bmi270->temp.data =
+    instance->temp.data =
 
     return BMI270_RESULT_SUCCESS;
 }
 
-bmi270_result_t bmi270_temp_get(const bmi270_t *const bmi270, int16_t *const temp)
+bmi270_result_t bmi270_temp_get(const bmi270_t *const instance, int16_t *const temp)
 {
-    if ((bmi270 == NULL) || (temp == NULL))
+    if ((instance == NULL) || (temp == NULL))
     {
         return BMI270_RESULT_ERROR;
     }
 
-    *temp = bmi270->temp.data;
+    *temp = instance->temp.data;
 
     return BMI270_RESULT_SUCCESS;
 }
