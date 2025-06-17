@@ -106,6 +106,17 @@ typedef enum spi_controller_ssm
 } spi_controller_ssm_t;
 
 ///
+/// \brief The spi controller internal slave select type.
+///
+typedef enum spi_controller_ssi
+{
+    SPI_CONTROLLER_SSI_BEGIN = 0,                   /*!< The internal slave select begin indicator.         */
+    SPI_CONTROLLER_SSI_0     = 0,                   /*!< The internal slave select disabled.                */
+    SPI_CONTROLLER_SSI_1,                           /*!< The internal slave select enabled.                 */
+    SPI_CONTROLLER_SSI_TOTAL,                       /*!< The internal slave select total indicator.         */
+} spi_controller_ssi_t;
+
+///
 /// \brief Initializes the spi controller.
 ///
 /// \param[in] instance                   The spi controller instance.
@@ -236,5 +247,17 @@ spi_controller_result_t spi_controller_set_crcl(spi_controller_t *const instance
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
 ///
 spi_controller_result_t spi_controller_set_ssm(spi_controller_t *const instance, const spi_controller_ssm_t ssm);
+
+///
+/// \brief Sets the spi internal slave select index inside instance.
+///
+/// \param[in] instance                   The spi controller instance.
+/// \param[in] ssi                        The spi controller internal slave select index.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_set_ssi(spi_controller_t *const instance, const spi_controller_ssi_t ssi);
 
 #endif  /* _SPI_CONTROLLER_H */

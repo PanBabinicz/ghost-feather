@@ -19,6 +19,7 @@ typedef struct spi_controller
     uint8_t  crcen          : 1;                    /*!< The hardware CRC calculation index.                */
     uint8_t  crcl           : 1;                    /*!< The CRC length index.                              */
     uint8_t  ssm            : 1;                    /*!< The software slave management index.               */
+    uint8_t  ssi            : 1;                    /*!< The internal slave select index.                   */
     bool     is_init;                               /*!< The is initialized flag.                           */
 } spi_controller_t;
 
@@ -38,6 +39,7 @@ static spi_controller_t spi_controller_instance =
     .lsbfirst       = SPI_CONTROLLER_LSBFIRST_0,
     .crcen          = SPI_CONTROLLER_CRCEN_0,
     .ssm            = SPI_CONTROLLER_SSM_0,
+    .ssi            = SPI_CONTROLLER_SSI_0,
     .is_init        = false,
 };
 
@@ -116,6 +118,16 @@ static void (*const spi_controller_set_ssm_array[SPI_CONTROLLER_SSM_TOTAL])(uint
     spi_set_crcl_16bit,
 };
 
+///
+/// \brief Contains function pointers that allow the internal slave select to be set using the
+///        libopencm3 functions.
+///
+static void (*const spi_controller_set_ssi_array[SPI_CONTROLLER_SSI_TOTAL])(uint32_t interface) =
+{
+    spi_set_nss_low,
+    spi_set_nss_high,
+};
+
 ///***********************************************************************************************************
 /// Private functions - declaration.
 ///***********************************************************************************************************
@@ -143,6 +155,7 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
     spi_controller_set_crcen_array[instance->crcen](instance->interface);
     spi_controller_set_crcl_array[instance->crcl](instance->interface);
     spi_controller_set_ssm_array[instance->ssm](instance->interface);
+    spi_controller_set_ssi_array[instance->ssi](instance->interface);
     spi_enable(instance->interface);
 
     instance->is_init = true;
@@ -274,6 +287,18 @@ spi_controller_result_t spi_controller_set_ssm(spi_controller_t *const instance,
     }
 
     instance->ssm = ssm;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_ssi(spi_controller_t *const instance, const spi_controller_ssi_t ssi)
+{
+    if ((ssi < SPI_CONTROLLER_SSI_BEGIN) || (ssi >= SPI_CONTROLLER_SSI_TOTAL) || (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->ssi = ssi;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
