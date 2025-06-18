@@ -117,6 +117,39 @@ typedef enum spi_controller_ssi
 } spi_controller_ssi_t;
 
 ///
+/// \brief The spi controller master selection type.
+///
+typedef enum spi_controller_mstr
+{
+    SPI_CONTROLLER_MSTR_BEGIN = 0,                  /*!< The master selection begin indicator.              */
+    SPI_CONTROLLER_MSTR_0     = 0,                  /*!< The slave configuration.                           */
+    SPI_CONTROLLER_MSTR_1,                          /*!< The master configuration.                          */
+    SPI_CONTROLLER_MSTR_TOTAL,                      /*!< The master selection total indicator.              */
+} spi_controller_mstr_t;
+
+///
+/// \brief The spi controller internal slave select type.
+///
+typedef enum spi_controller_ds
+{
+    SPI_CONTROLLER_DS_BEGIN = 3,                    /*!< The data size begin indicator.                     */
+    SPI_CONTROLLER_DS_4     = 3,                    /*!< The 4-bit data size.                               */
+    SPI_CONTROLLER_DS_5,                            /*!< The 5-bit data size.                               */
+    SPI_CONTROLLER_DS_6,                            /*!< The 6-bit data size.                               */
+    SPI_CONTROLLER_DS_7,                            /*!< The 7-bit data size.                               */
+    SPI_CONTROLLER_DS_8,                            /*!< The 8-bit data size.                               */
+    SPI_CONTROLLER_DS_9,                            /*!< The 9-bit data size.                               */
+    SPI_CONTROLLER_DS_10,                           /*!< The 10-bit data size.                              */
+    SPI_CONTROLLER_DS_11,                           /*!< The 11-bit data size.                              */
+    SPI_CONTROLLER_DS_12,                           /*!< The 12-bit data size.                              */
+    SPI_CONTROLLER_DS_13,                           /*!< The 13-bit data size.                              */
+    SPI_CONTROLLER_DS_14,                           /*!< The 14-bit data size.                              */
+    SPI_CONTROLLER_DS_15,                           /*!< The 15-bit data size.                              */
+    SPI_CONTROLLER_DS_16,                           /*!< The 16-bit data size.                              */
+    SPI_CONTROLLER_DS_TOTAL,                        /*!< The data size total indicator.                     */
+} spi_controller_ds_t;
+
+///
 /// \brief Initializes the spi controller.
 ///
 /// \param[in] instance                   The spi controller instance.
@@ -259,5 +292,29 @@ spi_controller_result_t spi_controller_set_ssm(spi_controller_t *const instance,
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
 ///
 spi_controller_result_t spi_controller_set_ssi(spi_controller_t *const instance, const spi_controller_ssi_t ssi);
+
+///
+/// \brief Sets the spi master selection index inside instance.
+///
+/// \param[in] instance                   The spi controller instance.
+/// \param[in] mstr                       The spi controller master selection index.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_set_mstr(spi_controller_t *const instance, const spi_controller_mstr_t mstr);
+
+///
+/// \brief Sets the spi data size index inside instance.
+///
+/// \param[in] instance                   The spi controller instance.
+/// \param[in] ds                         The spi controller data size index.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_set_ds(spi_controller_t *const instance, const spi_controller_ds_t ds);
 
 #endif  /* _SPI_CONTROLLER_H */

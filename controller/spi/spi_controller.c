@@ -20,6 +20,8 @@ typedef struct spi_controller
     uint8_t  crcl           : 1;                    /*!< The CRC length index.                              */
     uint8_t  ssm            : 1;                    /*!< The software slave management index.               */
     uint8_t  ssi            : 1;                    /*!< The internal slave select index.                   */
+    uint8_t  mstr           : 1;                    /*!< The master selection index.                        */
+    uint8_t  ds             : 4;                    /*!< The data size index.                               */
     bool     is_init;                               /*!< The is initialized flag.                           */
 } spi_controller_t;
 
@@ -40,6 +42,8 @@ static spi_controller_t spi_controller_instance =
     .crcen          = SPI_CONTROLLER_CRCEN_0,
     .ssm            = SPI_CONTROLLER_SSM_0,
     .ssi            = SPI_CONTROLLER_SSI_0,
+    .mstr           = SPI_CONTROLLER_MSTR_1,
+    .ds             = SPI_CONTROLLER_DS_8,
     .is_init        = false,
 };
 
@@ -128,6 +132,16 @@ static void (*const spi_controller_set_ssi_array[SPI_CONTROLLER_SSI_TOTAL])(uint
     spi_set_nss_high,
 };
 
+///
+/// \brief Contains function pointers that allow the master selection to be set using the
+///        libopencm3 functions.
+///
+static void (*const spi_controller_set_mstr_array[SPI_CONTROLLER_MSTR_TOTAL])(uint32_t interface) =
+{
+    spi_set_slave_mode,
+    spi_set_master_mode,
+};
+
 ///***********************************************************************************************************
 /// Private functions - declaration.
 ///***********************************************************************************************************
@@ -147,6 +161,8 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
     }
 
     spi_disable(instance->interface);
+
+    /* The CR1 configuration. */
     spi_controller_set_clock_phase_array[instance->clock_phase](instance->interface);
     spi_controller_set_clock_polarity_array[instance->clock_polarity](instance->interface);
     spi_controller_set_bidimode_array[instance->bidimode](instance->interface);
@@ -156,6 +172,11 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
     spi_controller_set_crcl_array[instance->crcl](instance->interface);
     spi_controller_set_ssm_array[instance->ssm](instance->interface);
     spi_controller_set_ssi_array[instance->ssi](instance->interface);
+    spi_controller_set_mstr_array[instance->mstr](instance->interface);
+
+    /* The CR2 configuration. */
+    spi_set_data_size(instance->interface, (uint16_t)instance->ds);
+
     spi_enable(instance->interface);
 
     instance->is_init = true;
@@ -299,6 +320,30 @@ spi_controller_result_t spi_controller_set_ssi(spi_controller_t *const instance,
     }
 
     instance->ssi = ssi;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_mstr(spi_controller_t *const instance, const spi_controller_mstr_t mstr)
+{
+    if ((mstr < SPI_CONTROLLER_MSTR_BEGIN) || (mstr >= SPI_CONTROLLER_MSTR_TOTAL) || (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->mstr = mstr;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_ds(spi_controller_t *const instance, const spi_controller_ds_t ds)
+{
+    if ((ds < SPI_CONTROLLER_DS_BEGIN) || (ds >= SPI_CONTROLLER_DS_TOTAL) || (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->ds = ds;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
