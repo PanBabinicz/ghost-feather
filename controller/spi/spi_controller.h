@@ -150,6 +150,30 @@ typedef enum spi_controller_ds
 } spi_controller_ds_t;
 
 ///
+/// \brief The spi controller slave select output enable type.
+///
+typedef enum spi_controller_ssoe
+{
+    SPI_CONTROLLER_SSOE_BEGIN = 0,                  /*!< The slave select output enable begin indicator.    */
+    SPI_CONTROLLER_SSOE_0     = 0,                  /*!< The slave select is disabled in master mode.       */
+    SPI_CONTROLLER_SSOE_1,                          /*!< The slave select is enabled in master mode.        */
+    SPI_CONTROLLER_SSOE_TOTAL,                      /*!< The slave select output enable total indicator.    */
+} spi_controller_ssoe_t;
+
+///
+/// \brief The spi controller frame format type.
+///
+/// \note  Set the FRF bit if the TI protocol is required (keep NSSP bit cleared in TI mode).
+///
+typedef enum spi_controller_frf
+{
+    SPI_CONTROLLER_FRF_BEGIN = 0,                   /*!< The frame format begin indicator.                  */
+    SPI_CONTROLLER_FRF_0     = 0,                   /*!< The frame format set to motorola.                  */
+    SPI_CONTROLLER_FRF_1,                           /*!< The frame format set to TI.                        */
+    SPI_CONTROLLER_FRF_TOTAL,                       /*!< The frame format total indicator.                  */
+} spi_controller_frf_t;
+
+///
 /// \brief Initializes the spi controller.
 ///
 /// \param[in] instance                   The spi controller instance.
@@ -316,5 +340,29 @@ spi_controller_result_t spi_controller_set_mstr(spi_controller_t *const instance
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
 ///
 spi_controller_result_t spi_controller_set_ds(spi_controller_t *const instance, const spi_controller_ds_t ds);
+
+///
+/// \brief Sets the spi slave select output enable inside instance.
+///
+/// \param[in] instance                   The spi controller instance.
+/// \param[in] ssoe                       The spi controller slave select output enable index.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_set_ssoe(spi_controller_t *const instance, const spi_controller_ssoe_t ssoe);
+
+///
+/// \brief Sets the spi frame format inside instance.
+///
+/// \param[in] instance                   The spi controller instance.
+/// \param[in] frf                        The spi controller frame format index.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_set_frf(spi_controller_t *const instance, const spi_controller_frf_t frf);
 
 #endif  /* _SPI_CONTROLLER_H */

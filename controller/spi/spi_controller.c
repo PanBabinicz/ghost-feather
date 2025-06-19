@@ -22,6 +22,8 @@ typedef struct spi_controller
     uint8_t  ssi            : 1;                    /*!< The internal slave select index.                   */
     uint8_t  mstr           : 1;                    /*!< The master selection index.                        */
     uint8_t  ds             : 4;                    /*!< The data size index.                               */
+    uint8_t  ssoe           : 1;                    /*!< The slave select output enable index.              */
+    uint8_t  frf            : 1;                    /*!< The frame format index.                            */
     bool     is_init;                               /*!< The is initialized flag.                           */
 } spi_controller_t;
 
@@ -44,6 +46,8 @@ static spi_controller_t spi_controller_instance =
     .ssi            = SPI_CONTROLLER_SSI_0,
     .mstr           = SPI_CONTROLLER_MSTR_1,
     .ds             = SPI_CONTROLLER_DS_8,
+    .ssoe           = SPI_CONTROLLER_SSOE_1,
+    .frf            = SPI_CONTROLLER_FRF_0,
     .is_init        = false,
 };
 
@@ -142,6 +146,25 @@ static void (*const spi_controller_set_mstr_array[SPI_CONTROLLER_MSTR_TOTAL])(ui
     spi_set_master_mode,
 };
 
+///
+/// \brief Contains function pointers that allow the slave select output enable to be set using the
+///        libopencm3 functions.
+///
+static void (*const spi_controller_set_ssoe_array[SPI_CONTROLLER_SSOE_TOTAL])(uint32_t interface) =
+{
+    spi_disable_ss_output,
+    spi_enable_ss_output,
+};
+
+///
+/// \brief Contains function pointers that allow the frame format to be set using the libopencm3 functions.
+///
+static void (*const spi_controller_set_frf_array[SPI_CONTROLLER_FRF_TOTAL])(uint32_t interface) =
+{
+    spi_set_frf_motorola,
+    spi_set_frf_ti,
+};
+
 ///***********************************************************************************************************
 /// Private functions - declaration.
 ///***********************************************************************************************************
@@ -176,6 +199,8 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
 
     /* The CR2 configuration. */
     spi_set_data_size(instance->interface, (uint16_t)instance->ds);
+    spi_controller_set_ssoe_array[instance->ssoe](instance->interface);
+    spi_controller_set_frf_array[instance->frf](instance->interface);
 
     spi_enable(instance->interface);
 
@@ -344,6 +369,30 @@ spi_controller_result_t spi_controller_set_ds(spi_controller_t *const instance, 
     }
 
     instance->ds = ds;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_ssoe(spi_controller_t *const instance, const spi_controller_ssoe_t ssoe)
+{
+    if ((ssoe < SPI_CONTROLLER_SSOE_BEGIN) || (ssoe >= SPI_CONTROLLER_SSOE_TOTAL) || (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->ssoe = ssoe;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_frf(spi_controller_t *const instance, const spi_controller_frf_t frf)
+{
+    if ((frf < SPI_CONTROLLER_FRF_BEGIN) || (frf >= SPI_CONTROLLER_FRF_TOTAL) || (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->frf = frf;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
