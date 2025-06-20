@@ -174,6 +174,20 @@ typedef enum spi_controller_frf
 } spi_controller_frf_t;
 
 ///
+/// \brief The spi controller NSS pulse management type.
+///
+/// \note  This bit must be written only when the SPI is disabled (SPE=0).
+///        This bit is not used in I2S mode and SPI TI mode.
+///
+typedef enum spi_controller_nssp
+{
+    SPI_CONTROLLER_NSSP_BEGIN = 0,                  /*!< The NSS pulse management begin indicator.          */
+    SPI_CONTROLLER_NSSP_0     = 0,                  /*!< The NSS pulse management is disabled.              */
+    SPI_CONTROLLER_NSSP_1,                          /*!< The NSS pulse management is enabled.               */
+    SPI_CONTROLLER_NSSP_TOTAL,                      /*!< The NSS pulse management total indicator.          */
+} spi_controller_nssp_t;
+
+///
 /// \brief Initializes the spi controller.
 ///
 /// \param[in] instance                   The spi controller instance.
@@ -342,7 +356,7 @@ spi_controller_result_t spi_controller_set_mstr(spi_controller_t *const instance
 spi_controller_result_t spi_controller_set_ds(spi_controller_t *const instance, const spi_controller_ds_t ds);
 
 ///
-/// \brief Sets the spi slave select output enable inside instance.
+/// \brief Sets the spi slave select output enable index inside instance.
 ///
 /// \param[in] instance                   The spi controller instance.
 /// \param[in] ssoe                       The spi controller slave select output enable index.
@@ -354,7 +368,7 @@ spi_controller_result_t spi_controller_set_ds(spi_controller_t *const instance, 
 spi_controller_result_t spi_controller_set_ssoe(spi_controller_t *const instance, const spi_controller_ssoe_t ssoe);
 
 ///
-/// \brief Sets the spi frame format inside instance.
+/// \brief Sets the spi frame format inside index instance.
 ///
 /// \param[in] instance                   The spi controller instance.
 /// \param[in] frf                        The spi controller frame format index.
@@ -364,5 +378,17 @@ spi_controller_result_t spi_controller_set_ssoe(spi_controller_t *const instance
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
 ///
 spi_controller_result_t spi_controller_set_frf(spi_controller_t *const instance, const spi_controller_frf_t frf);
+
+///
+/// \brief Sets the spi NSS pulse mangement index inside instance.
+///
+/// \param[in] instance                   The spi controller instance.
+/// \param[in] nssp                       The spi controller NSS pulse management index.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_set_nssp(spi_controller_t *const instance, const spi_controller_frf_t nssp);
 
 #endif  /* _SPI_CONTROLLER_H */

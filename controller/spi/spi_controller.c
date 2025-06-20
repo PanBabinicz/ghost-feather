@@ -24,6 +24,7 @@ typedef struct spi_controller
     uint8_t  ds             : 4;                    /*!< The data size index.                               */
     uint8_t  ssoe           : 1;                    /*!< The slave select output enable index.              */
     uint8_t  frf            : 1;                    /*!< The frame format index.                            */
+    uint8_t  nssp           : 1;                    /*!< The NSS pulse management index.                    */
     bool     is_init;                               /*!< The is initialized flag.                           */
 } spi_controller_t;
 
@@ -48,6 +49,7 @@ static spi_controller_t spi_controller_instance =
     .ds             = SPI_CONTROLLER_DS_8,
     .ssoe           = SPI_CONTROLLER_SSOE_1,
     .frf            = SPI_CONTROLLER_FRF_0,
+    .nssp           = SPI_CONTROLLER_NSSP_0,
     .is_init        = false,
 };
 
@@ -165,6 +167,15 @@ static void (*const spi_controller_set_frf_array[SPI_CONTROLLER_FRF_TOTAL])(uint
     spi_set_frf_ti,
 };
 
+///
+/// \brief Contains function pointers that allow the NSS pulse management to be set using the
+///        libopencm3 functions.
+static void (*const spi_controller_set_nssp_array[SPI_CONTROLLER_NSSP_TOTAL])(uint32_t interface) =
+{
+    spi_disable_nssp,
+    spi_enable_nssp,
+};
+
 ///***********************************************************************************************************
 /// Private functions - declaration.
 ///***********************************************************************************************************
@@ -201,6 +212,7 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
     spi_set_data_size(instance->interface, (uint16_t)instance->ds);
     spi_controller_set_ssoe_array[instance->ssoe](instance->interface);
     spi_controller_set_frf_array[instance->frf](instance->interface);
+    spi_controller_set_nssp_array[instance->nssp](instance->interface);
 
     spi_enable(instance->interface);
 
@@ -393,6 +405,18 @@ spi_controller_result_t spi_controller_set_frf(spi_controller_t *const instance,
     }
 
     instance->frf = frf;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_nssp(spi_controller_t *const instance, const spi_controller_frf_t nssp)
+{
+    if ((nssp < SPI_CONTROLLER_NSSP_BEGIN) || (nssp >= SPI_CONTROLLER_NSSP_TOTAL) || (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->nssp = nssp;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
