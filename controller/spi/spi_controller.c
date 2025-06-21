@@ -25,6 +25,9 @@ typedef struct spi_controller
     uint8_t  ssoe           : 1;                    /*!< The slave select output enable index.              */
     uint8_t  frf            : 1;                    /*!< The frame format index.                            */
     uint8_t  nssp           : 1;                    /*!< The NSS pulse management index.                    */
+    uint8_t  frxth          : 1;                    /*!< The FIFO reception threshold index.                */
+    uint8_t  ldmatx         : 1;                    /*!< The last DMA transfer for transmission index.      */
+    uint8_t  ldmarx         : 1;                    /*!< The last DMA transfer for reception index.         */
     bool     is_init;                               /*!< The is initialized flag.                           */
 } spi_controller_t;
 
@@ -50,6 +53,9 @@ static spi_controller_t spi_controller_instance =
     .ssoe           = SPI_CONTROLLER_SSOE_1,
     .frf            = SPI_CONTROLLER_FRF_0,
     .nssp           = SPI_CONTROLLER_NSSP_0,
+    .frxth          = SPI_CONTROLLER_FRXTH_0,
+    .ldmatx         = SPI_CONTROLLER_LDMATX_0,
+    .ldmarx         = SPI_CONTROLLER_LDMARX_0,
     .is_init        = false,
 };
 
@@ -176,6 +182,33 @@ static void (*const spi_controller_set_nssp_array[SPI_CONTROLLER_NSSP_TOTAL])(ui
     spi_enable_nssp,
 };
 
+///
+/// \brief Contains function pointers that allow the FIFO reception threshold to be set using the
+///        libopencm3 functions.
+static void (*const spi_controller_set_frxth_array[SPI_CONTROLLER_FRXTH_TOTAL])(uint32_t interface) =
+{
+    spi_fifo_reception_threshold_16bit,
+    spi_fifo_reception_threshold_8bit,
+};
+
+///
+/// \brief Contains function pointers that allow the last DMA transfer for transmission to be set using the
+///        libopencm3 functions.
+static void (*const spi_controller_set_ldmatx_array[SPI_CONTROLLER_LDMATX_TOTAL])(uint32_t interface) =
+{
+    spi_set_ldmatx_even,
+    spi_set_ldmatx_odd,
+};
+
+///
+/// \brief Contains function pointers that allow the last DMA transfer for reception to be set using the
+///        libopencm3 functions.
+static void (*const spi_controller_set_ldmarx_array[SPI_CONTROLLER_LDMARX_TOTAL])(uint32_t interface) =
+{
+    spi_set_ldmarx_even,
+    spi_set_ldmarx_odd,
+};
+
 ///***********************************************************************************************************
 /// Private functions - declaration.
 ///***********************************************************************************************************
@@ -213,6 +246,9 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
     spi_controller_set_ssoe_array[instance->ssoe](instance->interface);
     spi_controller_set_frf_array[instance->frf](instance->interface);
     spi_controller_set_nssp_array[instance->nssp](instance->interface);
+    spi_controller_set_frxth_array[instance->frxth](instance->interface);
+    spi_controller_set_ldmatx_array[instance->ldmatx](instance->interface);
+    spi_controller_set_ldmarx_array[instance->ldmatx](instance->interface);
 
     spi_enable(instance->interface);
 
@@ -409,7 +445,7 @@ spi_controller_result_t spi_controller_set_frf(spi_controller_t *const instance,
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
 
-spi_controller_result_t spi_controller_set_nssp(spi_controller_t *const instance, const spi_controller_frf_t nssp)
+spi_controller_result_t spi_controller_set_nssp(spi_controller_t *const instance, const spi_controller_nssp_t nssp)
 {
     if ((nssp < SPI_CONTROLLER_NSSP_BEGIN) || (nssp >= SPI_CONTROLLER_NSSP_TOTAL) || (instance == NULL))
     {
@@ -417,6 +453,42 @@ spi_controller_result_t spi_controller_set_nssp(spi_controller_t *const instance
     }
 
     instance->nssp = nssp;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_frxth(spi_controller_t *const instance, const spi_controller_frxth_t frxth)
+{
+    if ((frxth < SPI_CONTROLLER_FRXTH_BEGIN) || (frxth >= SPI_CONTROLLER_FRXTH_TOTAL) || (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->frxth = frxth;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_ldmatx(spi_controller_t *const instance, const spi_controller_ldmatx_t ldmatx)
+{
+    if ((ldmatx < SPI_CONTROLLER_LDMATX_BEGIN) || (ldmatx >= SPI_CONTROLLER_LDMATX_TOTAL) || (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->ldmatx = ldmatx;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_ldmarx(spi_controller_t *const instance, const spi_controller_ldmarx_t ldmarx)
+{
+    if ((ldmarx < SPI_CONTROLLER_LDMARX_BEGIN) || (ldmarx >= SPI_CONTROLLER_LDMARX_TOTAL) || (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->ldmarx = ldmarx;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }

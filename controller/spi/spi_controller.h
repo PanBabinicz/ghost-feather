@@ -188,6 +188,45 @@ typedef enum spi_controller_nssp
 } spi_controller_nssp_t;
 
 ///
+/// \brief The spi controller FIFO reception threshold type.
+///
+/// \note  This bit is not used in I2S mode.
+///
+typedef enum spi_controller_frxth
+{
+    SPI_CONTROLLER_FRXTH_BEGIN = 0,                 /*!< The FIFO reception threshold begin indicator.      */
+    SPI_CONTROLLER_FRXTH_0     = 0,                 /*!< When the FIFO level >= 1/2, generate RXNE event.   */
+    SPI_CONTROLLER_FRXTH_1,                         /*!< When the FIFO level >= 1/4, generate RXNE event.   */
+    SPI_CONTROLLER_FRXTH_TOTAL,                     /*!< The FIFO reception threshold total indicator.      */
+} spi_controller_frxth_t;
+
+///
+/// \brief The spi controller last DMA transfer for transmission type.
+///
+/// \note  This bit is not used in I2S mode.
+///
+typedef enum spi_controller_ldmatx
+{
+    SPI_CONTROLLER_LDMATX_BEGIN = 0,                /*!< LDMA transfer for transmission begin indicator.    */
+    SPI_CONTROLLER_LDMATX_0     = 0,                /*!< Number of data to transfer is even.                */
+    SPI_CONTROLLER_LDMATX_1,                        /*!< Number of data to transfer is odd.                 */
+    SPI_CONTROLLER_LDMATX_TOTAL,                    /*!< LDMA transfer for transmission total indicator.    */
+} spi_controller_ldmatx_t;
+
+///
+/// \brief The spi controller last DMA transfer for reception type.
+///
+/// \note  This bit is not used in I2S mode.
+///
+typedef enum spi_controller_ldmarx
+{
+    SPI_CONTROLLER_LDMARX_BEGIN = 0,                /*!< LDMA transfer for reception begin indicator.       */
+    SPI_CONTROLLER_LDMARX_0     = 0,                /*!< Number of data to transfer is even.                */
+    SPI_CONTROLLER_LDMARX_1,                        /*!< Number of data to transfer is odd.                 */
+    SPI_CONTROLLER_LDMARX_TOTAL,                    /*!< LDMA transfer for reception total indicator.       */
+} spi_controller_ldmarx_t;
+
+///
 /// \brief Initializes the spi controller.
 ///
 /// \param[in] instance                   The spi controller instance.
@@ -389,6 +428,42 @@ spi_controller_result_t spi_controller_set_frf(spi_controller_t *const instance,
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
 ///
-spi_controller_result_t spi_controller_set_nssp(spi_controller_t *const instance, const spi_controller_frf_t nssp);
+spi_controller_result_t spi_controller_set_nssp(spi_controller_t *const instance, const spi_controller_nssp_t nssp);
+
+///
+/// \brief Sets the spi FIFO reception threshold index inside instance.
+///
+/// \param[in] instance                   The spi controller instance.
+/// \param[in] frxth                      The spi controller FIFO reception threshold index.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_set_frxth(spi_controller_t *const instance, const spi_controller_frxth_t frxth);
+
+///
+/// \brief Sets the spi last DMA transfer for transmission index inside instance.
+///
+/// \param[in] instance                   The spi controller instance.
+/// \param[in] ldmatx                     The spi controller last DMA transfer for transmission index.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_set_ldmatx(spi_controller_t *const instance, const spi_controller_ldmatx_t ldmatx);
+
+///
+/// \brief Sets the spi last DMA transfer for reception index inside instance.
+///
+/// \param[in] instance                   The spi controller instance.
+/// \param[in] ldmarx                     The spi controller last DMA transfer for reception index.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_set_ldmarx(spi_controller_t *const instance, const spi_controller_ldmarx_t ldmarx);
 
 #endif  /* _SPI_CONTROLLER_H */
