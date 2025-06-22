@@ -10,16 +10,16 @@
 ///
 typedef struct cr1_conf
 {
-    uint8_t  clock_phase    : 1;                    /*!< The clock phase index.                             */
-    uint8_t  clock_polarity : 1;                    /*!< The clock polarity index.                          */
-    uint8_t  bidimode       : 1;                    /*!< The bidirectional data mode index.                 */
-    uint8_t  bidioe         : 1;                    /*!< The output enable in bidirectional mode index.     */  
-    uint8_t  lsbfirst       : 1;                    /*!< The frame format index.                            */
-    uint8_t  crcen          : 1;                    /*!< The hardware CRC calculation index.                */
-    uint8_t  crcl           : 1;                    /*!< The CRC length index.                              */
-    uint8_t  ssm            : 1;                    /*!< The software slave management index.               */
-    uint8_t  ssi            : 1;                    /*!< The internal slave select index.                   */
-    uint8_t  mstr           : 1;                    /*!< The master selection index.                        */
+    uint8_t  cpha     : 1;                          /*!< The clock phase index.                             */
+    uint8_t  cpol     : 1;                          /*!< The clock polarity index.                          */
+    uint8_t  bidimode : 1;                          /*!< The bidirectional data mode index.                 */
+    uint8_t  bidioe   : 1;                          /*!< The output enable in bidirectional mode index.     */
+    uint8_t  lsbfirst : 1;                          /*!< The frame format index.                            */
+    uint8_t  crcen    : 1;                          /*!< The hardware CRC calculation index.                */
+    uint8_t  crcl     : 1;                          /*!< The CRC length index.                              */
+    uint8_t  ssm      : 1;                          /*!< The software slave management index.               */
+    uint8_t  ssi      : 1;                          /*!< The internal slave select index.                   */
+    uint8_t  mstr     : 1;                          /*!< The master selection index.                        */
 } cr1_conf_t;
 
 ///
@@ -27,13 +27,13 @@ typedef struct cr1_conf
 ///
 typedef struct cr2_conf
 {
-    uint8_t  ds             : 4;                    /*!< The data size index.                               */
-    uint8_t  ssoe           : 1;                    /*!< The slave select output enable index.              */
-    uint8_t  frf            : 1;                    /*!< The frame format index.                            */
-    uint8_t  nssp           : 1;                    /*!< The NSS pulse management index.                    */
-    uint8_t  frxth          : 1;                    /*!< The FIFO reception threshold index.                */
-    uint8_t  ldmatx         : 1;                    /*!< The last DMA transfer for transmission index.      */
-    uint8_t  ldmarx         : 1;                    /*!< The last DMA transfer for reception index.         */
+    uint8_t  ds       : 4;                          /*!< The data size index.                               */
+    uint8_t  ssoe     : 1;                          /*!< The slave select output enable index.              */
+    uint8_t  frf      : 1;                          /*!< The frame format index.                            */
+    uint8_t  nssp     : 1;                          /*!< The NSS pulse management index.                    */
+    uint8_t  frxth    : 1;                          /*!< The FIFO reception threshold index.                */
+    uint8_t  ldmatx   : 1;                          /*!< The last DMA transfer for transmission index.      */
+    uint8_t  ldmarx   : 1;                          /*!< The last DMA transfer for reception index.         */
 } cr2_conf_t;
 
 ///
@@ -58,25 +58,25 @@ static spi_controller_t spi_controller_instance =
     .interface = SPI1,
     .cr1 =
     {
-        .clock_phase    = SPI_CONTROLLER_CLOCK_PHASE_0,
-        .clock_polarity = SPI_CONTROLLER_CLOCK_POLARITY_1,
-        .bidimode       = SPI_CONTROLLER_BIDIMODE_0,
-        .bidioe         = SPI_CONTROLLER_BIDIOE_0,
-        .lsbfirst       = SPI_CONTROLLER_LSBFIRST_0,
-        .crcen          = SPI_CONTROLLER_CRCEN_0,
-        .ssm            = SPI_CONTROLLER_SSM_0,
-        .ssi            = SPI_CONTROLLER_SSI_0,
-        .mstr           = SPI_CONTROLLER_MSTR_1,
+        .cpha     = SPI_CONTROLLER_CLOCK_PHASE_0,
+        .cpol     = SPI_CONTROLLER_CLOCK_POLARITY_1,
+        .bidimode = SPI_CONTROLLER_BIDIMODE_0,
+        .bidioe   = SPI_CONTROLLER_BIDIOE_0,
+        .lsbfirst = SPI_CONTROLLER_LSBFIRST_0,
+        .crcen    = SPI_CONTROLLER_CRCEN_0,
+        .ssm      = SPI_CONTROLLER_SSM_0,
+        .ssi      = SPI_CONTROLLER_SSI_0,
+        .mstr     = SPI_CONTROLLER_MSTR_1,
     },
     .cr2 =
     {
-        .ds             = SPI_CONTROLLER_DS_8,
-        .ssoe           = SPI_CONTROLLER_SSOE_1,
-        .frf            = SPI_CONTROLLER_FRF_0,
-        .nssp           = SPI_CONTROLLER_NSSP_0,
-        .frxth          = SPI_CONTROLLER_FRXTH_0,
-        .ldmatx         = SPI_CONTROLLER_LDMATX_0,
-        .ldmarx         = SPI_CONTROLLER_LDMARX_0,
+        .ds       = SPI_CONTROLLER_DS_8,
+        .ssoe     = SPI_CONTROLLER_SSOE_1,
+        .frf      = SPI_CONTROLLER_FRF_0,
+        .nssp     = SPI_CONTROLLER_NSSP_0,
+        .frxth    = SPI_CONTROLLER_FRXTH_0,
+        .ldmatx   = SPI_CONTROLLER_LDMATX_0,
+        .ldmarx   = SPI_CONTROLLER_LDMARX_0,
     },
     .is_init = false,
 };
@@ -84,7 +84,7 @@ static spi_controller_t spi_controller_instance =
 ///
 /// \brief Contains function pointers that allow the clock phase to be set using the libopencm3 functions.
 ///
-static void (*const spi_controller_set_clock_phase_array[SPI_CONTROLLER_CLOCK_PHASE_TOTAL])(uint32_t interface) =
+static void (*const spi_controller_set_cpha_array[SPI_CONTROLLER_CLOCK_PHASE_TOTAL])(uint32_t interface) =
 {
     spi_set_clock_phase_0,
     spi_set_clock_phase_1,
@@ -93,7 +93,7 @@ static void (*const spi_controller_set_clock_phase_array[SPI_CONTROLLER_CLOCK_PH
 ///
 /// \brief Contains function pointers that allow the clock polarity to be set using the libopencm3 functions.
 ///
-static void (*const spi_controller_set_clock_polarity_array[SPI_CONTROLLER_CLOCK_POLARITY_TOTAL])(uint32_t interface) =
+static void (*const spi_controller_set_cpol_array[SPI_CONTROLLER_CLOCK_POLARITY_TOTAL])(uint32_t interface) =
 {
     spi_set_clock_polarity_0,
     spi_set_clock_polarity_1,
@@ -234,10 +234,26 @@ static void (*const spi_controller_set_ldmarx_array[SPI_CONTROLLER_LDMARX_TOTAL]
 ///***********************************************************************************************************
 /// Private functions - declaration.
 ///***********************************************************************************************************
+///
+/// \brief Validates the CR1 config values.
+///
+static spi_controller_result_t spi_controller_validate_cr1(const spi_controller_t *const instance);
 
 ///***********************************************************************************************************
 /// Private functions - definition.
 ///***********************************************************************************************************
+static spi_controller_result_t spi_controller_validate_cr1(const spi_controller_t *const instance)
+{
+    /* Whether the instance is NULL was checked before. */
+
+    /* CPHA must be cleared in NSSP mode.*/
+    if ((instance->cr2.nssp == SPI_CONTROLLER_NSSP_1) && (instance->cr1.cpha == SPI_CONTROLLER_CPHA_1))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
 
 ///***********************************************************************************************************
 /// Global functions - definition.
@@ -252,8 +268,8 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
     spi_disable(instance->interface);
 
     /* The CR1 configuration. */
-    spi_controller_set_clock_phase_array[instance->cr1.clock_phase](instance->interface);
-    spi_controller_set_clock_polarity_array[instance->cr1.clock_polarity](instance->interface);
+    spi_controller_set_cpha_array[instance->cr1.cpha](instance->interface);
+    spi_controller_set_cpol_array[instance->cr1.cpol](instance->interface);
     spi_controller_set_bidimode_array[instance->cr1.bidimode](instance->interface);
     spi_controller_set_bidioe_array[instance->cr1.bidioe](instance->interface);
     spi_controller_set_lsbfirst_array[instance->cr1.lsbfirst](instance->interface);
@@ -303,30 +319,26 @@ spi_controller_result_t spi_controller_get_instance(const spi_controller_t **ins
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
 
-spi_controller_result_t spi_controller_set_clock_phase(spi_controller_t *const instance,
-                                                       const spi_controller_clock_phase_t clock_phase)
+spi_controller_result_t spi_controller_set_cpha(spi_controller_t *const instance, const spi_controller_cpha_t cpha)
 {
-    if ((clock_phase < SPI_CONTROLLER_CLOCK_PHASE_BEGIN) || (clock_phase >= SPI_CONTROLLER_CLOCK_PHASE_TOTAL) ||
-        (instance == NULL))
+    if ((cpha < SPI_CONTROLLER_CPHA_BEGIN) || (cpha >= SPI_CONTROLLER_CPHA_TOTAL) || (instance == NULL))
     {
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->cr1.clock_phase = clock_phase;
+    instance->cr1.cpha = cpha;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
 
-spi_controller_result_t spi_controller_set_clock_polarity(spi_controller_t *const instance,
-                                                          const spi_controller_clock_polarity_t clock_polarity)
+spi_controller_result_t spi_controller_set_cpol(spi_controller_t *const instance, const spi_controller_cpol_t cpol)
 {
-    if ((clock_polarity < SPI_CONTROLLER_CLOCK_POLARITY_BEGIN) || (clock_polarity >= SPI_CONTROLLER_CLOCK_POLARITY_TOTAL) ||
-        (instance == NULL))
+    if ((cpol < SPI_CONTROLLER_CPOL_BEGIN) || (cpol >= SPI_CONTROLLER_CPOL_TOTAL) || (instance == NULL))
     {
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->cr1.clock_polarity = clock_polarity;
+    instance->cr1.cpol = cpol;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }

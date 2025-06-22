@@ -20,24 +20,24 @@ typedef enum spi_controller_result
 ///
 /// \brief The spi controller clock phase type.
 ///
-typedef enum spi_controller_clock_phase
+typedef enum spi_controller_cpha
 {
-    SPI_CONTROLLER_CLOCK_PHASE_BEGIN = 0,           /*!< The clock phase begin indicator.                   */
-    SPI_CONTROLLER_CLOCK_PHASE_0     = 0,           /*!< Data is captured on the 1st clock edge after CS.   */
-    SPI_CONTROLLER_CLOCK_PHASE_1,                   /*!< Data is captured on the 2nd clock edge after CS.   */
-    SPI_CONTROLLER_CLOCK_PHASE_TOTAL,               /*!< The clock phase total indicator.                   */
-} spi_controller_clock_phase_t;
+    SPI_CONTROLLER_CPHA_BEGIN = 0,                  /*!< The clock phase begin indicator.                   */
+    SPI_CONTROLLER_CPHA_0     = 0,                  /*!< Data is captured on the 1st clock edge after CS.   */
+    SPI_CONTROLLER_CPHA_1,                          /*!< Data is captured on the 2nd clock edge after CS.   */
+    SPI_CONTROLLER_CPHA_TOTAL,                      /*!< The clock phase total indicator.                   */
+} spi_controller_cpha_t;
 
 ///
 /// \brief The spi controller clock polarity type.
 ///
-typedef enum spi_controller_clock_polarity
+typedef enum spi_controller_cpol
 {
-    SPI_CONTROLLER_CLOCK_POLARITY_BEGIN = 0,        /*!< The clock polarity begin indicator.                */
-    SPI_CONTROLLER_CLOCK_POLARITY_0     = 0,        /*!< The clock polarity to 0 when idle.                 */
-    SPI_CONTROLLER_CLOCK_POLARITY_1,                /*!< The clock polarity to 1 when idle.                 */
-    SPI_CONTROLLER_CLOCK_POLARITY_TOTAL,            /*!< The clock polarity total indicator.                */
-} spi_controller_clock_polarity_t;
+    SPI_CONTROLLER_CPOL_BEGIN = 0,                  /*!< The clock polarity begin indicator.                */
+    SPI_CONTROLLER_CPOL_0     = 0,                  /*!< The clock polarity to 0 when idle.                 */
+    SPI_CONTROLLER_CPOL_1,                          /*!< The clock polarity to 1 when idle.                 */
+    SPI_CONTROLLER_CPOL_TOTAL,                      /*!< The clock polarity total indicator.                */
+} spi_controller_cpol_t;
 
 ///
 /// \brief The spi controller bidirectional data mode type.
@@ -263,27 +263,25 @@ spi_controller_result_t spi_controller_get_instance(const spi_controller_t **ins
 /// \brief Sets the spi clock phase index inside instance.
 ///
 /// \param[in] instance                   The spi controller instance.
-/// \param[in] clock_phase                The spi controller clock phase index.
+/// \param[in] cpha                       The spi controller clock phase index.
 ///
 /// \return spi_controller_result_t       The spi controller result.
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
 ///
-spi_controller_result_t spi_controller_set_clock_phase(spi_controller_t *const instance,
-                                                       const spi_controller_clock_phase_t clock_phase);
+spi_controller_result_t spi_controller_set_cpha(spi_controller_t *const instance, const spi_controller_cpha_t cpha);
 
 ///
 /// \brief Sets the spi clock polarity index inside instance.
 ///
 /// \param[in] instance                   The spi controller instance.
-/// \param[in] clock_polarity             The spi controller clock polarity index.
+/// \param[in] cpol                       The spi controller clock polarity index.
 ///
 /// \return spi_controller_result_t       The spi controller result.
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
 ///
-spi_controller_result_t spi_controller_set_clock_polarity(spi_controller_t *const instance,
-                                                          const spi_controller_clock_polarity_t clock_polarity);
+spi_controller_result_t spi_controller_set_cpol(spi_controller_t *const instance, const spi_controller_cpol_t cpol);
 
 ///
 /// \brief Sets the spi bidirectional data mode index inside instance.
