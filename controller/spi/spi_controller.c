@@ -6,11 +6,10 @@
 /// Private objects - declaration.
 ///***********************************************************************************************************
 ///
-/// \brief The spi controller instance type.
+/// \brief The spi CR1 config type.
 ///
-typedef struct spi_controller
+typedef struct cr1_conf
 {
-    uint32_t interface;                             /*!< The spi peripheral interface.                      */
     uint8_t  clock_phase    : 1;                    /*!< The clock phase index.                             */
     uint8_t  clock_polarity : 1;                    /*!< The clock polarity index.                          */
     uint8_t  bidimode       : 1;                    /*!< The bidirectional data mode index.                 */
@@ -21,6 +20,13 @@ typedef struct spi_controller
     uint8_t  ssm            : 1;                    /*!< The software slave management index.               */
     uint8_t  ssi            : 1;                    /*!< The internal slave select index.                   */
     uint8_t  mstr           : 1;                    /*!< The master selection index.                        */
+} cr1_conf_t;
+
+///
+/// \brief The spi CR2 config type.
+///
+typedef struct cr2_conf
+{
     uint8_t  ds             : 4;                    /*!< The data size index.                               */
     uint8_t  ssoe           : 1;                    /*!< The slave select output enable index.              */
     uint8_t  frf            : 1;                    /*!< The frame format index.                            */
@@ -28,7 +34,17 @@ typedef struct spi_controller
     uint8_t  frxth          : 1;                    /*!< The FIFO reception threshold index.                */
     uint8_t  ldmatx         : 1;                    /*!< The last DMA transfer for transmission index.      */
     uint8_t  ldmarx         : 1;                    /*!< The last DMA transfer for reception index.         */
-    bool     is_init;                               /*!< The is initialized flag.                           */
+} cr2_conf_t;
+
+///
+/// \brief The spi controller instance type.
+///
+typedef struct spi_controller
+{
+    uint32_t   interface;                           /*!< The spi peripheral interface.                      */
+    cr1_conf_t cr1;                                 /*!< The spi CR1 config.                                */
+    cr2_conf_t cr2;                                 /*!< The spi CR2 config.                                */
+    bool       is_init;                             /*!< The is initialized flag.                           */
 } spi_controller_t;
 
 ///***********************************************************************************************************
@@ -39,24 +55,30 @@ typedef struct spi_controller
 ///
 static spi_controller_t spi_controller_instance =
 {
-    .interface      = SPI1,
-    .clock_phase    = SPI_CONTROLLER_CLOCK_PHASE_0,
-    .clock_polarity = SPI_CONTROLLER_CLOCK_POLARITY_1,
-    .bidimode       = SPI_CONTROLLER_BIDIMODE_0,
-    .bidioe         = SPI_CONTROLLER_BIDIOE_0,
-    .lsbfirst       = SPI_CONTROLLER_LSBFIRST_0,
-    .crcen          = SPI_CONTROLLER_CRCEN_0,
-    .ssm            = SPI_CONTROLLER_SSM_0,
-    .ssi            = SPI_CONTROLLER_SSI_0,
-    .mstr           = SPI_CONTROLLER_MSTR_1,
-    .ds             = SPI_CONTROLLER_DS_8,
-    .ssoe           = SPI_CONTROLLER_SSOE_1,
-    .frf            = SPI_CONTROLLER_FRF_0,
-    .nssp           = SPI_CONTROLLER_NSSP_0,
-    .frxth          = SPI_CONTROLLER_FRXTH_0,
-    .ldmatx         = SPI_CONTROLLER_LDMATX_0,
-    .ldmarx         = SPI_CONTROLLER_LDMARX_0,
-    .is_init        = false,
+    .interface = SPI1,
+    .cr1 =
+    {
+        .clock_phase    = SPI_CONTROLLER_CLOCK_PHASE_0,
+        .clock_polarity = SPI_CONTROLLER_CLOCK_POLARITY_1,
+        .bidimode       = SPI_CONTROLLER_BIDIMODE_0,
+        .bidioe         = SPI_CONTROLLER_BIDIOE_0,
+        .lsbfirst       = SPI_CONTROLLER_LSBFIRST_0,
+        .crcen          = SPI_CONTROLLER_CRCEN_0,
+        .ssm            = SPI_CONTROLLER_SSM_0,
+        .ssi            = SPI_CONTROLLER_SSI_0,
+        .mstr           = SPI_CONTROLLER_MSTR_1,
+    },
+    .cr2 =
+    {
+        .ds             = SPI_CONTROLLER_DS_8,
+        .ssoe           = SPI_CONTROLLER_SSOE_1,
+        .frf            = SPI_CONTROLLER_FRF_0,
+        .nssp           = SPI_CONTROLLER_NSSP_0,
+        .frxth          = SPI_CONTROLLER_FRXTH_0,
+        .ldmatx         = SPI_CONTROLLER_LDMATX_0,
+        .ldmarx         = SPI_CONTROLLER_LDMARX_0,
+    },
+    .is_init = false,
 };
 
 ///
@@ -230,25 +252,25 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
     spi_disable(instance->interface);
 
     /* The CR1 configuration. */
-    spi_controller_set_clock_phase_array[instance->clock_phase](instance->interface);
-    spi_controller_set_clock_polarity_array[instance->clock_polarity](instance->interface);
-    spi_controller_set_bidimode_array[instance->bidimode](instance->interface);
-    spi_controller_set_bidioe_array[instance->bidioe](instance->interface);
-    spi_controller_set_lsbfirst_array[instance->lsbfirst](instance->interface);
-    spi_controller_set_crcen_array[instance->crcen](instance->interface);
-    spi_controller_set_crcl_array[instance->crcl](instance->interface);
-    spi_controller_set_ssm_array[instance->ssm](instance->interface);
-    spi_controller_set_ssi_array[instance->ssi](instance->interface);
-    spi_controller_set_mstr_array[instance->mstr](instance->interface);
+    spi_controller_set_clock_phase_array[instance->cr1.clock_phase](instance->interface);
+    spi_controller_set_clock_polarity_array[instance->cr1.clock_polarity](instance->interface);
+    spi_controller_set_bidimode_array[instance->cr1.bidimode](instance->interface);
+    spi_controller_set_bidioe_array[instance->cr1.bidioe](instance->interface);
+    spi_controller_set_lsbfirst_array[instance->cr1.lsbfirst](instance->interface);
+    spi_controller_set_crcen_array[instance->cr1.crcen](instance->interface);
+    spi_controller_set_crcl_array[instance->cr1.crcl](instance->interface);
+    spi_controller_set_ssm_array[instance->cr1.ssm](instance->interface);
+    spi_controller_set_ssi_array[instance->cr1.ssi](instance->interface);
+    spi_controller_set_mstr_array[instance->cr1.mstr](instance->interface);
 
     /* The CR2 configuration. */
-    spi_set_data_size(instance->interface, (uint16_t)instance->ds);
-    spi_controller_set_ssoe_array[instance->ssoe](instance->interface);
-    spi_controller_set_frf_array[instance->frf](instance->interface);
-    spi_controller_set_nssp_array[instance->nssp](instance->interface);
-    spi_controller_set_frxth_array[instance->frxth](instance->interface);
-    spi_controller_set_ldmatx_array[instance->ldmatx](instance->interface);
-    spi_controller_set_ldmarx_array[instance->ldmatx](instance->interface);
+    spi_set_data_size(instance->interface, (uint16_t)instance->cr2.ds);
+    spi_controller_set_ssoe_array[instance->cr2.ssoe](instance->interface);
+    spi_controller_set_frf_array[instance->cr2.frf](instance->interface);
+    spi_controller_set_nssp_array[instance->cr2.nssp](instance->interface);
+    spi_controller_set_frxth_array[instance->cr2.frxth](instance->interface);
+    spi_controller_set_ldmatx_array[instance->cr2.ldmatx](instance->interface);
+    spi_controller_set_ldmarx_array[instance->cr2.ldmatx](instance->interface);
 
     spi_enable(instance->interface);
 
@@ -264,7 +286,7 @@ spi_controller_result_t spi_controller_deinit(spi_controller_t *const instance)
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    spi_disable(instance->spi);
+    spi_disable(instance->interface);
     instance->is_init = false;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
@@ -290,7 +312,7 @@ spi_controller_result_t spi_controller_set_clock_phase(spi_controller_t *const i
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->clock_phase = clock_phase;
+    instance->cr1.clock_phase = clock_phase;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -304,7 +326,7 @@ spi_controller_result_t spi_controller_set_clock_polarity(spi_controller_t *cons
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->clock_polarity = clock_polarity;
+    instance->cr1.clock_polarity = clock_polarity;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -318,7 +340,7 @@ spi_controller_result_t spi_controller_set_bidimode(spi_controller_t *const inst
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->bidimode = bidimode;
+    instance->cr1.bidimode = bidimode;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -331,7 +353,7 @@ spi_controller_result_t spi_controller_set_bidioe(spi_controller_t *const instan
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->bidioe = bidioe;
+    instance->cr1.bidioe = bidioe;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -344,7 +366,7 @@ spi_controller_result_t spi_controller_set_lsbfirst(spi_controller_t *const inst
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->lsbfirst = lsbfirst;
+    instance->cr1.lsbfirst = lsbfirst;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -356,7 +378,7 @@ spi_controller_result_t spi_controller_set_crcen(spi_controller_t *const instanc
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->crcen = crcen;
+    instance->cr1.crcen = crcen;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -368,7 +390,7 @@ spi_controller_result_t spi_controller_set_crcl(spi_controller_t *const instance
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->crcl = crcl;
+    instance->cr1.crcl = crcl;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -380,7 +402,7 @@ spi_controller_result_t spi_controller_set_ssm(spi_controller_t *const instance,
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->ssm = ssm;
+    instance->cr1.ssm = ssm;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -392,7 +414,7 @@ spi_controller_result_t spi_controller_set_ssi(spi_controller_t *const instance,
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->ssi = ssi;
+    instance->cr1.ssi = ssi;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -404,7 +426,7 @@ spi_controller_result_t spi_controller_set_mstr(spi_controller_t *const instance
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->mstr = mstr;
+    instance->cr1.mstr = mstr;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -416,7 +438,7 @@ spi_controller_result_t spi_controller_set_ds(spi_controller_t *const instance, 
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->ds = ds;
+    instance->cr2.ds = ds;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -428,7 +450,7 @@ spi_controller_result_t spi_controller_set_ssoe(spi_controller_t *const instance
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->ssoe = ssoe;
+    instance->cr2.ssoe = ssoe;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -440,7 +462,7 @@ spi_controller_result_t spi_controller_set_frf(spi_controller_t *const instance,
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->frf = frf;
+    instance->cr2.frf = frf;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -452,7 +474,7 @@ spi_controller_result_t spi_controller_set_nssp(spi_controller_t *const instance
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->nssp = nssp;
+    instance->cr2.nssp = nssp;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -464,7 +486,7 @@ spi_controller_result_t spi_controller_set_frxth(spi_controller_t *const instanc
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->frxth = frxth;
+    instance->cr2.frxth = frxth;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -476,7 +498,7 @@ spi_controller_result_t spi_controller_set_ldmatx(spi_controller_t *const instan
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->ldmatx = ldmatx;
+    instance->cr2.ldmatx = ldmatx;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
@@ -488,7 +510,7 @@ spi_controller_result_t spi_controller_set_ldmarx(spi_controller_t *const instan
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
-    instance->ldmarx = ldmarx;
+    instance->cr2.ldmarx = ldmarx;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
