@@ -62,6 +62,17 @@ typedef enum spi_controller_bidioe
 } spi_controller_bidioe_t;
 
 ///
+/// \brief The spi controller receive only mode enable type.
+///
+typedef enum spi_controller_rxonly
+{
+    SPI_CONTROLLER_RXONLY_BEGIN = 0,                /*!< The receive only mode enable begin indicator.      */
+    SPI_CONTROLLER_RXONLY_0     = 0,                /*!< Full-duplex (transmit and receive).                */
+    SPI_CONTROLLER_RXONLY_1,                        /*!< Output disabled (receive-only mode).               */
+    SPI_CONTROLLER_RXONLY_TOTAL,                    /*!< The receive only mode enable total indicator.      */
+} spi_controller_rxonly_t;
+
+///
 /// \brief The spi controller frame format type.
 ///
 typedef enum spi_controller_lsbfirst
@@ -307,6 +318,18 @@ spi_controller_result_t spi_controller_set_bidimode(spi_controller_t *const inst
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
 ///
 spi_controller_result_t spi_controller_set_bidioe(spi_controller_t *const instance, const spi_controller_bidioe_t bidioe);
+
+///
+/// \brief Sets the spi receive only mode enable index inside instance.
+///
+/// \param[in] instance                   The spi controller instance.
+/// \param[in] rxonly                     The spi controller receive only mode enable index.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_set_rxonly(spi_controller_t *const instance, const spi_controller_rxonly_t rxonly);
 
 ///
 /// \brief Sets the spi frame format index inside instance.

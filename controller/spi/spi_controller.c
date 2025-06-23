@@ -14,6 +14,7 @@ typedef struct cr1_conf
     uint8_t  cpol     : 1;                          /*!< The clock polarity index.                          */
     uint8_t  bidimode : 1;                          /*!< The bidirectional data mode index.                 */
     uint8_t  bidioe   : 1;                          /*!< The output enable in bidirectional mode index.     */
+    uint8_t  rxonly   : 1;                          /*!< The receive only mode enable index.                */
     uint8_t  lsbfirst : 1;                          /*!< The frame format index.                            */
     uint8_t  crcen    : 1;                          /*!< The hardware CRC calculation index.                */
     uint8_t  crcl     : 1;                          /*!< The CRC length index.                              */
@@ -62,6 +63,7 @@ static spi_controller_t spi_controller_instance =
         .cpol     = SPI_CONTROLLER_CLOCK_POLARITY_1,
         .bidimode = SPI_CONTROLLER_BIDIMODE_0,
         .bidioe   = SPI_CONTROLLER_BIDIOE_0,
+        .rxonly   = SPI_CONTROLLER_RXONLY_0,
         .lsbfirst = SPI_CONTROLLER_LSBFIRST_0,
         .crcen    = SPI_CONTROLLER_CRCEN_0,
         .ssm      = SPI_CONTROLLER_SSM_0,
@@ -252,6 +254,13 @@ static spi_controller_result_t spi_controller_validate_cr1(const spi_controller_
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
+    /* RXONLY and BIDIMODE can't be set at the same time. */
+    if ((instance->cr1.rxonly == SPI_CONTROLLER_RXONLY_1) &&
+        (instance->cr1.bidimode == SPI_CONTROLLER_BIDIMODE_1))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
 
@@ -366,6 +375,19 @@ spi_controller_result_t spi_controller_set_bidioe(spi_controller_t *const instan
     }
 
     instance->cr1.bidioe = bidioe;
+
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_rxonly(spi_controller_t *const instance, const spi_controller_rxonly_t rxonly)
+{
+    if ((rxonly < SPI_CONTROLLER_RXONLY_BEGIN) || (rxonly >= SPI_CONTROLLER_RXONLY_TOTAL) ||
+        (instance == NULL))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->cr1.rxonly = rxonly;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
