@@ -6,6 +6,14 @@
 /// Private objects - declaration.
 ///***********************************************************************************************************
 ///
+/// \brief The spi CRCPR config type.
+///
+typedef struct crcpr_conf
+{
+    uint16_t crcpoly;                               /*!< The CRC polynomial value.                          */
+} crcpr_conf_t;
+
+///
 /// \brief The spi CR1 config type.
 ///
 typedef struct cr1_conf
@@ -42,10 +50,11 @@ typedef struct cr2_conf
 ///
 typedef struct spi_controller
 {
-    uint32_t   interface;                           /*!< The spi peripheral interface.                      */
-    cr1_conf_t cr1;                                 /*!< The spi CR1 config.                                */
-    cr2_conf_t cr2;                                 /*!< The spi CR2 config.                                */
-    bool       is_init;                             /*!< The is initialized flag.                           */
+    uint32_t     interface;                         /*!< The spi peripheral interface.                      */
+    crcpr_conf_t crcpr;                             /*!< The spi CRCPR config.                              */
+    cr1_conf_t   cr1;                               /*!< The spi CR1 config.                                */
+    cr2_conf_t   cr2;                               /*!< The spi CR2 config.                                */
+    bool         is_init;                           /*!< The is initialized flag.                           */
 } spi_controller_t;
 
 ///***********************************************************************************************************
@@ -57,6 +66,10 @@ typedef struct spi_controller
 static spi_controller_t spi_controller_instance =
 {
     .interface = SPI1,
+    .crcpr =
+    {
+        .crcpr    = CRCPOLY_RESET_VALUE,
+    },
     .cr1 =
     {
         .cpha     = SPI_CONTROLLER_CLOCK_PHASE_0,
@@ -287,6 +300,11 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
         return SPI_CONTROLLER_RESULT_ERROR;
     }
 
+    if (spi_controller_validate_config(instance) != SPI_CONTROLLER_RESULT_SUCCESS)
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
     spi_disable(instance->interface);
 
     /* The CR1 configuration. */
@@ -338,6 +356,18 @@ spi_controller_result_t spi_controller_get_instance(const spi_controller_t **ins
     }
 
     *instance = &spi_controller_instance;
+    return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+spi_controller_result_t spi_controller_set_crcpr(spi_controller_t *const instance, const uint16_t crcpoly)
+{
+    if (instance == NULL)
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    instance->crcpr.crcpoly = crcpoly;
+
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
 

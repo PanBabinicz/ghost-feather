@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define CRCPOLY_RESET_VALUE (0x0007)
+
 ///
 /// \brief The spi controller instance type.
 ///
@@ -269,6 +271,20 @@ spi_controller_result_t spi_controller_deinit(spi_controller_t *const instance);
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
 ///
 spi_controller_result_t spi_controller_get_instance(const spi_controller_t **instance);
+
+///
+/// \brief Sets the spi CRC polynomial value inside instance.
+///
+/// \note  Default reset value is `0x0007`.
+///
+/// \param[in] instance                   The spi controller instance.
+/// \param[in] crcpoly                    The spi controller CRC polynomial value.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_set_crcpr(spi_controller_t *const instance, const uint16_t crcpoly);
 
 ///
 /// \brief Sets the spi clock phase index inside instance.
