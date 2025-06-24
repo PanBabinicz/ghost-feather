@@ -237,14 +237,14 @@ static void (*const spi_controller_set_ldmarx_array[SPI_CONTROLLER_LDMARX_TOTAL]
 /// Private functions - declaration.
 ///***********************************************************************************************************
 ///
-/// \brief Validates the CR1 config values.
+/// \brief Validates the CR1 and CR2 config values.
 ///
-static spi_controller_result_t spi_controller_validate_cr1(const spi_controller_t *const instance);
+static spi_controller_result_t spi_controller_validate_config(const spi_controller_t *const instance);
 
 ///***********************************************************************************************************
 /// Private functions - definition.
 ///***********************************************************************************************************
-static spi_controller_result_t spi_controller_validate_cr1(const spi_controller_t *const instance)
+static spi_controller_result_t spi_controller_validate_config(const spi_controller_t *const instance)
 {
     /* Whether the instance is NULL was checked before. */
 
@@ -257,6 +257,19 @@ static spi_controller_result_t spi_controller_validate_cr1(const spi_controller_
     /* RXONLY and BIDIMODE can't be set at the same time. */
     if ((instance->cr1.rxonly == SPI_CONTROLLER_RXONLY_1) &&
         (instance->cr1.bidimode == SPI_CONTROLLER_BIDIMODE_1))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    /* Keep CHPA and TI bits cleared in NSSP mode. */
+    if (((instance->cr2.nssp == SPI_CONTROLLER_NSSP_1) && (instance->cr2.frf == SPI_CONTROLLER_FRF_1)) ||
+        ((instance->cr2.nssp == SPI_CONTROLLER_NSSP_1) && (instance->cr1.cpha == SPI_CONTROLLER_CPHA_1)))
+    {
+        return SPI_CONTROLLER_RESULT_ERROR;
+    }
+
+    /* Keep NSSP bit cleared in TI mode. */
+    if ((instance->cr1.frf == SPI_CONTROLLER_FRF_1) && (instance->cr1.nssp == SPI_CONTROLLER_NSSP_1))
     {
         return SPI_CONTROLLER_RESULT_ERROR;
     }
