@@ -348,7 +348,7 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
     spi_controller_set_nssp_array[instance->cr2.nssp](instance->interface);
     spi_controller_set_frxth_array[instance->cr2.frxth](instance->interface);
     spi_controller_set_ldmatx_array[instance->cr2.ldmatx](instance->interface);
-    spi_controller_set_ldmarx_array[instance->cr2.ldmatx](instance->interface);
+    spi_controller_set_ldmarx_array[instance->cr2.ldmarx](instance->interface);
 
     if (instance->crcpr.set == true)
     {
