@@ -11,6 +11,7 @@
 typedef struct crcpr_conf
 {
     uint16_t crcpoly;                               /*!< The CRC polynomial value.                          */
+    bool     set;                                   /*!< The set CRC polynomial flag.                       */
 } crcpr_conf_t;
 
 ///
@@ -51,9 +52,9 @@ typedef struct cr2_conf
 typedef struct spi_controller
 {
     uint32_t     interface;                         /*!< The spi peripheral interface.                      */
-    crcpr_conf_t crcpr;                             /*!< The spi CRCPR config.                              */
     cr1_conf_t   cr1;                               /*!< The spi CR1 config.                                */
     cr2_conf_t   cr2;                               /*!< The spi CR2 config.                                */
+    crcpr_conf_t crcpr;                             /*!< The spi CRCPR config.                              */
     bool         is_init;                           /*!< The is initialized flag.                           */
 } spi_controller_t;
 
@@ -69,6 +70,7 @@ static spi_controller_t spi_controller_instance =
     .crcpr =
     {
         .crcpr    = CRCPOLY_RESET_VALUE,
+        .set      = false,
     },
     .cr1 =
     {
@@ -252,7 +254,20 @@ static void (*const spi_controller_set_ldmarx_array[SPI_CONTROLLER_LDMARX_TOTAL]
 ///
 /// \brief Validates the CR1 and CR2 config values.
 ///
+/// \param[in] instance                   The spi controller instance.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
 static spi_controller_result_t spi_controller_validate_config(const spi_controller_t *const instance);
+
+///
+/// \brief Sets the CRC polynomial register.
+///
+/// \param[in] instance The spi controller instance.
+///
+static void spi_set_crcpr(const spi_controller_t *const instance);
 
 ///***********************************************************************************************************
 /// Private functions - definition.
@@ -288,6 +303,13 @@ static spi_controller_result_t spi_controller_validate_config(const spi_controll
     }
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
+}
+
+static void spi_set_crcpr(const spi_controller_t *const instance)
+{
+    /* Whether the instance is NULL was checked before. */
+
+    SPI_CRCPR(instance->interface) = instance->crcpr.crcpoly;
 }
 
 ///***********************************************************************************************************
@@ -328,6 +350,11 @@ spi_controller_result_t spi_controller_init(spi_controller_t *const instance)
     spi_controller_set_ldmatx_array[instance->cr2.ldmatx](instance->interface);
     spi_controller_set_ldmarx_array[instance->cr2.ldmatx](instance->interface);
 
+    if (instance->crcpr.set == true)
+    {
+        spi_set_crcpr(instance);
+    }
+
     spi_enable(instance->interface);
 
     instance->is_init = true;
@@ -367,6 +394,7 @@ spi_controller_result_t spi_controller_set_crcpr(spi_controller_t *const instanc
     }
 
     instance->crcpr.crcpoly = crcpoly;
+    instance->crcpr.set     = true;
 
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
