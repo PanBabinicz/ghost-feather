@@ -264,13 +264,41 @@ spi_controller_result_t spi_controller_deinit(spi_controller_t *const instance);
 ///
 /// \brief Gets the spi instance.
 ///
-/// \param[out] instance                  The pointer to spi controller instance.
+/// \param[out] instance                  The pointer to the spi controller instance.
 ///
 /// \return spi_controller_result_t       The spi controller result.
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
 /// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
 ///
 spi_controller_result_t spi_controller_get_instance(const spi_controller_t **instance);
+
+///
+/// \brief Receives the specified number of bytes over spi.
+///
+/// \param[in]  instance                  The pointer to the spi controller instance.
+/// \param[out] data                      The pointer to the data buffer.
+/// \param[in]  size                      The number of bytes to receive.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_receive(const spi_controller_t *const instance, uint8_t *const data,
+                                               const uint32_t size);
+
+///
+/// \brief Transmits the specified number of bytes over spi.
+///
+/// \param[in] instance                   The pointer to the spi controller instance.
+/// \param[in] data                       The pointer to the data buffer.
+/// \param[in] size                       The number of bytes to transmit.
+///
+/// \return spi_controller_result_t       The spi controller result.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
+/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+///
+spi_controller_result_t spi_controller_receive(const spi_controller_t *const instance,
+                                               const uint8_t *const data, const uint32_t size);
 
 ///
 /// \brief Sets the spi CRC polynomial value inside instance.
