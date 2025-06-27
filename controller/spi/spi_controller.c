@@ -386,6 +386,70 @@ spi_controller_result_t spi_controller_get_instance(const spi_controller_t **ins
     return SPI_CONTROLLER_RESULT_SUCCESS;
 }
 
+spi_ctrl_res_t spi_ctrl_recv(const spi_ctrl_t *const inst, uint8_t *const buf, const uint32_t sz)
+{
+    if ((inst == NULL) || (buf == NULL))
+    {
+        return SPI_CTRL_RES_ERR;
+    }
+
+    const uint8_t step  = (inst->cr2.ds <= SPI_CTRL_DS_8) ? 1 : 2;
+    for (size_t i = 0; i < sz; i += step)
+    {
+        uint16_t data = spi_read(inst->intf);
+
+        if (step == 2)
+        {
+            if ((i + 1) >= sz)
+            {
+                return SPI_CTRL_RES_ERR;
+            }
+
+            buf[i]     = ((data >> 8) & 0xff);
+            buf[i + 1] = ((data >> 0) & 0xff);
+        }
+        else
+        {
+            buf[i] = ((data >> 0) & 0xff);
+        }
+    }
+
+    return SPI_CTRL_RES_OK;
+}
+
+spi_ctrl_res_t spi_ctrl_send(const spi_ctrl_t *const inst, const uint8_t *const buf, const uint32_t sz)
+{
+    if ((inst == NULL) || (buf == NULL))
+    {
+        return SPI_CTRL_RES_ERR;
+    }
+
+    const uint8_t step = (inst->cr2.ds <= SPI_CTRL_DS_8) ? 1 : 2;
+
+    for (size_t i = 0; i < sz; i += step)
+    {
+        uint16_t data;
+
+        if (step == 2)
+        {
+            if ((i + 1) >= sz)
+            {
+                return SPI_CTRL_RES_ERR;
+            }
+
+            data = (((uint16_t)buf[i] << 8) | buf[i + 1]);
+        }
+        else
+        {
+            data = buf[i];
+        }
+
+        spi_send(inst->intf, data);
+    }
+
+    return SPI_CTRL_RES_OK;
+}
+
 spi_controller_result_t spi_controller_set_crcpr(spi_controller_t *const instance, const uint16_t crcpoly)
 {
     if (instance == NULL)

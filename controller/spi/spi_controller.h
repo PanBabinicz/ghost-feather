@@ -275,30 +275,28 @@ spi_controller_result_t spi_controller_get_instance(const spi_controller_t **ins
 ///
 /// \brief Receives the specified number of bytes over spi.
 ///
-/// \param[in]  instance                  The pointer to the spi controller instance.
-/// \param[out] data                      The pointer to the data buffer.
-/// \param[in]  size                      The number of bytes to receive.
+/// \param[in] inst          The pointer to the spi controller instance.
+/// \param[in] buf           The pointer to the data buffer.
+/// \param[in] sz            The number of bytes to transmit.
 ///
-/// \return spi_controller_result_t       The spi controller result.
-/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
-/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+/// \return spi_ctrl_res_t   The spi controller result.
+/// \retval SPI_CTRL_RES_OK  On success.
+/// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_controller_result_t spi_controller_receive(const spi_controller_t *const instance, uint8_t *const data,
-                                               const uint32_t size);
+spi_ctrl_res_t spi_ctrl_recv(const spi_ctrl_t *const inst, uint8_t *const buf, const uint32_t sz);
 
 ///
-/// \brief Transmits the specified number of bytes over spi.
+/// \brief Sends the specified number of bytes over spi.
 ///
-/// \param[in] instance                   The pointer to the spi controller instance.
-/// \param[in] data                       The pointer to the data buffer.
-/// \param[in] size                       The number of bytes to transmit.
+/// \param[in] inst          The pointer to the spi controller instance.
+/// \param[in] buf           The pointer to the data buffer.
+/// \param[in] sz            The number of bytes to transmit.
 ///
-/// \return spi_controller_result_t       The spi controller result.
-/// \retval SPI_CONTROLLER_RESULT_SUCCESS On success.
-/// \retval SPI_CONTROLLER_RESULT_SUCCESS Otherwise.
+/// \return spi_ctrl_res_t   The spi controller result.
+/// \retval SPI_CTRL_RES_OK  On success.
+/// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_controller_result_t spi_controller_receive(const spi_controller_t *const instance,
-                                               const uint8_t *const data, const uint32_t size);
+spi_ctrl_res_t spi_ctrl_send(const spi_ctrl_t *const inst, const uint8_t *const buf, const uint32_t sz);
 
 ///
 /// \brief Sets the spi CRC polynomial value inside instance.
