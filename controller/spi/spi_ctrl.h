@@ -13,11 +13,20 @@ typedef struct spi_ctrl spi_ctrl_t;
 ///
 /// \brief The spi controller result type.
 ///
-typedef enum spi_ctrl_result
+typedef enum spi_ctrl_res
 {
     SPI_CTRL_RES_OK = 0,
     SPI_CTRL_RES_ERR,
 } spi_ctrl_res_t;
+
+///
+/// \brief The spi controller result type.
+///
+typedef enum spi_ctrl_stat
+{
+    SPI_CTRL_STAT_DEINIT = 0,
+    SPI_CTRL_STAT_INIT,
+} spi_ctrl_stat_t;
 
 ///
 /// \brief The spi ctrl clock phase type.

@@ -66,7 +66,7 @@ typedef struct spi_ctrl
 ///
 static spi_ctrl_t spi_ctrl_inst =
 {
-    .intf = SPI1,
+    .intf  = SPI1,
     .crcpr =
     {
         .crcpr    = CRCPOLY_RES_VAL,
@@ -95,7 +95,7 @@ static spi_ctrl_t spi_ctrl_inst =
         .ldmatx   = SPI_CTRL_LDMATX_0,
         .ldmarx   = SPI_CTRL_LDMARX_0,
     },
-    .init = false,
+    .init = SPI_CTRL_STAT_DEINIT,
 };
 
 ///
@@ -357,7 +357,7 @@ spi_ctrl_res_t spi_ctrl_init(spi_ctrl_t *const inst)
 
     spi_enable(inst->intf);
 
-    inst->init = true;
+    inst->init = SPI_CTRL_STAT_INIT;
 
     return SPI_CTRL_RES_OK;
 }
@@ -370,7 +370,7 @@ spi_ctrl_res_t spi_ctrl_deinit(spi_ctrl_t *const inst)
     }
 
     spi_disable(inst->intf);
-    inst->init = false;
+    inst->init = SPI_CTRL_STAT_DEINIT;
 
     return SPI_CTRL_RES_OK;
 }
