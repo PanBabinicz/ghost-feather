@@ -8,82 +8,82 @@
 ///
 /// \brief The bmi270 accelerometer data type.
 ///
-typedef struct bmi270_accel_data
+typedef struct bmi270_acc_data
 {
     uint16_t x;                                     /*!< The x-axis value.                                  */
     uint16_t y;                                     /*!< The y-axis value.                                  */
     uint16_t z;                                     /*!< The z-axis value.                                  */
-} bmi270_accel_data_t;
+} bmi270_acc_data_t;
 
 ///
 /// \brief The bmi270 accelerometer config type.
 ///
-typedef struct bmi270_accel_conf
+typedef struct bmi270_acc_conf
 {
-    uint8_t filter_perf : 1;                        /*!< The filter performance mode.                       */
-    uint8_t bwp         : 3;                        /*!< The bandwidth.                                     */
-    uint8_t odr         : 4;                        /*!< The output data rate.                              */
-} bmi270_accel_conf_t;
+    uint8_t filt_perf  : 1;                         /*!< The filter performance mode.                       */
+    uint8_t bwp        : 3;                         /*!< The bandwidth.                                     */
+    uint8_t odr        : 4;                         /*!< The output data rate.                              */
+} bmi270_acc_conf_t;
 
 ///
 /// \brief The bmi270 accelerometer range type.
 ///
-typedef struct bmi270_accel_range
+typedef struct bmi270_acc_rng
 {
-    uint8_t reserved    : 6;                        /*!< Reserved.                                          */
-    uint8_t acc_range   : 2;                        /*!< The accelerometer g-range.                         */
-} bmi270_accel_range_t;
+    uint8_t reserved   : 6;                         /*!< Reserved.                                          */
+    uint8_t acc_rng    : 2;                         /*!< The accelerometer g-range.                         */
+} bmi270_acc_rng_t;
 
 ///
 /// \brief The bmi270 accelerometer instance type.
 ///
-typedef struct bmi270_accel
+typedef struct bmi270_acc
 {
-    bmi270_accel_data_t  data;                      /*!< The bmi270 accelerometer data.                     */
-    bmi270_accel_conf_t  conf;                      /*!< The bmi270 accelerometer configuration.            */
-    bmi270_accel_range_t range;                     /*!< The bmi270 accelerometer range.                    */
-} bmi270_accel_t;
+    bmi270_acc_data_t data;                         /*!< The bmi270 accelerometer data.                     */
+    bmi270_acc_conf_t conf;                         /*!< The bmi270 accelerometer configuration.            */
+    bmi270_acc_rng_t  rng;                          /*!< The bmi270 accelerometer range.                    */
+} bmi270_acc_t;
 
 ///
 /// \brief The bmi270 gyroscope data type.
 ///
-typedef struct bmi270_gyro_data
+typedef struct bmi270_gyr_data
 {
     uint16_t x;                                     /*!< The x-axis value.                                  */
     uint16_t y;                                     /*!< The y-axis value.                                  */
     uint16_t z;                                     /*!< The z-axis value.                                  */
-} bmi270_gyro_data_t;
+} bmi270_gyr_data_t;
 
 ///
 /// \brief The bmi270 gyroscope config type.
 ///
-typedef struct bmi270_gyro_conf
+typedef struct bmi270_gyr_conf
 {
-    uint8_t filter_perf : 1;                        /*!< The filter performance mode.                       */
-    uint8_t noise_perf  : 1;                        /*!< The noise performance mode.                        */
-    uint8_t bwp         : 2;                        /*!< The bandwidth coefficient.                         */
-    uint8_t odr         : 4;                        /*!< The output data rate.                              */
-} bmi270_gyro_conf_t;
+    uint8_t filt_perf  : 1;                         /*!< The filter performance mode.                       */
+    uint8_t noise_perf : 1;                         /*!< The noise performance mode.                        */
+    uint8_t bwp        : 2;                         /*!< The bandwidth coefficient.                         */
+    uint8_t odr        : 4;                         /*!< The output data rate.                              */
+} bmi270_gyr_conf_t;
 
 ///
 /// \brief The bmi270 gyroscope range type.
 ///
-typedef struct bmi270_gyro_range
+typedef struct bmi270_gyr_rng
 {
-    uint8_t reserved    : 4;                        /*!< Reserved.                                          */
-    uint8_t ois_range   : 1;                        /*!< Pre-filtered FIFO data and OIS data.               */
-    uint8_t gyr_range   : 3;                        /*!< Filtered FIFO data and DATA registers.             */
-} bmi270_gyro_range_t;
+    uint8_t reserved   : 4;                         /*!< Reserved.                                          */
+    uint8_t ois_rng    : 1;                         /*!< Pre-filtered FIFO data and OIS data.               */
+    uint8_t gyr_rng    : 3;                         /*!< Filtered FIFO data and DATA registers.             */
+} bmi270_gyr_rng_t;
 
 ///
 /// \brief The bmi270 gyroscope instance type.
 ///
-typedef struct bmi270_gyro
+typedef struct bmi270_gyr
 {
-    bmi270_gyro_data_t  data;                       /*!< The bmi270 gyroscope data.                         */
-    bmi270_gyro_conf_t  conf;                       /*!< The bmi270 gyroscope configuration.                */
-    bmi270_gyro_range_t range;                      /*!< The bmi270 gyroscope range.                        */
-} bmi270_gyro_t;
+    bmi270_gyr_data_t data;                         /*!< The bmi270 gyroscope data.                         */
+    bmi270_gyr_conf_t conf;                         /*!< The bmi270 gyroscope configuration.                */
+    bmi270_gyr_rng_t  rng;                          /*!< The bmi270 gyroscope range.                        */
+} bmi270_gyr_t;
 
 ///
 /// \brief The bmi270 temperature sensor instance type.
@@ -98,26 +98,26 @@ typedef struct bmi27_temp
 ///
 typedef struct bmi270
 {
-    bmi270_accel_t accel;                           /*!< The accelerometer instance.                        */
-    bmi270_gyro_t  gyro;                            /*!< The gyroscope instance.                            */
-    bmi270_temp_t  temp;                            /*!< The temperature sensor instance.                   */
-    bool           is_init;                         /*!< The is initialized flag.                           */
+    bmi270_acc_t  acc;                              /*!< The accelerometer instance.                        */
+    bmi270_gyr_t  gyr;                              /*!< The gyroscope instance.                            */
+    bmi270_temp_t temp;                             /*!< The temperature sensor instance.                   */
+    bool          init;                             /*!< The is initialized flag.                           */
 } bmi270_t;
 
 ///
 /// \breif The bmi270 power mode config type.
 ///
-typedef sturct bmi270_power_mode_config
+typedef sturct bmi270_pwr_mode_conf
 {
     uint8_t pwr_ctrl_mask;
-    uint8_t pwr_ctrl_value;
+    uint8_t pwr_ctrl_val;
     uint8_t acc_conf_mask;
-    uint8_t acc_conf_value;
+    uint8_t acc_conf_val;
     uint8_t gyr_conf_mask;
-    uint8_t gyr_conf_value;
+    uint8_t gyr_conf_val;
     uint8_t pwr_conf_mask;
-    uint8_t pwr_conf_value;
-} bmi270_power_mode_config_t;
+    uint8_t pwr_conf_val;
+} bmi270_pwr_mode_conf_t;
 
 ///***********************************************************************************************************
 /// Private objects - definition.
@@ -125,143 +125,143 @@ typedef sturct bmi270_power_mode_config
 ///
 /// \breif The bmi270 instance.
 ///
-static bmi270_t bmi270_instance = { 0 };
+static bmi270_t bmi270_inst = { 0 };
 
 ///
 /// \breif The bmi270 power mode configuration look-up table.
 ///
-static const bmi270_power_mode_config_t bmi270_power_mode_configs[BMI270_POWER_MODE_TOTAL] =
+static const bmi270_pwr_mode_conf_t bmi270_pwr_mode_confs[BMI270_PWR_MODE_TOTAL] =
 {
     /* Suspend mode (lowest power mode). */
     {
-        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
-        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_OFF),
-        .acc_conf_mask  = (0x00),
-        .acc_conf_value = (0x00),
-        .gyr_conf_mask  = (0x00),
-        .gyr_conf_value = (0x00),
-        .pwr_conf_mask  = (BMI270_PWR_CONF_APS_MASK),
-        .pwr_conf_value = (BMI270_PWR_CONF_APS_ON),
+        .pwr_ctrl_mask = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_val  = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_OFF),
+        .acc_conf_mask = (0x00),
+        .acc_conf_val  = (0x00),
+        .gyr_conf_mask = (0x00),
+        .gyr_conf_val  = (0x00),
+        .pwr_conf_mask = (BMI270_PWR_CONF_APS_MASK),
+        .pwr_conf_val  = (BMI270_PWR_CONF_APS_ON),
     },
 
     /* Configuration mode. */
     {
-        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
-        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_OFF),
-        .acc_conf_mask  = (0x00),
-        .acc_conf_value = (0x00),
-        .gyr_conf_mask  = (0x00),
-        .gyr_conf_value = (0x00),
-        .pwr_conf_mask  = (BMI270_PWR_CONF_APS_MASK),
-        .pwr_conf_value = (BMI270_PWR_CONF_APS_OFF),
+        .pwr_ctrl_mask = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_val  = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_OFF),
+        .acc_conf_mask = (0x00),
+        .acc_conf_val  = (0x00),
+        .gyr_conf_mask = (0x00),
+        .gyr_conf_val  = (0x00),
+        .pwr_conf_mask = (BMI270_PWR_CONF_APS_MASK),
+        .pwr_conf_val  = (BMI270_PWR_CONF_APS_OFF),
     },
 
     /* Low power mode. Accelerometer only. */
     {
-        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
-        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_OFF),
-        .acc_conf_mask  = (BMI270_ACC_FILT_PERF_MASK),
-        .acc_conf_value = (BMI270_ACC_FILT_PERF_ULP),
-        .gyr_conf_mask  = (0x00),
-        .gyr_conf_value = (0x00),
-        .pwr_conf_mask  = (BMI270_PWR_CONF_APS_MASK),
-        .pwr_conf_value = (BMI270_PWR_CONF_APS_ON),
+        .pwr_ctrl_mask = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_val  = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_OFF),
+        .acc_conf_mask = (BMI270_ACC_FILT_PERF_MASK),
+        .acc_conf_val  = (BMI270_ACC_FILT_PERF_ULP),
+        .gyr_conf_mask = (0x00),
+        .gyr_conf_val  = (0x00),
+        .pwr_conf_mask = (BMI270_PWR_CONF_APS_MASK),
+        .pwr_conf_val  = (BMI270_PWR_CONF_APS_ON),
     },
 
     /* Low power mode. Gyroscope only. */
     {
-        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
-        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_ON),
-        .acc_conf_mask  = (0x00),
-        .acc_conf_value = (0x00),
-        .gyr_conf_mask  = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILTER_PERF_MASK),
-        .gyr_conf_value = (BMI270_GYR_NOISE_PERF_ULP | BMI270_GYR_FILTER_PERF_ULP),
-        .pwr_conf_mask  = (BMI270_PWR_CONF_APS_MASK),
-        .pwr_conf_value = (BMI270_PWR_CONF_APS_ON),
+        .pwr_ctrl_mask = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_val  = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_ON),
+        .acc_conf_mask = (0x00),
+        .acc_conf_val  = (0x00),
+        .gyr_conf_mask = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILT_PERF_MASK),
+        .gyr_conf_val  = (BMI270_GYR_NOISE_PERF_ULP | BMI270_GYR_FILT_PERF_ULP),
+        .pwr_conf_mask = (BMI270_PWR_CONF_APS_MASK),
+        .pwr_conf_val  = (BMI270_PWR_CONF_APS_ON),
     },
 
     /* Low power mode. IMU. */
     {
-        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
-        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_ON),
-        .acc_conf_mask  = (BMI270_ACC_FILT_PERF_MASK),
-        .acc_conf_value = (BMI270_ACC_FILT_PERF_ULP),
-        .gyr_conf_mask  = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILTER_PERF_MASK),
-        .gyr_conf_value = (BMI270_GYR_NOISE_PERF_ULP | BMI270_GYR_FILTER_PERF_ULP),
-        .pwr_conf_mask  = (BMI270_PWR_CONF_APS_MASK),
-        .pwr_conf_value = (BMI270_PWR_CONF_APS_ON),
+        .pwr_ctrl_mask = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_val  = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_ON),
+        .acc_conf_mask = (BMI270_ACC_FILT_PERF_MASK),
+        .acc_conf_val  = (BMI270_ACC_FILT_PERF_ULP),
+        .gyr_conf_mask = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILT_PERF_MASK),
+        .gyr_conf_val  = (BMI270_GYR_NOISE_PERF_ULP | BMI270_GYR_FILT_PERF_ULP),
+        .pwr_conf_mask = (BMI270_PWR_CONF_APS_MASK),
+        .pwr_conf_val  = (BMI270_PWR_CONF_APS_ON),
     },
 
     /* Normal mode. Accelerometer only. */
     {
-        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
-        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_OFF),
-        .acc_conf_mask  = (BMI270_ACC_FILT_PERF_MASK),
-        .acc_conf_value = (BMI270_ACC_FILT_PERF_HP),
-        .gyr_conf_mask  = (0x00),
-        .gyr_conf_value = (0x00),
-        .pwr_conf_mask  = (0x00),
-        .pwr_conf_value = (0x00),
+        .pwr_ctrl_mask = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_val  = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_OFF),
+        .acc_conf_mask = (BMI270_ACC_FILT_PERF_MASK),
+        .acc_conf_val  = (BMI270_ACC_FILT_PERF_HP),
+        .gyr_conf_mask = (0x00),
+        .gyr_conf_val  = (0x00),
+        .pwr_conf_mask = (0x00),
+        .pwr_conf_val  = (0x00),
     },
 
     /* Normal mode. Gyroscope only. */
     {
-        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
-        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_ON),
-        .acc_conf_mask  = (0x00),
-        .acc_conf_value = (0x00),
-        .gyr_conf_mask  = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILTER_PERF_MASK),
-        .gyr_conf_value = (BMI270_GYR_NOISE_PERF_ULP | BMI270_GYR_FILTER_PERF_HP),
-        .pwr_conf_mask  = (0x00),
-        .pwr_conf_value = (0x00),
+        .pwr_ctrl_mask = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_val  = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_ON),
+        .acc_conf_mask = (0x00),
+        .acc_conf_val  = (0x00),
+        .gyr_conf_mask = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILT_PERF_MASK),
+        .gyr_conf_val  = (BMI270_GYR_NOISE_PERF_ULP | BMI270_GYR_FILT_PERF_HP),
+        .pwr_conf_mask = (0x00),
+        .pwr_conf_val  = (0x00),
     },
 
     /* Normal mode. IMU. */
     {
-        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
-        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_ON),
-        .acc_conf_mask  = (BMI270_ACC_FILT_PERF_MASK),
-        .acc_conf_value = (BMI270_ACC_FILT_PERF_HP),
-        .gyr_conf_mask  = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILTER_PERF_MASK),
-        .gyr_conf_value = (BMI270_GYR_NOISE_PERF_ULP | BMI270_GYR_FILTER_PERF_HP),
-        .pwr_conf_mask  = (0x00),
-        .pwr_conf_value = (0x00),
+        .pwr_ctrl_mask = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_val  = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_ON),
+        .acc_conf_mask = (BMI270_ACC_FILT_PERF_MASK),
+        .acc_conf_val  = (BMI270_ACC_FILT_PERF_HP),
+        .gyr_conf_mask = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILT_PERF_MASK),
+        .gyr_conf_val  = (BMI270_GYR_NOISE_PERF_ULP | BMI270_GYR_FILT_PERF_HP),
+        .pwr_conf_mask = (0x00),
+        .pwr_conf_val  = (0x00),
     },
 
     /* Performance mode. Accelerometer only. */
     {
-        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
-        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_OFF),
-        .acc_conf_mask  = (BMI270_ACC_FILT_PERF_MASK),
-        .acc_conf_value = (BMI270_ACC_FILT_PERF_HP),
-        .gyr_conf_mask  = (0x00),
-        .gyr_conf_value = (0x00),
-        .pwr_conf_mask  = (0x00),
-        .pwr_conf_value = (0x00),
+        .pwr_ctrl_mask = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_val  = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_OFF),
+        .acc_conf_mask = (BMI270_ACC_FILT_PERF_MASK),
+        .acc_conf_val  = (BMI270_ACC_FILT_PERF_HP),
+        .gyr_conf_mask = (0x00),
+        .gyr_conf_val  = (0x00),
+        .pwr_conf_mask = (0x00),
+        .pwr_conf_val  = (0x00),
     },
 
     /* Performance mode. Gyroscope only. */
     {
-        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
-        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_ON),
-        .acc_conf_mask  = (0x00),
-        .acc_conf_value = (0x00),
-        .gyr_conf_mask  = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILTER_PERF_MASK),
-        .gyr_conf_value = (BMI270_GYR_NOISE_PERF_HP | BMI270_GYR_FILTER_PERF_HP),
-        .pwr_conf_mask  = (0x00),
-        .pwr_conf_value = (0x00),
+        .pwr_ctrl_mask = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_val  = (BMI270_PWR_CTRL_ACC_OFF | BMI270_PWR_CTRL_GYR_ON),
+        .acc_conf_mask = (0x00),
+        .acc_conf_val  = (0x00),
+        .gyr_conf_mask = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILT_PERF_MASK),
+        .gyr_conf_val  = (BMI270_GYR_NOISE_PERF_HP | BMI270_GYR_FILT_PERF_HP),
+        .pwr_conf_mask = (0x00),
+        .pwr_conf_val  = (0x00),
     },
 
     /* Performance mode. IMU. */
     {
-        .pwr_ctrl_mask  = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
-        .pwr_ctrl_value = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_ON),
-        .acc_conf_mask  = (BMI270_ACC_FILT_PERF_MASK),
-        .acc_conf_value = (BMI270_ACC_FILT_PERF_HP),
-        .gyr_conf_mask  = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILTER_PERF_MASK),
-        .gyr_conf_value = (BMI270_GYR_NOISE_PERF_HP | BMI270_GYR_FILTER_PERF_HP),
-        .pwr_conf_mask  = (0x00),
-        .pwr_conf_value = (0x00),
+        .pwr_ctrl_mask = (BMI270_PWR_CTRL_ACC_MASK | BMI270_PWR_CTRL_GYR_MASK),
+        .pwr_ctrl_val  = (BMI270_PWR_CTRL_ACC_ON | BMI270_PWR_CTRL_GYR_ON),
+        .acc_conf_mask = (BMI270_ACC_FILT_PERF_MASK),
+        .acc_conf_val  = (BMI270_ACC_FILT_PERF_HP),
+        .gyr_conf_mask = (BMI270_GYR_NOISE_PERF_MASK | BMI270_GYR_FILT_PERF_MASK),
+        .gyr_conf_val  = (BMI270_GYR_NOISE_PERF_HP | BMI270_GYR_FILT_PERF_HP),
+        .pwr_conf_mask = (0x00),
+        .pwr_conf_val  = (0x00),
     },
 };
 
@@ -276,54 +276,54 @@ static const bmi270_power_mode_config_t bmi270_power_mode_configs[BMI270_POWER_M
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-bmi270_t* bmi270_get_instance(void)
+bmi270_t* bmi270_get_inst(void)
 {
-    return &bmi270;
+    return &bmi270_inst;
 }
 
-const bmi270_power_mode_config_t* bmi270_get_power_mode_config(const bmi270_power_mode_t power_mode)
+const bmi270_pwr_mode_conf_t* bmi270_get_pwr_mode_conf(const bmi270_pwr_mode_t pwr_mode)
 {
-    if ((power_mode < BMI270_POWER_MODE_BEGIN) || (power_mode >= BMI270_POWER_MODE_TOTAL))
+    if ((pwr_mode < BMI270_PWR_MODE_BEGIN) || (pwr_mode >= BMI270_PWR_MODE_TOTAL))
     {
         return NULL;
     }
 
-    return &bmi270_power_mode_configs[power_mode];
+    return &bmi270_pwr_mode_confs[pwr_mode];
 }
 
-bmi270_result_t bmi270_init(bmi270_t *const instance)
+bmi270_res_t bmi270_init(bmi270_t *const inst)
 {
-    if (instance == NULL)
+    if (inst == NULL)
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
-    memset(instance, 0, sizeof(instance));
+    memset(inst, 0, sizeof(inst));
 
     /* TODO: The device initialization, needs spi. */
 
-    instance->is_init = BMI270_STATUS_INIT;
+    inst->init = BMI270_STAT_INIT;
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }
 
-bmi270_result_t bmi270_deinit(bmi270_t *const instance)
+bmi270_res_t bmi270_deinit(bmi270_t *const inst)
 {
-    if (instance == NULL)
+    if (inst == NULL)
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
-    instance->is_init = BMI270_STATUS_DEINIT;
+    inst->init = BMI270_STAT_DEINIT;
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }
 
-bmi270_result_t bmi270_set_power_mode(const bmi270_power_mode_config_t *const power_mode_config)
+bmi270_res_t bmi270_set_pwr_mode(const bmi270_pwr_mode_conf_t *const pwr_mode_conf)
 {
-    if (power_mode_config == NULL)
+    if (pwr_mode_conf == NULL)
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
     /* TODO: Get registers value via spi. */
@@ -332,156 +332,156 @@ bmi270_result_t bmi270_set_power_mode(const bmi270_power_mode_config_t *const po
     uint8_t gyr_conf_reg;
     uint8_t pwr_conf_reg;
 
-    pwr_ctrl_reg &= ~(power_mode_config->pwr_ctrl_mask);
-    pwr_ctrl_reg |=  (power_mode_config->pwr_ctrl_value);
+    pwr_ctrl_reg &= ~(pwr_mode_conf->pwr_ctrl_mask);
+    pwr_ctrl_reg |=  (pwr_mode_conf->pwr_ctrl_value);
 
-    acc_conf_reg &= ~(power_mode_config->acc_conf_mask);
-    acc_conf_reg |=  (power_mode_config->acc_conf_value);
+    acc_conf_reg &= ~(pwr_mode_conf->acc_conf_mask);
+    acc_conf_reg |=  (pwr_mode_conf->acc_conf_value);
 
-    gyr_conf_reg &= ~(power_mode_config->gyr_conf_mask);
-    gyr_conf_reg |=  (power_mode_config->gyr_conf_value);
+    gyr_conf_reg &= ~(pwr_mode_conf->gyr_conf_mask);
+    gyr_conf_reg |=  (pwr_mode_conf->gyr_conf_value);
 
-    pwr_conf_reg &= ~(power_mode_config->pwr_conf_mask);
-    pwr_conf_reg |=  (power_mode_config->pwr_conf_value);
+    pwr_conf_reg &= ~(pwr_mode_conf->pwr_conf_mask);
+    pwr_conf_reg |=  (pwr_mode_conf->pwr_conf_value);
 
     /* TODO: Set the registers via spi. */
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }
 
-bmi270_result_t bmi270_accel_self_test(void)
+bmi270_res_t bmi270_acc_self_test(void)
 {
-    /* TODO: The accelerometer initialization, needs spi. */
+    /* TODO: The accelerometer self-test, needs spi. */
 }
 
-bmi270_result_t bmi270_gyro_self_test(void)
+bmi270_res_t bmi270_gyr_self_test(void)
 {
     /* TODO: The gyroscope self-test, needs spi. */
 }
 
-bmi270_result_t bmi270_accel_read(bmi270_t *const instance)
+bmi270_res_t bmi270_acc_read(bmi270_t *const inst);
 {
-    if (instance == NULL)
+    if (inst == NULL)
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
     /* TODO: Read the accelerometer data via spi. */
-    instance->accel.data.x =
-    instance->accel.data.y =
-    instance->accel.data.z =
+    inst->acc.data.x =
+    inst->acc.data.y =
+    inst->acc.data.z =
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }
 
-bmi270_result_t bmi270_accel_get_x(const bmi270_t *const instance, int16_t *const x)
+bmi270_res_t bmi270_acc_get_x(const bmi270_t *const inst, int16_t *const x);
 {
-    if ((instance == NULL) || (x == NULL))
+    if ((inst == NULL) || (x == NULL))
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
-    *x = instance->accel.data.x;
+    *x = inst->acc.data.x;
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }
 
-bmi270_result_t bmi270_accel_get_y(const bmi270_t *const instance, int16_t *const y)
+bmi270_res_t bmi270_acc_get_y(const bmi270_t *const inst, int16_t *const y);
 {
-    if ((instance == NULL) || (y == NULL))
+    if ((inst == NULL) || (y == NULL))
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
-    *y = instance->accel.data.y;
+    *y = inst->acc.data.y;
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }
 
-bmi270_result_t bmi270_accel_get_z(const bmi270_t *const instance, int16_t *const z)
+bmi270_res_t bmi270_acc_get_z(const bmi270_t *const inst, int16_t *const z)
 {
-    if ((instance == NULL) || (z == NULL))
+    if ((inst == NULL) || (z == NULL))
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
-    *z = instance->accel.data.z;
+    *z = inst->acc.data.z;
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }
 
-bmi270_result_t bmi270_gyro_read(bmi270_t *const instance)
+bmi270_res_t bmi270_gyr_read(bmi270_t *const inst);
 {
-    if (instance == NULL)
+    if (inst == NULL)
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
     /* TODO: Read the gyroscope data via spi. */
-    instance->gyro.data.x =
-    instance->gyro.data.y =
-    instance->gyro.data.z =
+    inst->gyr.data.x =
+    inst->gyr.data.y =
+    inst->gyr.data.z =
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }
 
-bmi270_result_t bmi270_gyro_get_x(const bmi270_t *const instance, int16_t *const x)
+bmi270_res_t bmi270_gyr_get_x(const bmi270_t *const inst, int16_t *const x)
 {
-    if ((instance == NULL) || (x == NULL))
+    if ((inst == NULL) || (x == NULL))
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
-    *x = instance->gyro.data.x;
+    *x = inst->gyr.data.x;
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }
 
-bmi270_result_t bmi270_gyro_get_y(const bmi270_t *const instance, int16_t *const y)
+bmi270_res_t bmi270_gyr_get_y(const bmi270_t *const inst, int16_t *const y)
 {
-    if ((instance == NULL) || (y == NULL))
+    if ((inst == NULL) || (y == NULL))
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
-    *y = instance->gyro.data.y;
+    *y = inst->gyr.data.y;
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }
 
-bmi270_result_t bmi270_gyro_get_z(const bmi270_t *const instance, int16_t *const z)
+bmi270_res_t bmi270_gyr_get_z(const bmi270_t *const inst, int16_t *const z)
 {
-    if ((instance == NULL) || (z == NULL))
+    if ((inst == NULL) || (z == NULL))
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
-    *z = instance->gyro.data.z;
+    *z = inst->gyr.data.z;
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }
 
-bmi270_result_t bmi270_temp_read(bmi270_t *const instance)
+bmi270_res_t bmi270_temp_read(bmi270_t *const inst);
 {
-    if (instance == NULL)
+    if (inst == NULL)
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
     /* TODO: Read the temperature data via spi. */
-    instance->temp.data =
+    inst->temp.data =
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }
 
-bmi270_result_t bmi270_temp_get(const bmi270_t *const instance, int16_t *const temp)
+bmi270_res_t bmi270_temp_get(const bmi270_t *const inst, int16_t *const temp)
 {
-    if ((instance == NULL) || (temp == NULL))
+    if ((inst == NULL) || (temp == NULL))
     {
-        return BMI270_RESULT_ERROR;
+        return BMI270_RES_ERR;
     }
 
-    *temp = instance->temp.data;
+    *temp = inst->temp.data;
 
-    return BMI270_RESULT_SUCCESS;
+    return BMI270_RES_OK;
 }

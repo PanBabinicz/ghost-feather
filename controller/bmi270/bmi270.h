@@ -178,9 +178,9 @@
 #define BMI270_GYR_NOISE_PERF_MASK  (0x01 << 0x06)  /*!< The gyroscope noise performance mask.              */
 #define BMI270_GYR_NOISE_PERF_ULP   (0x00 << 0x06)  /*!< The gyroscope noise power optimized mode.          */
 #define BMI270_GYR_NOISE_PERF_HP    (0x01 << 0x06)  /*!< The gyroscope noise perf optimized mode.           */
-#define BMI270_GYR_FILTER_PERF_MASK (0x01 << 0x07)  /*!< The gyroscope filter performance mask.             */
-#define BMI270_GYR_FILTER_PERF_ULP  (0x00 << 0x07)  /*!< The gyroscope filter power optimized mode.         */
-#define BMI270_GYR_FILTER_PERF_HP   (0x01 << 0x07)  /*!< The gyroscope filter perf optimized mode.          */
+#define BMI270_GYR_FILT_PERF_MASK   (0x01 << 0x07)  /*!< The gyroscope filter performance mask.             */
+#define BMI270_GYR_FILT_PERF_ULP    (0x00 << 0x07)  /*!< The gyroscope filter power optimized mode.         */
+#define BMI270_GYR_FILT_PERF_HP     (0x01 << 0x07)  /*!< The gyroscope filter perf optimized mode.          */
 
 ///
 /// \brief The bmi270 GYR_RANGE register fields.
@@ -234,228 +234,228 @@ typedef struct bmi270 bmi270_t;
 ///
 /// \breif The bmi270 power mode configuration type.
 ///
-typedef struct bmi270_power_mode_config bmi270_power_mode_config_t;
+typedef struct bmi270_pwr_mode_conf bmi270_pwr_mode_conf_t;
 
 ///
 /// \breif The bmi270 result type.
 ///
-typedef enum bmi270_result
+typedef enum bmi270_res
 {
-    BMI270_RESULT_SUCCESS = 0,
-    BMI270_RESULT_ERROR,
-} bmi270_result_t;
+    BMI270_RES_OK = 0,
+    BMI270_RES_ERR,
+} bmi270_res_t;
 
 ///
 /// \breif The bmi270 status type.
 ///
-typedef enum bmi270_status
+typedef enum bmi270_stat
 {
-    BMI270_STATUS_DEINIT = 0,
-    BMI270_STATUS_INIT,
-} bmi270_status_t;
+    BMI270_STAT_DEINIT = 0,
+    BMI270_STAT_INIT,
+} bmi270_stat_t;
 
 ///
 /// \breif The bmi270 power mode type.
 ///
-typedef enum bmi270_power_mode
+typedef enum bmi270_pwr_mode
 {
-    BMI270_POWER_MODE_BEGIN = 0,
-    BMI270_POWER_MODE_SUSPEND = 0,
-    BMI270_POWER_MODE_CONFIGURATION,
-    BMI270_POWER_MODE_LOW_ACCEL_ONLY,
-    BMI270_POWER_MODE_LOW_GYRO_ONLY,
-    BMI270_POWER_MODE_LOW_IMU,
-    BMI270_POWER_MODE_NORMAL_ACCEL_ONLY,
-    BMI270_POWER_MODE_NORMAL_GYRO_ONLY,
-    BMI270_POWER_MODE_NORMAL_IMU,
-    BMI270_POWER_MODE_PERF_ACCEL_ONLY,
-    BMI270_POWER_MODE_PERF_GYRO_ONLY,
-    BMI270_POWER_MODE_PERF_IMU,
-    BMI270_POWER_MODE_TOTAL,
-} bmi270_power_mode_t;
+    BMI270_PWR_MODE_BEGIN = 0,
+    BMI270_PWR_MODE_SUSP  = 0,
+    BMI270_PWR_MODE_CONF,
+    BMI270_PWR_MODE_LOW_ACC_ONLY,
+    BMI270_PWR_MODE_LOW_GYR_ONLY,
+    BMI270_PWR_MODE_LOW_IMU,
+    BMI270_PWR_MODE_NORM_ACC_ONLY,
+    BMI270_PWR_MODE_NORM_GYR_ONLY,
+    BMI270_PWR_MODE_NORM_IMU,
+    BMI270_PWR_MODE_PERF_ACC_ONLY,
+    BMI270_PWR_MODE_PERF_GYR_ONLY,
+    BMI270_PWR_MODE_PERF_IMU,
+    BMI270_PWR_MODE_TOTAL,
+} bmi270_pwr_mode_t;
 
 ///
 /// \breif Gets the bmi270 instance.
 ///
 /// \return bmi270_t The bmi270 instance address.
 ///
-bmi270_t* bmi270_get_instance(void);
+bmi270_t* bmi270_get_inst(void);
 
 ///
 /// \breif Gets the bmi270 power mode config.
 ///
-/// \param[in] power_mode              The selected power mode.
+/// \param[in] pwr_mode            The selected power mode.
 ///
-/// \return bmi270_power_mode_config_t The power mode config.
+/// \return bmi270_pwr_mode_conf_t The power mode config.
 ///
-const bmi270_power_mode_config_t* bmi270_get_power_mode_config(const bmi270_power_mode_t power_mode);
+const bmi270_pwr_mode_conf_t* bmi270_get_pwr_mode_conf(const bmi270_pwr_mode_t pwr_mode);
 
 ///
 /// \breif Initializes the bmi270.
 ///
-/// \param[in] instance           The bmi270 instance.
+/// \param[in] inst        The bmi270 instance.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_init(bmi270_t *const instance);
+bmi270_res_t bmi270_init(bmi270_t *const inst);
 
 ///
 /// \breif Deinitializes the bmi270.
 ///
-/// \param[in] instance           The bmi270 instance.
+/// \param[in] inst        The bmi270 instance.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_deinit(bmi270_t *const instance);
+bmi270_res_t bmi270_deinit(bmi270_t *const inst);
 
 ///
 /// \brief Sets the power mode.
 ///
-/// \param[in] power_mode_config  The pointer to power mode config.
+/// \param[in] pwr_mode_conf The pointer to power mode config.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t     The bmi270 result.
+/// \retval BMI270_RES_OK    On success.
+/// \retval BMI270_RES_ERR   Otherwise.
 ///
-bmi270_result_t bmi270_set_power_mode(const bmi270_power_mode_config_t *const power_mode_config);
+bmi270_res_t bmi270_set_pwr_mode(const bmi270_pwr_mode_conf_t *const pwr_mode_conf);
 
 ///
 /// \brief Self-tests accelerometer.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_accel_self_test(void);
+bmi270_res_t bmi270_acc_self_test(void);
 
 ///
 /// \brief Self-tests gyroscope.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_gyro_self_test(void);
+bmi270_res_t bmi270_gyr_self_test(void);
 
 ///
 /// \brief Reads the accelerometer data.
 ///
-/// \param[in] instance           The bmi270 instance.
+/// \param[in] inst        The bmi270 instance.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_accel_read(bmi270_t *const instance);
+bmi270_res_t bmi270_acc_read(bmi270_t *const inst);
 
 ///
 /// \brief Gets the accelerometer x axis value.
 ///
-/// \param[in]  instance          The bmi270 instance.
-/// \param[out] x                 The x axis value.
+/// \param[in]  inst       The bmi270 instance.
+/// \param[out] x          The x axis value.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_accel_get_x(const bmi270_t *const instance, int16_t *const x);
+bmi270_res_t bmi270_acc_get_x(const bmi270_t *const inst, int16_t *const x);
 
 ///
 /// \brief Gets the accelerometer y axis value.
 ///
-/// \param[in]  instance          The bmi270 instance.
-/// \param[out] y                 The y axis value.
+/// \param[in]  inst       The bmi270 instance.
+/// \param[out] y          The y axis value.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_accel_get_y(const bmi270_t *const instance, int16_t *const y);
+bmi270_res_t bmi270_acc_get_y(const bmi270_t *const inst, int16_t *const y);
 
 ///
 /// \brief Gets the accelerometer z axis value.
 ///
-/// \param[in]  instance          The bmi270 instance.
-/// \param[out] z                 The z axis value.
+/// \param[in]  inst       The bmi270 instance.
+/// \param[out] z          The z axis value.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_accel_get_z(const bmi270_t *const instance, int16_t *const z);
+bmi270_res_t bmi270_acc_get_z(const bmi270_t *const inst, int16_t *const z);
 
 ///
 /// \brief Reads the gyroscope data.
 ///
-/// \param[in] instance           The bmi270 instance.
+/// \param[in] inst        The bmi270 instance.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_gyro_read(bmi270_t *const instance);
+bmi270_res_t bmi270_gyr_read(bmi270_t *const inst);
 
 ///
 /// \brief Gets the gyroscope x axis value.
 ///
-/// \param[in]  instance          The bmi270 instance.
-/// \param[out] x                 The x axis value.
+/// \param[in]  inst       The bmi270 instance.
+/// \param[out] x          The x axis value.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_gyro_get_x(const bmi270_t *const instance, int16_t *const x);
+bmi270_res_t bmi270_gyr_get_x(const bmi270_t *const inst, int16_t *const x);
 
 ///
 /// \brief Gets the gyroscope y axis value.
 ///
-/// \param[in]  instance          The bmi270 instance.
-/// \param[out] y                 The y axis value.
+/// \param[in]  inst       The bmi270 instance.
+/// \param[out] y          The y axis value.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_gyro_get_y(const bmi270_t *const instance, int16_t *const y);
+bmi270_res_t bmi270_gyr_get_y(const bmi270_t *const inst, int16_t *const y);
 
 ///
 /// \brief Gets the gyroscope z axis value.
 ///
-/// \param[in]  instance          The bmi270 instance.
-/// \param[out] z                 The z axis value.
+/// \param[in]  inst       The bmi270 instance.
+/// \param[out] z          The z axis value.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_gyro_get_z(const bmi270_t *const instance, int16_t *const z);
+bmi270_res_t bmi270_gyr_get_z(const bmi270_t *const inst, int16_t *const z);
 
 ///
 /// \brief Reads the temperature data.
 ///
-/// \param[in] instance           The bmi270 instance.
+/// \param[in] inst        The bmi270 instance.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_temp_read(bmi270_t *const instance);
+bmi270_res_t bmi270_temp_read(bmi270_t *const inst);
 
 ///
 /// \brief Gets the temperature value.
 ///
-/// \param[in]  instance          The bmi270 instance.
-/// \param[out] temp              The temp value.
+/// \param[in]  inst       The bmi270 instance.
+/// \param[out] temp       The temp value.
 ///
-/// \return bmi270_result_t       The bmi270 result.
-/// \retval BMI270_RESULT_SUCCESS On success.
-/// \retval BMI270_RESULT_ERROR   Otherwise.
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_result_t bmi270_temp_get(const bmi270_t *const instance, int16_t *const temp);
+bmi270_res_t bmi270_temp_get(const bmi270_t *const inst, int16_t *const temp);
 
 #endif  /* _BMI270_H */
