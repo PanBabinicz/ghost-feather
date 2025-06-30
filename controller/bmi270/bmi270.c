@@ -1,4 +1,5 @@
 #include "bmi270.h"
+#include "spi_ctrl.h"
 #include <stdbool.h>
 #include <string.h>
 
@@ -298,9 +299,25 @@ bmi270_res_t bmi270_init(bmi270_t *const inst)
         return BMI270_RES_ERR;
     }
 
+    spi_ctrl_t *spi_ctrl_inst;
     memset(inst, 0, sizeof(inst));
 
     /* TODO: The device initialization, needs spi. */
+    if (spi_ctrl_get_inst(&spi_ctrl_inst) == SPI_CTRL_RES_ERR)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    if (spi_ctrl_inst->init == SPI_CTRL_STAT_DEINIT)
+    {
+        if (spi_ctrl_init(spi_ctrl_inst) == SPI_CTRL_RES_ERR)
+        {
+            return BMI270_RES_ERR;
+        }
+    }
+
+    /* Read an arbitrary register of BMI270, discard the read response. */
+    spi_ctrl_recv()
 
     inst->init = BMI270_STAT_INIT;
 
