@@ -282,6 +282,28 @@ spi_ctrl_res_t spi_ctrl_deinit(spi_ctrl_t *const inst);
 spi_ctrl_res_t spi_ctrl_get_inst(const spi_ctrl_t **inst);
 
 ///
+/// \brief Begins an spi transaction by enabling the peripheral and managing NSS if needed.
+///
+/// \param[in] inst          The spi controller instance.
+///
+/// \return spi_ctrl_res_t   The spi controller result.
+/// \retval SPI_CTRL_RES_OK  On success.
+/// \retval SPI_CTRL_RES_ERR Otherwise.
+///
+spi_ctrl_res_t spi_ctrl_begin(spi_ctrl_t *const inst);
+
+///
+/// \brief Ends an spi transaction by disabling the peripheral and managing NSS if needed.
+///
+/// \param[in] inst          The spi controller instance.
+///
+/// \return spi_ctrl_res_t   The spi controller result.
+/// \retval SPI_CTRL_RES_OK  On success.
+/// \retval SPI_CTRL_RES_ERR Otherwise.
+///
+spi_ctrl_res_t spi_ctrl_end(spi_ctrl_t *const inst);
+
+///
 /// \brief Receives the specified number of bytes over spi.
 ///
 /// \param[in] inst          The pointer to the spi controller instance.

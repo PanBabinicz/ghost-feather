@@ -355,14 +355,6 @@ spi_ctrl_res_t spi_ctrl_init(spi_ctrl_t *const inst)
         spi_set_crcpr(inst);
     }
 
-    /* Enable the spi when SSOE bit is set to 0. The SS output is disabled, the communication will not
-     * start until the SS is manually enabled. */
-    if (inst->cr2.ssoe == SPI_CTRL_SSOE_0)
-    {
-        /* TODO: Find a better solution. */
-        spi_enable(inst->intf);
-    }
-
     inst->init = SPI_CTRL_STAT_INIT;
 
     return SPI_CTRL_RES_OK;
@@ -392,15 +384,46 @@ spi_ctrl_res_t spi_ctrl_get_inst(const spi_ctrl_t **inst)
     return SPI_CTRL_RES_OK;
 }
 
+spi_ctrl_res_t spi_ctrl_begin(spi_ctrl_t *const inst)
+{
+    if (inst == NULL)
+    {
+        return SPI_CTRL_RES_ERR;
+    }
+
+    if (inst->cr2.ssoe == SPI_CTRL_SSOE_0)
+    {
+        /* Change the NSS to low state. */
+    }
+
+    spi_enable(inst->intf);
+
+    return SPI_CTRL_RES_OK;
+}
+
+spi_ctrl_res_t spi_ctrl_end(spi_ctrl_t *const inst)
+{
+    if (inst == NULL)
+    {
+        return SPI_CTRL_RES_ERR;
+    }
+
+    if (inst->cr2.ssoe == SPI_CTRL_SSOE_0)
+    {
+        /* Change the NSS to high state. */
+    }
+
+    spi_disable(inst->intf);
+
+    return SPI_CTRL_RES_OK;
+}
+
 spi_ctrl_res_t spi_ctrl_recv(const spi_ctrl_t *const inst, uint8_t *const buf, const uint32_t sz)
 {
     if ((inst == NULL) || (buf == NULL))
     {
         return SPI_CTRL_RES_ERR;
     }
-
-    /* TODO: Maybe here is a better place to enable and disable spi?
-     *       When the SSOE is not set, manipulate the NSS pin manually. */
 
     const uint8_t step  = (inst->cr2.ds <= SPI_CTRL_DS_8) ? 1 : 2;
     for (size_t i = 0; i < sz; i += step)
