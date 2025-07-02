@@ -285,23 +285,29 @@ spi_ctrl_res_t spi_ctrl_get_inst(const spi_ctrl_t **inst);
 /// \brief Begins an spi transaction by enabling the peripheral and managing NSS if needed.
 ///
 /// \param[in] inst          The spi controller instance.
+/// \param[in] gpio_port     The gpio port identifier.
+/// \param[in] gpios         The gpio pin identifiers. If multiple pins are to be changed,
+///                          use bitwise OR '|' to separate them.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_begin(spi_ctrl_t *const inst);
+spi_ctrl_res_t spi_ctrl_begin(const spi_ctrl_t *const inst, const uint32_t gpio_port, const uint32_t gpios);
 
 ///
 /// \brief Ends an spi transaction by disabling the peripheral and managing NSS if needed.
 ///
 /// \param[in] inst          The spi controller instance.
+/// \param[in] gpio_port     The gpio port identifier.
+/// \param[in] gpios         The gpio pin identifiers. If multiple pins are to be changed,
+///                          use bitwise OR '|' to separate them.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_end(spi_ctrl_t *const inst);
+spi_ctrl_res_t spi_ctrl_end(const spi_ctrl_t *const inst, const uint32_t gpio_port, const uint32_t gpios);
 
 ///
 /// \brief Receives the specified number of bytes over spi.

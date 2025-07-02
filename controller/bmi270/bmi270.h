@@ -227,6 +227,12 @@
 #define BMI270_PWR_CTRL_TEMP_ON     (0x01 << 0x03)  /*!< The temperature sensor on.                         */
 
 ///
+/// \brief The bmi270 R/W opperation fields.
+///
+#define BMI270_OP_WRITE             (0x00 << 0x07)  /*!< The write operation indicator                      */
+#define BMI270_OP_READ              (0x01 << 0x07)  /*!< The read operation indicator                       */
+
+///
 /// \brief The bmi270 instance type.
 ///
 typedef struct bmi270 bmi270_t;

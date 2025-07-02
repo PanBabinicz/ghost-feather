@@ -1,4 +1,6 @@
 #include "spi_ctrl.h"
+#include "libopencm3/stm32/spi.h"
+#include "libopencm3/stm32/gpio.h"
 #include <stdbool.h>
 #include <string.h>
 
@@ -384,7 +386,7 @@ spi_ctrl_res_t spi_ctrl_get_inst(const spi_ctrl_t **inst)
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_begin(spi_ctrl_t *const inst)
+spi_ctrl_res_t spi_ctrl_begin(const spi_ctrl_t *const inst, const uint32_t gpio_port, const uint32_t gpios)
 {
     if (inst == NULL)
     {
@@ -394,6 +396,7 @@ spi_ctrl_res_t spi_ctrl_begin(spi_ctrl_t *const inst)
     if (inst->cr2.ssoe == SPI_CTRL_SSOE_0)
     {
         /* Change the NSS to low state. */
+        gpio_clear(gpio_port, gpios);
     }
 
     spi_enable(inst->intf);
@@ -401,19 +404,20 @@ spi_ctrl_res_t spi_ctrl_begin(spi_ctrl_t *const inst)
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_end(spi_ctrl_t *const inst)
+spi_ctrl_res_t spi_ctrl_end(const spi_ctrl_t *const inst, const uint32_t gpio_port, const uint32_t gpios)
 {
     if (inst == NULL)
     {
         return SPI_CTRL_RES_ERR;
     }
 
+    spi_disable(inst->intf);
+
     if (inst->cr2.ssoe == SPI_CTRL_SSOE_0)
     {
         /* Change the NSS to high state. */
+        gpio_set(gpio_port, gpios);
     }
-
-    spi_disable(inst->intf);
 
     return SPI_CTRL_RES_OK;
 }

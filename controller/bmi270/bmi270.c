@@ -89,10 +89,19 @@ typedef struct bmi270_gyr
 ///
 /// \brief The bmi270 temperature sensor instance type.
 ///
-typedef struct bmi27_temp
+typedef struct bmi270_temp
 {
     uint16_t data;                                  /*!< The temperature data.                              */
 } bmi270_temp_t;
+
+///
+/// \brief The gpio pair type.
+///
+typedef struct gpio_pair
+{
+    uint32_t port;                                  /*!< The gpio port identifier.                          */
+    uint16_t pin;                                   /*!< The gpio pin identifier.                           */
+} gpio_pair_t;
 
 ///
 /// \brief The bmi270 instance type.
@@ -102,6 +111,7 @@ typedef struct bmi270
     bmi270_acc_t  acc;                              /*!< The accelerometer instance.                        */
     bmi270_gyr_t  gyr;                              /*!< The gyroscope instance.                            */
     bmi270_temp_t temp;                             /*!< The temperature sensor instance.                   */
+    gpio_pair_t   gpio;                             /*!< The gpio pair.                                     */
     bool          init;                             /*!< The is initialized flag.                           */
 } bmi270_t;
 
@@ -126,7 +136,18 @@ typedef sturct bmi270_pwr_mode_conf
 ///
 /// \breif The bmi270 instance.
 ///
-static bmi270_t bmi270_inst = { 0 };
+static bmi270_t bmi270_inst =
+{
+    .acc  = { 0 },
+    .gyr  = { 0 },
+    .temp = { 0 },
+    .gpio =
+    {
+        .port = GPIOA,
+        .pin  = GPIO4,
+    },
+    .init = BMI270_STAT_DEINIT,
+};
 
 ///
 /// \breif The bmi270 power mode configuration look-up table.
@@ -299,8 +320,13 @@ bmi270_res_t bmi270_init(bmi270_t *const inst)
         return BMI270_RES_ERR;
     }
 
+    uint8_t    address;
+    uint8_t    buffer[2];
     spi_ctrl_t *spi_ctrl_inst;
-    memset(inst, 0, sizeof(inst));
+
+    memset(&inst->acc,  0, sizeof(inst->acc));
+    memset(&inst->gyr,  0, sizeof(inst->gyr));
+    memset(&inst->temp, 0, sizeof(inst->temp));
 
     /* TODO: The device initialization, needs spi. */
     if (spi_ctrl_get_inst(&spi_ctrl_inst) == SPI_CTRL_RES_ERR)
@@ -316,8 +342,15 @@ bmi270_res_t bmi270_init(bmi270_t *const inst)
         }
     }
 
-    /* Read an arbitrary register of BMI270, discard the read response. */
-    spi_ctrl_recv()
+    spi_ctrl_begin(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin);
+
+    /* Read an arbitrary register of BMI270, discard the read response.
+     * The MSB of the first byte is R/W indicator. */
+    address = (BMI270_REG_CHIP_ID | BMI270_OP_READ);
+    spi_ctrl_send(spi_ctrl_inst, &address, sizeof(buffer);
+    spi_ctrl_recv(spi_ctrl_inst, &buffer, sizeof(buffer);
+
+    spi_ctrl_end(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin);
 
     inst->init = BMI270_STAT_INIT;
 
