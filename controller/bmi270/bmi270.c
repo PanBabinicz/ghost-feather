@@ -345,10 +345,23 @@ bmi270_res_t bmi270_init(bmi270_t *const inst)
     spi_ctrl_begin(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin);
 
     /* Read an arbitrary register of BMI270, discard the read response.
-     * The MSB of the first byte is R/W indicator. */
+     * The MSB of the address is R/W indicator. */
     address = (BMI270_REG_CHIP_ID | BMI270_OP_READ);
-    spi_ctrl_send(spi_ctrl_inst, &address, sizeof(buffer);
-    spi_ctrl_recv(spi_ctrl_inst, &buffer, sizeof(buffer);
+    spi_ctrl_send(spi_ctrl_inst, &address, sizeof(address));
+    spi_ctrl_recv(spi_ctrl_inst, &buffer, sizeof(buffer));
+
+    /* Disable advanced power save mode. */
+    address = (BMI270_REG_PWR_CONF | BMI270_OP_WRITE);
+    spi_ctrl_send(spi_ctrl_ins, &address, sizeof(address));
+
+    /* Wait for 450us (12 LSB of SENSORTIME_0). */
+    address = (BMI270_REG_SENSORTIME_0 | BMI270_OP_READ);
+    memset(&buffer[0], 0, sizeof(buffer));
+    while (buffer[1] < 12)
+    {
+        spi_ctrl_send(spi_ctrl_inst, &address, sizeof(address));
+        spi_ctrl_recv(spi_ctrl_inst, &buffer, sizeof(buffer));
+    }
 
     spi_ctrl_end(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin);
 
