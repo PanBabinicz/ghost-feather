@@ -104,7 +104,7 @@ typedef struct gpio_pair
 } gpio_pair_t;
 
 ///
-/// \brief The gpio pair type.
+/// \brief The bmi270 configuration type.
 ///
 typedef struct bmi270_conf
 {
