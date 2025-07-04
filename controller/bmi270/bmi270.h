@@ -210,6 +210,12 @@
 #define BMI270_PWR_CONF_FUP_ON      (0x01 << 0x02)  /*!< The fast power up enabled.                         */
 
 ///
+/// \brief The bmi270 PWR_CONF register fields.
+///
+#define BMI270_INIT_CTRL_MASK       (0xff << 0x00)  /*!< The bmi270 init control mask.                      */
+#define BMI270_INIT_CTRL_START      (0x00 << 0x00)  /*!< The bmi270 init control start.                     */
+
+///
 /// \brief The bmi270 PWR_CTRL register fields.
 ///
 #define BMI270_PWR_CTRL_MASK        (0x0f << 0x00)  /*!< The bmi270 power control mask.                     */
