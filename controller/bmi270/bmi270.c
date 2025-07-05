@@ -744,10 +744,37 @@ static const bmi270_pwr_mode_conf_t bmi270_pwr_mode_confs[BMI270_PWR_MODE_TOTAL]
 ///***********************************************************************************************************
 /// Private functions - declaration.
 ///***********************************************************************************************************
+///
+/// \breif Uploads the bmi270 configuration file.
+///
+static bmi270_res_t bmi270_upld_conf(const bmi270_t *const inst);
 
 ///***********************************************************************************************************
 /// Private functions - definition.
 ///***********************************************************************************************************
+static bmi270_res_t bmi270_upld_conf(const bmi270_t *const inst)
+{
+    /* TODO: Check the behavior of spi_ctrl. Should I begin/end each time I want to send data to different
+     * register? */
+
+    /* Whether the instance is NULL was checked before. */
+    if (inst->stat != SPI_CTRL_STAT_RUN)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    uint8_t address = (BMI270_REG_INIT_DATA | BMI270_OP_WRITE);
+    uint8_t buffer[inst->conf.sz + 1] = { address, 0 };
+
+    memcpy(&buffer[1], &inst->conf.file[0], inst->conf.sz);
+
+    if (spi_ctrl_send(inst, &buffer[0], sizeof(buffer)) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    return BMI270_RES_OK;
+}
 
 ///***********************************************************************************************************
 /// Global functions - definition.
@@ -801,31 +828,53 @@ bmi270_res_t bmi270_init(bmi270_t *const inst)
     /* Read an arbitrary register of BMI270, discard the read response.
      * The MSB of the address is R/W indicator. */
     address = (BMI270_REG_CHIP_ID | BMI270_OP_READ);
-    spi_ctrl_send(spi_ctrl_inst, &address, sizeof(address));
-    spi_ctrl_recv(spi_ctrl_inst, &buffer, sizeof(buffer));
+    if (spi_ctrl_send(spi_ctrl_inst, &address, sizeof(address)) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+    if (spi_ctrl_recv(spi_ctrl_inst, &buffer, sizeof(buffer)) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
 
     /* Disable advanced power save mode: PWR_CONF.adv_power_save = 0x00. */
     address   = (BMI270_REG_PWR_CONF | BMI270_OP_WRITE);
     buffer[0] = address;
     buffer[1] = 0x00;
-    spi_ctrl_send(spi_ctrl_inst, &buffer[0], sizeof(buffer));
+    if (spi_ctrl_send(spi_ctrl_inst, &buffer[0], sizeof(buffer)) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
 
     /* Wait for 450us (12 LSB of SENSORTIME_0). */
     address = (BMI270_REG_SENSORTIME_0 | BMI270_OP_READ);
     memset(&buffer[0], 0, sizeof(buffer));
     while (buffer[1] < 12)
     {
-        spi_ctrl_send(spi_ctrl_inst, &address, sizeof(address));
-        spi_ctrl_recv(spi_ctrl_inst, &buffer, sizeof(buffer));
+        if (spi_ctrl_send(spi_ctrl_inst, &address, sizeof(address)) != SPI_CTRL_RES_OK)
+        {
+            return BMI270_RES_ERR;
+        }
+        if (spi_ctrl_recv(spi_ctrl_inst, &buffer, sizeof(buffer)) != SPI_CTRL_RES_OK)
+        {
+            return BMI270_RES_ERR;
+        }
     }
 
     /* Write INIT_CTRL.init_ctrl = 0x00 to prepare config load. */
     address   = (BMI270_REG_INIT_CTRL | BMI270_OP_WRITE);
     buffer[0] = address;
     buffer[1] = 0x00;
-    spi_ctrl_send(spi_ctrl_inst, &buffer[0], sizeof(buffer));
+    if (spi_ctrl_send(spi_ctrl_inst, &buffer[0], sizeof(buffer)) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
 
     /* Upload configuration file. */
+    if (bmi270_upld_conf(inst) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
 
     spi_ctrl_end(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin);
 

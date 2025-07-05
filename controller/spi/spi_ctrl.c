@@ -57,7 +57,7 @@ typedef struct spi_ctrl
     cr1_conf_t   cr1;                               /*!< The spi CR1 config.                                */
     cr2_conf_t   cr2;                               /*!< The spi CR2 config.                                */
     crcpr_conf_t crcpr;                             /*!< The spi CRCPR config.                              */
-    bool         init;                              /*!< The is initialized flag.                           */
+    bool         stat;                              /*!< The status flag.                                   */
 } spi_ctrl_t;
 
 ///***********************************************************************************************************
@@ -97,7 +97,7 @@ static spi_ctrl_t spi_ctrl_inst =
         .ldmatx   = SPI_CTRL_LDMATX_0,
         .ldmarx   = SPI_CTRL_LDMARX_0,
     },
-    .init = SPI_CTRL_STAT_DEINIT,
+    .stat = SPI_CTRL_STAT_DEINIT,
 };
 
 ///
@@ -357,7 +357,7 @@ spi_ctrl_res_t spi_ctrl_init(spi_ctrl_t *const inst)
         spi_set_crcpr(inst);
     }
 
-    inst->init = SPI_CTRL_STAT_INIT;
+    inst->stat = SPI_CTRL_STAT_INIT;
 
     return SPI_CTRL_RES_OK;
 }
@@ -370,7 +370,7 @@ spi_ctrl_res_t spi_ctrl_deinit(spi_ctrl_t *const inst)
     }
 
     spi_disable(inst->intf);
-    inst->init = SPI_CTRL_STAT_DEINIT;
+    inst->stat = SPI_CTRL_STAT_DEINIT;
 
     return SPI_CTRL_RES_OK;
 }
@@ -400,6 +400,7 @@ spi_ctrl_res_t spi_ctrl_begin(const spi_ctrl_t *const inst, const uint32_t gpio_
     }
 
     spi_enable(inst->intf);
+    inst->stat = SPI_CTRL_STAT_RUN;
 
     return SPI_CTRL_RES_OK;
 }
@@ -412,6 +413,7 @@ spi_ctrl_res_t spi_ctrl_end(const spi_ctrl_t *const inst, const uint32_t gpio_po
     }
 
     spi_disable(inst->intf);
+    inst->stat = SPI_CTRL_STAT_STOP;
 
     if (inst->cr2.ssoe == SPI_CTRL_SSOE_0)
     {

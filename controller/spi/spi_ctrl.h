@@ -24,8 +24,10 @@ typedef enum spi_ctrl_res
 ///
 typedef enum spi_ctrl_stat
 {
-    SPI_CTRL_STAT_DEINIT = 0,
-    SPI_CTRL_STAT_INIT,
+    SPI_CTRL_STAT_DEINIT = 0,                       /*!< The spi controller is deinitialized.               */
+    SPI_CTRL_STAT_INIT,                             /*!< The spi controller is initialized.                 */
+    SPI_CTRL_STAT_RUN,                              /*!< The spi controller executes transaction.           */
+    SPI_CTRL_STAT_STOP,                             /*!< The spi controller completed the transaction.      */
 } spi_ctrl_stat_t;
 
 ///
