@@ -115,20 +115,21 @@ typedef struct bmi270_conf
 ///
 /// \brief The bmi270 instance type.
 ///
-typedef struct bmi270
+struct bmi270_dev
 {
     bmi270_acc_t  acc;                              /*!< The accelerometer instance.                        */
     bmi270_gyr_t  gyr;                              /*!< The gyroscope instance.                            */
     bmi270_temp_t temp;                             /*!< The temperature sensor instance.                   */
     gpio_pair_t   gpio;                             /*!< The gpio pair.                                     */
     bmi270_conf_t conf;                             /*!< The bmi270 config.                                 */
+    spi_ctrl_t    *spi_ctrl_inst                    /*!< The spi controller instance.                       */
     bool          init;                             /*!< The is initialized flag.                           */
-} bmi270_t;
+};
 
 ///
 /// \breif The bmi270 power mode config type.
 ///
-typedef sturct bmi270_pwr_mode_conf
+typedef struct bmi270_pwr_mode_conf
 {
     uint8_t pwr_ctrl_mask;
     uint8_t pwr_ctrl_val;
@@ -745,13 +746,152 @@ static const bmi270_pwr_mode_conf_t bmi270_pwr_mode_confs[BMI270_PWR_MODE_TOTAL]
 /// Private functions - declaration.
 ///***********************************************************************************************************
 ///
+/// \breif Receives the register data from bmi270.
+///
+/// \param[in] inst        The bmi270 instance.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+static bmi270_res_t bmi270_reg_recv(const struct bmi270_dev *const dev);
+
+///
+/// \breif Performs power-on-reset (POR).
+///
+/// \param[in] inst        The bmi270 instance.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+static bmi270_res_t bmi270_por(const bmi270_t *const inst);
+
+///
 /// \breif Uploads the bmi270 configuration file.
+///
+/// \param[in] inst        The bmi270 instance.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
 static bmi270_res_t bmi270_upld_conf(const bmi270_t *const inst);
 
 ///***********************************************************************************************************
 /// Private functions - definition.
 ///***********************************************************************************************************
+static bmi270_res_t bmi270_reg_recv(const struct bmi270_dev *const dev)
+{
+    /* Whether the instance is NULL was checked before. */
+
+    if (spi_ctrl_begin(dev->spi_ctrl_inst, dev->gpio.port, dev->gpio.pin) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+    if (spi_ctrl_send(dev->spi_ctrl_inst, &adr, sizeof(adr)) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+    if (spi_ctrl_recv(dev->spi_ctrl_inst, &buf[0], sizeof(buf[0])) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+    if (spi_ctrl_end(dev->spi_ctrl_inst, dev->gpio.port, dev->gpio.pin) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    return BMI270_RES_OK;
+}
+
+static bmi270_res_t bmi270_por(const bmi270_t *const dev)
+{
+    /* Whether the instance is NULL was checked before. */
+
+    if (spi_ctrl_get_inst(inst->spi_ctrl_inst) == SPI_CTRL_RES_ERR)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    if (inst->spi_ctrl->stat == SPI_CTRL_STAT_DEINIT)
+    {
+        if (spi_ctrl_init(spi_ctrl_inst) == SPI_CTRL_RES_ERR)
+        {
+            return BMI270_RES_ERR;
+        }
+    }
+
+    /* TODO: Clean the redundant code. Delete typedef in structs. */
+
+    uint8_t adr;
+    uint8_t buf[inst->conf.sz + 1] = { 0 };
+
+    /* Read an arbitrary register of BMI270, discard the read response.
+     * The MSB of the address is R/W indicator. */
+    adr = (BMI270_REG_CHIP_ID | BMI270_OP_READ);
+
+    /* Disable advanced power save mode: PWR_CONF.adv_power_save = 0x00. */
+    adr    = (BMI270_REG_PWR_CONF | BMI270_OP_WRITE);
+    buf[0] = adr;
+    buf[1] = 0x00;
+    if (spi_ctrl_begin(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+    if (spi_ctrl_send(spi_ctrl_inst, &buf[0], sizeof(buf[0]) + sizeof(buf[1])) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+    if (spi_ctrl_end(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* Wait for 450us (12 LSB of SENSORTIME_0). */
+    adr    = (BMI270_REG_SENSORTIME_0 | BMI270_OP_READ);
+    buf[0] = 0;
+    buf[1] = 0;
+    while (buf[1] < 12)
+    {
+        if (spi_ctrl_begin(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin) != SPI_CTRL_RES_OK)
+        {
+            return BMI270_RES_ERR;
+        }
+        if (spi_ctrl_send(spi_ctrl_inst, &adr, sizeof(adr)) != SPI_CTRL_RES_OK)
+        {
+            return BMI270_RES_ERR;
+        }
+        if (spi_ctrl_recv(spi_ctrl_inst, &buf[0], sizeof(buf[0]) + sizeof(buf[1])) != SPI_CTRL_RES_OK)
+        {
+            return BMI270_RES_ERR;
+        }
+        if (spi_ctrl_end(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin) != SPI_CTRL_RES_OK)
+        {
+            return BMI270_RES_ERR;
+        }
+    }
+
+    /* Write INIT_CTRL.init_ctrl = 0x00 to prepare config load. */
+    adr   = (BMI270_REG_INIT_CTRL | BMI270_OP_WRITE);
+    buf[0] = adr;
+    buf[1] = 0x00;
+    if (spi_ctrl_send(spi_ctrl_inst, &buf[0], sizeof(buf)) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* Upload configuration file. */
+    if (bmi270_upld_conf(inst) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    spi_ctrl_end(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin);
+
+    return BMI270_RES_OK;
+}
+
 static bmi270_res_t bmi270_upld_conf(const bmi270_t *const inst)
 {
     /* TODO: Check the behavior of spi_ctrl. Should I begin/end each time I want to send data to different
@@ -809,74 +949,6 @@ bmi270_res_t bmi270_init(bmi270_t *const inst)
     memset(&inst->gyr,  0, sizeof(inst->gyr));
     memset(&inst->temp, 0, sizeof(inst->temp));
 
-    /* TODO: The device initialization, needs spi. */
-    if (spi_ctrl_get_inst(&spi_ctrl_inst) == SPI_CTRL_RES_ERR)
-    {
-        return BMI270_RES_ERR;
-    }
-
-    if (spi_ctrl_inst->init == SPI_CTRL_STAT_DEINIT)
-    {
-        if (spi_ctrl_init(spi_ctrl_inst) == SPI_CTRL_RES_ERR)
-        {
-            return BMI270_RES_ERR;
-        }
-    }
-
-    spi_ctrl_begin(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin);
-
-    /* Read an arbitrary register of BMI270, discard the read response.
-     * The MSB of the address is R/W indicator. */
-    address = (BMI270_REG_CHIP_ID | BMI270_OP_READ);
-    if (spi_ctrl_send(spi_ctrl_inst, &address, sizeof(address)) != SPI_CTRL_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
-    if (spi_ctrl_recv(spi_ctrl_inst, &buffer, sizeof(buffer)) != SPI_CTRL_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
-
-    /* Disable advanced power save mode: PWR_CONF.adv_power_save = 0x00. */
-    address   = (BMI270_REG_PWR_CONF | BMI270_OP_WRITE);
-    buffer[0] = address;
-    buffer[1] = 0x00;
-    if (spi_ctrl_send(spi_ctrl_inst, &buffer[0], sizeof(buffer)) != SPI_CTRL_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
-
-    /* Wait for 450us (12 LSB of SENSORTIME_0). */
-    address = (BMI270_REG_SENSORTIME_0 | BMI270_OP_READ);
-    memset(&buffer[0], 0, sizeof(buffer));
-    while (buffer[1] < 12)
-    {
-        if (spi_ctrl_send(spi_ctrl_inst, &address, sizeof(address)) != SPI_CTRL_RES_OK)
-        {
-            return BMI270_RES_ERR;
-        }
-        if (spi_ctrl_recv(spi_ctrl_inst, &buffer, sizeof(buffer)) != SPI_CTRL_RES_OK)
-        {
-            return BMI270_RES_ERR;
-        }
-    }
-
-    /* Write INIT_CTRL.init_ctrl = 0x00 to prepare config load. */
-    address   = (BMI270_REG_INIT_CTRL | BMI270_OP_WRITE);
-    buffer[0] = address;
-    buffer[1] = 0x00;
-    if (spi_ctrl_send(spi_ctrl_inst, &buffer[0], sizeof(buffer)) != SPI_CTRL_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
-
-    /* Upload configuration file. */
-    if (bmi270_upld_conf(inst) != BMI270_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
-
-    spi_ctrl_end(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin);
 
     inst->init = BMI270_STAT_INIT;
 
