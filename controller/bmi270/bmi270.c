@@ -9,127 +9,127 @@
 ///
 /// \brief The bmi270 accelerometer data type.
 ///
-typedef struct bmi270_acc_data
+struct bmi270_acc_data
 {
     uint16_t x;                                     /*!< The x-axis value.                                  */
     uint16_t y;                                     /*!< The y-axis value.                                  */
     uint16_t z;                                     /*!< The z-axis value.                                  */
-} bmi270_acc_data_t;
+};
 
 ///
 /// \brief The bmi270 accelerometer config type.
 ///
-typedef struct bmi270_acc_conf
+struct bmi270_acc_conf
 {
     uint8_t filt_perf  : 1;                         /*!< The filter performance mode.                       */
     uint8_t bwp        : 3;                         /*!< The bandwidth.                                     */
     uint8_t odr        : 4;                         /*!< The output data rate.                              */
-} bmi270_acc_conf_t;
+};
 
 ///
 /// \brief The bmi270 accelerometer range type.
 ///
-typedef struct bmi270_acc_rng
+struct bmi270_acc_rng
 {
     uint8_t reserved   : 6;                         /*!< Reserved.                                          */
     uint8_t acc_rng    : 2;                         /*!< The accelerometer g-range.                         */
-} bmi270_acc_rng_t;
+};
 
 ///
 /// \brief The bmi270 accelerometer instance type.
 ///
-typedef struct bmi270_acc
+struct bmi270_acc
 {
     bmi270_acc_data_t data;                         /*!< The bmi270 accelerometer data.                     */
     bmi270_acc_conf_t conf;                         /*!< The bmi270 accelerometer configuration.            */
     bmi270_acc_rng_t  rng;                          /*!< The bmi270 accelerometer range.                    */
-} bmi270_acc_t;
+};
 
 ///
 /// \brief The bmi270 gyroscope data type.
 ///
-typedef struct bmi270_gyr_data
+struct bmi270_gyr_data
 {
     uint16_t x;                                     /*!< The x-axis value.                                  */
     uint16_t y;                                     /*!< The y-axis value.                                  */
     uint16_t z;                                     /*!< The z-axis value.                                  */
-} bmi270_gyr_data_t;
+};
 
 ///
 /// \brief The bmi270 gyroscope config type.
 ///
-typedef struct bmi270_gyr_conf
+struct bmi270_gyr_conf
 {
     uint8_t filt_perf  : 1;                         /*!< The filter performance mode.                       */
     uint8_t noise_perf : 1;                         /*!< The noise performance mode.                        */
     uint8_t bwp        : 2;                         /*!< The bandwidth coefficient.                         */
     uint8_t odr        : 4;                         /*!< The output data rate.                              */
-} bmi270_gyr_conf_t;
+};
 
 ///
 /// \brief The bmi270 gyroscope range type.
 ///
-typedef struct bmi270_gyr_rng
+struct bmi270_gyr_rng
 {
     uint8_t reserved   : 4;                         /*!< Reserved.                                          */
     uint8_t ois_rng    : 1;                         /*!< Pre-filtered FIFO data and OIS data.               */
     uint8_t gyr_rng    : 3;                         /*!< Filtered FIFO data and DATA registers.             */
-} bmi270_gyr_rng_t;
+};
 
 ///
 /// \brief The bmi270 gyroscope instance type.
 ///
-typedef struct bmi270_gyr
+struct bmi270_gyr
 {
     bmi270_gyr_data_t data;                         /*!< The bmi270 gyroscope data.                         */
     bmi270_gyr_conf_t conf;                         /*!< The bmi270 gyroscope configuration.                */
     bmi270_gyr_rng_t  rng;                          /*!< The bmi270 gyroscope range.                        */
-} bmi270_gyr_t;
+};
 
 ///
 /// \brief The bmi270 temperature sensor instance type.
 ///
-typedef struct bmi270_temp
+struct bmi270_temp
 {
     uint16_t data;                                  /*!< The temperature data.                              */
-} bmi270_temp_t;
+};
 
 ///
 /// \brief The gpio pair type.
 ///
-typedef struct gpio_pair
+struct gpio_pair
 {
     uint32_t port;                                  /*!< The gpio port identifier.                          */
     uint16_t pin;                                   /*!< The gpio pin identifier.                           */
-} gpio_pair_t;
+};
 
 ///
 /// \brief The bmi270 configuration type.
 ///
-typedef struct bmi270_conf
+struct bmi270_conf
 {
     uint32_t      sz;                               /*!< The bmi270 config file size.                       */
     const uint8_t *file;                            /*!< The bmi270 config file.                            */
-} bmi270_conf_t;
+};
 
 ///
 /// \brief The bmi270 instance type.
 ///
 struct bmi270_dev
 {
-    bmi270_acc_t  acc;                              /*!< The accelerometer instance.                        */
-    bmi270_gyr_t  gyr;                              /*!< The gyroscope instance.                            */
-    bmi270_temp_t temp;                             /*!< The temperature sensor instance.                   */
-    gpio_pair_t   gpio;                             /*!< The gpio pair.                                     */
-    bmi270_conf_t conf;                             /*!< The bmi270 config.                                 */
-    spi_ctrl_t    *spi_ctrl_inst                    /*!< The spi controller instance.                       */
-    bool          init;                             /*!< The is initialized flag.                           */
+    struct bmi270_acc  acc;                         /*!< The accelerometer instance.                        */
+    struct bmi270_gyr  gyr;                         /*!< The gyroscope instance.                            */
+    struct bmi270_temp temp;                        /*!< The temperature sensor instance.                   */
+    struct gpio_pair   gpio;                        /*!< The gpio pair.                                     */
+    struct bmi270_conf conf;                        /*!< The bmi270 config.                                 */
+    struct spi_ctrl    *spi_ctrl_inst               /*!< The spi controller instance.                       */
+    bool               stat;                        /*!< The status flag.                                   */
 };
 
 ///
 /// \breif The bmi270 power mode config type.
 ///
-typedef struct bmi270_pwr_mode_conf
+struct bmi270_pwr_mode_conf
 {
     uint8_t pwr_ctrl_mask;
     uint8_t pwr_ctrl_val;
@@ -139,7 +139,7 @@ typedef struct bmi270_pwr_mode_conf
     uint8_t gyr_conf_val;
     uint8_t pwr_conf_mask;
     uint8_t pwr_conf_val;
-} bmi270_pwr_mode_conf_t;
+};
 
 ///***********************************************************************************************************
 /// Private objects - definition.
@@ -586,7 +586,7 @@ const uint8_t bmi270_config_file[] =
 ///
 /// \breif The bmi270 instance.
 ///
-static bmi270_t bmi270_inst =
+static struct bmi270_dev bmi270 =
 {
     .acc  = { 0 },
     .gyr  = { 0 },
@@ -601,13 +601,14 @@ static bmi270_t bmi270_inst =
         .sz   = sizeof(bmi270_config_file);
         .file = &bmi270_config_file[0];
     }
+    .spi_ctrl_inst = NULL
     .init = BMI270_STAT_DEINIT,
 };
 
 ///
 /// \breif The bmi270 power mode configuration look-up table.
 ///
-static const bmi270_pwr_mode_conf_t bmi270_pwr_mode_confs[BMI270_PWR_MODE_TOTAL] =
+static const struct bmi270_pwr_mode_conf bmi270_pwr_mode_confs[BMI270_PWR_MODE_TOTAL] =
 {
     /* Suspend mode (lowest power mode). */
     {
@@ -746,45 +747,66 @@ static const bmi270_pwr_mode_conf_t bmi270_pwr_mode_confs[BMI270_PWR_MODE_TOTAL]
 /// Private functions - declaration.
 ///***********************************************************************************************************
 ///
-/// \breif Receives the register data from bmi270.
+/// \breif Reads the register data from bmi270.
 ///
-/// \param[in] inst        The bmi270 instance.
+/// \param[in]  dev        The bmi270 device.
+/// \param[in]  adr        The bmi270 register address.
+/// \param[out] buf        The read buffer.
+/// \param[in]  sz         The read buffer size.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-static bmi270_res_t bmi270_reg_recv(const struct bmi270_dev *const dev);
+static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, const uint8_t adr, uint8_t *const buf,
+                                    const uint32_t sz);
+
+///
+/// \breif Writes data to the bmi270 register.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] adr         The bmi270 register address.
+/// \param[in] buf         The write buffer.
+/// \param[in] sz          The write buffer size.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+static bmi270_res_t bmi270_reg_write(const struct bmi270_dev *const dev, const uint8_t adr,
+                                     const uint8_t *const buf, const uint32_t sz);
 
 ///
 /// \breif Performs power-on-reset (POR).
 ///
-/// \param[in] inst        The bmi270 instance.
+/// \param[in] dev         The bmi270 device.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-static bmi270_res_t bmi270_por(const bmi270_t *const inst);
+static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev);
 
 ///
 /// \breif Uploads the bmi270 configuration file.
 ///
-/// \param[in] inst        The bmi270 instance.
+/// \param[in] dev         The bmi270 device.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-static bmi270_res_t bmi270_upld_conf(const bmi270_t *const inst);
+static bmi270_res_t bmi270_upld_conf(const bm270_dev *const dev);
 
 ///***********************************************************************************************************
 /// Private functions - definition.
 ///***********************************************************************************************************
-static bmi270_res_t bmi270_reg_recv(const struct bmi270_dev *const dev)
+static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, const uint8_t adr, uint8_t *const buf,
+                                    const uint32_t sz)
 {
-    /* Whether the instance is NULL was checked before. */
-
+    /* Whether the device is NULL was checked before. */
+    adr |= BMI270_OP_READ;
+    memset(&buf[0], 0, sz);
     if (spi_ctrl_begin(dev->spi_ctrl_inst, dev->gpio.port, dev->gpio.pin) != SPI_CTRL_RES_OK)
     {
         return BMI270_RES_ERR;
@@ -793,7 +815,7 @@ static bmi270_res_t bmi270_reg_recv(const struct bmi270_dev *const dev)
     {
         return BMI270_RES_ERR;
     }
-    if (spi_ctrl_recv(dev->spi_ctrl_inst, &buf[0], sizeof(buf[0])) != SPI_CTRL_RES_OK)
+    if (spi_ctrl_recv(dev->spi_ctrl_inst, &buf[0], sz) != SPI_CTRL_RES_OK)
     {
         return BMI270_RES_ERR;
     }
@@ -805,80 +827,88 @@ static bmi270_res_t bmi270_reg_recv(const struct bmi270_dev *const dev)
     return BMI270_RES_OK;
 }
 
-static bmi270_res_t bmi270_por(const bmi270_t *const dev)
+static bmi270_res_t bmi270_reg_write(const struct bmi270_dev *const dev, const uint8_t adr,
+                                     const uint8_t *const buf, const uint32_t sz)
 {
-    /* Whether the instance is NULL was checked before. */
+    /* Whether the device is NULL was checked before. */
+    uint8_t data[sz + 1];
 
-    if (spi_ctrl_get_inst(inst->spi_ctrl_inst) == SPI_CTRL_RES_ERR)
+    adr    |= BMI270_OP_WRITE;
+    data[0] = adr;
+    memcpy(&data[1], &buf[0], sz);
+    if (spi_ctrl_begin(dev->spi_ctrl_inst, dev->gpio.port, dev->gpio.pin) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+    if (spi_ctrl_send(dev->spi_ctrl_inst, &data[0], sizeof(data)) != SPI_CTRL_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+    if (spi_ctrl_end(dev->spi_ctrl_inst, dev->gpio.port, dev->gpio.pin) != SPI_CTRL_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
-    if (inst->spi_ctrl->stat == SPI_CTRL_STAT_DEINIT)
+    return BMI270_RES_OK;
+}
+
+static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev)
+{
+    /* Whether the device is NULL was checked before. */
+
+    if (spi_ctrl_get_inst(dev->spi_ctrl_inst) == SPI_CTRL_RES_ERR)
     {
-        if (spi_ctrl_init(spi_ctrl_inst) == SPI_CTRL_RES_ERR)
+        return BMI270_RES_ERR;
+    }
+
+    if (dev->spi_ctrl_inst->stat == SPI_CTRL_STAT_DEINIT)
+    {
+        if (spi_ctrl_init(dev->spi_ctrl_inst) == SPI_CTRL_RES_ERR)
         {
             return BMI270_RES_ERR;
         }
     }
 
-    /* TODO: Clean the redundant code. Delete typedef in structs. */
-
-    uint8_t adr;
-    uint8_t buf[inst->conf.sz + 1] = { 0 };
+    uint8_t  adr;
+    uint8_t  buf[dev->conf.sz + 1] = { 0 };
+    uint32_t sz;
 
     /* Read an arbitrary register of BMI270, discard the read response.
      * The MSB of the address is R/W indicator. */
-    adr = (BMI270_REG_CHIP_ID | BMI270_OP_READ);
+    adr = BMI270_REG_CHIP_ID;
+    sz  = 2;
+    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        retrun BMI270_RES_ERR;
+    }
 
     /* Disable advanced power save mode: PWR_CONF.adv_power_save = 0x00. */
-    adr    = (BMI270_REG_PWR_CONF | BMI270_OP_WRITE);
-    buf[0] = adr;
-    buf[1] = 0x00;
-    if (spi_ctrl_begin(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin) != SPI_CTRL_RES_OK)
+    adr    = BMI270_REG_PWR_CONF;
+    sz     = 1;
+    buf[0] = 0x00;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
-        return BMI270_RES_ERR;
-    }
-    if (spi_ctrl_send(spi_ctrl_inst, &buf[0], sizeof(buf[0]) + sizeof(buf[1])) != SPI_CTRL_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
-    if (spi_ctrl_end(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin) != SPI_CTRL_RES_OK)
-    {
-        return BMI270_RES_ERR;
+        retrun BMI270_RES_ERR;
     }
 
     /* Wait for 450us (12 LSB of SENSORTIME_0). */
-    adr    = (BMI270_REG_SENSORTIME_0 | BMI270_OP_READ);
-    buf[0] = 0;
-    buf[1] = 0;
+    adr = BMI270_REG_SENSORTIME_0;
+    sz  = 2
     while (buf[1] < 12)
     {
-        if (spi_ctrl_begin(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin) != SPI_CTRL_RES_OK)
+        if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
         {
-            return BMI270_RES_ERR;
-        }
-        if (spi_ctrl_send(spi_ctrl_inst, &adr, sizeof(adr)) != SPI_CTRL_RES_OK)
-        {
-            return BMI270_RES_ERR;
-        }
-        if (spi_ctrl_recv(spi_ctrl_inst, &buf[0], sizeof(buf[0]) + sizeof(buf[1])) != SPI_CTRL_RES_OK)
-        {
-            return BMI270_RES_ERR;
-        }
-        if (spi_ctrl_end(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin) != SPI_CTRL_RES_OK)
-        {
-            return BMI270_RES_ERR;
+            retrun BMI270_RES_ERR;
         }
     }
 
     /* Write INIT_CTRL.init_ctrl = 0x00 to prepare config load. */
-    adr   = (BMI270_REG_INIT_CTRL | BMI270_OP_WRITE);
-    buf[0] = adr;
-    buf[1] = 0x00;
-    if (spi_ctrl_send(spi_ctrl_inst, &buf[0], sizeof(buf)) != SPI_CTRL_RES_OK)
+    adr    = BMI270_REG_INIT_CTRL;
+    sz     = 1
+    buf[0] = 0x00;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
-        return BMI270_RES_ERR;
+        retrun BMI270_RES_ERR;
     }
 
     /* Upload configuration file. */
@@ -892,12 +922,12 @@ static bmi270_res_t bmi270_por(const bmi270_t *const dev)
     return BMI270_RES_OK;
 }
 
-static bmi270_res_t bmi270_upld_conf(const bmi270_t *const inst)
+static bmi270_res_t bmi270_upld_conf(const bmi270_dev *const dev)
 {
     /* TODO: Check the behavior of spi_ctrl. Should I begin/end each time I want to send data to different
      * register? */
 
-    /* Whether the instance is NULL was checked before. */
+    /* Whether the device is NULL was checked before. */
     if (inst->stat != SPI_CTRL_STAT_RUN)
     {
         return BMI270_RES_ERR;
@@ -919,9 +949,9 @@ static bmi270_res_t bmi270_upld_conf(const bmi270_t *const inst)
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-bmi270_t* bmi270_get_inst(void)
+struct bmi270_dev* bmi270_get_dev(void)
 {
-    return &bmi270_inst;
+    return &bmi270;
 }
 
 const bmi270_pwr_mode_conf_t* bmi270_get_pwr_mode_conf(const bmi270_pwr_mode_t pwr_mode)
@@ -934,9 +964,9 @@ const bmi270_pwr_mode_conf_t* bmi270_get_pwr_mode_conf(const bmi270_pwr_mode_t p
     return &bmi270_pwr_mode_confs[pwr_mode];
 }
 
-bmi270_res_t bmi270_init(bmi270_t *const inst)
+bmi270_res_t bmi270_init(struct bmi270_dev *const dev);
 {
-    if (inst == NULL)
+    if (dev == NULL)
     {
         return BMI270_RES_ERR;
     }
@@ -945,27 +975,29 @@ bmi270_res_t bmi270_init(bmi270_t *const inst)
     uint8_t    buffer[2];
     spi_ctrl_t *spi_ctrl_inst;
 
-    memset(&inst->acc,  0, sizeof(inst->acc));
-    memset(&inst->gyr,  0, sizeof(inst->gyr));
-    memset(&inst->temp, 0, sizeof(inst->temp));
+    memset(&dev->acc,  0, sizeof(dev->acc));
+    memset(&dev->gyr,  0, sizeof(dev->gyr));
+    memset(&dev->temp, 0, sizeof(dev->temp));
 
 
-    inst->init = BMI270_STAT_INIT;
+    dev->stat = BMI270_STAT_INIT;
 
     return BMI270_RES_OK;
 }
 
-bmi270_res_t bmi270_deinit(bmi270_t *const inst)
+bmi270_res_t bmi270_deinit(struct bmi270_dev *const dev)
 {
-    if (inst == NULL)
+    if (dev == NULL)
     {
         return BMI270_RES_ERR;
     }
 
-    inst->init = BMI270_STAT_DEINIT;
+    dev->stat = BMI270_STAT_DEINIT;
 
     return BMI270_RES_OK;
 }
+
+/* TODO: Refactor rest of the code below. */
 
 bmi270_res_t bmi270_set_pwr_mode(const bmi270_pwr_mode_conf_t *const pwr_mode_conf)
 {

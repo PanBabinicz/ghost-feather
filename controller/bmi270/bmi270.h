@@ -241,12 +241,12 @@
 ///
 /// \brief The bmi270 instance type.
 ///
-typedef struct bmi270 bmi270_t;
+struct bmi270_dev;
 
 ///
 /// \breif The bmi270 power mode configuration type.
 ///
-typedef struct bmi270_pwr_mode_conf bmi270_pwr_mode_conf_t;
+struct bmi270_pwr_mode_conf;
 
 ///
 /// \breif The bmi270 result type.
@@ -291,7 +291,7 @@ typedef enum bmi270_pwr_mode
 ///
 /// \return bmi270_t The bmi270 instance address.
 ///
-bmi270_t* bmi270_get_inst(void);
+struct bmi270_dev* bmi270_get_dev(void);
 
 ///
 /// \breif Gets the bmi270 power mode config.
@@ -305,24 +305,24 @@ const bmi270_pwr_mode_conf_t* bmi270_get_pwr_mode_conf(const bmi270_pwr_mode_t p
 ///
 /// \breif Initializes the bmi270.
 ///
-/// \param[in] inst        The bmi270 instance.
+/// \param[in] dev         The bmi270 device.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_init(bmi270_t *const inst);
+bmi270_res_t bmi270_init(struct bmi270_dev *const dev);
 
 ///
 /// \breif Deinitializes the bmi270.
 ///
-/// \param[in] inst        The bmi270 instance.
+/// \param[in] dev         The bmi270 device.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_deinit(bmi270_t *const inst);
+bmi270_res_t bmi270_deinit(struct bmi270_dev *const dev);
 
 ///
 /// \brief Sets the power mode.
