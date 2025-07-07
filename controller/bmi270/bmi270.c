@@ -584,7 +584,7 @@ const uint8_t bmi270_config_file[] =
 };
 
 ///
-/// \breif The bmi270 instance.
+/// \breif The bmi270 device.
 ///
 static struct bmi270_dev bmi270 =
 {
@@ -601,7 +601,7 @@ static struct bmi270_dev bmi270 =
         .sz   = sizeof(bmi270_config_file);
         .file = &bmi270_config_file[0];
     }
-    .spi_ctrl_inst = NULL
+    .spi_ctrl_inst = NULL,
     .init = BMI270_STAT_DEINIT,
 };
 
