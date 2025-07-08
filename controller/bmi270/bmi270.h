@@ -333,7 +333,7 @@ bmi270_res_t bmi270_deinit(struct bmi270_dev *const dev);
 /// \retval BMI270_RES_OK    On success.
 /// \retval BMI270_RES_ERR   Otherwise.
 ///
-bmi270_res_t bmi270_set_pwr_mode(const bmi270_pwr_mode_conf_t *const pwr_mode_conf);
+bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_pwr_mode_conf *const pwr_mode_conf);
 
 ///
 /// \brief Self-tests accelerometer.
@@ -356,118 +356,118 @@ bmi270_res_t bmi270_gyr_self_test(void);
 ///
 /// \brief Reads the accelerometer data.
 ///
-/// \param[in] inst        The bmi270 instance.
+/// \param[in] dev         The bmi270 device.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_acc_read(bmi270_t *const inst);
+bmi270_res_t bmi270_acc_read(struct bmi270_dev *const dev);
 
 ///
 /// \brief Gets the accelerometer x axis value.
 ///
-/// \param[in]  inst       The bmi270 instance.
+/// \param[in]  dev        The bmi270 device.
 /// \param[out] x          The x axis value.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_acc_get_x(const bmi270_t *const inst, int16_t *const x);
+bmi270_res_t bmi270_acc_get_x(const struct bmi270_dev *const dev, int16_t *const x);
 
 ///
 /// \brief Gets the accelerometer y axis value.
 ///
-/// \param[in]  inst       The bmi270 instance.
+/// \param[in]  dev        The bmi270 device.
 /// \param[out] y          The y axis value.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_acc_get_y(const bmi270_t *const inst, int16_t *const y);
+bmi270_res_t bmi270_acc_get_y(const struct bmi270_dev *const dev, int16_t *const y);
 
 ///
 /// \brief Gets the accelerometer z axis value.
 ///
-/// \param[in]  inst       The bmi270 instance.
+/// \param[in]  dev        The bmi270 device.
 /// \param[out] z          The z axis value.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_acc_get_z(const bmi270_t *const inst, int16_t *const z);
+bmi270_res_t bmi270_acc_get_z(const struct bmi270_dev *const dev, int16_t *const z);
 
 ///
 /// \brief Reads the gyroscope data.
 ///
-/// \param[in] inst        The bmi270 instance.
+/// \param[in] dev         The bmi270 device.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_gyr_read(bmi270_t *const inst);
+bmi270_res_t bmi270_gyr_read(struct bmi270_dev *const dev);
 
 ///
 /// \brief Gets the gyroscope x axis value.
 ///
-/// \param[in]  inst       The bmi270 instance.
+/// \param[in]  dev        The bmi270 device.
 /// \param[out] x          The x axis value.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_gyr_get_x(const bmi270_t *const inst, int16_t *const x);
+bmi270_res_t bmi270_gyr_get_x(const struct bmi270_dev *const dev, int16_t *const x);
 
 ///
 /// \brief Gets the gyroscope y axis value.
 ///
-/// \param[in]  inst       The bmi270 instance.
+/// \param[in]  dev        The bmi270 device.
 /// \param[out] y          The y axis value.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_gyr_get_y(const bmi270_t *const inst, int16_t *const y);
+bmi270_res_t bmi270_gyr_get_y(const struct bmi270_dev *const dev, int16_t *const y);
 
 ///
 /// \brief Gets the gyroscope z axis value.
 ///
-/// \param[in]  inst       The bmi270 instance.
+/// \param[in]  dev        The bmi270 device.
 /// \param[out] z          The z axis value.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_gyr_get_z(const bmi270_t *const inst, int16_t *const z);
+bmi270_res_t bmi270_gyr_get_z(const struct bmi270_dev *const dev, int16_t *const z);
 
 ///
 /// \brief Reads the temperature data.
 ///
-/// \param[in] inst        The bmi270 instance.
+/// \param[in] dev         The bmi270 device.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_temp_read(bmi270_t *const inst);
+bmi270_res_t bmi270_temp_read(struct bmi270_dev *const dev);
 
 ///
 /// \brief Gets the temperature value.
 ///
-/// \param[in]  inst       The bmi270 instance.
+/// \param[in]  dev        The bmi270 device.
 /// \param[out] temp       The temp value.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_temp_get(const bmi270_t *const inst, int16_t *const temp);
+bmi270_res_t bmi270_temp_get(const struct bmi270_dev *const dev, int16_t *const temp);
 
 #endif  /* _BMI270_H */
