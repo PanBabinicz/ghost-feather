@@ -475,7 +475,6 @@ static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev)
     }
 
     /* Upload configuration file. */
-    adr = BMI270_REG_INIT_DATA;
     if (bmi270_upld_conf(dev) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
