@@ -359,7 +359,18 @@ static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev);
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-static bmi270_res_t bmi270_upld_conf(const bm270_dev *const dev);
+static bmi270_res_t bmi270_upld_conf_file(const bm270_dev *const dev);
+
+///
+/// \breif Validates the bmi270 configuration file.
+///
+/// \param[in] dev         The bmi270 device.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+static bmi270_res_t bmi270_vld_conf_file(const bm270_dev *const dev);
 
 ///***********************************************************************************************************
 /// Private functions - definition.
@@ -369,7 +380,6 @@ static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, const ui
 {
     /* Whether the device is NULL was checked before. */
     adr |= BMI270_OP_READ;
-    memset(&buf[0], 0, sz);
     if (spi_ctrl_begin(dev->spi_ctrl_inst, dev->gpio.port, dev->gpio.pin) != SPI_CTRL_RES_OK)
     {
         return BMI270_RES_ERR;
@@ -475,17 +485,25 @@ static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev)
     }
 
     /* Upload configuration file. */
-    if (bmi270_upld_conf(dev) != BMI270_RES_OK)
+    if (bmi270_upld_conf_file(dev) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
+#if (defined(BMI270_VLD_CONF_FILE) && (BMI270_VLD_CONF_FILE == 1))
+    /* Optionally: Check config file correctness by comparing it to data written to the register
+     * in previous step. */
+    if (bmi270_vld_conf_file(dev) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+#endif
 
     spi_ctrl_end(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin);
 
     return BMI270_RES_OK;
 }
 
-static bmi270_res_t bmi270_upld_conf(const bm270_dev *const dev)
+static bmi270_res_t bmi270_upld_conf_file(const bm270_dev *const dev)
 {
     /* Whether the device is NULL was checked before. */
     if (dev->spi_ctrl_inst->stat != SPI_CTRL_STAT_RUN)
@@ -495,10 +513,34 @@ static bmi270_res_t bmi270_upld_conf(const bm270_dev *const dev)
 
     uint8_t adr = BMI270_REG_INIT_DATA;
 
-    for (uint32_t i = 0; i < dev->conf.sz; i++)
+    if (bmi270_reg_write(dev, adr, dev->conf.file, dev->conf.sz) != BMI270_RES_OK)
     {
-        const uint8_t byte = dev->conf.file[i];
-        bmi270_reg_write(dev, adr, &byte, sizeof(byte));
+        return BMI270_RES_ERR;
+    }
+
+    return BMI270_RES_OK;
+}
+
+static bmi270_res_t bmi270_vld_conf_file(const bm270_dev *const dev)
+{
+    /* Whether the device is NULL was checked before. */
+    if (dev->spi_ctrl_inst->stat != SPI_CTRL_STAT_RUN)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    uint8_t adr = BMI270_REG_INIT_DATA;
+    uint8_t buf[dev->conf.sz + 1] = { 0 };
+
+    if (bmi270_reg_read(dev, adr, &buf[0], sizeof(buf)) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* First read byte is a dummy byte. */
+    if (memcmp(dev->conf.file, &buf[1], dev->conf.sz) != 0)
+    {
+        return BMI270_RES_ERR;
     }
 
     return BMI270_RES_OK;
