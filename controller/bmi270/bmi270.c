@@ -380,6 +380,9 @@ static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, const ui
 {
     /* Whether the device is NULL was checked before. */
     adr |= BMI270_OP_READ;
+
+    /* The first byte is a dummy byte. Read two bytes. */
+    sz  += 1;
     if (spi_ctrl_begin(dev->spi_ctrl_inst, dev->gpio.port, dev->gpio.pin) != SPI_CTRL_RES_OK)
     {
         return BMI270_RES_ERR;
@@ -449,7 +452,7 @@ static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev)
     /* Read an arbitrary register of BMI270, discard the read response.
      * The MSB of the address is R/W indicator. */
     adr = BMI270_REG_CHIP_ID;
-    sz  = 2;
+    sz  = 1;
     if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
         retrun BMI270_RES_ERR;
@@ -466,7 +469,7 @@ static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev)
 
     /* Wait for 450us (12 LSB of SENSORTIME_0). */
     adr = BMI270_REG_SENSORTIME_0;
-    sz  = 2
+    sz  = 1;
     while (buf[1] < 12)
     {
         if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
@@ -477,7 +480,7 @@ static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev)
 
     /* Write INIT_CTRL.init_ctrl = 0x00 to prepare config load. */
     adr    = BMI270_REG_INIT_CTRL;
-    sz     = 1
+    sz     = 1;
     buf[0] = 0x00;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
@@ -498,7 +501,27 @@ static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev)
     }
 #endif
 
-    spi_ctrl_end(spi_ctrl_inst, inst->gpio.port, inst->gpio.pin);
+    /* Write INIT_CTRL.init_ctrl = 0x01 to complete config load.
+     * NOTE: This operation must not be performed more than once after POR
+     *       or soft reset. */
+    adr    = BMI270_REG_INIT_CTRL;
+    sz     = 1;
+    buf[0] = 0x01;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        retrun BMI270_RES_ERR;
+    }
+
+    /* Wait until internal status register contains the value 0b0001. */
+    adr = BMI270_REG_INTERNAL_STATUS;
+    sz  = 1;
+    while ((buf[1] & BMI270_INST_MSG_MSK) != BMI270_INST_MSG_INIT_OK)
+    {
+        if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+        {
+            retrun BMI270_RES_ERR;
+        }
+    }
 
     return BMI270_RES_OK;
 }
@@ -537,7 +560,6 @@ static bmi270_res_t bmi270_vld_conf_file(const bm270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    /* First read byte is a dummy byte. */
     if (memcmp(dev->conf.file, &buf[1], dev->conf.sz) != 0)
     {
         return BMI270_RES_ERR;
