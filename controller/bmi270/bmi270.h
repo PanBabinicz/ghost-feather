@@ -63,8 +63,8 @@
 #define BMI270_REG_FEATURES_15              (0x3f)  /*!< Input register for feature configuration.          */
 #define BMI270_REG_ACC_CONF                 (0x40)  /*!< Accelerometer ODR, bandwidth, mode config.         */
 #define BMI270_REG_ACC_RANGE                (0x41)  /*!< Selection of the accelerometer g-range.            */
-#define BMI270_REG_GYRO_CONF                (0x42)  /*!< Gyroscope ODR, bandwidth, mode config.             */
-#define BMI270_REG_GYRO_RANGE               (0x43)  /*!< Gyroscope angular rate measurement range.          */
+#define BMI270_REG_GYR_CONF                 (0x42)  /*!< Gyroscope ODR, bandwidth, mode config.             */
+#define BMI270_REG_GYR_RANGE                (0x43)  /*!< Gyroscope angular rate measurement range.          */
 #define BMI270_REG_AUX_CONF                 (0x44)  /*!< Auxiliary sensor interface ODR.                    */
 #define BMI270_REG_FIFO_DOWNS               (0x45)  /*!< Gyroe and accel downsampling rates for FIFO.       */
 #define BMI270_REG_FIFO_WTM_0               (0x46)  /*!< FIFO watermark level (LSB).                        */
@@ -343,13 +343,15 @@ bmi270_res_t bmi270_deinit(struct bmi270_dev *const dev);
 ///
 /// \brief Sets the power mode.
 ///
+/// \param[in] dev           The bmi270 device.
 /// \param[in] pwr_mode_conf The pointer to power mode config.
 ///
 /// \return bmi270_res_t     The bmi270 result.
 /// \retval BMI270_RES_OK    On success.
 /// \retval BMI270_RES_ERR   Otherwise.
 ///
-bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_pwr_mode_conf *const pwr_mode_conf);
+bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
+                                 const struct bmi270_pwr_mode_conf *const pwr_mode_conf);
 
 ///
 /// \brief Self-tests accelerometer.

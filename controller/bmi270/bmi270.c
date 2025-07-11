@@ -446,7 +446,7 @@ static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev)
     }
 
     uint8_t  adr;
-    uint8_t  buf[dev->conf.sz + 1] = { 0 };
+    uint8_t  buf[2] = { 0 };
     uint32_t sz;
 
     /* Read an arbitrary register of BMI270, discard the read response.
@@ -460,8 +460,8 @@ static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev)
 
     /* Disable advanced power save mode: PWR_CONF.adv_power_save = 0x00. */
     adr    = BMI270_REG_PWR_CONF;
-    sz     = 1;
     buf[0] = 0x00;
+    sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
         retrun BMI270_RES_ERR;
@@ -480,8 +480,8 @@ static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev)
 
     /* Write INIT_CTRL.init_ctrl = 0x00 to prepare config load. */
     adr    = BMI270_REG_INIT_CTRL;
-    sz     = 1;
     buf[0] = 0x00;
+    sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
         retrun BMI270_RES_ERR;
@@ -505,8 +505,8 @@ static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev)
      * NOTE: This operation must not be performed more than once after POR
      *       or soft reset. */
     adr    = BMI270_REG_INIT_CTRL;
-    sz     = 1;
     buf[0] = 0x01;
+    sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
         retrun BMI270_RES_ERR;
@@ -593,14 +593,14 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev);
         return BMI270_RES_ERR;
     }
 
-    uint8_t    address;
-    uint8_t    buffer[2];
-    spi_ctrl_t *spi_ctrl_inst;
-
     memset(&dev->acc,  0, sizeof(dev->acc));
     memset(&dev->gyr,  0, sizeof(dev->gyr));
     memset(&dev->temp, 0, sizeof(dev->temp));
 
+    if (bmi270_por(dev) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
 
     dev->stat = BMI270_STAT_INIT;
 
@@ -619,18 +619,62 @@ bmi270_res_t bmi270_deinit(struct bmi270_dev *const dev)
     return BMI270_RES_OK;
 }
 
-bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_pwr_mode_conf *const pwr_mode_conf)
+bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
+                                 const struct bmi270_pwr_mode_conf *const pwr_mode_conf)
 {
     if (pwr_mode_conf == NULL)
     {
         return BMI270_RES_ERR;
     }
 
-    /* TODO: Get registers value via spi. */
     uint8_t pwr_ctrl_reg;
     uint8_t acc_conf_reg;
     uint8_t gyr_conf_reg;
     uint8_t pwr_conf_reg;
+
+    uint8_t buf[3] = { 0 };
+    uint8_t adr;
+    uint8_t sz;
+
+    /* Read the PWR_CONF and PWR_CTRL registers values. */
+    adr = BMI270_REG_PWR_CONF;
+    sz  = 2;
+    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+    else
+    {
+        pwr_conf_reg = buf[1];
+        pwr_ctrl_reg = buf[2];
+    }
+
+    /* Read the ACC_CONF register value. */
+    adr = BMI270_REG_ACC_CONF;
+    sz  = 1;
+    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+    else
+    {
+        acc_conf_reg = buf[1];
+    }
+
+    /* Read the GYR_CONF register value. */
+    adr = BMI270_REG_GYR_CONF;
+    sz  = 1;
+    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+    else
+    {
+        gyr_conf_reg = buf[1];
+    }
+
+    pwr_conf_reg &= ~(pwr_mode_conf->pwr_conf_mask);
+    pwr_conf_reg |=  (pwr_mode_conf->pwr_conf_value);
 
     pwr_ctrl_reg &= ~(pwr_mode_conf->pwr_ctrl_mask);
     pwr_ctrl_reg |=  (pwr_mode_conf->pwr_ctrl_value);
@@ -641,13 +685,38 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_pwr_mode_conf *const pwr_mo
     gyr_conf_reg &= ~(pwr_mode_conf->gyr_conf_mask);
     gyr_conf_reg |=  (pwr_mode_conf->gyr_conf_value);
 
-    pwr_conf_reg &= ~(pwr_mode_conf->pwr_conf_mask);
-    pwr_conf_reg |=  (pwr_mode_conf->pwr_conf_value);
+    /* Write the PWR_CONF and PWR_CTRL registers values. */
+    adr    = BMI270_REG_PWR_CONF;
+    buf[0] = pwr_conf_reg;
+    buf[1] = pwr_ctrl_reg;
+    sz     = 2;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
 
-    /* TODO: Set the registers via spi. */
+    /* Write the ACC_CONF register value. */
+    adr    = BMI270_REG_ACC_CONF;
+    buf[0] = acc_conf_reg;
+    sz     = 1;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* Write the GYR_CONF register value. */
+    adr    = BMI270_REG_ACC_CONF;
+    buf[0] = gyr_conf_reg;
+    sz     = 1;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
 
     return BMI270_RES_OK;
 }
+
+/* TODO: Finished here. */
 
 bmi270_res_t bmi270_acc_self_test(void)
 {
