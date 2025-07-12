@@ -94,8 +94,8 @@
 #define BMI270_REG_NVM_CONF                 (0x6a)  /*!< NVM configuration.                                 */
 #define BMI270_REG_IF_CONF                  (0x6b)  /*!< Serial interface settings.                         */
 #define BMI270_REG_DRV                      (0x6c)  /*!< Drive strenght control register (NVM backend).     */
-#define BMI270_REG_ACC_SELF_TEST            (0x6d)  /*!< Accelerometer self-test configuration and trigger. */
-#define BMI270_REG_GYR_SELF_TEST_AXES       (0x6e)  /*!< Gyro axes self-test configuration and trigger.     */
+#define BMI270_REG_ACC_SLF_TST              (0x6d)  /*!< Accelerometer self-test configuration and trigger. */
+#define BMI270_REG_GYR_SLF_TST_AXES         (0x6e)  /*!< Gyro axes self-test configuration and trigger.     */
 #define BMI270_REG_NV_CONF                  (0x70)  /*!< NVM backend configuration bits.                    */
 #define BMI270_REG_OFFSET_0                 (0x71)  /*!< Offset compensation for accelerometer X-axis.      */
 #define BMI270_REG_OFFSET_1                 (0x72)  /*!< Offset compensation for accelerometer Y-axis.      */
@@ -210,6 +210,17 @@
 #define BMI270_GYR_OIS_MSK          (0x01 << 0x03)  /*!< The gyroscope ois range mask.                      */
 #define BMI270_GYR_OIS_250          (0x00 << 0x03)  /*!< The gyroscope ois +/-250dps,  131.2 LSB/dps.       */
 #define BMI270_GYR_OIS_2000         (0x01 << 0x03)  /*!< The gyroscope ois +/-2000dps, 16.4  LSB/dps.       */
+
+///
+/// \brief The bmi270 ACC_SELF_TEST register fields.
+///
+#define BMI270_ACC_SLF_TST_MSK      (0x0f << 0x00)  /*!< The accelerometer self-test configuration mask.    */
+#define BMI270_ACC_SLF_TST_EN_0FF   (0x00 << 0x00)  /*!< Disable accelerometer self-test.                   */
+#define BMI270_ACC_SLF_TST_EN_ON    (0x01 << 0x00)  /*!< Enable accelerometer self-test.                    */
+#define BMI270_ACC_SLF_TST_SIG_NEG  (0x00 << 0x02)  /*!< Set the self-test sign to negative.                */
+#define BMI270_ACC_SLF_TST_SIG_POS  (0x01 << 0x02)  /*!< Set the self-test sign to possitive.               */
+#define BMI270_ACC_SLF_TST_AMP_LOW  (0x00 << 0x03)  /*!< Set amplitude of the self-test deflection to low.  */
+#define BMI270_ACC_SLF_TST_AMP_HIGH (0x01 << 0x03)  /*!< Set amplitude of the self-test deflection to high. */
 
 ///
 /// \brief The bmi270 PWR_CONF register fields.
@@ -356,11 +367,13 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
 ///
 /// \brief Self-tests accelerometer.
 ///
+/// \param[in] dev         The bmi270 device.
+///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_acc_self_test(void);
+bmi270_res_t bmi270_acc_slf_tst(const struct bmi270_dev *const dev);
 
 ///
 /// \brief Self-tests gyroscope.
@@ -369,7 +382,7 @@ bmi270_res_t bmi270_acc_self_test(void);
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_gyr_self_test(void);
+bmi270_res_t bmi270_gyr_slf_tst(void);
 
 ///
 /// \brief Reads the accelerometer data.

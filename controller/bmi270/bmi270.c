@@ -432,19 +432,6 @@ static bmi270_res_t bmi270_por(const struct bmi270_dev *const dev)
 {
     /* Whether the device is NULL was checked before. */
 
-    if (spi_ctrl_get_inst(dev->spi_ctrl_inst) == SPI_CTRL_RES_ERR)
-    {
-        return BMI270_RES_ERR;
-    }
-
-    if (dev->spi_ctrl_inst->stat == SPI_CTRL_STAT_DEINIT)
-    {
-        if (spi_ctrl_init(dev->spi_ctrl_inst) == SPI_CTRL_RES_ERR)
-        {
-            return BMI270_RES_ERR;
-        }
-    }
-
     uint8_t  adr;
     uint8_t  buf[2] = { 0 };
     uint32_t sz;
@@ -597,6 +584,22 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev);
     memset(&dev->gyr,  0, sizeof(dev->gyr));
     memset(&dev->temp, 0, sizeof(dev->temp));
 
+    if (dev->spi_ctrl_inst == NULL)
+    {
+        if (spi_ctrl_get_inst(dev->spi_ctrl_inst) == SPI_CTRL_RES_ERR)
+        {
+            return BMI270_RES_ERR;
+        }
+    }
+
+    if (dev->spi_ctrl_inst->stat == SPI_CTRL_STAT_DEINIT)
+    {
+        if (spi_ctrl_init(dev->spi_ctrl_inst) == SPI_CTRL_RES_ERR)
+        {
+            return BMI270_RES_ERR;
+        }
+    }
+
     if (bmi270_por(dev) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
@@ -622,7 +625,7 @@ bmi270_res_t bmi270_deinit(struct bmi270_dev *const dev)
 bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
                                  const struct bmi270_pwr_mode_conf *const pwr_mode_conf)
 {
-    if (pwr_mode_conf == NULL)
+    if ((pwr_mode_conf == NULL) || (dev->spi_ctrl_inst == NULL))
     {
         return BMI270_RES_ERR;
     }
@@ -718,12 +721,48 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
 
 /* TODO: Finished here. */
 
-bmi270_res_t bmi270_acc_self_test(void)
+bmi270_res_t bmi270_acc_slf_tst(const struct bmi270_dev *const dev)
 {
-    /* TODO: The accelerometer self-test, needs spi. */
+    if ((dev == NULL) || (dev->spi_ctrl_inst == NULL))
+    {
+        return BMI270_RES_ERR;
+    }
+
+    uint8_t adr;
+    uint8_t sz;
+    uint8_t buf[2];
+
+    /* Enable accelerometer with register PWR_CTRL.acc_en = 0x01. */
+    adr    = BMI270_REG_PWR_CTRL;
+    buf[0] = 1;
+    sz     = 1;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* Set +/-16g range in register ACC_RANGE.acc_range. */
+    adr    = BMI270_REG_ACC_RANGE;
+    buf[0] = BMI270_ACC_RANGE_16G;
+    sz     = 1;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* Set self test amplitude to high by settign ACC_SELF_TEST.acc_self_test_amp = 0x01. */
+    adr    = BMI270_REG_ACC_SLF_TST;
+    buf[0] = BMI270_ACC_SLF_TST_AMP_HIGH;
+    sz     = 1;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    return BMI270_RES_OK;
 }
 
-bmi270_res_t bmi270_gyr_self_test(void)
+bmi270_res_t bmi270_gyr_slf_tst(void)
 {
     /* TODO: The gyroscope self-test, needs spi. */
 }
