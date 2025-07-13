@@ -215,7 +215,7 @@
 /// \brief The bmi270 ACC_SELF_TEST register fields.
 ///
 #define BMI270_ACC_SLF_TST_MSK      (0x0f << 0x00)  /*!< The accelerometer self-test configuration mask.    */
-#define BMI270_ACC_SLF_TST_EN_0FF   (0x00 << 0x00)  /*!< Disable accelerometer self-test.                   */
+#define BMI270_ACC_SLF_TST_EN_OFF   (0x00 << 0x00)  /*!< Disable accelerometer self-test.                   */
 #define BMI270_ACC_SLF_TST_EN_ON    (0x01 << 0x00)  /*!< Enable accelerometer self-test.                    */
 #define BMI270_ACC_SLF_TST_SIG_NEG  (0x00 << 0x02)  /*!< Set the self-test sign to negative.                */
 #define BMI270_ACC_SLF_TST_SIG_POS  (0x01 << 0x02)  /*!< Set the self-test sign to possitive.               */

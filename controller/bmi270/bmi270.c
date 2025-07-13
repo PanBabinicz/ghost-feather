@@ -732,6 +732,9 @@ bmi270_res_t bmi270_acc_slf_tst(const struct bmi270_dev *const dev)
     uint8_t sz;
     uint8_t buf[2];
 
+    int16_t pos_x, pos_y, pos_z;
+    int16_t neg_x, neg_y, neg_z;
+
     /* Enable accelerometer with register PWR_CTRL.acc_en = 0x01. */
     adr    = BMI270_REG_PWR_CTRL;
     buf[0] = 1;
@@ -753,6 +756,72 @@ bmi270_res_t bmi270_acc_slf_tst(const struct bmi270_dev *const dev)
     /* Set self test amplitude to high by settign ACC_SELF_TEST.acc_self_test_amp = 0x01. */
     adr    = BMI270_REG_ACC_SLF_TST;
     buf[0] = BMI270_ACC_SLF_TST_AMP_HIGH;
+    sz     = 1;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* TODO: Wait for > 2ms. */
+
+    /* Set positive self-test polarity (ACC_SELF_TEST.acc_self_test_sign = 0x01). */
+    adr    = BMI270_REG_ACC_SLF_TST;
+    buf[0] = BMI270_ACC_SLF_TST_SIG_POS;
+    sz     = 1;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* Enable self-test (ACC_SELF_TEST.acc_self_test_en = 0x01). */
+    adr    = BMI270_REG_ACC_SLF_TST;
+    buf[0] = BMI270_ACC_SLF_TST_EN_ON;
+    sz     = 1;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* TODO: Wait for > 50ms. */
+
+    /* Read and store positive acceleration value of each axis from registers DATA_8 to DATA_13. */
+    bmi270_acc_read(dev);
+    bmi270_acc_get_x(dev, &pos_x);
+    bmi270_acc_get_y(dev, &pos_y);
+    bmi270_acc_get_z(dev, &pos_z);
+
+    /* Set negative self-test polarity (ACC_SELF_TEST.acc_self_test_sign = 0x00). */
+    adr    = BMI270_REG_ACC_SLF_TST;
+    buf[0] = BMI270_ACC_SLF_TST_SIG_NEG;
+    sz     = 1;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* Enable self-test (ACC_SELF_TEST.acc_self_test_en = 0x01). */
+    adr    = BMI270_REG_ACC_SLF_TST;
+    buf[0] = BMI270_ACC_SLF_TST_EN_ON;
+    sz     = 1;
+    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* TODO: Wait for > 50ms. */
+
+    /* Read and store negative acceleration value of each axis from registers DATA_8 to DATA_13. */
+    bmi270_acc_read(dev);
+    bmi270_acc_get_x(dev, &neg_x);
+    bmi270_acc_get_y(dev, &neg_y);
+    bmi270_acc_get_z(dev, &neg_z);
+
+    /* TODO: Calculate difference of positive and negative acceleration values and compare against
+     *       minimum difference signal values defined in the table below. */
+
+    /* Disable self-test (ACC_SELF_TEST.acc_self_test_en = 0x01). */
+    adr    = BMI270_REG_ACC_SLF_TST;
+    buf[0] = BMI270_ACC_SLF_TST_EN_OFF;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
