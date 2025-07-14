@@ -223,6 +223,22 @@
 #define BMI270_ACC_SLF_TST_AMP_HIGH (0x01 << 0x03)  /*!< Set amplitude of the self-test deflection to high. */
 
 ///
+/// \brief The bmi270 ACC_SELF_TEST register fields.
+///
+#define BMI270_GYR_SLF_TST_MSK      (0x0f << 0x00)  /*!< The gyroscope self-test configuration mask.        */
+#define BMI270_GYR_SLF_TST_DONE_MSK (0x01 << 0x00)  /*!< Gyroscope functional test of detection ended mask. */
+#define BMI270_GYR_SLF_TST_DONE     (0x01 << 0x00)  /*!< Gyroscope functional test of detection ended.      */
+#define BMI270_GYR_SLF_TST_X_MSK    (0x00 << 0x03)  /*!< Gyroscope X-axis self test mask.                   */
+#define BMI270_GYR_SLF_TST_X_ERR    (0x00 << 0x01)  /*!< Error status of gyro X-axis self test.             */
+#define BMI270_GYR_SLF_TST_X_OK     (0x01 << 0x01)  /*!< OK status of gyro X-axis self test.                */
+#define BMI270_GYR_SLF_TST_Y_MSK    (0x00 << 0x03)  /*!< Gyroscope Y-axis self test mask.                   */
+#define BMI270_GYR_SLF_TST_Y_ERR    (0x00 << 0x02)  /*!< Error status of gyro Y-axis self test.             */
+#define BMI270_GYR_SLF_TST_Y_OK     (0x01 << 0x02)  /*!< OK status of gyro Y-axis self test.                */
+#define BMI270_GYR_SLF_TST_Z_MSK    (0x00 << 0x03)  /*!< Gyroscope Z-axis self test mask.                   */
+#define BMI270_GYR_SLF_TST_Z_ERR    (0x00 << 0x03)  /*!< Error status of gyro Z-axis self test.             */
+#define BMI270_GYR_SLF_TST_Z_OK     (0x01 << 0x03)  /*!< OK status of gyro Z-axis self test.                */
+
+///
 /// \brief The bmi270 PWR_CONF register fields.
 ///
 #define BMI270_PWR_CONF_MSK         (0x07 << 0x00)  /*!< The power conf mask.                               */
@@ -258,6 +274,16 @@
 #define BMI270_PWR_CTRL_TEMP_MSK    (0x01 << 0x03)  /*!< The bmi270 power control temperature sensor mask.  */
 #define BMI270_PWR_CTRL_TEMP_OFF    (0x00 << 0x03)  /*!< The temperature sensor off.                        */
 #define BMI270_PWR_CTRL_TEMP_ON     (0x01 << 0x03)  /*!< The temperature sensor on.                         */
+
+///
+/// \brief The bmi270 CMD register fields.
+///
+#define BMI270_CMD_MSK              (0xff << 0x00)  /*!< The bmi270 cmd mask.                               */
+#define BMI270_CMD_G_TRIGGER        (0x02 << 0x00)  /*!< The cmd which triggers special gyro ops.           */
+#define BMI270_CMD_USR_GAIN         (0x03 << 0x00)  /*!< The cmd which applies new gyro gain value.         */
+#define BMI270_CMD_NVM_PROG         (0xa0 << 0x00)  /*!< The cmd which writes the NVM backed reg into NVM.  */
+#define BMI270_CMD_FIFO_FLUSH       (0xb0 << 0x00)  /*!< The cmd which clears FIFO content.                 */
+#define BMI270_CMD_SOFTRESET        (0xb6 << 0x00)  /*!< The cmd which triggers a reset.                    */
 
 ///
 /// \brief The bmi270 R/W opperation fields.
@@ -352,6 +378,20 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev);
 bmi270_res_t bmi270_deinit(struct bmi270_dev *const dev);
 
 ///
+/// \breif Performs soft reset of the bmi270.
+///
+/// \note  After every POR or soft reset, the IMU remains in suspend mode. To get ready for
+///        operation the device must be initialized through init procedure.
+///
+/// \param[in] dev         The bmi270 device.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_soft_rst(struct bmi270_dev *const dev);
+
+///
 /// \brief Sets the power mode.
 ///
 /// \param[in] dev           The bmi270 device.
@@ -378,11 +418,13 @@ bmi270_res_t bmi270_acc_slf_tst(const struct bmi270_dev *const dev);
 ///
 /// \brief Self-tests gyroscope.
 ///
+/// \param[in] dev         The bmi270 device.
+///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_gyr_slf_tst(void);
+bmi270_res_t bmi270_gyr_slf_tst(const struct bmi270_dev *const dev);
 
 ///
 /// \brief Reads the accelerometer data.
