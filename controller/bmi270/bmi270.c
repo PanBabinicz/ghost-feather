@@ -96,6 +96,15 @@ struct bmi270_temp
 };
 
 ///
+/// \brief The bmi270 sensor time instance type.
+///
+struct bmi270_time
+{
+    uint32_t reserved  : 8;                         /*!< Reserved.                                          */
+    uint32_t data      : 24;                        /*!< The sensor time data.                              */
+};
+
+///
 /// \brief The gpio pair type.
 ///
 struct gpio_pair
@@ -121,6 +130,7 @@ struct bmi270_dev
     struct bmi270_acc  acc;                         /*!< The accelerometer instance.                        */
     struct bmi270_gyr  gyr;                         /*!< The gyroscope instance.                            */
     struct bmi270_temp temp;                        /*!< The temperature sensor instance.                   */
+    struct bmi270_time time;                        /*!< The sensor time instance.                          */
     struct gpio_pair   gpio;                        /*!< The gpio pair.                                     */
     struct bmi270_conf conf;                        /*!< The bmi270 config.                                 */
     struct spi_ctrl    *spi_ctrl_inst               /*!< The spi controller instance.                       */
@@ -154,6 +164,7 @@ static struct bmi270_dev bmi270 =
     .acc  = { 0 },
     .gyr  = { 0 },
     .temp = { 0 },
+    .time = { 0 },
     .gpio =
     {
         .port = GPIOA,
@@ -1035,6 +1046,30 @@ bmi270_res_t bmi270_temp_get(const struct bmi270_dev *const dev, int16_t *const 
     }
 
     *temp = dev->temp.data;
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_time_read(const struct bmi270_dev *const dev)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* TODO: Read the sensor time via spi. */
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_time_get(const struct bmi270_dev *const dev, uint32_t *const time)
+{
+    if ((dev == NULL) || (time == NULL))
+    {
+        return BMI270_RES_ERR;
+    }
+
+    *time = dev->time.data;
 
     return BMI270_RES_OK;
 }

@@ -535,12 +535,35 @@ bmi270_res_t bmi270_temp_read(struct bmi270_dev *const dev);
 /// \brief Gets the temperature value.
 ///
 /// \param[in]  dev        The bmi270 device.
-/// \param[out] temp       The temp value.
+/// \param[out] temp       The temperature value.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 bmi270_res_t bmi270_temp_get(const struct bmi270_dev *const dev, int16_t *const temp);
+
+///
+/// \brief Reads the sensor time register data.
+///
+/// \param[in] dev         The bmi270 device.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_time_read(const struct bmi270_dev *const dev);
+
+///
+/// \brief Gets the sensor time value.
+///
+/// \param[in]  dev        The bmi270 device.
+/// \param[out] time       The sensor time value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_time_get(const struct bmi270_dev *const dev, uint32_t *const time);
 
 #endif  /* _BMI270_H */
