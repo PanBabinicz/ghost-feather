@@ -372,6 +372,18 @@ static bmi270_res_t bmi270_upld_conf_file(const bm270_dev *const dev);
 ///
 static bmi270_res_t bmi270_vld_conf_file(const bm270_dev *const dev);
 
+///
+/// \breif Delays execution for the specified number of bmi270 sensor time cycles.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] cycles      The number of cycles.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+static bmi270_res_t bmi270_wait_cycles(const bm270_dev *const dev, const uint32_t cycles);
+
 ///***********************************************************************************************************
 /// Private functions - definition.
 ///***********************************************************************************************************
@@ -466,6 +478,38 @@ static bmi270_res_t bmi270_vld_conf_file(const bm270_dev *const dev)
     {
         return BMI270_RES_ERR;
     }
+
+    return BMI270_RES_OK;
+}
+
+static bmi270_res_t bmi270_wait_cycles(const bm270_dev *const dev, const uint32_t cycles)
+{
+    /* Whether the device is NULL was checked before. */
+    uint32_t prev;
+    uint32_t curr;
+
+    if (bmi270_time_read(dev) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    prev = dev->time.data;
+
+    do
+    {
+        if (bmi270_time_read(dev) != BMI270_RES_OK)
+        {
+            return BMI270_RES_ERR;
+        }
+
+        curr = dev->time.data;
+
+        if (curr < prev)
+        {
+            /* Wrap around, the 24bit counter. */
+            curr += 0x01000000;
+        }
+    } while ((curr - prev) < cycles);
 
     return BMI270_RES_OK;
 }
@@ -1057,7 +1101,16 @@ bmi270_res_t bmi270_time_read(const struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    /* TODO: Read the sensor time via spi. */
+    uint8_t  adr    = BMI270_REG_SENSORTIME_0;
+    uint8_t  buf[4] = { 0 };
+    uint32_t sz     = 3;
+
+    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->time.data = ((buf[1] << 0x10) | (buf[2] << 0x08) | (buf[3] << 0x00));
 
     return BMI270_RES_OK;
 }
