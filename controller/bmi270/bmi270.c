@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+#define BMI270_US_TO_CYCLES(us)  ((uint32_t)((((us) * 10000) + 390624) / 390625))
+
 ///***********************************************************************************************************
 /// Private objects - declaration.
 ///***********************************************************************************************************
@@ -375,6 +377,8 @@ static bmi270_res_t bmi270_vld_conf_file(const bm270_dev *const dev);
 ///
 /// \breif Delays execution for the specified number of bmi270 sensor time cycles.
 ///
+/// \note  One cycle is equal to 39.0625us.
+///
 /// \param[in] dev         The bmi270 device.
 /// \param[in] cycles      The number of cycles.
 ///
@@ -581,15 +585,10 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
         retrun BMI270_RES_ERR;
     }
 
-    /* Wait for 450us (12 LSB of SENSORTIME_0). */
-    adr = BMI270_REG_SENSORTIME_0;
-    sz  = 1;
-    while (buf[1] < 12)
+    /* Wait for 450us. */
+    if (bmi270_wait_cycles(dev, BMI270_US_TO_CYCLES(450)) != BMI270_RES_OK)
     {
-        if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
-        {
-            retrun BMI270_RES_ERR;
-        }
+        retrun BMI270_RES_ERR;
     }
 
     /* Write INIT_CTRL.init_ctrl = 0x00 to prepare config load. */
@@ -820,7 +819,11 @@ bmi270_res_t bmi270_acc_slf_tst(const struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    /* TODO: Wait for > 2ms. */
+    /* Wait for > 2ms. */
+    if (bmi270_wait_cycles(dev, BMI270_US_TO_CYCLES(2000)) != BMI270_RES_OK)
+    {
+        retrun BMI270_RES_ERR;
+    }
 
     /* Set positive self-test polarity (ACC_SELF_TEST.acc_self_test_sign = 0x01). */
     adr    = BMI270_REG_ACC_SLF_TST;
@@ -840,7 +843,11 @@ bmi270_res_t bmi270_acc_slf_tst(const struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    /* TODO: Wait for > 50ms. */
+    /* Wait for > 50ms. */
+    if (bmi270_wait_cycles(dev, BMI270_US_TO_CYCLES(50000)) != BMI270_RES_OK)
+    {
+        retrun BMI270_RES_ERR;
+    }
 
     /* Read and store positive acceleration value of each axis from registers DATA_8 to DATA_13. */
     bmi270_acc_read(dev);
@@ -866,7 +873,11 @@ bmi270_res_t bmi270_acc_slf_tst(const struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    /* TODO: Wait for > 50ms. */
+    /* Wait for > 50ms. */
+    if (bmi270_wait_cycles(dev, BMI270_US_TO_CYCLES(50000)) != BMI270_RES_OK)
+    {
+        retrun BMI270_RES_ERR;
+    }
 
     /* Read and store negative acceleration value of each axis from registers DATA_8 to DATA_13. */
     bmi270_acc_read(dev);
@@ -921,7 +932,11 @@ bmi270_res_t bmi270_gyr_slf_tst(const struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    /* TODO: Wait for 450us. */
+    /* Wait for 450us. */
+    if (bmi270_wait_cycles(dev, BMI270_US_TO_CYCLES(450)) != BMI270_RES_OK)
+    {
+        retrun BMI270_RES_ERR;
+    }
 
     /* Enable accelerometer PWR_CTRL.acc_en = 0x01. */
     adr    = BMI270_REG_PWR_CTRL;
