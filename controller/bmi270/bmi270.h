@@ -38,7 +38,7 @@
 #define BMI270_REG_SC_OUT_0                 (0x1e)  /*!< Step counting value byte-0.                        */
 #define BMI270_REG_SC_OUT_1                 (0x1f)  /*!< Step counting value byte-1.                        */
 #define BMI270_REG_WR_GEST_ACT              (0x20)  /*!< Wrist gesture and activity detection output.       */
-#define BMI270_REG_INTRNL_STAT          (0x21)  /*!< Error bits and messge indicating internal status.  */
+#define BMI270_REG_INST                     (0x21)  /*!< Error bits and messge indicating internal status.  */
 #define BMI270_REG_TEMPERATURE_0            (0x22)  /*!< Temperature (LSB).                                 */
 #define BMI270_REG_TEMPERATURE_1            (0x23)  /*!< Temperature (MSB).                                 */
 #define BMI270_REG_FIFO_LENGTH_0            (0x24)  /*!< FIFO byte count register (LSB).                    */
@@ -109,7 +109,7 @@
 #define BMI270_REG_CMD                      (0x7e)  /*!< Command register.                                  */
 
 ///
-/// \brief The bmi270 INTRNL_STAT register fields.
+/// \brief The bmi270 INST register fields.
 ///
 #define BMI270_INST_MSK             (0xff << 0x00)  /*!< The internal status register mask.                 */
 #define BMI270_INST_MSG_MSK         (0x0f << 0x00)  /*!< The internal status message mask.                  */
@@ -123,6 +123,18 @@
 #define BMI270_INST_MSG_COMPAT_ERR  (0x07 << 0x00)  /*!< The internal status message compatibility error.   */
 #define BMI270_INST_AXES_REMAP      (0x01 << 0x05)  /*!< The internal status incorrect axes remapping.      */
 #define BMI270_INST_ODR_50HZ_ERR    (0x01 << 0x06)  /*!< The internal status minimum bandwidth are not met. */
+
+///
+/// \brief The bmi270 GYR_GAIN_STATUS register fields.
+///
+#define BMI270_GYR_GAIN_STAT_MSK    (0x3f << 0x00)  /*!< Describes the saturation status for the gyro gain. */
+#define BMI270_GYR_GAIN_STAT_SAT_X  (0x01 << 0x00)  /*!< Gain results to saturated value for x axis.        */
+#define BMI270_GYR_GAIN_STAT_SAT_Y  (0x01 << 0x01)  /*!< Gain results to saturated value for y axis.        */
+#define BMI270_GYR_GAIN_STAT_SAT_Z  (0x01 << 0x02)  /*!< Gain results to saturated value for z axis.        */
+#define BMI270_GYR_GAIN_STAT_NO_ERR (0x00 << 0x03)  /*!< Selected feature has been executed.                */
+#define BMI270_GYR_GAIN_STAT_PRECON (0x01 << 0x03)  /*!< Precondition to start the feature was not ended.   */
+#define BMI270_GYR_GAIN_STAT_DL     (0x02 << 0x03)  /*!< Unsuccessful download of 2kB configuration stream. */
+#define BMI270_GYR_GAIN_STAT_ABORT  (0x03 << 0x03)  /*!< Command is aborted.                                */
 
 ///
 /// \brief The bmi270 ACC_CONF register fields.

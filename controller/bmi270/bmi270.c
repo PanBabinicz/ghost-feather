@@ -626,7 +626,7 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
     }
 
     /* Wait until internal status register contains the value 0b0001. */
-    adr = BMI270_REG_INTERNAL_STATUS;
+    adr = BMI270_REG_INST;
     sz  = 1;
     while ((buf[1] & BMI270_INST_MSG_MSK) != BMI270_INST_MSG_INIT_OK)
     {
@@ -947,13 +947,26 @@ bmi270_res_t bmi270_gyr_slf_tst(const struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    /* TODO: Ensure that the device is at rest during self-test execution. */
-
     /* Send g_trigger command using the register CMD. */
     adr    = BMI270_REG_CMD;
     buf[0] = BMI270_CMD_G_TRIGGER;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    /* GYR_GAIN_STATUS.g_trig_status reports of a successful self-test or execution errors. */
+    adr    = BMI270_REG_FEATURES_8;
+    sz     = 1;
+    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    if ((buf[1] & BMI270_GYR_GAIN_STAT_PRECON) ||
+        (buf[1] & BMI270_GYR_GAIN_STAT_DL) ||
+        (buf[1] & BMI270_GYR_GAIN_STAT_ABORT))
     {
         return BMI270_RES_ERR;
     }
@@ -968,8 +981,6 @@ bmi270_res_t bmi270_gyr_slf_tst(const struct bmi270_dev *const dev)
             return BMI270_RES_ERR;
         }
     }
-
-    /* TODO: GYR_GAIN_STATUS.g_trig_status reports of a successful self-test or execution errors. */
 
     /* The test passed if all axes report the status "ok" by GYR_SELF_TEST_AXES.gyr_axis[xyz]_ok = 0x01. */
     if ((buf[1] & BMI270_GYR_SLF_TST_X_ERR) ||
