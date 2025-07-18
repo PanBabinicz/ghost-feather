@@ -43,9 +43,9 @@ struct bmi270_acc_rng
 ///
 struct bmi270_acc
 {
-    bmi270_acc_data_t data;                         /*!< The bmi270 accelerometer data.                     */
-    bmi270_acc_conf_t conf;                         /*!< The bmi270 accelerometer configuration.            */
-    bmi270_acc_rng_t  rng;                          /*!< The bmi270 accelerometer range.                    */
+    struct bmi270_acc_data data;                    /*!< The bmi270 accelerometer data.                     */
+    struct bmi270_acc_conf conf;                    /*!< The bmi270 accelerometer configuration.            */
+    struct bmi270_acc_rng  rng;                     /*!< The bmi270 accelerometer range.                    */
 };
 
 ///
@@ -84,9 +84,9 @@ struct bmi270_gyr_rng
 ///
 struct bmi270_gyr
 {
-    bmi270_gyr_data_t data;                         /*!< The bmi270 gyroscope data.                         */
-    bmi270_gyr_conf_t conf;                         /*!< The bmi270 gyroscope configuration.                */
-    bmi270_gyr_rng_t  rng;                          /*!< The bmi270 gyroscope range.                        */
+    struct bmi270_gyr_data data;                    /*!< The bmi270 gyroscope data.                         */
+    struct bmi270_gyr_conf conf;                    /*!< The bmi270 gyroscope configuration.                */
+    struct bmi270_gyr_rng  rng;                     /*!< The bmi270 gyroscope range.                        */
 };
 
 ///
@@ -578,7 +578,7 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
 
     /* Disable advanced power save mode: PWR_CONF.adv_power_save = 0x00. */
     adr    = BMI270_REG_PWR_CONF;
-    buf[0] = 0x00;
+    buf[0] = 0;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
@@ -593,7 +593,7 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
 
     /* Write INIT_CTRL.init_ctrl = 0x00 to prepare config load. */
     adr    = BMI270_REG_INIT_CTRL;
-    buf[0] = 0x00;
+    buf[0] = 0;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
@@ -661,15 +661,12 @@ bmi270_res_t bmi270_soft_rst(struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    uint8_t  adr;
-    uint8_t  buf;
-    uint32_t sz;
+    uint8_t  adr = BMI270_REG_PWR_CONF;
+    uint8_t  buf = BMI270_CMD_SOFTRESET;
+    uint32_t sz  = 1;
 
     if (dev->stat != BMI270_STAT_DEINIT)
     {
-        adr = BMI270_REG_PWR_CONF;
-        buf = BMI270_CMD_SOFTRESET;
-        sz  = 1;
         if (bmi270_reg_write(dev, adr, &buf, sz) != BMI270_RES_OK)
         {
             retrun BMI270_RES_ERR;
@@ -694,9 +691,9 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
     uint8_t gyr_conf_reg;
     uint8_t pwr_conf_reg;
 
-    uint8_t buf[3] = { 0 };
-    uint8_t adr;
-    uint8_t sz;
+    uint8_t  adr;
+    uint8_t  buf[3] = { 0 };
+    uint32_t sz;
 
     /* Read the PWR_CONF and PWR_CTRL registers values. */
     adr = BMI270_REG_PWR_CONF;
@@ -785,9 +782,9 @@ bmi270_res_t bmi270_acc_slf_tst(const struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    uint8_t adr;
-    uint8_t sz;
-    uint8_t buf[2];
+    uint8_t  adr;
+    uint8_t  buf[2] = { 0 };
+    uint32_t sz;
 
     int16_t pos_x, pos_y, pos_z;
     int16_t neg_x, neg_y, neg_z;
@@ -1000,10 +997,18 @@ bmi270_res_t bmi270_acc_read(struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    /* TODO: Read the accelerometer data via spi. */
-    dev->acc.data.x =
-    dev->acc.data.y =
-    dev->acc.data.z =
+    uint8_t  adr    = BMI270_REG_DATA_8;
+    uint8_t  buf[7] = { 0 };
+    uint32_t sz     = 6;
+
+    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->acc.data.x = ((buf[2] << 0x08) | (buf[1] << 0x00));
+    dev->acc.data.y = ((buf[4] << 0x08) | (buf[3] << 0x00));
+    dev->acc.data.z = ((buf[6] << 0x08) | (buf[5] << 0x00));
 
     return BMI270_RES_OK;
 }
@@ -1051,10 +1056,18 @@ bmi270_res_t bmi270_gyr_read(struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    /* TODO: Read the gyroscope data via spi. */
-    dev->gyr.data.x =
-    dev->gyr.data.y =
-    dev->gyr.data.z =
+    uint8_t  adr    = BMI270_REG_DATA_14;
+    uint8_t  buf[7] = { 0 };
+    uint32_t sz     = 6;
+
+    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->gyr.data.x = ((buf[2] << 0x08) | (buf[1] << 0x00));
+    dev->gyr.data.y = ((buf[4] << 0x08) | (buf[3] << 0x00));
+    dev->gyr.data.z = ((buf[6] << 0x08) | (buf[5] << 0x00));
 
     return BMI270_RES_OK;
 }
@@ -1102,8 +1115,16 @@ bmi270_res_t bmi270_temp_read(struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    /* TODO: Read the temperature data via spi. */
-    dev->temp.data =
+    uint8_t  adr    = BMI270_REG_TEMPERATURE_0;
+    uint8_t  buf[3] = { 0 };
+    uint32_t sz     = 2;
+
+    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->temp.data = ((buf[2] << 0x08) | (buf[1] << 0x00));
 
     return BMI270_RES_OK;
 }
