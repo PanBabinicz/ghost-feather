@@ -8,7 +8,7 @@
 ///
 /// \brief The spi controller instance type.
 ///
-typedef struct spi_ctrl spi_ctrl_t;
+struct spi_ctrl_dev;
 
 ///
 /// \brief The spi controller result type.
@@ -253,40 +253,40 @@ typedef enum spi_ctrl_ldmarx
 ///
 /// \brief Initializes the spi controller.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_init(spi_ctrl_t *const inst);
+spi_ctrl_res_t spi_ctrl_init(struct spi_ctrl_dev *const dev);
 
 ///
 /// \brief Deinitializes the spi controller.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_deinit(spi_ctrl_t *const inst);
+spi_ctrl_res_t spi_ctrl_deinit(struct spi_ctrl_dev *const dev);
 
 ///
-/// \brief Gets the spi instance.
+/// \brief Gets the spi device.
 ///
-/// \param[out] inst         The pointer to the spi controller instance.
+/// \param[out] dev          The pointer to the spi controller device.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_get_inst(const spi_ctrl_t **inst);
+spi_ctrl_res_t spi_ctrl_get_dev(const struct spi_ctrl_dev **dev);
 
 ///
 /// \brief Begins an spi transaction by enabling the peripheral and managing NSS if needed.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] gpio_port     The gpio port identifier.
 /// \param[in] gpios         The gpio pin identifiers. If multiple pins are to be changed,
 ///                          use bitwise OR '|' to separate them.
@@ -295,12 +295,13 @@ spi_ctrl_res_t spi_ctrl_get_inst(const spi_ctrl_t **inst);
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_begin(const spi_ctrl_t *const inst, const uint32_t gpio_port, const uint32_t gpios);
+spi_ctrl_res_t spi_ctrl_begin(const struct spi_ctrl_dev *const dev, const uint32_t gpio_port,
+                              const uint32_t gpios);
 
 ///
 /// \brief Ends an spi transaction by disabling the peripheral and managing NSS if needed.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] gpio_port     The gpio port identifier.
 /// \param[in] gpios         The gpio pin identifiers. If multiple pins are to be changed,
 ///                          use bitwise OR '|' to separate them.
@@ -309,12 +310,13 @@ spi_ctrl_res_t spi_ctrl_begin(const spi_ctrl_t *const inst, const uint32_t gpio_
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_end(const spi_ctrl_t *const inst, const uint32_t gpio_port, const uint32_t gpios);
+spi_ctrl_res_t spi_ctrl_end(const struct spi_ctrl_dev *const dev, const uint32_t gpio_port,
+                            const uint32_t gpios);
 
 ///
 /// \brief Receives the specified number of bytes over spi.
 ///
-/// \param[in] inst          The pointer to the spi controller instance.
+/// \param[in] dev           The pointer to the spi controller device.
 /// \param[in] buf           The pointer to the data buffer.
 /// \param[in] sz            The number of bytes to transmit.
 ///
@@ -322,12 +324,13 @@ spi_ctrl_res_t spi_ctrl_end(const spi_ctrl_t *const inst, const uint32_t gpio_po
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_recv(const spi_ctrl_t *const inst, uint8_t *const buf, const uint32_t sz);
+spi_ctrl_res_t spi_ctrl_recv(const struct spi_ctrl_dev *const dev, uint8_t *const buf,
+                             const uint32_t sz);
 
 ///
 /// \brief Sends the specified number of bytes over spi.
 ///
-/// \param[in] inst          The pointer to the spi controller instance.
+/// \param[in] dev           The pointer to the spi controller device.
 /// \param[in] buf           The pointer to the data buffer.
 /// \param[in] sz            The number of bytes to transmit.
 ///
@@ -335,236 +338,237 @@ spi_ctrl_res_t spi_ctrl_recv(const spi_ctrl_t *const inst, uint8_t *const buf, c
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_send(const spi_ctrl_t *const inst, const uint8_t *const buf, const uint32_t sz);
+spi_ctrl_res_t spi_ctrl_send(const struct spi_ctrl_dev *const dev, const uint8_t *const buf,
+                             const uint32_t sz);
 
 ///
-/// \brief Sets the spi CRC polynomial value inside instance.
+/// \brief Sets the spi CRC polynomial value inside device.
 ///
 /// \note  Default reset value is `0x0007`.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] crcpoly       The spi controller CRC polynomial value.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_crcpr(spi_ctrl_t *const inst, const uint16_t crcpoly);
+spi_ctrl_res_t spi_ctrl_set_crcpr(struct spi_ctrl_dev *const dev, const uint16_t crcpoly);
 
 ///
-/// \brief Sets the spi clock phase index inside instance.
+/// \brief Sets the spi clock phase index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] cpha          The spi controller clock phase index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_cpha(spi_ctrl_t *const inst, const spi_ctrl_cpha_t cpha);
+spi_ctrl_res_t spi_ctrl_set_cpha(struct spi_ctrl_dev *const dev, const spi_ctrl_cpha_t cpha);
 
 ///
-/// \brief Sets the spi clock polarity index inside instance.
+/// \brief Sets the spi clock polarity index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] cpol          The spi controller clock polarity index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_cpol(spi_ctrl_t *const inst, const spi_ctrl_cpol_t cpol);
+spi_ctrl_res_t spi_ctrl_set_cpol(struct spi_ctrl_dev *const dev, const spi_ctrl_cpol_t cpol);
 
 ///
-/// \brief Sets the spi bidirectional data mode index inside instance.
+/// \brief Sets the spi bidirectional data mode index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] bidimode      The spi controller bidirectional data mode index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_bidimode(spi_ctrl_t *const inst, const spi_ctrl_bidimode_t bidimode);
+spi_ctrl_res_t spi_ctrl_set_bidimode(struct spi_ctrl_dev *const dev, const spi_ctrl_bidimode_t bidimode);
 
 ///
-/// \brief Sets the spi output enable in bidirectional mode index inside instance.
+/// \brief Sets the spi output enable in bidirectional mode index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] bidioe        The spi controller output enable in bidirectional mode index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_bidioe(spi_ctrl_t *const inst, const spi_ctrl_bidioe_t bidioe);
+spi_ctrl_res_t spi_ctrl_set_bidioe(struct spi_ctrl_dev *const dev, const spi_ctrl_bidioe_t bidioe);
 
 ///
-/// \brief Sets the spi receive only mode enable index inside instance.
+/// \brief Sets the spi receive only mode enable index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] rxonly        The spi controller receive only mode enable index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_rxonly(spi_ctrl_t *const inst, const spi_ctrl_rxonly_t rxonly);
+spi_ctrl_res_t spi_ctrl_set_rxonly(struct spi_ctrl_dev *const dev, const spi_ctrl_rxonly_t rxonly);
 
 ///
-/// \brief Sets the spi frame format index inside instance.
+/// \brief Sets the spi frame format index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] lsbfirst      The spi controller frame format index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_lsbfirst(spi_ctrl_t *const inst, const spi_ctrl_lsbfirst_t lsbfirst);
+spi_ctrl_res_t spi_ctrl_set_lsbfirst(struct spi_ctrl_dev *const dev, const spi_ctrl_lsbfirst_t lsbfirst);
 
 ///
-/// \brief Sets the spi hardware CRC calculation index inside instance.
+/// \brief Sets the spi hardware CRC calculation index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] crcen         The spi controller hardware CRC calculation index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_crcen(spi_ctrl_t *const inst, const spi_ctrl_crcen_t crcen);
+spi_ctrl_res_t spi_ctrl_set_crcen(struct spi_ctrl_dev *const dev, const spi_ctrl_crcen_t crcen);
 
 ///
-/// \brief Sets the spi CRC length index inside instance.
+/// \brief Sets the spi CRC length index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] crcl          The spi controller CRC length index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_crcl(spi_ctrl_t *const inst, const spi_ctrl_crcl_t crcl);
+spi_ctrl_res_t spi_ctrl_set_crcl(struct spi_ctrl_dev *const dev, const spi_ctrl_crcl_t crcl);
 
 ///
-/// \brief Sets the spi software slave management index inside instance.
+/// \brief Sets the spi software slave management index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] ssm           The spi controller software slave management index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_ssm(spi_ctrl_t *const inst, const spi_ctrl_ssm_t ssm);
+spi_ctrl_res_t spi_ctrl_set_ssm(struct spi_ctrl_dev *const dev, const spi_ctrl_ssm_t ssm);
 
 ///
-/// \brief Sets the spi internal slave select index inside instance.
+/// \brief Sets the spi internal slave select index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] ssi           The spi controller internal slave select index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_ssi(spi_ctrl_t *const inst, const spi_ctrl_ssi_t ssi);
+spi_ctrl_res_t spi_ctrl_set_ssi(struct spi_ctrl_dev *const dev, const spi_ctrl_ssi_t ssi);
 
 ///
-/// \brief Sets the spi master selection index inside instance.
+/// \brief Sets the spi master selection index inside dev.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] mstr          The spi controller master selection index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_mstr(spi_ctrl_t *const inst, const spi_ctrl_mstr_t mstr);
+spi_ctrl_res_t spi_ctrl_set_mstr(struct spi_ctrl_dev *const dev, const spi_ctrl_mstr_t mstr);
 
 ///
-/// \brief Sets the spi data size index inside instance.
+/// \brief Sets the spi data size index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] ds            The spi controller data size index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_ds(spi_ctrl_t *const inst, const spi_ctrl_ds_t ds);
+spi_ctrl_res_t spi_ctrl_set_ds(struct spi_ctrl_dev *const dev, const spi_ctrl_ds_t ds);
 
 ///
-/// \brief Sets the spi slave select output enable index inside instance.
+/// \brief Sets the spi slave select output enable index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] ssoe          The spi controller slave select output enable index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_ssoe(spi_ctrl_t *const inst, const spi_ctrl_ssoe_t ssoe);
+spi_ctrl_res_t spi_ctrl_set_ssoe(struct spi_ctrl_dev *const dev, const spi_ctrl_ssoe_t ssoe);
 
 ///
-/// \brief Sets the spi frame format inside index instance.
+/// \brief Sets the spi frame format inside index device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] frf           The spi controller frame format index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_frf(spi_ctrl_t *const inst, const spi_ctrl_frf_t frf);
+spi_ctrl_res_t spi_ctrl_set_frf(struct spi_ctrl_dev *const dev, const spi_ctrl_frf_t frf);
 
 ///
-/// \brief Sets the spi NSS pulse mangement index inside instance.
+/// \brief Sets the spi NSS pulse mangement index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] nssp          The spi controller NSS pulse management index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_nssp(spi_ctrl_t *const inst, const spi_ctrl_nssp_t nssp);
+spi_ctrl_res_t spi_ctrl_set_nssp(struct spi_ctrl_dev *const dev, const spi_ctrl_nssp_t nssp);
 
 ///
-/// \brief Sets the spi FIFO reception threshold index inside instance.
+/// \brief Sets the spi FIFO reception threshold index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] frxth         The spi controller FIFO reception threshold index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_frxth(spi_ctrl_t *const inst, const spi_ctrl_frxth_t frxth);
+spi_ctrl_res_t spi_ctrl_set_frxth(struct spi_ctrl_t *const dev, const spi_ctrl_frxth_t frxth);
 
 ///
-/// \brief Sets the spi last DMA transfer for transmission index inside instance.
+/// \brief Sets the spi last DMA transfer for transmission index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] ldmatx        The spi controller last DMA transfer for transmission index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_ldmatx(spi_ctrl_t *const inst, const spi_ctrl_ldmatx_t ldmatx);
+spi_ctrl_res_t spi_ctrl_set_ldmatx(struct spi_ctrl_dev *const dev, const spi_ctrl_ldmatx_t ldmatx);
 
 ///
-/// \brief Sets the spi last DMA transfer for reception index inside instance.
+/// \brief Sets the spi last DMA transfer for reception index inside device.
 ///
-/// \param[in] inst          The spi controller instance.
+/// \param[in] dev           The spi controller device.
 /// \param[in] ldmarx        The spi controller last DMA transfer for reception index.
 ///
 /// \return spi_ctrl_res_t   The spi controller result.
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_ldmarx(spi_ctrl_t *const inst, const spi_ctrl_ldmarx_t ldmarx);
+spi_ctrl_res_t spi_ctrl_set_ldmarx(struct spi_ctrl_dev *const dev, const spi_ctrl_ldmarx_t ldmarx);
 
 #endif  /* _SPI_CTRL_H */
