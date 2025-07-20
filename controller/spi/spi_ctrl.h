@@ -19,6 +19,7 @@ typedef enum spi_ctrl_res
     SPI_CTRL_RES_ERR,
 } spi_ctrl_res_t;
 
+/* TODO: Add idle status. */
 ///
 /// \brief The spi controller result type.
 ///
@@ -284,6 +285,19 @@ spi_ctrl_res_t spi_ctrl_deinit(struct spi_ctrl_dev *const dev);
 spi_ctrl_res_t spi_ctrl_get_dev(const struct spi_ctrl_dev **dev);
 
 ///
+/// \brief Gets the spi device status.
+///
+/// \param[in] dev               The spi controller device.
+///
+/// \return spi_ctrl_stat_t      The spi controller device status.
+/// \retval SPI_CTRL_STAT_DEINIT The spi controller is deinitialized.
+/// \retval SPI_CTRL_STAT_INIT   The spi controller is initialized.
+/// \retval SPI_CTRL_STAT_RUN    The spi controller executes transaction.
+/// \retval SPI_CTRL_STAT_STOP   The spi controller completed the transaction.
+///
+spi_ctrl_stat_t spi_ctrl_get_stat(const struct spi_ctrl_dev *const dev);
+
+///
 /// \brief Begins an spi transaction by enabling the peripheral and managing NSS if needed.
 ///
 /// \param[in] dev           The spi controller device.
@@ -295,7 +309,7 @@ spi_ctrl_res_t spi_ctrl_get_dev(const struct spi_ctrl_dev **dev);
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_begin(const struct spi_ctrl_dev *const dev, const uint32_t gpio_port,
+spi_ctrl_res_t spi_ctrl_begin(struct spi_ctrl_dev *const dev, const uint32_t gpio_port,
                               const uint32_t gpios);
 
 ///
@@ -310,7 +324,7 @@ spi_ctrl_res_t spi_ctrl_begin(const struct spi_ctrl_dev *const dev, const uint32
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_end(const struct spi_ctrl_dev *const dev, const uint32_t gpio_port,
+spi_ctrl_res_t spi_ctrl_end(struct spi_ctrl_dev *const dev, const uint32_t gpio_port,
                             const uint32_t gpios);
 
 ///
@@ -545,7 +559,7 @@ spi_ctrl_res_t spi_ctrl_set_nssp(struct spi_ctrl_dev *const dev, const spi_ctrl_
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_frxth(struct spi_ctrl_t *const dev, const spi_ctrl_frxth_t frxth);
+spi_ctrl_res_t spi_ctrl_set_frxth(struct spi_ctrl_dev *const dev, const spi_ctrl_frxth_t frxth);
 
 ///
 /// \brief Sets the spi last DMA transfer for transmission index inside device.

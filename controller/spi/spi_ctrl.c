@@ -382,11 +382,21 @@ spi_ctrl_res_t spi_ctrl_get_dev(const struct spi_ctrl_dev **dev)
         return SPI_CTRL_RES_ERR;
     }
 
-    *dev = &spi_ctrl_dev;
+    *dev = &spi_ctrl;
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_begin(const struct spi_ctrl_dev *const dev, const uint32_t gpio_port,
+spi_ctrl_stat_t spi_ctrl_get_stat(const struct spi_ctrl_dev *const dev)
+{
+    if (dev == NULL)
+    {
+        return SPI_CTRL_RES_ERR;
+    }
+
+    return dev->stat;
+}
+
+spi_ctrl_res_t spi_ctrl_begin(struct spi_ctrl_dev *const dev, const uint32_t gpio_port,
                               const uint32_t gpios)
 {
     if (dev == NULL)
@@ -406,7 +416,7 @@ spi_ctrl_res_t spi_ctrl_begin(const struct spi_ctrl_dev *const dev, const uint32
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_end(const struct spi_ctrl_dev *const dev, const uint32_t gpio_port,
+spi_ctrl_res_t spi_ctrl_end(struct spi_ctrl_dev *const dev, const uint32_t gpio_port,
                             const uint32_t gpios)
 {
     if (dev == NULL)
@@ -687,7 +697,7 @@ spi_ctrl_res_t spi_ctrl_set_nssp(struct spi_ctrl_dev *const dev, const spi_ctrl_
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_frxth(struct spi_ctrl_t *const dev, const spi_ctrl_frxth_t frxth)
+spi_ctrl_res_t spi_ctrl_set_frxth(struct spi_ctrl_dev *const dev, const spi_ctrl_frxth_t frxth)
 {
     if ((frxth < SPI_CTRL_FRXTH_BEGIN) || (frxth >= SPI_CTRL_FRXTH_TOTAL) || (dev == NULL))
     {
