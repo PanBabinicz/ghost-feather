@@ -365,7 +365,7 @@ struct bmi270_dev* bmi270_get_dev(void);
 ///
 /// \return bmi270_pwr_mode_conf_t The power mode config.
 ///
-const bmi270_pwr_mode_conf_t* bmi270_get_pwr_mode_conf(const bmi270_pwr_mode_t pwr_mode);
+const struct bmi270_pwr_mode_conf* bmi270_get_pwr_mode_conf(const bmi270_pwr_mode_t pwr_mode);
 
 ///
 /// \breif Initializes the bmi270.
@@ -425,7 +425,7 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_acc_slf_tst(const struct bmi270_dev *const dev);
+bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev);
 
 ///
 /// \brief Self-tests gyroscope.
@@ -436,7 +436,7 @@ bmi270_res_t bmi270_acc_slf_tst(const struct bmi270_dev *const dev);
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_gyr_slf_tst(const struct bmi270_dev *const dev);
+bmi270_res_t bmi270_gyr_slf_tst(struct bmi270_dev *const dev);
 
 ///
 /// \brief Reads the accelerometer data.
@@ -564,7 +564,7 @@ bmi270_res_t bmi270_temp_get(const struct bmi270_dev *const dev, int16_t *const 
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-bmi270_res_t bmi270_time_read(const struct bmi270_dev *const dev);
+bmi270_res_t bmi270_time_read(struct bmi270_dev *const dev);
 
 ///
 /// \brief Gets the sensor time value.
