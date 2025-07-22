@@ -386,7 +386,7 @@ static bmi270_res_t bmi270_vld_conf_file(const struct bmi270_dev *const dev);
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-static bmi270_res_t bmi270_wait_cycles(const struct bmi270_dev *const dev, const uint32_t cycles);
+static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint32_t cycles);
 
 ///***********************************************************************************************************
 /// Private functions - definition.
@@ -490,7 +490,7 @@ static bmi270_res_t bmi270_vld_conf_file(const struct bmi270_dev *const dev)
     return BMI270_RES_OK;
 }
 
-static bmi270_res_t bmi270_wait_cycles(const struct bmi270_dev *const dev, const uint32_t cycles)
+static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint32_t cycles)
 {
     /* Whether the device is NULL was checked before. */
     uint32_t prev;
