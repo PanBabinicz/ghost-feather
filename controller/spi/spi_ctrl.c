@@ -390,7 +390,7 @@ spi_ctrl_stat_t spi_ctrl_get_stat(const struct spi_ctrl_dev *const dev)
 {
     if (dev == NULL)
     {
-        return SPI_CTRL_RES_ERR;
+        return SPI_CTRL_STAT_DEINIT;
     }
 
     return dev->stat;

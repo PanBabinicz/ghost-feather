@@ -3,6 +3,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif  /* __cplusplus */
+
 ///
 /// \breif The bmi270 registers definition.
 ///
@@ -577,5 +581,9 @@ bmi270_res_t bmi270_time_read(struct bmi270_dev *const dev);
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 bmi270_res_t bmi270_time_get(const struct bmi270_dev *const dev, uint32_t *const time);
+
+#ifdef __cplusplus
+}
+#endif  /* __cplusplus */
 
 #endif  /* _BMI270_H */

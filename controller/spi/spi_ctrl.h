@@ -3,6 +3,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif  /* __cplusplus */
+
 #define CRCPOLY_RES_VAL (0x0007)
 
 ///
@@ -584,5 +588,9 @@ spi_ctrl_res_t spi_ctrl_set_ldmatx(struct spi_ctrl_dev *const dev, const spi_ctr
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
 spi_ctrl_res_t spi_ctrl_set_ldmarx(struct spi_ctrl_dev *const dev, const spi_ctrl_ldmarx_t ldmarx);
+
+#ifdef __cplusplus
+}
+#endif  /* __cplusplus */
 
 #endif  /* _SPI_CTRL_H */
