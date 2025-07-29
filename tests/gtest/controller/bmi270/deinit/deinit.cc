@@ -1,0 +1,42 @@
+#include <gtest/gtest.h>
+#include <stdint.h>
+#include "bmi270.h"
+
+class gtest_bmi270_deinit : public ::testing::Test
+{
+    protected:
+        void SetUp() override
+        {
+            if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
+                std::string("procedure"))
+            {
+                struct bmi270_dev *dev = bmi270_get_dev();
+                (void)bmi270_set_stat(dev, BMI270_STAT_INIT);
+            }
+        }
+};
+
+///
+/// \brief This test performs the bmi270 deinit procedure.
+///
+TEST_F(gtest_bmi270_deinit, procedure)
+{
+    bmi270_res_t  res;
+    bmi270_stat_t stat;
+
+    struct bmi270_dev *dev = NULL;
+    dev = bmi270_get_dev();
+
+    /*
+    res = bmi270_get_stat(dev, &stat);
+    EXPECT_EQ(res, BMI270_RES_OK);
+    EXPECT_EQ(stat, BMI270_STAT_INIT);
+    */
+
+    res = bmi270_deinit(dev);
+    EXPECT_EQ(res, BMI270_RES_OK);
+
+    res = bmi270_get_stat(dev, &stat);
+    EXPECT_EQ(res, BMI270_RES_OK);
+    EXPECT_EQ(stat, BMI270_STAT_DEINIT);
+}

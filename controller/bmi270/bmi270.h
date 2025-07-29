@@ -322,8 +322,10 @@ struct bmi270_pwr_mode_conf;
 ///
 typedef enum bmi270_res
 {
-    BMI270_RES_OK = 0,
+    BMI270_RES_BEGIN = 0,
+    BMI270_RES_OK    = 0,
     BMI270_RES_ERR,
+    BMI270_RES_TOTAL,
 } bmi270_res_t;
 
 ///
@@ -331,8 +333,10 @@ typedef enum bmi270_res
 ///
 typedef enum bmi270_stat
 {
+    BMI270_STAT_BEGIN  = 0,
     BMI270_STAT_DEINIT = 0,
     BMI270_STAT_INIT,
+    BMI270_STAT_TOTAL,
 } bmi270_stat_t;
 
 ///
@@ -419,6 +423,30 @@ bmi270_res_t bmi270_soft_rst(struct bmi270_dev *const dev);
 ///
 bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
                                  const struct bmi270_pwr_mode_conf *const pwr_mode_conf);
+
+///
+/// \brief Sets the device status.
+///
+/// \param[in] dev           The bmi270 device.
+/// \param[in] stat          The bmi270 device status.
+///
+/// \return bmi270_res_t     The bmi270 result.
+/// \retval BMI270_RES_OK    On success.
+/// \retval BMI270_RES_ERR   Otherwise.
+///
+bmi270_res_t bmi270_set_stat(struct bmi270_dev *const dev, const bmi270_stat_t stat);
+
+///
+/// \brief Get the device status.
+///
+/// \param[in]  dev          The bmi270 device.
+/// \param[out] stat         The bmi270 device status.
+///
+/// \return bmi270_res_t     The bmi270 result.
+/// \retval BMI270_RES_OK    On success.
+/// \retval BMI270_RES_ERR   Otherwise.
+///
+bmi270_res_t bmi270_get_stat(const struct bmi270_dev *const dev, bmi270_stat_t *const stat);
 
 ///
 /// \brief Self-tests accelerometer.
