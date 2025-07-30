@@ -40,3 +40,14 @@ TEST_F(gtest_bmi270_deinit, procedure)
     EXPECT_EQ(res, BMI270_RES_OK);
     EXPECT_EQ(stat, BMI270_STAT_DEINIT);
 }
+
+///
+/// \brief This test checks the null pointer protection inside bmi270 deinit function.
+///
+TEST_F(gtest_bmi270_deinit, null_pointer_protection)
+{
+    bmi270_res_t res;
+
+    res = bmi270_deinit(NULL);
+    EXPECT_EQ(res, BMI270_RES_ERR);
+}
