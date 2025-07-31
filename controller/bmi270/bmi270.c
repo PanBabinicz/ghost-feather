@@ -1153,6 +1153,18 @@ bmi270_res_t bmi270_gyr_get_x(const struct bmi270_dev *const dev, int16_t *const
     return BMI270_RES_OK;
 }
 
+bmi270_res_t bmi270_gyr_set_x(struct bmi270_dev *const dev, const int16_t x)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->gyr.data.x = x;
+
+    return BMI270_RES_OK;
+}
+
 bmi270_res_t bmi270_gyr_get_y(const struct bmi270_dev *const dev, int16_t *const y)
 {
     if ((dev == NULL) || (y == NULL))
@@ -1165,6 +1177,18 @@ bmi270_res_t bmi270_gyr_get_y(const struct bmi270_dev *const dev, int16_t *const
     return BMI270_RES_OK;
 }
 
+bmi270_res_t bmi270_gyr_set_y(struct bmi270_dev *const dev, const int16_t y)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->gyr.data.y = y;
+
+    return BMI270_RES_OK;
+}
+
 bmi270_res_t bmi270_gyr_get_z(const struct bmi270_dev *const dev, int16_t *const z)
 {
     if ((dev == NULL) || (z == NULL))
@@ -1173,6 +1197,18 @@ bmi270_res_t bmi270_gyr_get_z(const struct bmi270_dev *const dev, int16_t *const
     }
 
     *z = dev->gyr.data.z;
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_gyr_set_z(struct bmi270_dev *const dev, const int16_t z)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->gyr.data.z = z;
 
     return BMI270_RES_OK;
 }

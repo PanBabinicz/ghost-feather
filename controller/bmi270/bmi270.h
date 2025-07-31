@@ -577,6 +577,18 @@ bmi270_res_t bmi270_gyr_read(struct bmi270_dev *const dev);
 bmi270_res_t bmi270_gyr_get_x(const struct bmi270_dev *const dev, int16_t *const x);
 
 ///
+/// \brief Sets the gyroscope x axis value.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] x           The x axis value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_gyr_set_x(struct bmi270_dev *const dev, const int16_t x);
+
+///
 /// \brief Gets the gyroscope y axis value.
 ///
 /// \param[in]  dev        The bmi270 device.
@@ -589,6 +601,18 @@ bmi270_res_t bmi270_gyr_get_x(const struct bmi270_dev *const dev, int16_t *const
 bmi270_res_t bmi270_gyr_get_y(const struct bmi270_dev *const dev, int16_t *const y);
 
 ///
+/// \brief Sets the gyroscope y axis value.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] y           The y axis value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_gyr_set_y(struct bmi270_dev *const dev, const int16_t y);
+
+///
 /// \brief Gets the gyroscope z axis value.
 ///
 /// \param[in]  dev        The bmi270 device.
@@ -599,6 +623,18 @@ bmi270_res_t bmi270_gyr_get_y(const struct bmi270_dev *const dev, int16_t *const
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 bmi270_res_t bmi270_gyr_get_z(const struct bmi270_dev *const dev, int16_t *const z);
+
+///
+/// \brief Sets the gyroscope z axis value.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] z           The z axis value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_gyr_set_z(struct bmi270_dev *const dev, const int16_t z);
 
 ///
 /// \brief Reads the temperature data.
