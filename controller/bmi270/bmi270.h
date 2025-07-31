@@ -496,8 +496,8 @@ bmi270_res_t bmi270_acc_get_x(const struct bmi270_dev *const dev, int16_t *const
 ///
 /// \brief Sets the accelerometer x axis value.
 ///
-/// \param[in]  dev        The bmi270 device.
-/// \param[out] x          The x axis value.
+/// \param[in] dev         The bmi270 device.
+/// \param[in] x           The x axis value.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
@@ -520,8 +520,8 @@ bmi270_res_t bmi270_acc_get_y(const struct bmi270_dev *const dev, int16_t *const
 ///
 /// \brief Sets the accelerometer y axis value.
 ///
-/// \param[in]  dev        The bmi270 device.
-/// \param[out] y          The y axis value.
+/// \param[in] dev         The bmi270 device.
+/// \param[in] y           The y axis value.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
@@ -544,8 +544,8 @@ bmi270_res_t bmi270_acc_get_z(const struct bmi270_dev *const dev, int16_t *const
 ///
 /// \brief Sets the accelerometer z axis value.
 ///
-/// \param[in]  dev        The bmi270 device.
-/// \param[out] z          The z axis value.
+/// \param[in] dev         The bmi270 device.
+/// \param[in] z           The z axis value.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
