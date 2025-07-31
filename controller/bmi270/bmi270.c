@@ -1246,6 +1246,18 @@ bmi270_res_t bmi270_temp_get(const struct bmi270_dev *const dev, int16_t *const 
     return BMI270_RES_OK;
 }
 
+bmi270_res_t bmi270_temp_set(struct bmi270_dev *const dev, int16_t temp)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->temp.data = temp;
+
+    return BMI270_RES_OK;
+}
+
 bmi270_res_t bmi270_time_read(struct bmi270_dev *const dev)
 {
     if (dev == NULL)
