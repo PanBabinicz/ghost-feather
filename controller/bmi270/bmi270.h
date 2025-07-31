@@ -494,6 +494,18 @@ bmi270_res_t bmi270_acc_read(struct bmi270_dev *const dev);
 bmi270_res_t bmi270_acc_get_x(const struct bmi270_dev *const dev, int16_t *const x);
 
 ///
+/// \brief Sets the accelerometer x axis value.
+///
+/// \param[in]  dev        The bmi270 device.
+/// \param[out] x          The x axis value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_acc_set_x(struct bmi270_dev *const dev, const int16_t x);
+
+///
 /// \brief Gets the accelerometer y axis value.
 ///
 /// \param[in]  dev        The bmi270 device.
@@ -506,6 +518,18 @@ bmi270_res_t bmi270_acc_get_x(const struct bmi270_dev *const dev, int16_t *const
 bmi270_res_t bmi270_acc_get_y(const struct bmi270_dev *const dev, int16_t *const y);
 
 ///
+/// \brief Sets the accelerometer y axis value.
+///
+/// \param[in]  dev        The bmi270 device.
+/// \param[out] y          The y axis value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_acc_set_y(struct bmi270_dev *const dev, const int16_t y);
+
+///
 /// \brief Gets the accelerometer z axis value.
 ///
 /// \param[in]  dev        The bmi270 device.
@@ -516,6 +540,18 @@ bmi270_res_t bmi270_acc_get_y(const struct bmi270_dev *const dev, int16_t *const
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 bmi270_res_t bmi270_acc_get_z(const struct bmi270_dev *const dev, int16_t *const z);
+
+///
+/// \brief Sets the accelerometer z axis value.
+///
+/// \param[in]  dev        The bmi270 device.
+/// \param[out] z          The z axis value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_acc_set_z(struct bmi270_dev *const dev, const int16_t z);
 
 ///
 /// \brief Reads the gyroscope data.
