@@ -1290,3 +1290,15 @@ bmi270_res_t bmi270_time_get(const struct bmi270_dev *const dev, uint32_t *const
 
     return BMI270_RES_OK;
 }
+
+bmi270_res_t bmi270_time_set(struct bmi270_dev *const dev, const uint32_t time)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->time.data = time;
+
+    return BMI270_RES_OK;
+}

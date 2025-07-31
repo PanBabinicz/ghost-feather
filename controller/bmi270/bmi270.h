@@ -694,6 +694,18 @@ bmi270_res_t bmi270_time_read(struct bmi270_dev *const dev);
 ///
 bmi270_res_t bmi270_time_get(const struct bmi270_dev *const dev, uint32_t *const time);
 
+///
+/// \brief Sets the sensor time value.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] time        The sensor time value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_time_set(struct bmi270_dev *const dev, const uint32_t time);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
