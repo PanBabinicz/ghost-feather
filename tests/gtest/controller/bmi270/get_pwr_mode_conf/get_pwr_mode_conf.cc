@@ -5,7 +5,7 @@
 ///
 /// \brief This test performs the bmi270 get power mode config procedure.
 ///
-TEST(get_pwr_mode_conf, procedure)
+TEST(gtest_bmi270_get_pwr_mode_conf, procedure)
 {
     bool test_stat = true;
     const bmi270_pwr_mode_t pwr_mode_array[BMI270_PWR_MODE_TOTAL] =
@@ -42,7 +42,7 @@ TEST(get_pwr_mode_conf, procedure)
 /// \brief This test checks the invalid power mode protection insdie bmi270 get power mode
 ///        config function.
 ///
-TEST(get_pwr_mode_conf, inv_pwr_mode)
+TEST(gtest_bmi270_get_pwr_mode_conf, inv_pwr_mode)
 {
     bool test_stat = true;
     int32_t inv_pwr_mode = BMI270_PWR_MODE_BEGIN - 1;

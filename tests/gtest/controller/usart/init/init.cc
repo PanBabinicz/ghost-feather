@@ -11,7 +11,7 @@ uint32_t USART_BRR = 0x00000000;
 ///
 /// \brief This test performs the usart controller init procedure.
 ///
-TEST(init, procedure)
+TEST(gtest_usart_ctrl_init, procedure)
 {
     usart_controller_status_t status;
     uint32_t expected_usart_cr1 = 0x0000000d;

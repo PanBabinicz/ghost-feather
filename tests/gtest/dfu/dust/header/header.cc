@@ -5,7 +5,7 @@
 ///
 /// \brief This test creates the header.
 ///
-TEST(header, create)
+TEST(gtest_dust_header, create)
 {
     dust_result_t result;
     dust_header_t header = { 0 };
@@ -33,7 +33,7 @@ TEST(header, create)
 ///
 /// \brief This test checks the null pointer protection inside create header function.
 ///
-TEST(header, null_pointer_protection)
+TEST(gtest_dust_header, null_pointer_protection)
 {
     dust_result_t result;
 

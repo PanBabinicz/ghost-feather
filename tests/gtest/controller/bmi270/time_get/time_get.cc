@@ -11,7 +11,7 @@ class gtest_bmi270_time_get : public ::testing::Test
                 std::string("procedure"))
             {
                 struct bmi270_dev *dev = bmi270_get_dev();
-                uint32_t time = 0xdeadbeef;
+                uint32_t time = 0x00dead00;
 
                 (void)bmi270_time_set(dev, time);
             }
@@ -28,8 +28,8 @@ TEST_F(gtest_bmi270_time_get, procedure)
 
     res = bmi270_time_get(dev, &time);
     EXPECT_EQ(res, BMI270_RES_OK);
-    /* TODO: Check the tiem value. */
-    //EXPECT_EQ(time, 0xdeadbeef);
+
+    EXPECT_EQ(time, 0x00dead00);
 }
 
 ///

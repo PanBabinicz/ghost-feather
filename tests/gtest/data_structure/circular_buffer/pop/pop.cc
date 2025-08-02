@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "data_structure/circular_buffer.h"
 
-class pop : public ::testing::Test
+class gtest_circ_buf_pop : public ::testing::Test
 {
     protected:
         void SetUp() override
@@ -58,7 +58,7 @@ class pop : public ::testing::Test
 ///
 /// \brief This test pops single element.
 ///
-TEST_F(pop, single)
+TEST_F(gtest_circ_buf_pop, single)
 {
     circular_buffer_result_t result;
     uint8_t element;
@@ -72,7 +72,7 @@ TEST_F(pop, single)
 ///
 /// \brief This test pops every element from full circular buffer.
 ///
-TEST_F(pop, all)
+TEST_F(gtest_circ_buf_pop, all)
 {
     circular_buffer_result_t result;
     uint8_t element;
@@ -89,7 +89,7 @@ TEST_F(pop, all)
 ///
 /// \brief This test pops element from empty circular buffer.
 ///
-TEST_F(pop, empty)
+TEST_F(gtest_circ_buf_pop, empty)
 {
     circular_buffer_result_t result;
     uint8_t element = 0xff;
@@ -103,7 +103,7 @@ TEST_F(pop, empty)
 ///
 /// \brief This test pops element from overflowed circular buffer.
 ///
-TEST_F(pop, overflow)
+TEST_F(gtest_circ_buf_pop, overflow)
 {
     circular_buffer_result_t result;
     uint8_t element;
@@ -121,7 +121,7 @@ TEST_F(pop, overflow)
 ///
 /// \brief This test checks the null pointer protection inside pop function.
 ///
-TEST_F(pop, null_pointer_protection)
+TEST_F(gtest_circ_buf_pop, null_pointer_protection)
 {
     circular_buffer_result_t result;
 
@@ -132,7 +132,7 @@ TEST_F(pop, null_pointer_protection)
 ///
 /// \brief This test checks the invalid instance protection inside pop function.
 ///
-TEST_F(pop, invalid_instance)
+TEST_F(gtest_circ_buf_pop, invalid_instance)
 {
     circular_buffer_result_t result;
     uint8_t element;

@@ -5,7 +5,7 @@
 ///
 /// \brief This test creates the payload.
 ///
-TEST(payload, create)
+TEST(gtest_dust_payload, create)
 {
     dust_result_t result;
     dust_payload_t payload = { 0 };
@@ -28,7 +28,7 @@ TEST(payload, create)
 ///
 /// \brief This test checks the null pointer protection inside create payload function.
 ///
-TEST(payload, null_pointer_protection)
+TEST(gtest_dust_payload, null_pointer_protection)
 {
     dust_result_t result;
     dust_payload_t payload = { 0 };
