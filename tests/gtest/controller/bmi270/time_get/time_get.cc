@@ -18,6 +18,9 @@ class gtest_bmi270_time_get : public ::testing::Test
         }
 };
 
+///
+/// \brief This test performs the bmi270 time get procedure.
+///
 TEST_F(gtest_bmi270_time_get, procedure)
 {
     bmi270_res_t res;
@@ -33,7 +36,7 @@ TEST_F(gtest_bmi270_time_get, procedure)
 }
 
 ///
-/// \brief This test checks the null pointer protection inside bmi270 deinit function.
+/// \brief This test checks the null pointer protection inside bmi270 time set function.
 ///
 TEST_F(gtest_bmi270_time_get, null_pointer_protection)
 {
