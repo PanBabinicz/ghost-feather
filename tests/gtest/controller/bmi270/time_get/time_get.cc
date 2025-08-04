@@ -36,7 +36,7 @@ TEST_F(gtest_bmi270_time_get, procedure)
 }
 
 ///
-/// \brief This test checks the null pointer protection inside bmi270 time set function.
+/// \brief This test checks the null pointer protection inside bmi270 time get function.
 ///
 TEST_F(gtest_bmi270_time_get, null_pointer_protection)
 {
