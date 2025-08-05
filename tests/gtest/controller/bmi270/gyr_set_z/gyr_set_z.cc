@@ -33,6 +33,6 @@ TEST(gtest_bmi270_gyr_set_z, null_pointer_protection)
     struct bmi270_dev *dev = NULL;
     dev = bmi270_get_dev();
 
-    res = bmi270_time_set(NULL, 0xfeed);
+    res = bmi270_gyr_set_z(NULL, 0xfeed);
     EXPECT_EQ(res, BMI270_RES_ERR);
 }
