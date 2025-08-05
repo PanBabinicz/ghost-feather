@@ -1,6 +1,7 @@
 add_subdirectory(deinit)
 add_subdirectory(get_dev)
 add_subdirectory(get_pwr_mode_conf)
+add_subdirectory(gyr_set_x)
 add_subdirectory(gyr_set_z)
 add_subdirectory(temp_get)
 add_subdirectory(temp_set)
