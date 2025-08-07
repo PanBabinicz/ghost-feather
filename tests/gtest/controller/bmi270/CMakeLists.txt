@@ -1,3 +1,4 @@
+add_subdirectory(acc_set_x)
 add_subdirectory(deinit)
 add_subdirectory(get_dev)
 add_subdirectory(get_pwr_mode_conf)
