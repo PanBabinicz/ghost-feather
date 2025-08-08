@@ -1,3 +1,4 @@
+add_subdirectory(acc_get_x)
 add_subdirectory(acc_set_x)
 add_subdirectory(acc_set_y)
 add_subdirectory(acc_set_z)
