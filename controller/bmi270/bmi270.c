@@ -784,7 +784,7 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
     return BMI270_RES_OK;
 }
 
-bmi270_res_t bmi270_set_stat(struct bmi270_dev *const dev, const bmi270_stat_t stat)
+bmi270_res_t bmi270_stat_set(struct bmi270_dev *const dev, const bmi270_stat_t stat)
 {
     if ((dev == NULL) || (stat < BMI270_STAT_BEGIN) || (stat >= BMI270_STAT_TOTAL))
     {
@@ -796,7 +796,7 @@ bmi270_res_t bmi270_set_stat(struct bmi270_dev *const dev, const bmi270_stat_t s
     return BMI270_RES_OK;
 }
 
-bmi270_res_t bmi270_get_stat(const struct bmi270_dev *const dev, bmi270_stat_t *const stat)
+bmi270_res_t bmi270_stat_get(const struct bmi270_dev *const dev, bmi270_stat_t *const stat)
 {
     if ((dev == NULL) || (stat == NULL ))
     {

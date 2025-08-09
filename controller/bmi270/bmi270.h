@@ -434,7 +434,7 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
 /// \retval BMI270_RES_OK    On success.
 /// \retval BMI270_RES_ERR   Otherwise.
 ///
-bmi270_res_t bmi270_set_stat(struct bmi270_dev *const dev, const bmi270_stat_t stat);
+bmi270_res_t bmi270_stat_set(struct bmi270_dev *const dev, const bmi270_stat_t stat);
 
 ///
 /// \brief Get the device status.
@@ -446,7 +446,7 @@ bmi270_res_t bmi270_set_stat(struct bmi270_dev *const dev, const bmi270_stat_t s
 /// \retval BMI270_RES_OK    On success.
 /// \retval BMI270_RES_ERR   Otherwise.
 ///
-bmi270_res_t bmi270_get_stat(const struct bmi270_dev *const dev, bmi270_stat_t *const stat);
+bmi270_res_t bmi270_stat_get(const struct bmi270_dev *const dev, bmi270_stat_t *const stat);
 
 ///
 /// \brief Self-tests accelerometer.

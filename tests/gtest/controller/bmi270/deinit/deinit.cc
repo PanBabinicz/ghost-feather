@@ -11,7 +11,7 @@ class gtest_bmi270_deinit : public ::testing::Test
                 std::string("procedure"))
             {
                 struct bmi270_dev *dev = bmi270_get_dev();
-                (void)bmi270_set_stat(dev, BMI270_STAT_INIT);
+                (void)bmi270_stat_set(dev, BMI270_STAT_INIT);
             }
         }
 };
@@ -28,7 +28,7 @@ TEST_F(gtest_bmi270_deinit, procedure)
     dev = bmi270_get_dev();
 
     /*
-    res = bmi270_get_stat(dev, &stat);
+    res = bmi270_stat_get(dev, &stat);
     EXPECT_EQ(res, BMI270_RES_OK);
     EXPECT_EQ(stat, BMI270_STAT_INIT);
     */
@@ -36,7 +36,7 @@ TEST_F(gtest_bmi270_deinit, procedure)
     res = bmi270_deinit(dev);
     EXPECT_EQ(res, BMI270_RES_OK);
 
-    res = bmi270_get_stat(dev, &stat);
+    res = bmi270_stat_get(dev, &stat);
     EXPECT_EQ(res, BMI270_RES_OK);
     EXPECT_EQ(stat, BMI270_STAT_DEINIT);
 }
