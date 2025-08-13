@@ -3,12 +3,12 @@
 
 #include <stdint.h>
 
-#define GPIOA       (GPIO_PA)
-#define GPIOB       (GPIO_PB)
-#define GPIOC       (GPIO_PC)
-#define GPIOD       (GPIO_PD)
-#define GPIOE       (GPIO_PE)
-#define GPIOF       (GPIO_PF)
+#define GPIOA       (GPIO_PORT_A)
+#define GPIOB       (GPIO_PORT_B)
+#define GPIOC       (GPIO_PORT_C)
+#define GPIOD       (GPIO_PORT_D)
+#define GPIOE       (GPIO_PORT_E)
+#define GPIOF       (GPIO_PORT_F)
 
 #define GPIO0       (0x01 << 0x00)
 #define GPIO1       (0x01 << 0x01)
@@ -29,24 +29,24 @@
 #define GPIO_ALL    (0xffff)
 
 ///
-/// \breif The gpio ports type.
+/// \breif The gpio port type.
 ///
-typedef enum gpio_ports
+typedef enum gpio_port
 {
-    GPIO_PA = 0,
-    GPIO_PB,
-    GPIO_PC,
-    GPIO_PD,
-    GPIO_PE,
-    GPIO_PF,
-    GPIO_PTOTAL,
-} gpio_ports_t;
+    GPIO_PORT_A = 0,
+    GPIO_PORT_B,
+    GPIO_PORT_C,
+    GPIO_PORT_D,
+    GPIO_PORT_E,
+    GPIO_PORT_F,
+    GPIO_PORT_TOTAL,
+} gpio_port_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */
 
-static uint32_t GPIO_BSRR_REG[GPIO_PTOTAL];
+static uint32_t GPIO_BSRR_REG[GPIO_PORT_TOTAL];
 
 ///
 /// \breif Mock implementation of gpio_clear function.
