@@ -3,16 +3,6 @@
 
 #include <stdint.h>
 
-#define GPIO_BASE   (0x40006000U)
-
-#define GPIO_P(i)   (GPIO_BASE + (0x24 * (i)))
-#define GPIO_PA	    (GPIO_P(0))
-#define GPIO_PB     (GPIO_P(1))
-#define GPIO_PC     (GPIO_P(2))
-#define GPIO_PD     (GPIO_P(3))
-#define GPIO_PE     (GPIO_P(4))
-#define GPIO_PF     (GPIO_P(5))
-
 #define GPIOA       (GPIO_PA)
 #define GPIOB       (GPIO_PB)
 #define GPIOC       (GPIO_PC)
@@ -38,16 +28,32 @@
 #define GPIO15      (0x01 << 0x0f)
 #define GPIO_ALL    (0xffff)
 
+///
+/// \breif The gpio ports type.
+///
+typedef enum gpio_ports
+{
+    GPIO_PA = 0,
+    GPIO_PB,
+    GPIO_PC,
+    GPIO_PD,
+    GPIO_PE,
+    GPIO_PF,
+    GPIO_PTOTAL,
+} gpio_ports_t;
+
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */
+
+static uint32_t GPIO_BSRR_REG[GPIO_PTOTAL];
 
 ///
 /// \breif Mock implementation of gpio_clear function.
 ///
 static inline void gpio_clear(uint32_t gpioport, uint16_t gpios)
 {
-    return;
+    GPIO_BSRR_REG[gpioport] = (gpios << 16);
 }
 
 ///
@@ -55,7 +61,7 @@ static inline void gpio_clear(uint32_t gpioport, uint16_t gpios)
 ///
 static inline void gpio_set(uint32_t gpioport, uint16_t gpios)
 {
-    return;
+    GPIO_BSRR_REG[gpioport] = (gpios << 16);
 }
 
 #ifdef __cplusplus
