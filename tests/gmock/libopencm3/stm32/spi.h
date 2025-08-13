@@ -3,23 +3,40 @@
 
 #include <stdint.h>
 
-#define MMIO32(addr)		(*(volatile uint32_t *)((uintptr_t)(addr)))
-#define SPI_CRCPR(spi_base) (MMIO32((spi_base) + 0x10))
+#define SPI1                (SPI_INTF_1)
+#define SPI2                (SPI_INTF_2)
+#define SPI3                (SPI_INTF_3)
+#define SPI4                (SPI_INTF_4)
+#define SPI5                (SPI_INTF_5)
 
-#define SPI1_BASE           (0x40013000U)
-#define SPI1                (SPI1_BASE)
+#define SPI_CR1_SPE         (1 << 6)
 
+///
+/// \breif The spi interface type.
+///
+typedef enum spi_intf
+{
+    SPI_INTF_1 = 0,
+    SPI_INTF_2,
+    SPI_INTF_3,
+    SPI_INTF_4,
+    SPI_INTF_5,
+    SPI_INTF_6,
+    SPI_INTF_TOTAL,
+} spi_intf_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */
+
+static uint32_t SPI_CR1_REG[SPI_INTF_TOTAL];
 
 ///
 /// \breif Mock implementation of spi_enable function.
 ///
 static inline void spi_enable(uint32_t spi)
 {
-    return;
+    SPI_CR1_REG[spi] |= SPI_CR1_SPE;
 }
 
 ///
@@ -27,7 +44,7 @@ static inline void spi_enable(uint32_t spi)
 ///
 static inline void spi_disable(uint32_t spi)
 {
-    return;
+    SPI_CR1_REG[spi] &= ~(SPI_CR1_SPE);
 }
 
 ///
