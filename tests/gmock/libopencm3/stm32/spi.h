@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define SPI_CRCPR(spi_base) (SPI_CRCPR_ARR[spi_base])
+
 #define SPI1                (SPI_INTF_1)
 #define SPI2                (SPI_INTF_2)
 #define SPI3                (SPI_INTF_3)
@@ -29,14 +31,16 @@ typedef enum spi_intf
 extern "C" {
 #endif  /* __cplusplus */
 
-static uint32_t SPI_CR1_REG[SPI_INTF_TOTAL];
+static uint32_t SPI_CR1_ARR[SPI_INTF_TOTAL];
+static uint32_t SPI_CRCPR_ARR[SPI_INTF_TOTAL];
+static uint32_t SPI_DR_ARR[SPI_INTF_TOTAL];
 
 ///
 /// \breif Mock implementation of spi_enable function.
 ///
 static inline void spi_enable(uint32_t spi)
 {
-    SPI_CR1_REG[spi] |= SPI_CR1_SPE;
+    SPI_CR1_ARR[spi] |= SPI_CR1_SPE;
 }
 
 ///
@@ -44,7 +48,7 @@ static inline void spi_enable(uint32_t spi)
 ///
 static inline void spi_disable(uint32_t spi)
 {
-    SPI_CR1_REG[spi] &= ~(SPI_CR1_SPE);
+    SPI_CR1_ARR[spi] &= ~(SPI_CR1_SPE);
 }
 
 ///
@@ -68,7 +72,7 @@ static inline void spi_write(uint32_t spi, uint16_t data)
 ///
 static inline void spi_send(uint32_t spi, uint16_t data)
 {
-    return;
+	SPI_DR_ARR[spi] = data;
 }
 
 ///
@@ -76,7 +80,7 @@ static inline void spi_send(uint32_t spi, uint16_t data)
 ///
 static inline uint16_t spi_read(uint32_t spi)
 {
-    return 0;
+	return SPI_DR_ARR[spi];
 }
 
 ///
