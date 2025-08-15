@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define SPI_FIFO_BUF_MAX_SZ (0xffU)
+
 #define SPI_CRCPR(spi_base) (SPI_CRCPR_ARR[spi_base])
 
 #define SPI1                (SPI_INTF_1)
@@ -27,13 +29,19 @@ typedef enum spi_intf
     SPI_INTF_TOTAL,
 } spi_intf_t;
 
+struct spi_dr
+{
+    uint8_t idx;
+    uint8_t buf[SPI_FIFO_BUF_MAX_SZ];
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */
 
-static uint32_t SPI_CR1_ARR[SPI_INTF_TOTAL];
-static uint32_t SPI_CRCPR_ARR[SPI_INTF_TOTAL];
-static uint32_t SPI_DR_ARR[SPI_INTF_TOTAL];
+static uint32_t      SPI_CR1_ARR[SPI_INTF_TOTAL];
+static uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
+static struct spi_dr SPI_DR_ARR[SPI_INTF_TOTAL];
 
 ///
 /// \breif Mock implementation of spi_enable function.
@@ -72,7 +80,8 @@ static inline void spi_write(uint32_t spi, uint16_t data)
 ///
 static inline void spi_send(uint32_t spi, uint16_t data)
 {
-	SPI_DR_ARR[spi] = data;
+    SPI_DR_ARR[spi].buf[SPI_DR_ARR[spi].idx] = data;
+    SPI_DR_ARR[spi].idx++;
 }
 
 ///
@@ -80,7 +89,11 @@ static inline void spi_send(uint32_t spi, uint16_t data)
 ///
 static inline uint16_t spi_read(uint32_t spi)
 {
-	return SPI_DR_ARR[spi];
+    uint8_t data = SPI_DR_ARR[spi].buf[SPI_DR_ARR[spi].idx];
+
+    SPI_DR_ARR[spi].idx--;
+
+    return data;
 }
 
 ///
