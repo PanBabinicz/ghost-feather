@@ -2,46 +2,17 @@
 #define _GMOCK_LIBOPENCM3_SPI_H
 
 #include <stdint.h>
-
-#define SPI_FIFO_BUF_MAX_SZ (0xffU)
+#include "spi_common.h"
 
 #define SPI_CRCPR(spi_base) (SPI_CRCPR_ARR[spi_base])
-
-#define SPI1                (SPI_INTF_1)
-#define SPI2                (SPI_INTF_2)
-#define SPI3                (SPI_INTF_3)
-#define SPI4                (SPI_INTF_4)
-#define SPI5                (SPI_INTF_5)
-
-#define SPI_CR1_SPE         (1 << 6)
-
-///
-/// \breif The spi interface type.
-///
-typedef enum spi_intf
-{
-    SPI_INTF_1 = 0,
-    SPI_INTF_2,
-    SPI_INTF_3,
-    SPI_INTF_4,
-    SPI_INTF_5,
-    SPI_INTF_6,
-    SPI_INTF_TOTAL,
-} spi_intf_t;
-
-struct spi_dr
-{
-    uint8_t idx;
-    uint8_t buf[SPI_FIFO_BUF_MAX_SZ];
-};
 
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */
 
-static uint32_t      SPI_CR1_ARR[SPI_INTF_TOTAL];
-static uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
-static struct spi_dr SPI_DR_ARR[SPI_INTF_TOTAL];
+extern uint32_t      SPI_CR1_ARR[SPI_INTF_TOTAL];
+extern uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
+extern struct spi_dr SPI_DR_ARR[SPI_INTF_TOTAL];
 
 ///
 /// \breif Mock implementation of spi_enable function.
