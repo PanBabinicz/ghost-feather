@@ -27,7 +27,8 @@ typedef enum spi_intf
 
 struct spi_dr
 {
-    uint8_t idx;
+    uint8_t tx_idx;
+    uint8_t rx_idx;
     uint8_t buf[SPI_FIFO_BUF_MAX_SZ];
 };
 

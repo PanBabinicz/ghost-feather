@@ -15,6 +15,10 @@ class gtest_bmi270_acc_read : public ::testing::Test
             if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
                 std::string("procedure"))
             {
+                /* It is not important what data goes inside fifo after that.
+                 * For example bmi270_acc_read function will push register address
+                 * to fifo during transmission. The fifo has two indexes, rx and tx.
+                 * It always starts reading from rx_idx which is 0. */
                 SPI_DR_ARR[SPI1].buf[0] = 0x00;
                 SPI_DR_ARR[SPI1].buf[1] = 0x01;
                 SPI_DR_ARR[SPI1].buf[2] = 0x23;
@@ -47,17 +51,15 @@ TEST_F(gtest_bmi270_acc_read, procedure)
 
     res = bmi270_acc_get_x(dev, &x);
     EXPECT_EQ(res, BMI270_RES_OK);
-    EXPECT_EQ(x, (0x2301));
+    EXPECT_EQ(x, (int16_t)(0x2301));
 
-    /*
     res = bmi270_acc_get_y(dev, &y);
     EXPECT_EQ(res, BMI270_RES_OK);
-    EXPECT_EQ(x, (0x6745));
+    EXPECT_EQ(y, (int16_t)(0x6745));
 
     res = bmi270_acc_get_z(dev, &z);
     EXPECT_EQ(res, BMI270_RES_OK);
-    EXPECT_EQ(x, (0xcdab));
-    */
+    EXPECT_EQ(z, (int16_t)(0xab89));
 }
 
 ///

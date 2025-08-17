@@ -51,8 +51,8 @@ static inline void spi_write(uint32_t spi, uint16_t data)
 ///
 static inline void spi_send(uint32_t spi, uint16_t data)
 {
-    SPI_DR_ARR[spi].buf[SPI_DR_ARR[spi].idx] = data;
-    SPI_DR_ARR[spi].idx++;
+    SPI_DR_ARR[spi].buf[SPI_DR_ARR[spi].tx_idx] = data;
+    SPI_DR_ARR[spi].tx_idx++;
 }
 
 ///
@@ -60,9 +60,9 @@ static inline void spi_send(uint32_t spi, uint16_t data)
 ///
 static inline uint16_t spi_read(uint32_t spi)
 {
-    uint8_t data = SPI_DR_ARR[spi].buf[SPI_DR_ARR[spi].idx];
+    uint8_t data = SPI_DR_ARR[spi].buf[SPI_DR_ARR[spi].rx_idx];
 
-    SPI_DR_ARR[spi].idx--;
+    SPI_DR_ARR[spi].rx_idx++;
 
     return data;
 }
