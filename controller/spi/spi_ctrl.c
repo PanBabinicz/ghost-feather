@@ -375,7 +375,7 @@ spi_ctrl_res_t spi_ctrl_deinit(struct spi_ctrl_dev *const dev)
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_get_dev(const struct spi_ctrl_dev **dev)
+spi_ctrl_res_t spi_ctrl_get_dev(struct spi_ctrl_dev **dev)
 {
     if (dev == NULL)
     {

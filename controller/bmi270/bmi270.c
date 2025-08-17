@@ -552,15 +552,13 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
     uint32_t sz;
     bool     spi_ctrl_stat;
 
-    const struct spi_ctrl_dev *spi_ctrl_dev_ptr = dev->spi_ctrl;
-
     memset(&dev->acc,  0, sizeof(dev->acc));
     memset(&dev->gyr,  0, sizeof(dev->gyr));
     memset(&dev->temp, 0, sizeof(dev->temp));
 
     if (dev->spi_ctrl == NULL)
     {
-        if (spi_ctrl_get_dev(&spi_ctrl_dev_ptr) == SPI_CTRL_RES_ERR)
+        if (spi_ctrl_get_dev(&dev->spi_ctrl) == SPI_CTRL_RES_ERR)
         {
             return BMI270_RES_ERR;
         }
@@ -777,6 +775,21 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
     buf[0] = gyr_conf_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_spi_ctrl_asg(struct bmi270_dev *const dev)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    if (spi_ctrl_get_dev(&dev->spi_ctrl) != SPI_CTRL_RES_OK)
     {
         return BMI270_RES_ERR;
     }

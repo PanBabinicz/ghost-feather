@@ -45,11 +45,11 @@ TEST_F(gtest_bmi270_acc_read, procedure)
     res = bmi270_acc_read(dev);
     EXPECT_EQ(res, BMI270_RES_OK);
 
-    /*
     res = bmi270_acc_get_x(dev, &x);
     EXPECT_EQ(res, BMI270_RES_OK);
     EXPECT_EQ(x, (0x2301));
 
+    /*
     res = bmi270_acc_get_y(dev, &y);
     EXPECT_EQ(res, BMI270_RES_OK);
     EXPECT_EQ(x, (0x6745));

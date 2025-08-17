@@ -10,7 +10,7 @@ extern "C" {
 #define CRCPOLY_RES_VAL (0x0007)
 
 ///
-/// \brief The spi controller instance type.
+/// \brief The spi controller device type.
 ///
 struct spi_ctrl_dev;
 
@@ -286,7 +286,7 @@ spi_ctrl_res_t spi_ctrl_deinit(struct spi_ctrl_dev *const dev);
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_get_dev(const struct spi_ctrl_dev **dev);
+spi_ctrl_res_t spi_ctrl_get_dev(struct spi_ctrl_dev **dev);
 
 ///
 /// \brief Gets the spi device status.
