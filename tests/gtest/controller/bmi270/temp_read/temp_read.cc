@@ -46,7 +46,7 @@ TEST_F(gtest_bmi270_temp_read, procedure)
 
     res = bmi270_temp_get(dev, &temp);
     EXPECT_EQ(res, BMI270_RES_OK);
-    EXPECT_EQ(x, (int16_t)(0xdead));
+    EXPECT_EQ(temp, (int16_t)(0xdead));
 }
 
 ///
