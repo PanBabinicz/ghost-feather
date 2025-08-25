@@ -421,7 +421,7 @@ bmi270_res_t bmi270_soft_rst(struct bmi270_dev *const dev);
 /// \retval BMI270_RES_OK    On success.
 /// \retval BMI270_RES_ERR   Otherwise.
 ///
-bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
+bmi270_res_t bmi270_pwr_mode_set(const struct bmi270_dev *const dev,
                                  const struct bmi270_pwr_mode_conf *const pwr_mode_conf);
 
 ///

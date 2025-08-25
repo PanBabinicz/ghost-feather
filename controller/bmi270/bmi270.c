@@ -685,10 +685,10 @@ bmi270_res_t bmi270_soft_rst(struct bmi270_dev *const dev)
     return BMI270_RES_OK;
 }
 
-bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
+bmi270_res_t bmi270_pwr_mode_set(const struct bmi270_dev *const dev,
                                  const struct bmi270_pwr_mode_conf *const pwr_mode_conf)
 {
-    if ((pwr_mode_conf == NULL) || (dev->spi_ctrl == NULL))
+    if ((dev == NULL) || (dev->spi_ctrl == NULL) || (pwr_mode_conf == NULL))
     {
         return BMI270_RES_ERR;
     }
