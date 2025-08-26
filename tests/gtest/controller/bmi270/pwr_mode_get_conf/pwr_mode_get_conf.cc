@@ -8,9 +8,9 @@ uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
 struct spi_dr SPI_DR_ARR[SPI_INTF_TOTAL];
 
 ///
-/// \brief This test performs the bmi270 get power mode config procedure.
+/// \brief This test performs the bmi270 power mode get config procedure.
 ///
-TEST(gtest_bmi270_get_pwr_mode_conf, procedure)
+TEST(gtest_bmi270_pwr_mode_get_conf, procedure)
 {
     bool test_stat = true;
     const bmi270_pwr_mode_t pwr_mode_array[BMI270_PWR_MODE_TOTAL] =
@@ -31,7 +31,7 @@ TEST(gtest_bmi270_get_pwr_mode_conf, procedure)
     for (uint32_t i = BMI270_PWR_MODE_BEGIN; i < BMI270_PWR_MODE_TOTAL; i++)
     {
         const struct bmi270_pwr_mode_conf *pwr_mode_conf =
-            bmi270_get_pwr_mode_conf(pwr_mode_array[i]);
+            bmi270_pwr_mode_get_conf(pwr_mode_array[i]);
 
         if (pwr_mode_conf == NULL)
         {
@@ -44,10 +44,10 @@ TEST(gtest_bmi270_get_pwr_mode_conf, procedure)
 }
 
 ///
-/// \brief This test checks the invalid power mode protection insdie bmi270 get power mode
-///        config function.
+/// \brief This test checks the invalid power mode protection insdie bmi270 power
+///        mode get config function.
 ///
-TEST(gtest_bmi270_get_pwr_mode_conf, inv_pwr_mode)
+TEST(gtest_bmi270_pwr_mode_get_conf, inv_pwr_mode)
 {
     bool test_stat = true;
     int32_t inv_pwr_mode = BMI270_PWR_MODE_BEGIN - 1;
@@ -55,7 +55,7 @@ TEST(gtest_bmi270_get_pwr_mode_conf, inv_pwr_mode)
     for (uint32_t i = 0; i < 2; i++)
     {
         const struct bmi270_pwr_mode_conf *pwr_mode_conf =
-            bmi270_get_pwr_mode_conf((const bmi270_pwr_mode_t)(inv_pwr_mode));
+            bmi270_pwr_mode_get_conf((const bmi270_pwr_mode_t)(inv_pwr_mode));
 
         if (pwr_mode_conf != NULL)
         {

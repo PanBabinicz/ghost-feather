@@ -36,7 +36,7 @@ TEST_F(gtest_bmi270_pwr_mode_set, null_pointer_protection)
     struct bmi270_dev *dev = NULL;
 
     const struct bmi270_pwr_mode_conf *pwr_mode_conf =
-      bmi270_get_pwr_mode_conf(BMI270_PWR_MODE_SUSP);
+      bmi270_pwr_mode_get_conf(BMI270_PWR_MODE_SUSP);
     dev = bmi270_get_dev();
 
     /* The bmi270 device is NULL. */

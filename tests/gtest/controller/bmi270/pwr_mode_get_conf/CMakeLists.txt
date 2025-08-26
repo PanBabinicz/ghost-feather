@@ -2,14 +2,14 @@ file(GLOB_RECURSE BMI270 ${PROJECT_ROOT_DIR}/controller/bmi270/*.c)
 file(GLOB_RECURSE SPI_CTRL ${PROJECT_ROOT_DIR}/controller/spi/*.c)
 
 add_executable(
-    get_pwr_mode_conf
-    get_pwr_mode_conf.cc
+    pwr_mode_get_conf
+    pwr_mode_get_conf.cc
     ${BMI270}
     ${SPI_CTRL}
     )
 
 target_include_directories(
-    get_pwr_mode_conf
+    pwr_mode_get_conf
     PRIVATE
     ${PROJECT_ROOT_DIR}/controller/bmi270
     ${PROJECT_ROOT_DIR}/controller/spi
@@ -17,13 +17,13 @@ target_include_directories(
     )
 
 target_compile_definitions(
-    get_pwr_mode_conf
+    pwr_mode_get_conf
     PRIVATE
     STM32F7
     )
 
 target_compile_options(
-    get_pwr_mode_conf
+    pwr_mode_get_conf
     PRIVATE
     --coverage
     -g
@@ -31,16 +31,16 @@ target_compile_options(
     )
 
 target_link_options(
-    get_pwr_mode_conf
+    pwr_mode_get_conf
     PRIVATE
     --coverage
     )
 
 target_link_libraries(
-    get_pwr_mode_conf
+    pwr_mode_get_conf
     PRIVATE
     GTest::gtest_main
     )
 
 include(GoogleTest)
-gtest_discover_tests(get_pwr_mode_conf)
+gtest_discover_tests(pwr_mode_get_conf)
