@@ -373,7 +373,7 @@ struct bmi270_dev* bmi270_get_dev(void);
 ///
 /// \return bmi270_pwr_mode_conf_t The power mode config.
 ///
-const struct bmi270_pwr_mode_conf* bmi270_get_pwr_mode_conf(const bmi270_pwr_mode_t pwr_mode);
+const struct bmi270_pwr_mode_conf* bmi270_pwr_mode_get_conf(const bmi270_pwr_mode_t pwr_mode);
 
 ///
 /// \breif Initializes the bmi270.
