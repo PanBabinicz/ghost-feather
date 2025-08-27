@@ -525,7 +525,7 @@ static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint3
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-struct bmi270_dev* bmi270_get_dev(void)
+struct bmi270_dev* bmi270_dev_get(void)
 {
     return &bmi270;
 }

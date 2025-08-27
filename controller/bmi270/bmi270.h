@@ -364,7 +364,7 @@ typedef enum bmi270_pwr_mode
 ///
 /// \return bmi270_t The bmi270 instance address.
 ///
-struct bmi270_dev* bmi270_get_dev(void);
+struct bmi270_dev* bmi270_dev_get(void);
 
 ///
 /// \breif Gets the bmi270 power mode config.
