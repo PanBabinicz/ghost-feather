@@ -7,21 +7,46 @@ uint32_t      SPI_CR1_ARR[SPI_INTF_TOTAL];
 uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
 struct spi_dr SPI_DR_ARR[SPI_INTF_TOTAL];
 
+///
+/// \brief The gtest_bmi270_gyr_get_x test fixture class.
+///
 class gtest_bmi270_gyr_get_x : public ::testing::Test
 {
     protected:
+        static void SetUpTestSuite()
+        {
+            dev = bmi270_dev_get();
+        }
+
+        static void TearDownTestSuite()
+        {
+            dev = nullptr;
+        }
+
         void SetUp() override
         {
             if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
                 std::string("procedure"))
             {
-                struct bmi270_dev *dev = bmi270_get_dev();
                 int16_t x = 0xabcd;
-
                 (void)bmi270_gyr_set_x(dev, x);
             }
         }
+
+        void TearDown() override
+        {
+            if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
+                std::string("procedure"))
+            {
+                int16_t x = 0x0000;
+                (void)bmi270_gyr_set_x(dev, x);
+            }
+        }
+
+        static bmi270_dev *dev;
 };
+
+struct bmi270_dev *gtest_bmi270_gyr_get_x::dev = nullptr;
 
 ///
 /// \brief This test performs the bmi270 gyroscope get x axis procedure.
@@ -31,10 +56,7 @@ TEST_F(gtest_bmi270_gyr_get_x, procedure)
     bmi270_res_t res;
     int16_t x;
 
-    struct bmi270_dev *dev = NULL;
-    dev = bmi270_get_dev();
-
-    res = bmi270_gyr_get_x(dev, &x);
+    res = bmi270_gyr_get_x(gtest_bmi270_gyr_get_x::dev, &x);
     EXPECT_EQ(res, BMI270_RES_OK);
 
     EXPECT_EQ(x, (int16_t)0xabcd);
@@ -49,12 +71,9 @@ TEST_F(gtest_bmi270_gyr_get_x, null_pointer_protection)
     bmi270_res_t res;
     int16_t x;
 
-    struct bmi270_dev *dev = NULL;
-    dev = bmi270_get_dev();
-
     res = bmi270_gyr_get_x(NULL, &x);
     EXPECT_EQ(res, BMI270_RES_ERR);
 
-    res = bmi270_gyr_get_x(dev, NULL);
+    res = bmi270_gyr_get_x(gtest_bmi270_gyr_get_x::dev, NULL);
     EXPECT_EQ(res, BMI270_RES_ERR);
 }
