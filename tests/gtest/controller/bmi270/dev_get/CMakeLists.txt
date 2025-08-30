@@ -2,14 +2,14 @@ file(GLOB_RECURSE BMI270 ${PROJECT_ROOT_DIR}/controller/bmi270/*.c)
 file(GLOB_RECURSE SPI_CTRL ${PROJECT_ROOT_DIR}/controller/spi/*.c)
 
 add_executable(
-    get_dev
-    get_dev.cc
+    dev_get
+    dev_get.cc
     ${BMI270}
     ${SPI_CTRL}
     )
 
 target_include_directories(
-    get_dev
+    dev_get
     PRIVATE
     ${PROJECT_ROOT_DIR}/controller/bmi270
     ${PROJECT_ROOT_DIR}/controller/spi
@@ -17,13 +17,13 @@ target_include_directories(
     )
 
 target_compile_definitions(
-    get_dev
+    dev_get
     PRIVATE
     STM32F7
     )
 
 target_compile_options(
-    get_dev
+    dev_get
     PRIVATE
     --coverage
     -g
@@ -31,16 +31,16 @@ target_compile_options(
     )
 
 target_link_options(
-    get_dev
+    dev_get
     PRIVATE
     --coverage
     )
 
 target_link_libraries(
-    get_dev
+    dev_get
     PRIVATE
     GTest::gtest_main
     )
 
 include(GoogleTest)
-gtest_discover_tests(get_dev)
+gtest_discover_tests(dev_get)
