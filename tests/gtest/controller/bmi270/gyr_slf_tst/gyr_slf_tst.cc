@@ -8,9 +8,38 @@ uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
 struct spi_dr SPI_DR_ARR[SPI_INTF_TOTAL];
 
 ///
+/// \brief The gtest_bmi270_gyr_slf_tst test fixture class.
+///
+class gtest_bmi270_gyr_slf_tst : public ::testing::Test
+{
+    protected:
+        static void SetUpTestSuite()
+        {
+            dev = bmi270_dev_get();
+        }
+
+        static void TearDownTestSuite()
+        {
+            dev = nullptr;
+        }
+
+        void SetUp() override
+        {
+        }
+
+        void TearDown() override
+        {
+        }
+
+        static bmi270_dev *dev;
+};
+
+struct bmi270_dev *gtest_bmi270_gyr_slf_tst::dev = nullptr;
+
+///
 /// \brief This test performs the bmi270 gyroscope self test procedure.
 ///
-TEST(gtest_bmi270_gyr_slf_tst, procedure)
+TEST_F(gtest_bmi270_gyr_slf_tst, procedure)
 {
 }
 
@@ -18,7 +47,7 @@ TEST(gtest_bmi270_gyr_slf_tst, procedure)
 /// \brief This test checks the null pointer protection inside bmi270 gyroscope
 ///        self test function.
 ///
-TEST(gtest_bmi270_gyr_slf_tst, null_pointer_protection)
+TEST_F(gtest_bmi270_gyr_slf_tst, null_pointer_protection)
 {
     bmi270_res_t res;
 
