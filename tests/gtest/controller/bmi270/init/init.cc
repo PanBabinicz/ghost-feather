@@ -7,19 +7,44 @@ uint32_t      SPI_CR1_ARR[SPI_INTF_TOTAL];
 uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
 struct spi_dr SPI_DR_ARR[SPI_INTF_TOTAL];
 
+///
+/// \brief The gtest_bmi270_init test fixture class.
+///
 class gtest_bmi270_init : public ::testing::Test
 {
     protected:
+        static void SetUpTestSuite()
+        {
+            dev = bmi270_dev_get();
+        }
+
+        static void TearDownTestSuite()
+        {
+            dev = nullptr;
+        }
+
         void SetUp() override
         {
             if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
                 std::string("procedure"))
             {
-                struct bmi270_dev *dev = bmi270_get_dev();
                 (void)bmi270_stat_set(dev, BMI270_STAT_INIT);
             }
         }
+
+        void TearDown() override
+        {
+            if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
+                std::string("procedure"))
+            {
+                (void)bmi270_stat_set(dev, BMI270_STAT_DEINIT);
+            }
+        }
+
+        static bmi270_dev *dev;
 };
+
+struct bmi270_dev *gtest_bmi270_init::dev = nullptr;
 
 ///
 /// \brief This test performs the bmi270 init procedure.
