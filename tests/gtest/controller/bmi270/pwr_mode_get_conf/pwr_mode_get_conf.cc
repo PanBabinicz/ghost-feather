@@ -8,6 +8,45 @@ uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
 struct spi_dr SPI_DR_ARR[SPI_INTF_TOTAL];
 
 ///
+/// \brief The gtest_bmi270_pwr_mode_get_conf test fixture class.
+///
+class gtest_bmi270_pwr_mode_get_conf : public ::testing::Test
+{
+    protected:
+        static void SetUpTestSuite()
+        {
+            dev = bmi270_dev_get();
+        }
+
+        static void TearDownTestSuite()
+        {
+            dev = nullptr;
+        }
+
+        void SetUp() override
+        {
+            if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
+                std::string("procedure"))
+            {
+                (void)bmi270_stat_set(dev, BMI270_STAT_INIT);
+            }
+        }
+
+        void TearDown() override
+        {
+            if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
+                std::string("procedure"))
+            {
+                (void)bmi270_stat_set(dev, BMI270_STAT_DEINIT);
+            }
+        }
+
+        static bmi270_dev *dev;
+};
+
+struct bmi270_dev *gtest_bmi270_pwr_mode_get_conf::dev = nullptr;
+
+///
 /// \brief This test performs the bmi270 power mode get config procedure.
 ///
 TEST(gtest_bmi270_pwr_mode_get_conf, procedure)
@@ -44,7 +83,7 @@ TEST(gtest_bmi270_pwr_mode_get_conf, procedure)
 }
 
 ///
-/// \brief This test checks the invalid power mode protection insdie bmi270 power
+/// \brief This test checks the invalid power mode protection inside bmi270 power
 ///        mode get config function.
 ///
 TEST(gtest_bmi270_pwr_mode_get_conf, inv_pwr_mode)
