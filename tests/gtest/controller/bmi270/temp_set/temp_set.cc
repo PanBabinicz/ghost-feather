@@ -8,20 +8,46 @@ uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
 struct spi_dr SPI_DR_ARR[SPI_INTF_TOTAL];
 
 ///
+/// \brief The gtest_bmi270_temp_set test fixture class.
+///
+class gtest_bmi270_temp_set : public ::testing::Test
+{
+    protected:
+        static void SetUpTestSuite()
+        {
+            dev = bmi270_dev_get();
+        }
+
+        static void TearDownTestSuite()
+        {
+            dev = nullptr;
+        }
+
+        void SetUp() override
+        {
+        }
+
+        void TearDown() override
+        {
+        }
+
+        static bmi270_dev *dev;
+};
+
+struct bmi270_dev *gtest_bmi270_temp_set::dev = nullptr;
+
+///
 /// \brief This test performs the bmi270 temperature set procedure.
 ///
-TEST(gtest_bmi270_temp_set, procedure)
+TEST_F(gtest_bmi270_temp_set, procedure)
 {
     bmi270_res_t res;
     int16_t temp;
 
-    struct bmi270_dev *dev = NULL;
-    dev = bmi270_get_dev();
-
-    res = bmi270_temp_set(dev, 0xbabe);
+    res = bmi270_temp_set(gtest_bmi270_temp_set::dev, 0xbabe);
     EXPECT_EQ(res, BMI270_RES_OK);
 
-    res = bmi270_temp_get(dev, &temp);
+    res = bmi270_temp_get(gtest_bmi270_temp_set::dev, &temp);
     EXPECT_EQ(res, BMI270_RES_OK);
 
     EXPECT_EQ(temp, (int16_t)0xbabe);
@@ -30,12 +56,9 @@ TEST(gtest_bmi270_temp_set, procedure)
 ///
 /// \brief This test checks the null pointer protection inside bmi270 temperature set function.
 ///
-TEST(gtest_bmi270_temp_set, null_pointer_protection)
+TEST_F(gtest_bmi270_temp_set, null_pointer_protection)
 {
     bmi270_res_t res;
-
-    struct bmi270_dev *dev = NULL;
-    dev = bmi270_get_dev();
 
     res = bmi270_temp_set(NULL, 0xbabe);
     EXPECT_EQ(res, BMI270_RES_ERR);
