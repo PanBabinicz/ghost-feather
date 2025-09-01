@@ -8,17 +8,43 @@ uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
 struct spi_dr SPI_DR_ARR[SPI_INTF_TOTAL];
 
 ///
+/// \brief The gtest_bmi270_spi_ctrl_asg test fixture class.
+///
+class gtest_bmi270_spi_ctrl_asg : public ::testing::Test
+{
+    protected:
+        static void SetUpTestSuite()
+        {
+            dev = bmi270_dev_get();
+        }
+
+        static void TearDownTestSuite()
+        {
+            dev = nullptr;
+        }
+
+        void SetUp() override
+        {
+        }
+
+        void TearDown() override
+        {
+        }
+
+        static bmi270_dev *dev;
+};
+
+struct bmi270_dev *gtest_bmi270_spi_ctrl_asg::dev = nullptr;
+
+///
 /// \brief This test performs the bmi270 spi control assign procedure.
 ///
-TEST(gtest_bmi270_spi_ctrl_asg, procedure)
+TEST_F(gtest_bmi270_spi_ctrl_asg, procedure)
 {
     bmi270_res_t res;
     bmi270_stat_t stat;
 
-    struct bmi270_dev *dev = NULL;
-    dev = bmi270_get_dev();
-
-    res = bmi270_spi_ctrl_asg(dev);
+    res = bmi270_spi_ctrl_asg(gtest_bmi270_spi_ctrl_asg::dev);
     EXPECT_EQ(res, BMI270_RES_OK);
 }
 
@@ -26,7 +52,7 @@ TEST(gtest_bmi270_spi_ctrl_asg, procedure)
 /// \brief This test checks the null pointer protection inside bmi270 spi
 ///        control assign function.
 ///
-TEST(gtest_bmi270_spi_ctrl_asg, null_pointer_protection)
+TEST_F(gtest_bmi270_spi_ctrl_asg, null_pointer_protection)
 {
     bmi270_res_t res;
 
