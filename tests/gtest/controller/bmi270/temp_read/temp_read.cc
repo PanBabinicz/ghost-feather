@@ -7,9 +7,22 @@ uint32_t      SPI_CR1_ARR[SPI_INTF_TOTAL];
 uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
 struct spi_dr SPI_DR_ARR[SPI_INTF_TOTAL];
 
+///
+/// \brief The gtest_bmi270_temp_read test fixture class.
+///
 class gtest_bmi270_temp_read : public ::testing::Test
 {
     protected:
+        static void SetUpTestSuite()
+        {
+            dev = bmi270_dev_get();
+        }
+
+        static void TearDownTestSuite()
+        {
+            dev = nullptr;
+        }
+
         void SetUp() override
         {
             if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
@@ -24,7 +37,22 @@ class gtest_bmi270_temp_read : public ::testing::Test
                 SPI_DR_ARR[SPI1].buf[2] = 0xde;
             }
         }
+
+        void TearDown() override
+        {
+            if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
+                std::string("procedure"))
+            {
+                SPI_DR_ARR[SPI1].buf[0] = 0x00;
+                SPI_DR_ARR[SPI1].buf[1] = 0x00;
+                SPI_DR_ARR[SPI1].buf[2] = 0x00;
+            }
+        }
+
+        static bmi270_dev *dev;
 };
+
+struct bmi270_dev *gtest_bmi270_temp_read::dev = nullptr;
 
 ///
 /// \brief This test performs the bmi270 temp read procedure.
@@ -35,16 +63,13 @@ TEST_F(gtest_bmi270_temp_read, procedure)
     /* TODO: Check the variable type in struct. */
     int16_t temp;
 
-    struct bmi270_dev *dev = NULL;
-    dev = bmi270_get_dev();
-
-    res = bmi270_spi_ctrl_asg(dev);
+    res = bmi270_spi_ctrl_asg(gtest_bmi270_temp_read::dev);
     EXPECT_EQ(res, BMI270_RES_OK);
 
-    res = bmi270_temp_read(dev);
+    res = bmi270_temp_read(gtest_bmi270_temp_read::dev);
     EXPECT_EQ(res, BMI270_RES_OK);
 
-    res = bmi270_temp_get(dev, &temp);
+    res = bmi270_temp_get(gtest_bmi270_temp_read::dev, &temp);
     EXPECT_EQ(res, BMI270_RES_OK);
     EXPECT_EQ(temp, (int16_t)(0xdead));
 }
@@ -55,9 +80,6 @@ TEST_F(gtest_bmi270_temp_read, procedure)
 TEST_F(gtest_bmi270_temp_read, null_pointer_protection)
 {
     bmi270_res_t res;
-
-    struct bmi270_dev *dev = NULL;
-    dev = bmi270_get_dev();
 
     res = bmi270_temp_read(NULL);
     EXPECT_EQ(res, BMI270_RES_ERR);
