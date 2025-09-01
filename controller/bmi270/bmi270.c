@@ -95,7 +95,7 @@ struct bmi270_gyr
 ///
 struct bmi270_temp
 {
-    uint16_t data;                                  /*!< The temperature data.                              */
+    int16_t data;                                   /*!< The temperature data.                              */
 };
 
 ///
