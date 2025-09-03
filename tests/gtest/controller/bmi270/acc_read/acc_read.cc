@@ -39,6 +39,7 @@ class gtest_bmi270_acc_read : public ::testing::Test
                 SPI_DR_ARR[SPI1].buf[4] = 0x67;
                 SPI_DR_ARR[SPI1].buf[5] = 0x89;
                 SPI_DR_ARR[SPI1].buf[6] = 0xab;
+                SPI_DR_ARR[SPI1].tx_idx = 0x07;
             }
         }
 
@@ -54,6 +55,7 @@ class gtest_bmi270_acc_read : public ::testing::Test
                 SPI_DR_ARR[SPI1].buf[4] = 0x00;
                 SPI_DR_ARR[SPI1].buf[5] = 0x00;
                 SPI_DR_ARR[SPI1].buf[6] = 0x00;
+                SPI_DR_ARR[SPI1].tx_idx = 0x00;
             }
         }
 

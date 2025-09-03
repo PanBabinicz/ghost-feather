@@ -36,6 +36,7 @@ class gtest_bmi270_time_read : public ::testing::Test
                 SPI_DR_ARR[SPI1].buf[1] = 0xb0;
                 SPI_DR_ARR[SPI1].buf[2] = 0x0b;
                 SPI_DR_ARR[SPI1].buf[3] = 0xed;
+                SPI_DR_ARR[SPI1].tx_idx = 0x04;
             }
         }
 
@@ -48,6 +49,7 @@ class gtest_bmi270_time_read : public ::testing::Test
                 SPI_DR_ARR[SPI1].buf[1] = 0x00;
                 SPI_DR_ARR[SPI1].buf[2] = 0x00;
                 SPI_DR_ARR[SPI1].buf[3] = 0x00;
+                SPI_DR_ARR[SPI1].tx_idx = 0x00;
             }
         }
 
