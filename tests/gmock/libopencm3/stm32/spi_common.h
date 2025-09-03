@@ -1,7 +1,9 @@
 #ifndef _SPI_COMMON_H
 #define _SPI_COMMON_H
 
-#define SPI_FIFO_BUF_MAX_SZ (0xffffffffU)
+#include <stdint.h>
+
+#define SPI_FIFO_BUF_MAX_SZ (0x400U)
 
 #define SPI1                (SPI_INTF_1)
 #define SPI2                (SPI_INTF_2)

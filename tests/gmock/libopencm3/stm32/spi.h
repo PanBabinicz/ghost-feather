@@ -1,7 +1,6 @@
 #ifndef _GMOCK_LIBOPENCM3_SPI_H
 #define _GMOCK_LIBOPENCM3_SPI_H
 
-#include <stdint.h>
 #include "spi_common.h"
 
 #define SPI_CRCPR(spi_base) (SPI_CRCPR_ARR[spi_base])
@@ -52,7 +51,12 @@ static inline void spi_write(uint32_t spi, uint16_t data)
 static inline void spi_send(uint32_t spi, uint16_t data)
 {
     SPI_DR_ARR[spi].buf[SPI_DR_ARR[spi].tx_idx] = data;
-    SPI_DR_ARR[spi].tx_idx++;
+    SPI_DR_ARR[spi].tx_idx = (SPI_DR_ARR[spi].tx_idx + 1) & (SPI_FIFO_BUF_MAX_SZ - 1);
+
+    if (SPI_DR_ARR[spi].tx_idx == SPI_DR_ARR[spi].rx_idx)
+    {
+        SPI_DR_ARR[spi].rx_idx++;
+    }
 }
 
 ///
@@ -61,8 +65,10 @@ static inline void spi_send(uint32_t spi, uint16_t data)
 static inline uint16_t spi_read(uint32_t spi)
 {
     uint8_t data = SPI_DR_ARR[spi].buf[SPI_DR_ARR[spi].rx_idx];
-
-    SPI_DR_ARR[spi].rx_idx++;
+    SPI_DR_ARR[spi].rx_idx = ((SPI_DR_ARR[spi].rx_idx + 1) & (SPI_FIFO_BUF_MAX_SZ - 1))
+                           >   SPI_DR_ARR[spi].tx_idx
+                           ?   SPI_DR_ARR[spi].tx_idx
+                           : ((SPI_DR_ARR[spi].rx_idx + 1) & (SPI_FIFO_BUF_MAX_SZ - 1));
 
     return data;
 }
