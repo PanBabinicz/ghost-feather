@@ -447,13 +447,6 @@ static bmi270_res_t bmi270_reg_write(const struct bmi270_dev *const dev, uint8_t
 static bmi270_res_t bmi270_upld_conf_file(const struct bmi270_dev *const dev)
 {
     /* Whether the device is NULL was checked before. */
-    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_get_stat(dev->spi_ctrl);
-
-    if (spi_ctrl_stat != SPI_CTRL_STAT_RUN)
-    {
-        return BMI270_RES_ERR;
-    }
-
     uint8_t adr = BMI270_REG_INIT_DATA;
 
     if (bmi270_reg_write(dev, adr, dev->conf.file, dev->conf.sz) != BMI270_RES_OK)
@@ -467,13 +460,6 @@ static bmi270_res_t bmi270_upld_conf_file(const struct bmi270_dev *const dev)
 static bmi270_res_t bmi270_vld_conf_file(const struct bmi270_dev *const dev)
 {
     /* Whether the device is NULL was checked before. */
-    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_get_stat(dev->spi_ctrl);
-
-    if (spi_ctrl_stat != SPI_CTRL_STAT_RUN)
-    {
-        return BMI270_RES_ERR;
-    }
-
     uint8_t adr = BMI270_REG_INIT_DATA;
     uint8_t buf[dev->conf.sz + 1];
 
