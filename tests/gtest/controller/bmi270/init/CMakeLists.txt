@@ -20,6 +20,7 @@ target_compile_definitions(
     bmi270_init
     PRIVATE
     STM32F7
+    BMI270_VLD_CONF_FILE
     )
 
 target_compile_options(
