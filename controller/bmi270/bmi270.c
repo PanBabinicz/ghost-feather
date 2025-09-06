@@ -603,7 +603,7 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
      * in previous step. */
     if (bmi270_vld_conf_file(dev) != BMI270_RES_OK)
     {
-        return BMI270_RES_ERR;
+        return BMI270_RES_VLD_ERR;
     }
 #endif
 

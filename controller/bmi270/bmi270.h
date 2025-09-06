@@ -325,6 +325,7 @@ typedef enum bmi270_res
     BMI270_RES_BEGIN = 0,
     BMI270_RES_OK    = 0,
     BMI270_RES_ERR,
+    BMI270_RES_VLD_ERR,
     BMI270_RES_TOTAL,
 } bmi270_res_t;
 
