@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <stdint.h>
 #include "bmi270.h"
+#include "bmi270_conf.h"
 #include "libopencm3/stm32/spi_common.h"
 
 uint32_t      SPI_CR1_ARR[SPI_INTF_TOTAL];
@@ -28,7 +29,39 @@ class gtest_bmi270_init : public ::testing::Test
             if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
                 std::string("procedure"))
             {
-                (void)bmi270_stat_set(dev, BMI270_STAT_INIT);
+                /* It is not important what data goes inside fifo after that.
+                 * For example bmi270_acc_read function will push register address
+                 * to fifo during transmission. The fifo has two indexes, rx and tx.
+                 * It always starts reading from rx_idx which is 0. */
+
+                /* buf[0] and buf[1] will be discarded. */
+                SPI_DR_ARR[SPI1].buf[0] = 0x00;
+                SPI_DR_ARR[SPI1].buf[1] = 0x00;
+
+                /* Wait previous time. */
+                SPI_DR_ARR[SPI1].buf[2] = 0x00;
+                SPI_DR_ARR[SPI1].buf[3] = 0x00;
+                SPI_DR_ARR[SPI1].buf[4] = 0x00;
+                SPI_DR_ARR[SPI1].buf[5] = 0x00;
+
+                /* Wait current time. */
+                SPI_DR_ARR[SPI1].buf[6] = 0x00;
+                SPI_DR_ARR[SPI1].buf[7] = 0x00;
+                SPI_DR_ARR[SPI1].buf[8] = 0x00;
+                SPI_DR_ARR[SPI1].buf[9] = 0x0d;
+
+                /* Config file. */
+                SPI_DR_ARR[SPI1].buf[10] = 0x00;
+                memcpy(&SPI_DR_ARR[SPI1].buf[11], &bmi270_conf_file[0], sizeof(bmi270_conf_file));
+
+                /* Internal status register value. */
+                SPI_DR_ARR[SPI1].buf[12 + sizeof(bmi270_conf_file)] = 0x00;
+                SPI_DR_ARR[SPI1].buf[13 + sizeof(bmi270_conf_file)] = 0x01;
+
+                /* Set tx_idx to point to first the unoccupied place in the buffer. */
+                SPI_DR_ARR[SPI1].tx_idx = 14 + sizeof(bmi270_conf_file);
+
+                (void)bmi270_stat_set(dev, BMI270_STAT_DEINIT);
             }
         }
 
@@ -37,6 +70,7 @@ class gtest_bmi270_init : public ::testing::Test
             if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
                 std::string("procedure"))
             {
+                memset(&SPI_DR_ARR[SPI1].buf[0], 0, sizeof(SPI_DR_ARR[SPI1].buf));
                 (void)bmi270_stat_set(dev, BMI270_STAT_DEINIT);
             }
         }
@@ -51,6 +85,19 @@ struct bmi270_dev *gtest_bmi270_init::dev = nullptr;
 ///
 TEST_F(gtest_bmi270_init, procedure)
 {
+    bmi270_res_t res;
+    bmi270_stat_t stat;
+
+    res = bmi270_stat_get(gtest_bmi270_init::dev, &stat);
+    EXPECT_EQ(res, BMI270_RES_OK);
+    EXPECT_EQ(stat, BMI270_STAT_DEINIT);
+
+    res = bmi270_init(gtest_bmi270_init::dev);
+    EXPECT_EQ(res, BMI270_RES_OK);
+
+    res = bmi270_stat_get(gtest_bmi270_init::dev, &stat);
+    EXPECT_EQ(res, BMI270_RES_OK);
+    EXPECT_EQ(stat, BMI270_STAT_INIT);
 }
 
 ///
