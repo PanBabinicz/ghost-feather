@@ -695,11 +695,9 @@ bmi270_res_t bmi270_pwr_mode_set(const struct bmi270_dev *const dev,
     {
         return BMI270_RES_ERR;
     }
-    else
-    {
-        pwr_conf_reg = buf[1];
-        pwr_ctrl_reg = buf[2];
-    }
+
+    pwr_conf_reg = buf[1];
+    pwr_ctrl_reg = buf[2];
 
     /* Read the ACC_CONF register value. */
     adr = BMI270_REG_ACC_CONF;
@@ -708,10 +706,8 @@ bmi270_res_t bmi270_pwr_mode_set(const struct bmi270_dev *const dev,
     {
         return BMI270_RES_ERR;
     }
-    else
-    {
-        acc_conf_reg = buf[1];
-    }
+
+    acc_conf_reg = buf[1];
 
     /* Read the GYR_CONF register value. */
     adr = BMI270_REG_GYR_CONF;
@@ -720,10 +716,8 @@ bmi270_res_t bmi270_pwr_mode_set(const struct bmi270_dev *const dev,
     {
         return BMI270_RES_ERR;
     }
-    else
-    {
-        gyr_conf_reg = buf[1];
-    }
+
+    gyr_conf_reg = buf[1];
 
     pwr_conf_reg &= ~(pwr_mode_conf->pwr_conf_mask);
     pwr_conf_reg |=  (pwr_mode_conf->pwr_conf_val);
