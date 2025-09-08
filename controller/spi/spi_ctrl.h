@@ -286,7 +286,7 @@ spi_ctrl_res_t spi_ctrl_deinit(struct spi_ctrl_dev *const dev);
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_get_dev(struct spi_ctrl_dev **dev);
+spi_ctrl_res_t spi_ctrl_dev_get(struct spi_ctrl_dev **dev);
 
 ///
 /// \brief Gets the spi device status.
@@ -299,7 +299,7 @@ spi_ctrl_res_t spi_ctrl_get_dev(struct spi_ctrl_dev **dev);
 /// \retval SPI_CTRL_STAT_RUN    The spi controller executes transaction.
 /// \retval SPI_CTRL_STAT_STOP   The spi controller completed the transaction.
 ///
-spi_ctrl_stat_t spi_ctrl_get_stat(const struct spi_ctrl_dev *const dev);
+spi_ctrl_stat_t spi_ctrl_stat_get(const struct spi_ctrl_dev *const dev);
 
 ///
 /// \brief Begins an spi transaction by enabling the peripheral and managing NSS if needed.
@@ -371,7 +371,7 @@ spi_ctrl_res_t spi_ctrl_send(const struct spi_ctrl_dev *const dev, const uint8_t
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_crcpr(struct spi_ctrl_dev *const dev, const uint16_t crcpoly);
+spi_ctrl_res_t spi_ctrl_crcpr_set(struct spi_ctrl_dev *const dev, const uint16_t crcpoly);
 
 ///
 /// \brief Sets the spi clock phase index inside device.
@@ -383,7 +383,7 @@ spi_ctrl_res_t spi_ctrl_set_crcpr(struct spi_ctrl_dev *const dev, const uint16_t
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_cpha(struct spi_ctrl_dev *const dev, const spi_ctrl_cpha_t cpha);
+spi_ctrl_res_t spi_ctrl_cpha_set(struct spi_ctrl_dev *const dev, const spi_ctrl_cpha_t cpha);
 
 ///
 /// \brief Sets the spi clock polarity index inside device.
@@ -395,7 +395,7 @@ spi_ctrl_res_t spi_ctrl_set_cpha(struct spi_ctrl_dev *const dev, const spi_ctrl_
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_cpol(struct spi_ctrl_dev *const dev, const spi_ctrl_cpol_t cpol);
+spi_ctrl_res_t spi_ctrl_cpol_set(struct spi_ctrl_dev *const dev, const spi_ctrl_cpol_t cpol);
 
 ///
 /// \brief Sets the spi bidirectional data mode index inside device.
@@ -407,7 +407,7 @@ spi_ctrl_res_t spi_ctrl_set_cpol(struct spi_ctrl_dev *const dev, const spi_ctrl_
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_bidimode(struct spi_ctrl_dev *const dev, const spi_ctrl_bidimode_t bidimode);
+spi_ctrl_res_t spi_ctrl_bidimode_set(struct spi_ctrl_dev *const dev, const spi_ctrl_bidimode_t bidimode);
 
 ///
 /// \brief Sets the spi output enable in bidirectional mode index inside device.
@@ -419,7 +419,7 @@ spi_ctrl_res_t spi_ctrl_set_bidimode(struct spi_ctrl_dev *const dev, const spi_c
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_bidioe(struct spi_ctrl_dev *const dev, const spi_ctrl_bidioe_t bidioe);
+spi_ctrl_res_t spi_ctrl_bidioe_set(struct spi_ctrl_dev *const dev, const spi_ctrl_bidioe_t bidioe);
 
 ///
 /// \brief Sets the spi receive only mode enable index inside device.
@@ -431,7 +431,7 @@ spi_ctrl_res_t spi_ctrl_set_bidioe(struct spi_ctrl_dev *const dev, const spi_ctr
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_rxonly(struct spi_ctrl_dev *const dev, const spi_ctrl_rxonly_t rxonly);
+spi_ctrl_res_t spi_ctrl_rxonly_set(struct spi_ctrl_dev *const dev, const spi_ctrl_rxonly_t rxonly);
 
 ///
 /// \brief Sets the spi frame format index inside device.
@@ -443,7 +443,7 @@ spi_ctrl_res_t spi_ctrl_set_rxonly(struct spi_ctrl_dev *const dev, const spi_ctr
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_lsbfirst(struct spi_ctrl_dev *const dev, const spi_ctrl_lsbfirst_t lsbfirst);
+spi_ctrl_res_t spi_ctrl_lsbfirst_set(struct spi_ctrl_dev *const dev, const spi_ctrl_lsbfirst_t lsbfirst);
 
 ///
 /// \brief Sets the spi hardware CRC calculation index inside device.
@@ -455,7 +455,7 @@ spi_ctrl_res_t spi_ctrl_set_lsbfirst(struct spi_ctrl_dev *const dev, const spi_c
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_crcen(struct spi_ctrl_dev *const dev, const spi_ctrl_crcen_t crcen);
+spi_ctrl_res_t spi_ctrl_crcen_set(struct spi_ctrl_dev *const dev, const spi_ctrl_crcen_t crcen);
 
 ///
 /// \brief Sets the spi CRC length index inside device.
@@ -467,7 +467,7 @@ spi_ctrl_res_t spi_ctrl_set_crcen(struct spi_ctrl_dev *const dev, const spi_ctrl
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_crcl(struct spi_ctrl_dev *const dev, const spi_ctrl_crcl_t crcl);
+spi_ctrl_res_t spi_ctrl_crcl_set(struct spi_ctrl_dev *const dev, const spi_ctrl_crcl_t crcl);
 
 ///
 /// \brief Sets the spi software slave management index inside device.
@@ -479,7 +479,7 @@ spi_ctrl_res_t spi_ctrl_set_crcl(struct spi_ctrl_dev *const dev, const spi_ctrl_
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_ssm(struct spi_ctrl_dev *const dev, const spi_ctrl_ssm_t ssm);
+spi_ctrl_res_t spi_ctrl_ssm_set(struct spi_ctrl_dev *const dev, const spi_ctrl_ssm_t ssm);
 
 ///
 /// \brief Sets the spi internal slave select index inside device.
@@ -491,7 +491,7 @@ spi_ctrl_res_t spi_ctrl_set_ssm(struct spi_ctrl_dev *const dev, const spi_ctrl_s
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_ssi(struct spi_ctrl_dev *const dev, const spi_ctrl_ssi_t ssi);
+spi_ctrl_res_t spi_ctrl_ssi_set(struct spi_ctrl_dev *const dev, const spi_ctrl_ssi_t ssi);
 
 ///
 /// \brief Sets the spi master selection index inside dev.
@@ -503,7 +503,7 @@ spi_ctrl_res_t spi_ctrl_set_ssi(struct spi_ctrl_dev *const dev, const spi_ctrl_s
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_mstr(struct spi_ctrl_dev *const dev, const spi_ctrl_mstr_t mstr);
+spi_ctrl_res_t spi_ctrl_mstr_set(struct spi_ctrl_dev *const dev, const spi_ctrl_mstr_t mstr);
 
 ///
 /// \brief Sets the spi data size index inside device.
@@ -515,7 +515,7 @@ spi_ctrl_res_t spi_ctrl_set_mstr(struct spi_ctrl_dev *const dev, const spi_ctrl_
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_ds(struct spi_ctrl_dev *const dev, const spi_ctrl_ds_t ds);
+spi_ctrl_res_t spi_ctrl_ds_set(struct spi_ctrl_dev *const dev, const spi_ctrl_ds_t ds);
 
 ///
 /// \brief Sets the spi slave select output enable index inside device.
@@ -527,7 +527,7 @@ spi_ctrl_res_t spi_ctrl_set_ds(struct spi_ctrl_dev *const dev, const spi_ctrl_ds
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_ssoe(struct spi_ctrl_dev *const dev, const spi_ctrl_ssoe_t ssoe);
+spi_ctrl_res_t spi_ctrl_ssoe_set(struct spi_ctrl_dev *const dev, const spi_ctrl_ssoe_t ssoe);
 
 ///
 /// \brief Sets the spi frame format inside index device.
@@ -539,7 +539,7 @@ spi_ctrl_res_t spi_ctrl_set_ssoe(struct spi_ctrl_dev *const dev, const spi_ctrl_
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_frf(struct spi_ctrl_dev *const dev, const spi_ctrl_frf_t frf);
+spi_ctrl_res_t spi_ctrl_frf_set(struct spi_ctrl_dev *const dev, const spi_ctrl_frf_t frf);
 
 ///
 /// \brief Sets the spi NSS pulse mangement index inside device.
@@ -551,7 +551,7 @@ spi_ctrl_res_t spi_ctrl_set_frf(struct spi_ctrl_dev *const dev, const spi_ctrl_f
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_nssp(struct spi_ctrl_dev *const dev, const spi_ctrl_nssp_t nssp);
+spi_ctrl_res_t spi_ctrl_nssp_set(struct spi_ctrl_dev *const dev, const spi_ctrl_nssp_t nssp);
 
 ///
 /// \brief Sets the spi FIFO reception threshold index inside device.
@@ -563,7 +563,7 @@ spi_ctrl_res_t spi_ctrl_set_nssp(struct spi_ctrl_dev *const dev, const spi_ctrl_
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_frxth(struct spi_ctrl_dev *const dev, const spi_ctrl_frxth_t frxth);
+spi_ctrl_res_t spi_ctrl_frxth_set(struct spi_ctrl_dev *const dev, const spi_ctrl_frxth_t frxth);
 
 ///
 /// \brief Sets the spi last DMA transfer for transmission index inside device.
@@ -575,7 +575,7 @@ spi_ctrl_res_t spi_ctrl_set_frxth(struct spi_ctrl_dev *const dev, const spi_ctrl
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_ldmatx(struct spi_ctrl_dev *const dev, const spi_ctrl_ldmatx_t ldmatx);
+spi_ctrl_res_t spi_ctrl_ldmatx_set(struct spi_ctrl_dev *const dev, const spi_ctrl_ldmatx_t ldmatx);
 
 ///
 /// \brief Sets the spi last DMA transfer for reception index inside device.
@@ -587,7 +587,7 @@ spi_ctrl_res_t spi_ctrl_set_ldmatx(struct spi_ctrl_dev *const dev, const spi_ctr
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_set_ldmarx(struct spi_ctrl_dev *const dev, const spi_ctrl_ldmarx_t ldmarx);
+spi_ctrl_res_t spi_ctrl_ldmarx_set(struct spi_ctrl_dev *const dev, const spi_ctrl_ldmarx_t ldmarx);
 
 #ifdef __cplusplus
 }

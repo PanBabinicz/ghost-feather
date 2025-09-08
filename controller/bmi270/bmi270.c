@@ -544,13 +544,13 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
 
     if (dev->spi_ctrl == NULL)
     {
-        if (spi_ctrl_get_dev(&dev->spi_ctrl) == SPI_CTRL_RES_ERR)
+        if (spi_ctrl_dev_get(&dev->spi_ctrl) == SPI_CTRL_RES_ERR)
         {
             return BMI270_RES_ERR;
         }
     }
 
-    spi_ctrl_stat = spi_ctrl_get_stat(dev->spi_ctrl);
+    spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
 
     if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
     {
@@ -769,7 +769,7 @@ bmi270_res_t bmi270_spi_ctrl_asg(struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    if (spi_ctrl_get_dev(&dev->spi_ctrl) != SPI_CTRL_RES_OK)
+    if (spi_ctrl_dev_get(&dev->spi_ctrl) != SPI_CTRL_RES_OK)
     {
         return BMI270_RES_ERR;
     }

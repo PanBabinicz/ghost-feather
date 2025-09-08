@@ -375,7 +375,7 @@ spi_ctrl_res_t spi_ctrl_deinit(struct spi_ctrl_dev *const dev)
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_get_dev(struct spi_ctrl_dev **dev)
+spi_ctrl_res_t spi_ctrl_dev_get(struct spi_ctrl_dev **dev)
 {
     if (dev == NULL)
     {
@@ -386,7 +386,7 @@ spi_ctrl_res_t spi_ctrl_get_dev(struct spi_ctrl_dev **dev)
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_stat_t spi_ctrl_get_stat(const struct spi_ctrl_dev *const dev)
+spi_ctrl_stat_t spi_ctrl_stat_get(const struct spi_ctrl_dev *const dev)
 {
     if (dev == NULL)
     {
@@ -502,7 +502,7 @@ spi_ctrl_res_t spi_ctrl_send(const struct spi_ctrl_dev *const dev, const uint8_t
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_crcpr(struct spi_ctrl_dev *const dev, const uint16_t crcpoly)
+spi_ctrl_res_t spi_ctrl_crcpr_set(struct spi_ctrl_dev *const dev, const uint16_t crcpoly)
 {
     if (dev == NULL)
     {
@@ -515,7 +515,7 @@ spi_ctrl_res_t spi_ctrl_set_crcpr(struct spi_ctrl_dev *const dev, const uint16_t
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_cpha(struct spi_ctrl_dev *const dev, const spi_ctrl_cpha_t cpha)
+spi_ctrl_res_t spi_ctrl_cpha_set(struct spi_ctrl_dev *const dev, const spi_ctrl_cpha_t cpha)
 {
     if ((cpha < SPI_CTRL_CPHA_BEGIN) || (cpha >= SPI_CTRL_CPHA_TOTAL) || (dev == NULL))
     {
@@ -527,7 +527,7 @@ spi_ctrl_res_t spi_ctrl_set_cpha(struct spi_ctrl_dev *const dev, const spi_ctrl_
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_cpol(struct spi_ctrl_dev *const dev, const spi_ctrl_cpol_t cpol)
+spi_ctrl_res_t spi_ctrl_cpol_set(struct spi_ctrl_dev *const dev, const spi_ctrl_cpol_t cpol)
 {
     if ((cpol < SPI_CTRL_CPOL_BEGIN) || (cpol >= SPI_CTRL_CPOL_TOTAL) || (dev == NULL))
     {
@@ -539,7 +539,7 @@ spi_ctrl_res_t spi_ctrl_set_cpol(struct spi_ctrl_dev *const dev, const spi_ctrl_
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_bidimode(struct spi_ctrl_dev *const dev, const spi_ctrl_bidimode_t bidimode)
+spi_ctrl_res_t spi_ctrl_bidimode_set(struct spi_ctrl_dev *const dev, const spi_ctrl_bidimode_t bidimode)
 {
     if ((bidimode < SPI_CTRL_BIDIMODE_BEGIN) || (bidimode >= SPI_CTRL_BIDIMODE_TOTAL) ||
         (dev == NULL))
@@ -552,7 +552,7 @@ spi_ctrl_res_t spi_ctrl_set_bidimode(struct spi_ctrl_dev *const dev, const spi_c
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_bidioe(struct spi_ctrl_dev *const dev, const spi_ctrl_bidioe_t bidioe)
+spi_ctrl_res_t spi_ctrl_bidioe_set(struct spi_ctrl_dev *const dev, const spi_ctrl_bidioe_t bidioe)
 {
     if ((bidioe < SPI_CTRL_BIDIOE_BEGIN) || (bidioe >= SPI_CTRL_BIDIOE_TOTAL) ||
         (dev == NULL))
@@ -565,7 +565,7 @@ spi_ctrl_res_t spi_ctrl_set_bidioe(struct spi_ctrl_dev *const dev, const spi_ctr
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_rxonly(struct spi_ctrl_dev *const dev, const spi_ctrl_rxonly_t rxonly)
+spi_ctrl_res_t spi_ctrl_rxonly_set(struct spi_ctrl_dev *const dev, const spi_ctrl_rxonly_t rxonly)
 {
     if ((rxonly < SPI_CTRL_RXONLY_BEGIN) || (rxonly >= SPI_CTRL_RXONLY_TOTAL) || (dev == NULL))
     {
@@ -577,7 +577,7 @@ spi_ctrl_res_t spi_ctrl_set_rxonly(struct spi_ctrl_dev *const dev, const spi_ctr
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_lsbfirst(struct spi_ctrl_dev *const dev, const spi_ctrl_lsbfirst_t lsbfirst)
+spi_ctrl_res_t spi_ctrl_lsbfirst_set(struct spi_ctrl_dev *const dev, const spi_ctrl_lsbfirst_t lsbfirst)
 {
     if ((lsbfirst < SPI_CTRL_LSBFIRST_BEGIN) || (lsbfirst >= SPI_CTRL_LSBFIRST_TOTAL) || (dev == NULL))
     {
@@ -589,7 +589,7 @@ spi_ctrl_res_t spi_ctrl_set_lsbfirst(struct spi_ctrl_dev *const dev, const spi_c
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_crcen(struct spi_ctrl_dev *const dev, const spi_ctrl_crcen_t crcen)
+spi_ctrl_res_t spi_ctrl_crcen_set(struct spi_ctrl_dev *const dev, const spi_ctrl_crcen_t crcen)
 {
     if ((crcen < SPI_CTRL_CRCEN_BEGIN) || (crcen >= SPI_CTRL_CRCEN_TOTAL) || (dev == NULL))
     {
@@ -601,7 +601,7 @@ spi_ctrl_res_t spi_ctrl_set_crcen(struct spi_ctrl_dev *const dev, const spi_ctrl
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_crcl(struct spi_ctrl_dev *const dev, const spi_ctrl_crcl_t crcl)
+spi_ctrl_res_t spi_ctrl_crcl_set(struct spi_ctrl_dev *const dev, const spi_ctrl_crcl_t crcl)
 {
     if ((crcl < SPI_CTRL_CRCL_BEGIN) || (crcl >= SPI_CTRL_CRCL_TOTAL) || (dev == NULL))
     {
@@ -613,7 +613,7 @@ spi_ctrl_res_t spi_ctrl_set_crcl(struct spi_ctrl_dev *const dev, const spi_ctrl_
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_ssm(struct spi_ctrl_dev *const dev, const spi_ctrl_ssm_t ssm)
+spi_ctrl_res_t spi_ctrl_ssm_set(struct spi_ctrl_dev *const dev, const spi_ctrl_ssm_t ssm)
 {
     if ((ssm < SPI_CTRL_SSM_BEGIN) || (ssm >= SPI_CTRL_SSM_TOTAL) || (dev == NULL))
     {
@@ -625,7 +625,7 @@ spi_ctrl_res_t spi_ctrl_set_ssm(struct spi_ctrl_dev *const dev, const spi_ctrl_s
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_ssi(struct spi_ctrl_dev *const dev, const spi_ctrl_ssi_t ssi)
+spi_ctrl_res_t spi_ctrl_ssi_set(struct spi_ctrl_dev *const dev, const spi_ctrl_ssi_t ssi)
 {
     if ((ssi < SPI_CTRL_SSI_BEGIN) || (ssi >= SPI_CTRL_SSI_TOTAL) || (dev == NULL))
     {
@@ -637,7 +637,7 @@ spi_ctrl_res_t spi_ctrl_set_ssi(struct spi_ctrl_dev *const dev, const spi_ctrl_s
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_mstr(struct spi_ctrl_dev *const dev, const spi_ctrl_mstr_t mstr)
+spi_ctrl_res_t spi_ctrl_mstr_set(struct spi_ctrl_dev *const dev, const spi_ctrl_mstr_t mstr)
 {
     if ((mstr < SPI_CTRL_MSTR_BEGIN) || (mstr >= SPI_CTRL_MSTR_TOTAL) || (dev == NULL))
     {
@@ -649,7 +649,7 @@ spi_ctrl_res_t spi_ctrl_set_mstr(struct spi_ctrl_dev *const dev, const spi_ctrl_
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_ds(struct spi_ctrl_dev *const dev, const spi_ctrl_ds_t ds)
+spi_ctrl_res_t spi_ctrl_ds_set(struct spi_ctrl_dev *const dev, const spi_ctrl_ds_t ds)
 {
     if ((ds < SPI_CTRL_DS_BEGIN) || (ds >= SPI_CTRL_DS_TOTAL) || (dev == NULL))
     {
@@ -661,7 +661,7 @@ spi_ctrl_res_t spi_ctrl_set_ds(struct spi_ctrl_dev *const dev, const spi_ctrl_ds
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_ssoe(struct spi_ctrl_dev *const dev, const spi_ctrl_ssoe_t ssoe)
+spi_ctrl_res_t spi_ctrl_ssoe_set(struct spi_ctrl_dev *const dev, const spi_ctrl_ssoe_t ssoe)
 {
     if ((ssoe < SPI_CTRL_SSOE_BEGIN) || (ssoe >= SPI_CTRL_SSOE_TOTAL) || (dev == NULL))
     {
@@ -673,7 +673,7 @@ spi_ctrl_res_t spi_ctrl_set_ssoe(struct spi_ctrl_dev *const dev, const spi_ctrl_
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_frf(struct spi_ctrl_dev *const dev, const spi_ctrl_frf_t frf)
+spi_ctrl_res_t spi_ctrl_frf_set(struct spi_ctrl_dev *const dev, const spi_ctrl_frf_t frf)
 {
     if ((frf < SPI_CTRL_FRF_BEGIN) || (frf >= SPI_CTRL_FRF_TOTAL) || (dev == NULL))
     {
@@ -685,7 +685,7 @@ spi_ctrl_res_t spi_ctrl_set_frf(struct spi_ctrl_dev *const dev, const spi_ctrl_f
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_nssp(struct spi_ctrl_dev *const dev, const spi_ctrl_nssp_t nssp)
+spi_ctrl_res_t spi_ctrl_nssp_set(struct spi_ctrl_dev *const dev, const spi_ctrl_nssp_t nssp)
 {
     if ((nssp < SPI_CTRL_NSSP_BEGIN) || (nssp >= SPI_CTRL_NSSP_TOTAL) || (dev == NULL))
     {
@@ -697,7 +697,7 @@ spi_ctrl_res_t spi_ctrl_set_nssp(struct spi_ctrl_dev *const dev, const spi_ctrl_
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_frxth(struct spi_ctrl_dev *const dev, const spi_ctrl_frxth_t frxth)
+spi_ctrl_res_t spi_ctrl_frxth_set(struct spi_ctrl_dev *const dev, const spi_ctrl_frxth_t frxth)
 {
     if ((frxth < SPI_CTRL_FRXTH_BEGIN) || (frxth >= SPI_CTRL_FRXTH_TOTAL) || (dev == NULL))
     {
@@ -709,7 +709,7 @@ spi_ctrl_res_t spi_ctrl_set_frxth(struct spi_ctrl_dev *const dev, const spi_ctrl
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_ldmatx(struct spi_ctrl_dev *const dev, const spi_ctrl_ldmatx_t ldmatx)
+spi_ctrl_res_t spi_ctrl_ldmatx_set(struct spi_ctrl_dev *const dev, const spi_ctrl_ldmatx_t ldmatx)
 {
     if ((ldmatx < SPI_CTRL_LDMATX_BEGIN) || (ldmatx >= SPI_CTRL_LDMATX_TOTAL) || (dev == NULL))
     {
@@ -721,7 +721,7 @@ spi_ctrl_res_t spi_ctrl_set_ldmatx(struct spi_ctrl_dev *const dev, const spi_ctr
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_set_ldmarx(struct spi_ctrl_dev *const dev, const spi_ctrl_ldmarx_t ldmarx)
+spi_ctrl_res_t spi_ctrl_ldmarx_set(struct spi_ctrl_dev *const dev, const spi_ctrl_ldmarx_t ldmarx)
 {
     if ((ldmarx < SPI_CTRL_LDMARX_BEGIN) || (ldmarx >= SPI_CTRL_LDMARX_TOTAL) || (dev == NULL))
     {
