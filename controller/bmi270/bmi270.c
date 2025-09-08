@@ -542,6 +542,7 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
     memset(&dev->gyr,  0, sizeof(dev->gyr));
     memset(&dev->temp, 0, sizeof(dev->temp));
 
+    /* TODO: This part violates SOLID principles. */
     if (dev->spi_ctrl == NULL)
     {
         if (spi_ctrl_dev_get(&dev->spi_ctrl) == SPI_CTRL_RES_ERR)
@@ -559,6 +560,7 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
             return BMI270_RES_ERR;
         }
     }
+    /*****************************/
 
     /* Read an arbitrary register of BMI270, discard the read response.
      * The MSB of the address is R/W indicator. */
