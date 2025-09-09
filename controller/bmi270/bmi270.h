@@ -363,7 +363,7 @@ typedef enum bmi270_pwr_mode
 ///
 /// \breif Gets the bmi270 instance.
 ///
-/// \return bmi270_t The bmi270 instance address.
+/// \return struct bmi270_dev* The bmi270 instance address.
 ///
 struct bmi270_dev* bmi270_dev_get(void);
 

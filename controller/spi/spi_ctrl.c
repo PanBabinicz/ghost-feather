@@ -317,7 +317,7 @@ static void spi_set_crcpr(const struct spi_ctrl_dev *const dev)
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-spi_ctrl_res_t spi_ctrl_init(struct spi_ctrl_dev *const dev)
+spi_ctrl_res_t spi_ctrl_dev_init(struct spi_ctrl_dev *const dev)
 {
     if (dev == NULL)
     {
@@ -362,7 +362,7 @@ spi_ctrl_res_t spi_ctrl_init(struct spi_ctrl_dev *const dev)
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_deinit(struct spi_ctrl_dev *const dev)
+spi_ctrl_res_t spi_ctrl_dev_deinit(struct spi_ctrl_dev *const dev)
 {
     if (dev == NULL)
     {
@@ -375,15 +375,9 @@ spi_ctrl_res_t spi_ctrl_deinit(struct spi_ctrl_dev *const dev)
     return SPI_CTRL_RES_OK;
 }
 
-spi_ctrl_res_t spi_ctrl_dev_get(struct spi_ctrl_dev **dev)
+struct spi_ctrl_dev* spi_ctrl_dev_get(void)
 {
-    if (dev == NULL)
-    {
-        return SPI_CTRL_RES_ERR;
-    }
-
-    *dev = &spi_ctrl;
-    return SPI_CTRL_RES_OK;
+    return &spi_ctrl;
 }
 
 spi_ctrl_stat_t spi_ctrl_stat_get(const struct spi_ctrl_dev *const dev)

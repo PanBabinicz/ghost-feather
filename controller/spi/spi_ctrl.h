@@ -264,7 +264,7 @@ typedef enum spi_ctrl_ldmarx
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_init(struct spi_ctrl_dev *const dev);
+spi_ctrl_res_t spi_ctrl_dev_init(struct spi_ctrl_dev *const dev);
 
 ///
 /// \brief Deinitializes the spi controller.
@@ -275,18 +275,14 @@ spi_ctrl_res_t spi_ctrl_init(struct spi_ctrl_dev *const dev);
 /// \retval SPI_CTRL_RES_OK  On success.
 /// \retval SPI_CTRL_RES_ERR Otherwise.
 ///
-spi_ctrl_res_t spi_ctrl_deinit(struct spi_ctrl_dev *const dev);
+spi_ctrl_res_t spi_ctrl_dev_deinit(struct spi_ctrl_dev *const dev);
 
 ///
 /// \brief Gets the spi device.
 ///
-/// \param[out] dev          The pointer to the spi controller device.
+/// \return struct spi_ctrl_dev* The spi controller device address.
 ///
-/// \return spi_ctrl_res_t   The spi controller result.
-/// \retval SPI_CTRL_RES_OK  On success.
-/// \retval SPI_CTRL_RES_ERR Otherwise.
-///
-spi_ctrl_res_t spi_ctrl_dev_get(struct spi_ctrl_dev **dev);
+struct spi_ctrl_dev* spi_ctrl_dev_get(void);
 
 ///
 /// \brief Gets the spi device status.

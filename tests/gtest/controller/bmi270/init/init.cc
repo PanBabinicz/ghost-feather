@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <stdint.h>
 #include "bmi270.h"
+#include "spi_ctrl.h"
 #include "bmi270_conf.h"
 #include "libopencm3/stm32/spi_common.h"
 
@@ -16,12 +17,21 @@ class gtest_bmi270_init : public ::testing::Test
     protected:
         static void SetUpTestSuite()
         {
+            struct spi_ctrl_dev *spi_ctrl;
+            spi_ctrl = spi_ctrl_dev_get();
+
+            (void)spi_ctrl_dev_init(spi_ctrl);
             dev = bmi270_dev_get();
         }
 
         static void TearDownTestSuite()
         {
+            struct spi_ctrl_dev *spi_ctrl;
+            spi_ctrl = spi_ctrl_dev_get();
+
+            (void)spi_ctrl_dev_deinit(spi_ctrl);
             dev = nullptr;
+
         }
 
         void SetUp() override
@@ -91,6 +101,9 @@ TEST_F(gtest_bmi270_init, procedure)
     res = bmi270_stat_get(gtest_bmi270_init::dev, &stat);
     EXPECT_EQ(res, BMI270_RES_OK);
     EXPECT_EQ(stat, BMI270_STAT_DEINIT);
+
+    res = bmi270_spi_ctrl_asg(gtest_bmi270_init::dev);
+    EXPECT_EQ(res, BMI270_RES_OK);
 
     res = bmi270_init(gtest_bmi270_init::dev);
     EXPECT_EQ(res, BMI270_RES_OK);

@@ -528,7 +528,7 @@ const struct bmi270_pwr_mode_conf* bmi270_pwr_mode_get_conf(const bmi270_pwr_mod
 
 bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
 {
-    if (dev == NULL)
+    if ((dev == NULL) || (dev->spi_ctrl == NULL))
     {
         return BMI270_RES_ERR;
     }
@@ -542,25 +542,11 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
     memset(&dev->gyr,  0, sizeof(dev->gyr));
     memset(&dev->temp, 0, sizeof(dev->temp));
 
-    /* TODO: This part violates SOLID principles. */
-    if (dev->spi_ctrl == NULL)
-    {
-        if (spi_ctrl_dev_get(&dev->spi_ctrl) == SPI_CTRL_RES_ERR)
-        {
-            return BMI270_RES_ERR;
-        }
-    }
-
     spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
-
     if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
     {
-        if (spi_ctrl_init(dev->spi_ctrl) == SPI_CTRL_RES_ERR)
-        {
-            return BMI270_RES_ERR;
-        }
+        return BMI270_RES_ERR;
     }
-    /*****************************/
 
     /* Read an arbitrary register of BMI270, discard the read response.
      * The MSB of the address is R/W indicator. */
@@ -771,10 +757,7 @@ bmi270_res_t bmi270_spi_ctrl_asg(struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    if (spi_ctrl_dev_get(&dev->spi_ctrl) != SPI_CTRL_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
+    dev->spi_ctrl = spi_ctrl_dev_get();
 
     return BMI270_RES_OK;
 }
