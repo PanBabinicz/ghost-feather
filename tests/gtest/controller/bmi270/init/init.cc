@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <stdint.h>
 #include "bmi270.h"
-#include "spi_ctrl.h"
 #include "bmi270_conf.h"
 #include "libopencm3/stm32/spi_common.h"
+#include "spi_ctrl.h"
 
 uint32_t      SPI_CR1_ARR[SPI_INTF_TOTAL];
 uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
@@ -17,21 +17,19 @@ class gtest_bmi270_init : public ::testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            struct spi_ctrl_dev *spi_ctrl;
             spi_ctrl = spi_ctrl_dev_get();
-
             (void)spi_ctrl_dev_init(spi_ctrl);
-            dev = bmi270_dev_get();
+
+            bmi270 = bmi270_dev_get();
         }
 
         static void TearDownTestSuite()
         {
-            struct spi_ctrl_dev *spi_ctrl;
             spi_ctrl = spi_ctrl_dev_get();
-
             (void)spi_ctrl_dev_deinit(spi_ctrl);
-            dev = nullptr;
 
+            bmi270 = nullptr;
+            spi_ctrl = nullptr;
         }
 
         void SetUp() override
@@ -71,7 +69,7 @@ class gtest_bmi270_init : public ::testing::Test
                 /* Set tx_idx to point to first the unoccupied place in the buffer. */
                 SPI_DR_ARR[SPI1].tx_idx = 14 + sizeof(bmi270_conf_file);
 
-                (void)bmi270_stat_set(dev, BMI270_STAT_DEINIT);
+                (void)bmi270_stat_set(bmi270, BMI270_STAT_DEINIT);
             }
         }
 
@@ -81,14 +79,16 @@ class gtest_bmi270_init : public ::testing::Test
                 std::string("procedure"))
             {
                 memset(&SPI_DR_ARR[SPI1].buf[0], 0, sizeof(SPI_DR_ARR[SPI1].buf));
-                (void)bmi270_stat_set(dev, BMI270_STAT_DEINIT);
+                (void)bmi270_stat_set(bmi270, BMI270_STAT_DEINIT);
             }
         }
 
-        static bmi270_dev *dev;
+        static struct bmi270_dev *bmi270;
+        static struct spi_ctrl_dev *spi_ctrl;
 };
 
-struct bmi270_dev *gtest_bmi270_init::dev = nullptr;
+struct bmi270_dev   *gtest_bmi270_init::bmi270   = nullptr;
+struct spi_ctrl_dev *gtest_bmi270_init::spi_ctrl = nullptr;
 
 ///
 /// \brief This test performs the bmi270 init procedure.
@@ -98,17 +98,17 @@ TEST_F(gtest_bmi270_init, procedure)
     bmi270_res_t res;
     bmi270_stat_t stat;
 
-    res = bmi270_stat_get(gtest_bmi270_init::dev, &stat);
+    res = bmi270_stat_get(gtest_bmi270_init::bmi270, &stat);
     EXPECT_EQ(res, BMI270_RES_OK);
     EXPECT_EQ(stat, BMI270_STAT_DEINIT);
 
-    res = bmi270_spi_ctrl_asg(gtest_bmi270_init::dev);
+    res = bmi270_spi_ctrl_asg(gtest_bmi270_init::bmi270);
     EXPECT_EQ(res, BMI270_RES_OK);
 
-    res = bmi270_init(gtest_bmi270_init::dev);
+    res = bmi270_init(gtest_bmi270_init::bmi270);
     EXPECT_EQ(res, BMI270_RES_OK);
 
-    res = bmi270_stat_get(gtest_bmi270_init::dev, &stat);
+    res = bmi270_stat_get(gtest_bmi270_init::bmi270, &stat);
     EXPECT_EQ(res, BMI270_RES_OK);
     EXPECT_EQ(stat, BMI270_STAT_INIT);
 }

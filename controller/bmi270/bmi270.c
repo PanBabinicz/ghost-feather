@@ -536,7 +536,7 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
     uint8_t  adr;
     uint8_t  buf[2] = { 0 };
     uint32_t sz;
-    bool     spi_ctrl_stat;
+    spi_ctrl_stat_t spi_ctrl_stat;
 
     memset(&dev->acc,  0, sizeof(dev->acc));
     memset(&dev->gyr,  0, sizeof(dev->gyr));
@@ -637,14 +637,20 @@ bmi270_res_t bmi270_deinit(struct bmi270_dev *const dev)
 /* TODO: Must not be performed while NVM writing operation is in progress. */
 bmi270_res_t bmi270_soft_rst(struct bmi270_dev *const dev)
 {
-    if (dev == NULL)
+    if ((dev == NULL) || (dev->spi_ctrl == NULL))
     {
         return BMI270_RES_ERR;
     }
 
-    uint8_t  adr = BMI270_REG_PWR_CONF;
-    uint8_t  buf = BMI270_CMD_SOFTRESET;
-    uint32_t sz  = 1;
+    uint8_t  adr  = BMI270_REG_PWR_CONF;
+    uint8_t  buf  = BMI270_CMD_SOFTRESET;
+    uint32_t sz   = 1;
+
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
+    {
+        return BMI270_RES_ERR;
+    }
 
     if (dev->stat != BMI270_STAT_DEINIT)
     {
