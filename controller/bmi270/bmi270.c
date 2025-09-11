@@ -1009,7 +1009,7 @@ bmi270_res_t bmi270_gyr_slf_tst(struct bmi270_dev *const dev)
 
 bmi270_res_t bmi270_acc_read(struct bmi270_dev *const dev)
 {
-    if (dev == NULL)
+    if ((dev == NULL) || (dev->spi_ctrl == NULL))
     {
         return BMI270_RES_ERR;
     }
@@ -1017,6 +1017,12 @@ bmi270_res_t bmi270_acc_read(struct bmi270_dev *const dev)
     uint8_t  adr    = BMI270_REG_DATA_8;
     uint8_t  buf[7] = { 0 };
     uint32_t sz     = 6;
+
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
+    {
+        return BMI270_RES_ERR;
+    }
 
     if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
