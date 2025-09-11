@@ -15,12 +15,12 @@ class gtest_bmi270_acc_get_x : public ::testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            dev = bmi270_dev_get();
+            bmi270 = bmi270_dev_get();
         }
 
         static void TearDownTestSuite()
         {
-            dev = nullptr;
+            bmi270 = nullptr;
         }
 
         void SetUp() override
@@ -29,7 +29,7 @@ class gtest_bmi270_acc_get_x : public ::testing::Test
                 std::string("procedure"))
             {
                 int16_t x = 0xcaca;
-                (void)bmi270_acc_set_x(dev, x);
+                (void)bmi270_acc_set_x(bmi270, x);
             }
         }
 
@@ -39,14 +39,15 @@ class gtest_bmi270_acc_get_x : public ::testing::Test
                 std::string("procedure"))
             {
                 int16_t x = 0x0000;
-                (void)bmi270_acc_set_x(dev, x);
+                (void)bmi270_acc_set_x(bmi270, x);
             }
         }
 
-        static bmi270_dev *dev;
+        static struct bmi270_dev *bmi270;
 };
 
-struct bmi270_dev *gtest_bmi270_acc_get_x::dev = nullptr;
+
+struct bmi270_dev *gtest_bmi270_acc_get_x::bmi270 = nullptr;
 
 ///
 /// \brief This test performs the bmi270 accelerometer get x axis procedure.
@@ -56,7 +57,7 @@ TEST_F(gtest_bmi270_acc_get_x, procedure)
     bmi270_res_t res;
     int16_t x;
 
-    res = bmi270_acc_get_x(gtest_bmi270_acc_get_x::dev, &x);
+    res = bmi270_acc_get_x(gtest_bmi270_acc_get_x::bmi270, &x);
     EXPECT_EQ(res, BMI270_RES_OK);
 
     EXPECT_EQ(x, (int16_t)0xcaca);
@@ -74,6 +75,6 @@ TEST_F(gtest_bmi270_acc_get_x, null_pointer_protection)
     res = bmi270_acc_get_x(NULL, &x);
     EXPECT_EQ(res, BMI270_RES_ERR);
 
-    res = bmi270_acc_get_x(gtest_bmi270_acc_get_x::dev, NULL);
+    res = bmi270_acc_get_x(gtest_bmi270_acc_get_x::bmi270, NULL);
     EXPECT_EQ(res, BMI270_RES_ERR);
 }

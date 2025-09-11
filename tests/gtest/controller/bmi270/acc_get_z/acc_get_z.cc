@@ -15,12 +15,12 @@ class gtest_bmi270_acc_get_z : public ::testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            dev = bmi270_dev_get();
+            bmi270 = bmi270_dev_get();
         }
 
         static void TearDownTestSuite()
         {
-            dev = nullptr;
+            bmi270 = nullptr;
         }
 
         void SetUp() override
@@ -29,7 +29,7 @@ class gtest_bmi270_acc_get_z : public ::testing::Test
                 std::string("procedure"))
             {
                 int16_t z = 0xc0de;
-                (void)bmi270_acc_set_z(dev, z);
+                (void)bmi270_acc_set_z(bmi270, z);
             }
         }
 
@@ -39,14 +39,14 @@ class gtest_bmi270_acc_get_z : public ::testing::Test
                 std::string("procedure"))
             {
                 int16_t z = 0x0000;
-                (void)bmi270_acc_set_z(dev, z);
+                (void)bmi270_acc_set_z(bmi270, z);
             }
         }
 
-        static bmi270_dev *dev;
+        static bmi270_dev *bmi270;
 };
 
-struct bmi270_dev *gtest_bmi270_acc_get_z::dev = nullptr;
+struct bmi270_dev *gtest_bmi270_acc_get_z::bmi270 = nullptr;
 
 ///
 /// \brief This test performs the bmi270 accelerometer get z axis procedure.
@@ -56,7 +56,7 @@ TEST_F(gtest_bmi270_acc_get_z, procedure)
     bmi270_res_t res;
     int16_t z;
 
-    res = bmi270_acc_get_z(gtest_bmi270_acc_get_z::dev, &z);
+    res = bmi270_acc_get_z(gtest_bmi270_acc_get_z::bmi270, &z);
     EXPECT_EQ(res, BMI270_RES_OK);
 
     EXPECT_EQ(z, (int16_t)0xc0de);
@@ -74,6 +74,6 @@ TEST_F(gtest_bmi270_acc_get_z, null_pointer_protection)
     res = bmi270_acc_get_z(NULL, &z);
     EXPECT_EQ(res, BMI270_RES_ERR);
 
-    res = bmi270_acc_get_z(gtest_bmi270_acc_get_z::dev, NULL);
+    res = bmi270_acc_get_z(gtest_bmi270_acc_get_z::bmi270, NULL);
     EXPECT_EQ(res, BMI270_RES_ERR);
 }
