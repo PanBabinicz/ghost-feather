@@ -19,7 +19,7 @@ class gtest_bmi270_dev_get : public ::testing::Test
 
         static void TearDownTestSuite()
         {
-            dev = nullptr;
+            bmi270 = nullptr;
         }
 
         void SetUp() override
@@ -30,17 +30,17 @@ class gtest_bmi270_dev_get : public ::testing::Test
         {
         }
 
-        static bmi270_dev *dev;
+        static bmi270_dev *bmi270;
 };
 
-struct bmi270_dev *gtest_bmi270_dev_get::dev = nullptr;
+struct bmi270_dev *gtest_bmi270_dev_get::bmi270 = nullptr;
 
 ///
 /// \brief This test performs the bmi270 device get procedure.
 ///
 TEST_F(gtest_bmi270_dev_get, procedure)
 {
-    gtest_bmi270_dev_get::dev = bmi270_dev_get();
+    gtest_bmi270_dev_get::bmi270 = bmi270_dev_get();
 
-    EXPECT_NE(gtest_bmi270_dev_get::dev, nullptr);
+    EXPECT_NE(gtest_bmi270_dev_get::bmi270, nullptr);
 }
