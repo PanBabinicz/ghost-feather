@@ -15,12 +15,12 @@ class gtest_bmi270_deinit : public ::testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            dev = bmi270_dev_get();
+            bmi270 = bmi270_dev_get();
         }
 
         static void TearDownTestSuite()
         {
-            dev = nullptr;
+            bmi270 = nullptr;
         }
 
         void SetUp() override
@@ -28,7 +28,7 @@ class gtest_bmi270_deinit : public ::testing::Test
             if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
                 std::string("procedure"))
             {
-                (void)bmi270_stat_set(dev, BMI270_STAT_INIT);
+                (void)bmi270_stat_set(bmi270, BMI270_STAT_INIT);
             }
         }
 
@@ -37,14 +37,14 @@ class gtest_bmi270_deinit : public ::testing::Test
             if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
                 std::string("procedure"))
             {
-                (void)bmi270_stat_set(dev, BMI270_STAT_DEINIT);
+                (void)bmi270_stat_set(bmi270, BMI270_STAT_DEINIT);
             }
         }
 
-        static bmi270_dev *dev;
+        static bmi270_dev *bmi270;
 };
 
-struct bmi270_dev *gtest_bmi270_deinit::dev = nullptr;
+struct bmi270_dev *gtest_bmi270_deinit::bmi270 = nullptr;
 
 ///
 /// \brief This test performs the bmi270 deinit procedure.
@@ -54,14 +54,14 @@ TEST_F(gtest_bmi270_deinit, procedure)
     bmi270_res_t  res;
     bmi270_stat_t stat;
 
-    res = bmi270_stat_get(dev, &stat);
+    res = bmi270_stat_get(gtest_bmi270_deinit::bmi270, &stat);
     EXPECT_EQ(res, BMI270_RES_OK);
     EXPECT_EQ(stat, BMI270_STAT_INIT);
 
-    res = bmi270_deinit(dev);
+    res = bmi270_deinit(gtest_bmi270_deinit::bmi270);
     EXPECT_EQ(res, BMI270_RES_OK);
 
-    res = bmi270_stat_get(dev, &stat);
+    res = bmi270_stat_get(gtest_bmi270_deinit::bmi270, &stat);
     EXPECT_EQ(res, BMI270_RES_OK);
     EXPECT_EQ(stat, BMI270_STAT_DEINIT);
 }
