@@ -31,7 +31,7 @@ class gtest_bmi270_acc_set_y : public ::testing::Test
         {
         }
 
-        static bmi270_dev *bmi270;
+        static struct bmi270_dev *bmi270;
 };
 
 struct bmi270_dev *gtest_bmi270_acc_set_y::bmi270 = nullptr;
