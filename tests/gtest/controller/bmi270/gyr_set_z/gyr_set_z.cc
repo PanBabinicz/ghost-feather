@@ -15,12 +15,12 @@ class gtest_bmi270_gyr_set_z : public ::testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            dev = bmi270_dev_get();
+            bmi270 = bmi270_dev_get();
         }
 
         static void TearDownTestSuite()
         {
-            dev = nullptr;
+            bmi270 = nullptr;
         }
 
         void SetUp() override
@@ -31,10 +31,10 @@ class gtest_bmi270_gyr_set_z : public ::testing::Test
         {
         }
 
-        static bmi270_dev *dev;
+        static struct bmi270_dev *bmi270;
 };
 
-struct bmi270_dev *gtest_bmi270_gyr_set_z::dev = nullptr;
+struct bmi270_dev *gtest_bmi270_gyr_set_z::bmi270 = nullptr;
 
 ///
 /// \brief This test performs the bmi270 gyroscope set z axis procedure.
@@ -44,10 +44,10 @@ TEST_F(gtest_bmi270_gyr_set_z, procedure)
     bmi270_res_t res;
     int16_t z;
 
-    res = bmi270_gyr_set_z(gtest_bmi270_gyr_set_z::dev, 0xfeed);
+    res = bmi270_gyr_set_z(gtest_bmi270_gyr_set_z::bmi270, 0xfeed);
     EXPECT_EQ(res, BMI270_RES_OK);
 
-    res = bmi270_gyr_get_z(gtest_bmi270_gyr_set_z::dev, &z);
+    res = bmi270_gyr_get_z(gtest_bmi270_gyr_set_z::bmi270, &z);
     EXPECT_EQ(res, BMI270_RES_OK);
 
     EXPECT_EQ(z, (int16_t)0xfeed);
