@@ -15,36 +15,20 @@ class gtest_bmi270_pwr_mode_get_conf : public ::testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            dev = bmi270_dev_get();
         }
 
         static void TearDownTestSuite()
         {
-            dev = nullptr;
         }
 
         void SetUp() override
         {
-            if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
-                std::string("procedure"))
-            {
-                (void)bmi270_stat_set(dev, BMI270_STAT_INIT);
-            }
         }
 
         void TearDown() override
         {
-            if (::testing::UnitTest::GetInstance()->current_test_info()->name() ==
-                std::string("procedure"))
-            {
-                (void)bmi270_stat_set(dev, BMI270_STAT_DEINIT);
-            }
         }
-
-        static bmi270_dev *dev;
 };
-
-struct bmi270_dev *gtest_bmi270_pwr_mode_get_conf::dev = nullptr;
 
 ///
 /// \brief This test performs the bmi270 power mode get config procedure.
