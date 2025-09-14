@@ -15,12 +15,12 @@ class gtest_bmi270_temp_get : public ::testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            dev = bmi270_dev_get();
+            bmi270 = bmi270_dev_get();
         }
 
         static void TearDownTestSuite()
         {
-            dev = nullptr;
+            bmi270 = nullptr;
         }
 
         void SetUp() override
@@ -29,7 +29,7 @@ class gtest_bmi270_temp_get : public ::testing::Test
                 std::string("procedure"))
             {
                 int16_t temp = 0xcafe;
-                (void)bmi270_temp_set(dev, temp);
+                (void)bmi270_temp_set(bmi270, temp);
             }
         }
 
@@ -39,14 +39,14 @@ class gtest_bmi270_temp_get : public ::testing::Test
                 std::string("procedure"))
             {
                 int16_t temp = 0x0000;
-                (void)bmi270_temp_set(dev, temp);
+                (void)bmi270_temp_set(bmi270, temp);
             }
         }
 
-        static bmi270_dev *dev;
+        static struct bmi270_dev *bmi270;
 };
 
-struct bmi270_dev *gtest_bmi270_temp_get::dev = nullptr;
+struct bmi270_dev *gtest_bmi270_temp_get::bmi270 = nullptr;
 
 ///
 /// \brief This test performs the bmi270 temperature get procedure.
@@ -56,7 +56,7 @@ TEST_F(gtest_bmi270_temp_get, procedure)
     bmi270_res_t res;
     int16_t temp;
 
-    res = bmi270_temp_get(gtest_bmi270_temp_get::dev, &temp);
+    res = bmi270_temp_get(gtest_bmi270_temp_get::bmi270, &temp);
     EXPECT_EQ(res, BMI270_RES_OK);
 
     EXPECT_EQ(temp, (int16_t)0xcafe);
@@ -73,6 +73,6 @@ TEST_F(gtest_bmi270_temp_get, null_pointer_protection)
     res = bmi270_temp_get(NULL, &temp);
     EXPECT_EQ(res, BMI270_RES_ERR);
 
-    res = bmi270_temp_get(gtest_bmi270_temp_get::dev, NULL);
+    res = bmi270_temp_get(gtest_bmi270_temp_get::bmi270, NULL);
     EXPECT_EQ(res, BMI270_RES_ERR);
 }
