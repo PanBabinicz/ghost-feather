@@ -15,12 +15,12 @@ class gtest_bmi270_time_get : public ::testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            dev = bmi270_dev_get();
+            bmi270 = bmi270_dev_get();
         }
 
         static void TearDownTestSuite()
         {
-            dev = nullptr;
+            bmi270 = nullptr;
         }
 
         void SetUp() override
@@ -29,7 +29,7 @@ class gtest_bmi270_time_get : public ::testing::Test
                 std::string("procedure"))
             {
                 uint32_t time = 0x00dead00;
-                (void)bmi270_time_set(dev, time);
+                (void)bmi270_time_set(bmi270, time);
             }
         }
 
@@ -39,14 +39,14 @@ class gtest_bmi270_time_get : public ::testing::Test
                 std::string("procedure"))
             {
                 uint32_t time = 0x00000000;
-                (void)bmi270_time_set(dev, time);
+                (void)bmi270_time_set(bmi270, time);
             }
         }
 
-        static bmi270_dev *dev;
+        static struct bmi270_dev *bmi270;
 };
 
-struct bmi270_dev *gtest_bmi270_time_get::dev = nullptr;
+struct bmi270_dev *gtest_bmi270_time_get::bmi270 = nullptr;
 
 ///
 /// \brief This test performs the bmi270 time get procedure.
@@ -56,7 +56,7 @@ TEST_F(gtest_bmi270_time_get, procedure)
     bmi270_res_t res;
     uint32_t time;
 
-    res = bmi270_time_get(gtest_bmi270_time_get::dev, &time);
+    res = bmi270_time_get(gtest_bmi270_time_get::bmi270, &time);
     EXPECT_EQ(res, BMI270_RES_OK);
 
     EXPECT_EQ(time, 0x00dead00);
@@ -73,6 +73,6 @@ TEST_F(gtest_bmi270_time_get, null_pointer_protection)
     res = bmi270_time_get(NULL, &time);
     EXPECT_EQ(res, BMI270_RES_ERR);
 
-    res = bmi270_time_get(gtest_bmi270_time_get::dev, NULL);
+    res = bmi270_time_get(gtest_bmi270_time_get::bmi270, NULL);
     EXPECT_EQ(res, BMI270_RES_ERR);
 }

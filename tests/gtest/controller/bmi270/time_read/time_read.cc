@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include "bmi270.h"
 #include "libopencm3/stm32/spi_common.h"
+#include "spi_ctrl.h"
 
 uint32_t      SPI_CR1_ARR[SPI_INTF_TOTAL];
 uint32_t      SPI_CRCPR_ARR[SPI_INTF_TOTAL];
@@ -15,12 +16,19 @@ class gtest_bmi270_time_read : public ::testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            dev = bmi270_dev_get();
+            spi_ctrl = spi_ctrl_dev_get();
+            (void)spi_ctrl_dev_init(spi_ctrl);
+
+            bmi270 = bmi270_dev_get();
         }
 
         static void TearDownTestSuite()
         {
-            dev = nullptr;
+            spi_ctrl = spi_ctrl_dev_get();
+            (void)spi_ctrl_dev_deinit(spi_ctrl);
+
+            bmi270 = nullptr;
+            spi_ctrl = nullptr;
         }
 
         void SetUp() override
@@ -53,10 +61,12 @@ class gtest_bmi270_time_read : public ::testing::Test
             }
         }
 
-        static bmi270_dev *dev;
+        static struct bmi270_dev *bmi270;
+        static struct spi_ctrl_dev *spi_ctrl;
 };
 
-struct bmi270_dev *gtest_bmi270_time_read::dev = nullptr;
+struct bmi270_dev   *gtest_bmi270_time_read::bmi270   = nullptr;
+struct spi_ctrl_dev *gtest_bmi270_time_read::spi_ctrl = nullptr;
 
 ///
 /// \brief This test performs the bmi270 time read procedure.
@@ -66,13 +76,13 @@ TEST_F(gtest_bmi270_time_read, procedure)
     bmi270_res_t res;
     uint32_t time;
 
-    res = bmi270_spi_ctrl_asg(gtest_bmi270_time_read::dev);
+    res = bmi270_spi_ctrl_asg(gtest_bmi270_time_read::bmi270);
     EXPECT_EQ(res, BMI270_RES_OK);
 
-    res = bmi270_time_read(gtest_bmi270_time_read::dev);
+    res = bmi270_time_read(gtest_bmi270_time_read::bmi270);
     EXPECT_EQ(res, BMI270_RES_OK);
 
-    res = bmi270_time_get(gtest_bmi270_time_read::dev, &time);
+    res = bmi270_time_get(gtest_bmi270_time_read::bmi270, &time);
     EXPECT_EQ(res, BMI270_RES_OK);
     EXPECT_EQ(time, 0xb00bed);
 }
