@@ -15,12 +15,12 @@ class gtest_bmi270_spi_ctrl_asg : public ::testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            dev = bmi270_dev_get();
+            bmi270 = bmi270_dev_get();
         }
 
         static void TearDownTestSuite()
         {
-            dev = nullptr;
+            bmi270= nullptr;
         }
 
         void SetUp() override
@@ -31,10 +31,10 @@ class gtest_bmi270_spi_ctrl_asg : public ::testing::Test
         {
         }
 
-        static bmi270_dev *dev;
+        static struct bmi270_dev *bmi270;
 };
 
-struct bmi270_dev *gtest_bmi270_spi_ctrl_asg::dev = nullptr;
+struct bmi270_dev *gtest_bmi270_spi_ctrl_asg::bmi270 = nullptr;
 
 ///
 /// \brief This test performs the bmi270 spi control assign procedure.
@@ -44,7 +44,7 @@ TEST_F(gtest_bmi270_spi_ctrl_asg, procedure)
     bmi270_res_t res;
     bmi270_stat_t stat;
 
-    res = bmi270_spi_ctrl_asg(gtest_bmi270_spi_ctrl_asg::dev);
+    res = bmi270_spi_ctrl_asg(gtest_bmi270_spi_ctrl_asg::bmi270);
     EXPECT_EQ(res, BMI270_RES_OK);
 }
 
