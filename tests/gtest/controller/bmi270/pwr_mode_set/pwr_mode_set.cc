@@ -61,15 +61,18 @@ class gtest_bmi270_pwr_mode_set : public ::testing::Test
                 /* Set tx_idx to point to first the unoccupied place in the buffer. */
                 SPI_DR_ARR[SPI1].tx_idx = 7;
 
-                /* Buffers after write operations inside bmi270_pwr_mode_set,
-                 * And for this scenario:
-                 * buf[7]  = BMI270_REG_PWR_CONF
-                 * buf[8]  = 0x03
-                 * buf[9]  = 0x00
-                 * buf[10] = BMI270_REG_ACC_CONF
-                 * buf[11] = 0xa8
-                 * buf[12] = BMI270_REG_GYR_CONF
-                 * buf[13] = 0xa9 */
+                /* Bytes after write operations inside bmi270_pwr_mode_set,
+                 * And for this scenario, buf[7], buf[8] and buf[9] are dummy bytes
+                 * buf[7]  = BMI270_REG_PWR_CONF | BMI270_OP_READ
+                 * buf[8]  = BMI270_REG_ACC_CONF | BMI270_OP_READ
+                 * buf[9]  = BMI270_REG_GYR_CONF | BMI270_OP_READ
+                 * buf[10] = BMI270_REG_PWR_CONF
+                 * buf[11] = 0x03
+                 * buf[12] = 0x00
+                 * buf[13] = BMI270_REG_ACC_CONF
+                 * buf[14] = 0xa8
+                 * buf[15] = BMI270_REG_GYR_CONF
+                 * buf[16] = 0xa9 */
         }
 
         void TearDown() override
@@ -99,13 +102,13 @@ TEST_F(gtest_bmi270_pwr_mode_set, procedure)
     res = bmi270_pwr_mode_set(gtest_bmi270_pwr_mode_set::bmi270, pwr_mode_conf);
     EXPECT_EQ(res, BMI270_RES_OK);
 
-    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[7],  BMI270_REG_PWR_CONF);
-    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[8],  0x03);
-    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[9],  0x00);
-    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[10], BMI270_REG_ACC_CONF);
-    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[11], 0xa8);
-    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[12], BMI270_REG_GYR_CONF);
-    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[13], 0xa9);
+    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[10], BMI270_REG_PWR_CONF);
+    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[11], 0x03);
+    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[12], 0x00);
+    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[13], BMI270_REG_ACC_CONF);
+    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[14], 0xa8);
+    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[15], BMI270_REG_GYR_CONF);
+    EXPECT_EQ(SPI_DR_ARR[SPI1].buf[16], 0xa9);
 }
 
 ///
