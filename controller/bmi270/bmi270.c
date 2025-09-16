@@ -718,6 +718,7 @@ bmi270_res_t bmi270_pwr_mode_set(const struct bmi270_dev *const dev,
 
     gyr_conf_reg = buf[1];
 
+    /*
     pwr_conf_reg &= ~(pwr_mode_conf->pwr_conf_mask);
     pwr_conf_reg |=  (pwr_mode_conf->pwr_conf_val);
 
@@ -729,6 +730,7 @@ bmi270_res_t bmi270_pwr_mode_set(const struct bmi270_dev *const dev,
 
     gyr_conf_reg &= ~(pwr_mode_conf->gyr_conf_mask);
     gyr_conf_reg |=  (pwr_mode_conf->gyr_conf_val);
+    */
 
     /* Write the PWR_CONF and PWR_CTRL registers values. */
     adr    = BMI270_REG_PWR_CONF;
@@ -750,7 +752,7 @@ bmi270_res_t bmi270_pwr_mode_set(const struct bmi270_dev *const dev,
     }
 
     /* Write the GYR_CONF register value. */
-    adr    = BMI270_REG_ACC_CONF;
+    adr    = BMI270_REG_GYR_CONF;
     buf[0] = gyr_conf_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
@@ -804,9 +806,16 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
+    {
+        return BMI270_RES_ERR;
+    }
+
     uint8_t  adr;
     uint8_t  buf[2] = { 0 };
     uint32_t sz;
+    uint8_t  acc_slf_tst_reg = 0;
 
     int16_t pos_x, pos_y, pos_z;
     int16_t neg_x, neg_y, neg_z;
@@ -830,8 +839,9 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
     }
 
     /* Set self test amplitude to high by settign ACC_SELF_TEST.acc_self_test_amp = 0x01. */
+    acc_slf_tst_reg = BMI270_ACC_SLF_TST_AMP_HIGH;
     adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = BMI270_ACC_SLF_TST_AMP_HIGH;
+    buf[0] = acc_slf_tst_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
@@ -845,8 +855,9 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
     }
 
     /* Set positive self-test polarity (ACC_SELF_TEST.acc_self_test_sign = 0x01). */
+    acc_slf_tst_reg |= BMI270_ACC_SLF_TST_SIG_POS;
     adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = BMI270_ACC_SLF_TST_SIG_POS;
+    buf[0] = acc_slf_tst_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
@@ -854,8 +865,9 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
     }
 
     /* Enable self-test (ACC_SELF_TEST.acc_self_test_en = 0x01). */
+    acc_slf_tst_reg |= BMI270_ACC_SLF_TST_EN_ON;
     adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = BMI270_ACC_SLF_TST_EN_ON;
+    buf[0] = acc_slf_tst_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
@@ -875,8 +887,9 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
     bmi270_acc_get_z(dev, &pos_z);
 
     /* Set negative self-test polarity (ACC_SELF_TEST.acc_self_test_sign = 0x00). */
+    acc_slf_tst_reg &= ~(BMI270_ACC_SLF_TST_SIG_POS | BMI270_ACC_SLF_TST_EN_ON);
     adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = BMI270_ACC_SLF_TST_SIG_NEG;
+    buf[0] = acc_slf_tst_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
@@ -884,8 +897,9 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
     }
 
     /* Enable self-test (ACC_SELF_TEST.acc_self_test_en = 0x01). */
+    acc_slf_tst_reg |= BMI270_ACC_SLF_TST_EN_ON;
     adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = BMI270_ACC_SLF_TST_EN_ON;
+    buf[0] = acc_slf_tst_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
