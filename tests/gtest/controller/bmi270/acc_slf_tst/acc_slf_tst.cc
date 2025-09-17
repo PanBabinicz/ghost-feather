@@ -15,12 +15,19 @@ class gtest_bmi270_acc_slf_tst : public ::testing::Test
     protected:
         static void SetUpTestSuite()
         {
+            spi_ctrl = spi_ctrl_dev_get();
+            (void)spi_ctrl_dev_init(spi_ctrl);
+
             bmi270 = bmi270_dev_get();
         }
 
         static void TearDownTestSuite()
         {
+            spi_ctrl = spi_ctrl_dev_get();
+            (void)spi_ctrl_dev_deinit(spi_ctrl);
+
             bmi270 = nullptr;
+            spi_ctrl = nullptr;
         }
 
         void SetUp() override
@@ -32,9 +39,11 @@ class gtest_bmi270_acc_slf_tst : public ::testing::Test
         }
 
         static struct bmi270_dev *bmi270;
+        static struct spi_ctrl_dev *spi_ctrl;
 };
 
 struct bmi270_dev *gtest_bmi270_acc_slf_tst::bmi270 = nullptr;
+struct spi_ctrl_dev *gtest_bmi270_acc_slf_tst::spi_ctrl = nullptr;
 
 ///
 /// \brief This test performs the bmi270 accelerometer self test procedure.
