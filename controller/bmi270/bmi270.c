@@ -388,6 +388,17 @@ static bmi270_res_t bmi270_vld_conf_file(const struct bmi270_dev *const dev);
 ///
 static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint32_t cycles);
 
+///
+/// \breif Sends soft reset command to the bmi270 device.
+///
+/// \param[in] dev         The bmi270 device.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+static bmi270_res_t bmi270_cmd_soft_rst(struct bmi270_dev *const dev);
+
 ///***********************************************************************************************************
 /// Private functions - definition.
 ///***********************************************************************************************************
@@ -504,6 +515,25 @@ static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint3
             curr += 0x01000000;
         }
     } while ((curr - prev) < cycles);
+
+    return BMI270_RES_OK;
+}
+
+static bmi270_res_t bmi270_cmd_soft_rst(struct bmi270_dev *const dev)
+{
+    uint8_t  adr  = BMI270_REG_PWR_CONF;
+    uint8_t  buf  = BMI270_CMD_SOFTRESET;
+    uint32_t sz   = 1;
+
+    if (dev->stat != BMI270_STAT_DEINIT)
+    {
+        if (bmi270_reg_write(dev, adr, &buf, sz) != BMI270_RES_OK)
+        {
+            return BMI270_RES_ERR;
+        }
+
+        dev->stat = BMI270_STAT_DEINIT;
+    }
 
     return BMI270_RES_OK;
 }
@@ -647,18 +677,9 @@ bmi270_res_t bmi270_soft_rst(struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    uint8_t  adr  = BMI270_REG_PWR_CONF;
-    uint8_t  buf  = BMI270_CMD_SOFTRESET;
-    uint32_t sz   = 1;
-
-    if (dev->stat != BMI270_STAT_DEINIT)
+    if (bmi270_cmd_soft_rst(dev) != BMI270_RES_OK)
     {
-        if (bmi270_reg_write(dev, adr, &buf, sz) != BMI270_RES_OK)
-        {
-            return BMI270_RES_ERR;
-        }
-
-        dev->stat = BMI270_STAT_DEINIT;
+        return BMI270_RES_ERR;
     }
 
     return BMI270_RES_OK;
@@ -935,7 +956,13 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
 
 bmi270_res_t bmi270_gyr_slf_tst(struct bmi270_dev *const dev)
 {
-    if (dev == NULL)
+    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    {
+        return BMI270_RES_ERR;
+    }
+
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
     {
         return BMI270_RES_ERR;
     }
@@ -945,7 +972,7 @@ bmi270_res_t bmi270_gyr_slf_tst(struct bmi270_dev *const dev)
     uint32_t sz;
 
     /* Issue a soft reset or a power-on reset. */
-    if (bmi270_soft_rst(dev) != BMI270_RES_OK)
+    if (bmi270_cmd_soft_rst(dev) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
