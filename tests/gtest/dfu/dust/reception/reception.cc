@@ -6,7 +6,7 @@
 ///
 /// \brief This test receives the serialized data.
 ///
-TEST(reception, serialized_data)
+TEST(gtest_dust_reception, serialized_data)
 {
     dust_result_t result;
     dust_serialized_t serialized =
@@ -30,7 +30,7 @@ TEST(reception, serialized_data)
 ///
 /// \brief This test checks the null pointer protection inside receive function.
 ///
-TEST(reception, null_pointer_protection)
+TEST(gtest_dust_reception, null_pointer_protection)
 {
     dust_result_t result;
 

@@ -5,7 +5,7 @@
 ///
 /// \brief This test pushes single element.
 ///
-TEST(push, single)
+TEST(gtest_circ_buf_push, single)
 {
     circular_buffer_result_t result;
     uint8_t buffer[CIRCULAR_BUFFER_LENGTH];
@@ -22,7 +22,7 @@ TEST(push, single)
 ///
 /// \brief This test pushes elements until the buffer is full.
 ///
-TEST(push, full)
+TEST(gtest_circ_buf_push, full)
 {
     circular_buffer_result_t result;
     uint8_t buffer[CIRCULAR_BUFFER_LENGTH];
@@ -45,7 +45,7 @@ TEST(push, full)
 ///
 /// \brief This test pushes elements until the buffer is overflowed.
 ///
-TEST(push, overflow)
+TEST(gtest_circ_buf_push, overflow)
 {
     circular_buffer_result_t result;
     uint8_t buffer[CIRCULAR_BUFFER_LENGTH];
@@ -68,7 +68,7 @@ TEST(push, overflow)
 ///
 /// \brief This test checks the invalid instance protection inside push function.
 ///
-TEST(push, invalid_instance)
+TEST(gtest_circ_buf_push, invalid_instance)
 {
     circular_buffer_result_t result;
     uint8_t element;

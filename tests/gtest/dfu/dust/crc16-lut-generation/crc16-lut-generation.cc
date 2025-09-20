@@ -85,7 +85,7 @@ static uint16_t predefined_crc16_lut_0x8005[CRC16_LUT_SIZE] =
 ///
 /// \brief This test performs the CRC16 generator check for 0x1021 polynomial.
 ///
-TEST(crc16_lut_generation, polynomial_0x1021)
+TEST(gtest_dust_crc16_lut_generation, polynomial_0x1021)
 {
     uint16_t generated_crc16_lut[CRC16_LUT_SIZE] = { 0 };
     uint8_t result;
@@ -106,7 +106,7 @@ TEST(crc16_lut_generation, polynomial_0x1021)
 ///
 /// \brief This test performs the CRC16 generator check for 0x8005 polynomial.
 ///
-TEST(crc16_lut_generation, polynomial_0x8005)
+TEST(gtest_dust_crc16_lut_generation, polynomial_0x8005)
 {
     uint16_t generated_crc16_lut[CRC16_LUT_SIZE] = { 0 };
     uint8_t result;

@@ -6,7 +6,7 @@
 ///
 /// \brief This test transmits the serialized data.
 ///
-TEST(transmission, serialized_data)
+TEST(gtest_dust_transmission, serialized_data)
 {
     dust_result_t result;
     dust_serialized_t serialized =
@@ -31,7 +31,7 @@ TEST(transmission, serialized_data)
 ///
 /// \brief This test checks the null pointer protection inside transmit function.
 ///
-TEST(transmission, null_pointer_protection)
+TEST(gtest_dust_transmission, null_pointer_protection)
 {
     dust_result_t result;
 

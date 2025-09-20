@@ -142,7 +142,6 @@ static inline void usart_set_parity(uint32_t usart, uint32_t parity)
     USART_CR1 = reg32;
 }
 
-
 ///
 /// \breif Mock implementation of usart_set_mode function.
 ///
@@ -171,4 +170,4 @@ static inline void usart_set_stopbits(uint32_t usart, uint32_t stopbits)
 }
 #endif  /* __cplusplus */
 
-#endif  /* _GMOCK_LIBOPENCM3_USART */
+#endif  /* _GMOCK_LIBOPENCM3_USART_H */
