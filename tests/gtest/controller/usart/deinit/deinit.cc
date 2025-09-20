@@ -11,7 +11,7 @@ uint32_t USART_BRR = ((SYSCLK + 115200 / 2 ) / 115200);
 ///
 /// \brief This test performs the usart controller deinit procedure.
 ///
-TEST(deinit, procedure)
+TEST(gtest_usart_ctrl_deinit, procedure)
 {
     usart_controller_status_t status;
     uint32_t expected_usart_cr1 = 0x0000000c;

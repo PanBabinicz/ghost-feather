@@ -6,7 +6,7 @@
 ///
 /// \brief This test performs packet deserialization.
 ///
-TEST(deserialization, perform)
+TEST(gtest_dust_deserialization, perform)
 {
     dust_result_t result;
     dust_protocol_instance_t instance =
@@ -64,7 +64,7 @@ TEST(deserialization, perform)
 ///
 /// \brief This test checks the size protection inside deserialize function.
 ///
-TEST(serialization, size_protection)
+TEST(gtest_dust_deserialization, size_protection)
 {
     dust_result_t result;
     dust_protocol_instance_t instance =
@@ -92,7 +92,7 @@ TEST(serialization, size_protection)
 ///
 /// \brief This test checks the null pointer protection inside deserialize function.
 ///
-TEST(deserialization, null_pointer_protection)
+TEST(gtest_dust_deserialization, null_pointer_protection)
 {
     dust_result_t result;
     dust_protocol_instance_t instance = { 0 };

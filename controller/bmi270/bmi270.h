@@ -3,6 +3,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif  /* __cplusplus */
+
 ///
 /// \breif The bmi270 registers definition.
 ///
@@ -304,7 +308,7 @@
 #define BMI270_OP_READ              (0x01 << 0x07)  /*!< The read operation indicator                       */
 
 ///
-/// \brief The bmi270 instance type.
+/// \brief The bmi270 device type.
 ///
 struct bmi270_dev;
 
@@ -318,8 +322,11 @@ struct bmi270_pwr_mode_conf;
 ///
 typedef enum bmi270_res
 {
-    BMI270_RES_OK = 0,
+    BMI270_RES_BEGIN = 0,
+    BMI270_RES_OK    = 0,
     BMI270_RES_ERR,
+    BMI270_RES_VLD_ERR,
+    BMI270_RES_TOTAL,
 } bmi270_res_t;
 
 ///
@@ -327,8 +334,10 @@ typedef enum bmi270_res
 ///
 typedef enum bmi270_stat
 {
+    BMI270_STAT_BEGIN  = 0,
     BMI270_STAT_DEINIT = 0,
     BMI270_STAT_INIT,
+    BMI270_STAT_TOTAL,
 } bmi270_stat_t;
 
 ///
@@ -354,9 +363,9 @@ typedef enum bmi270_pwr_mode
 ///
 /// \breif Gets the bmi270 instance.
 ///
-/// \return bmi270_t The bmi270 instance address.
+/// \return struct bmi270_dev* The bmi270 instance address.
 ///
-struct bmi270_dev* bmi270_get_dev(void);
+struct bmi270_dev* bmi270_dev_get(void);
 
 ///
 /// \breif Gets the bmi270 power mode config.
@@ -365,7 +374,7 @@ struct bmi270_dev* bmi270_get_dev(void);
 ///
 /// \return bmi270_pwr_mode_conf_t The power mode config.
 ///
-const struct bmi270_pwr_mode_conf* bmi270_get_pwr_mode_conf(const bmi270_pwr_mode_t pwr_mode);
+const struct bmi270_pwr_mode_conf* bmi270_pwr_mode_get_conf(const bmi270_pwr_mode_t pwr_mode);
 
 ///
 /// \breif Initializes the bmi270.
@@ -413,8 +422,44 @@ bmi270_res_t bmi270_soft_rst(struct bmi270_dev *const dev);
 /// \retval BMI270_RES_OK    On success.
 /// \retval BMI270_RES_ERR   Otherwise.
 ///
-bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
+bmi270_res_t bmi270_pwr_mode_set(const struct bmi270_dev *const dev,
                                  const struct bmi270_pwr_mode_conf *const pwr_mode_conf);
+
+///
+/// \brief Assigns the spi controller device inside bmi270 device sturcture.
+///
+/// \param[in] dev           The bmi270 device.
+/// \param[in] stat          The bmi270 device status.
+///
+/// \return bmi270_res_t     The bmi270 result.
+/// \retval BMI270_RES_OK    On success.
+/// \retval BMI270_RES_ERR   Otherwise.
+///
+bmi270_res_t bmi270_spi_ctrl_asg(struct bmi270_dev *const dev);
+
+///
+/// \brief Sets the device status.
+///
+/// \param[in] dev           The bmi270 device.
+/// \param[in] stat          The bmi270 device status.
+///
+/// \return bmi270_res_t     The bmi270 result.
+/// \retval BMI270_RES_OK    On success.
+/// \retval BMI270_RES_ERR   Otherwise.
+///
+bmi270_res_t bmi270_stat_set(struct bmi270_dev *const dev, const bmi270_stat_t stat);
+
+///
+/// \brief Get the device status.
+///
+/// \param[in]  dev          The bmi270 device.
+/// \param[out] stat         The bmi270 device status.
+///
+/// \return bmi270_res_t     The bmi270 result.
+/// \retval BMI270_RES_OK    On success.
+/// \retval BMI270_RES_ERR   Otherwise.
+///
+bmi270_res_t bmi270_stat_get(const struct bmi270_dev *const dev, bmi270_stat_t *const stat);
 
 ///
 /// \brief Self-tests accelerometer.
@@ -462,6 +507,18 @@ bmi270_res_t bmi270_acc_read(struct bmi270_dev *const dev);
 bmi270_res_t bmi270_acc_get_x(const struct bmi270_dev *const dev, int16_t *const x);
 
 ///
+/// \brief Sets the accelerometer x axis value.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] x           The x axis value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_acc_set_x(struct bmi270_dev *const dev, const int16_t x);
+
+///
 /// \brief Gets the accelerometer y axis value.
 ///
 /// \param[in]  dev        The bmi270 device.
@@ -474,6 +531,18 @@ bmi270_res_t bmi270_acc_get_x(const struct bmi270_dev *const dev, int16_t *const
 bmi270_res_t bmi270_acc_get_y(const struct bmi270_dev *const dev, int16_t *const y);
 
 ///
+/// \brief Sets the accelerometer y axis value.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] y           The y axis value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_acc_set_y(struct bmi270_dev *const dev, const int16_t y);
+
+///
 /// \brief Gets the accelerometer z axis value.
 ///
 /// \param[in]  dev        The bmi270 device.
@@ -484,6 +553,18 @@ bmi270_res_t bmi270_acc_get_y(const struct bmi270_dev *const dev, int16_t *const
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 bmi270_res_t bmi270_acc_get_z(const struct bmi270_dev *const dev, int16_t *const z);
+
+///
+/// \brief Sets the accelerometer z axis value.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] z           The z axis value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_acc_set_z(struct bmi270_dev *const dev, const int16_t z);
 
 ///
 /// \brief Reads the gyroscope data.
@@ -509,6 +590,18 @@ bmi270_res_t bmi270_gyr_read(struct bmi270_dev *const dev);
 bmi270_res_t bmi270_gyr_get_x(const struct bmi270_dev *const dev, int16_t *const x);
 
 ///
+/// \brief Sets the gyroscope x axis value.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] x           The x axis value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_gyr_set_x(struct bmi270_dev *const dev, const int16_t x);
+
+///
 /// \brief Gets the gyroscope y axis value.
 ///
 /// \param[in]  dev        The bmi270 device.
@@ -521,6 +614,18 @@ bmi270_res_t bmi270_gyr_get_x(const struct bmi270_dev *const dev, int16_t *const
 bmi270_res_t bmi270_gyr_get_y(const struct bmi270_dev *const dev, int16_t *const y);
 
 ///
+/// \brief Sets the gyroscope y axis value.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] y           The y axis value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_gyr_set_y(struct bmi270_dev *const dev, const int16_t y);
+
+///
 /// \brief Gets the gyroscope z axis value.
 ///
 /// \param[in]  dev        The bmi270 device.
@@ -531,6 +636,18 @@ bmi270_res_t bmi270_gyr_get_y(const struct bmi270_dev *const dev, int16_t *const
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 bmi270_res_t bmi270_gyr_get_z(const struct bmi270_dev *const dev, int16_t *const z);
+
+///
+/// \brief Sets the gyroscope z axis value.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] z           The z axis value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_gyr_set_z(struct bmi270_dev *const dev, const int16_t z);
 
 ///
 /// \brief Reads the temperature data.
@@ -556,6 +673,18 @@ bmi270_res_t bmi270_temp_read(struct bmi270_dev *const dev);
 bmi270_res_t bmi270_temp_get(const struct bmi270_dev *const dev, int16_t *const temp);
 
 ///
+/// \brief Sets the temperature value.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] temp        The temperature value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_temp_set(struct bmi270_dev *const dev, const int16_t temp);
+
+///
 /// \brief Reads the sensor time register data.
 ///
 /// \param[in] dev         The bmi270 device.
@@ -577,5 +706,21 @@ bmi270_res_t bmi270_time_read(struct bmi270_dev *const dev);
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 bmi270_res_t bmi270_time_get(const struct bmi270_dev *const dev, uint32_t *const time);
+
+///
+/// \brief Sets the sensor time value.
+///
+/// \param[in] dev         The bmi270 device.
+/// \param[in] time        The sensor time value.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+bmi270_res_t bmi270_time_set(struct bmi270_dev *const dev, const uint32_t time);
+
+#ifdef __cplusplus
+}
+#endif  /* __cplusplus */
 
 #endif  /* _BMI270_H */

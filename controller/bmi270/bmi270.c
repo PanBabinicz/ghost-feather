@@ -95,7 +95,7 @@ struct bmi270_gyr
 ///
 struct bmi270_temp
 {
-    uint16_t data;                                  /*!< The temperature data.                              */
+    int16_t data;                                   /*!< The temperature data.                              */
 };
 
 ///
@@ -388,6 +388,17 @@ static bmi270_res_t bmi270_vld_conf_file(const struct bmi270_dev *const dev);
 ///
 static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint32_t cycles);
 
+///
+/// \breif Sends soft reset command to the bmi270 device.
+///
+/// \param[in] dev         The bmi270 device.
+///
+/// \return bmi270_res_t   The bmi270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
+///
+static bmi270_res_t bmi270_cmd_soft_rst(struct bmi270_dev *const dev);
+
 ///***********************************************************************************************************
 /// Private functions - definition.
 ///***********************************************************************************************************
@@ -447,13 +458,6 @@ static bmi270_res_t bmi270_reg_write(const struct bmi270_dev *const dev, uint8_t
 static bmi270_res_t bmi270_upld_conf_file(const struct bmi270_dev *const dev)
 {
     /* Whether the device is NULL was checked before. */
-    bool spi_ctrl_stat = spi_ctrl_get_stat(dev->spi_ctrl);
-
-    if (spi_ctrl_stat != SPI_CTRL_STAT_RUN)
-    {
-        return BMI270_RES_ERR;
-    }
-
     uint8_t adr = BMI270_REG_INIT_DATA;
 
     if (bmi270_reg_write(dev, adr, dev->conf.file, dev->conf.sz) != BMI270_RES_OK)
@@ -467,13 +471,6 @@ static bmi270_res_t bmi270_upld_conf_file(const struct bmi270_dev *const dev)
 static bmi270_res_t bmi270_vld_conf_file(const struct bmi270_dev *const dev)
 {
     /* Whether the device is NULL was checked before. */
-    bool spi_ctrl_stat = spi_ctrl_get_stat(dev->spi_ctrl);
-
-    if (spi_ctrl_stat != SPI_CTRL_STAT_RUN)
-    {
-        return BMI270_RES_ERR;
-    }
-
     uint8_t adr = BMI270_REG_INIT_DATA;
     uint8_t buf[dev->conf.sz + 1];
 
@@ -522,15 +519,34 @@ static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint3
     return BMI270_RES_OK;
 }
 
+static bmi270_res_t bmi270_cmd_soft_rst(struct bmi270_dev *const dev)
+{
+    uint8_t  adr  = BMI270_REG_CMD;
+    uint8_t  buf  = BMI270_CMD_SOFTRESET;
+    uint32_t sz   = 1;
+
+    if (dev->stat != BMI270_STAT_DEINIT)
+    {
+        if (bmi270_reg_write(dev, adr, &buf, sz) != BMI270_RES_OK)
+        {
+            return BMI270_RES_ERR;
+        }
+
+        dev->stat = BMI270_STAT_DEINIT;
+    }
+
+    return BMI270_RES_OK;
+}
+
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-struct bmi270_dev* bmi270_get_dev(void)
+struct bmi270_dev* bmi270_dev_get(void)
 {
     return &bmi270;
 }
 
-const struct bmi270_pwr_mode_conf* bmi270_get_pwr_mode_conf(const bmi270_pwr_mode_t pwr_mode)
+const struct bmi270_pwr_mode_conf* bmi270_pwr_mode_get_conf(const bmi270_pwr_mode_t pwr_mode)
 {
     if ((pwr_mode < BMI270_PWR_MODE_BEGIN) || (pwr_mode >= BMI270_PWR_MODE_TOTAL))
     {
@@ -542,7 +558,13 @@ const struct bmi270_pwr_mode_conf* bmi270_get_pwr_mode_conf(const bmi270_pwr_mod
 
 bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
 {
-    if (dev == NULL)
+    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    {
+        return BMI270_RES_ERR;
+    }
+
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
     {
         return BMI270_RES_ERR;
     }
@@ -550,31 +572,10 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
     uint8_t  adr;
     uint8_t  buf[2] = { 0 };
     uint32_t sz;
-    bool     spi_ctrl_stat;
-
-    const struct spi_ctrl_dev *spi_ctrl_dev_ptr = dev->spi_ctrl;
 
     memset(&dev->acc,  0, sizeof(dev->acc));
     memset(&dev->gyr,  0, sizeof(dev->gyr));
     memset(&dev->temp, 0, sizeof(dev->temp));
-
-    if (dev->spi_ctrl == NULL)
-    {
-        if (spi_ctrl_get_dev(&spi_ctrl_dev_ptr) == SPI_CTRL_RES_ERR)
-        {
-            return BMI270_RES_ERR;
-        }
-    }
-
-    spi_ctrl_stat = spi_ctrl_get_stat(dev->spi_ctrl);
-
-    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
-    {
-        if (spi_ctrl_init(dev->spi_ctrl) == SPI_CTRL_RES_ERR)
-        {
-            return BMI270_RES_ERR;
-        }
-    }
 
     /* Read an arbitrary register of BMI270, discard the read response.
      * The MSB of the address is R/W indicator. */
@@ -619,7 +620,7 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
      * in previous step. */
     if (bmi270_vld_conf_file(dev) != BMI270_RES_OK)
     {
-        return BMI270_RES_ERR;
+        return BMI270_RES_VLD_ERR;
     }
 #endif
 
@@ -665,32 +666,35 @@ bmi270_res_t bmi270_deinit(struct bmi270_dev *const dev)
 /* TODO: Must not be performed while NVM writing operation is in progress. */
 bmi270_res_t bmi270_soft_rst(struct bmi270_dev *const dev)
 {
-    if (dev == NULL)
+    if ((dev == NULL) || (dev->spi_ctrl == NULL))
     {
         return BMI270_RES_ERR;
     }
 
-    uint8_t  adr = BMI270_REG_PWR_CONF;
-    uint8_t  buf = BMI270_CMD_SOFTRESET;
-    uint32_t sz  = 1;
-
-    if (dev->stat != BMI270_STAT_DEINIT)
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
     {
-        if (bmi270_reg_write(dev, adr, &buf, sz) != BMI270_RES_OK)
-        {
-            return BMI270_RES_ERR;
-        }
+        return BMI270_RES_ERR;
+    }
 
-        dev->stat = BMI270_STAT_DEINIT;
+    if (bmi270_cmd_soft_rst(dev) != BMI270_RES_OK)
+    {
+        return BMI270_RES_ERR;
     }
 
     return BMI270_RES_OK;
 }
 
-bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
+bmi270_res_t bmi270_pwr_mode_set(const struct bmi270_dev *const dev,
                                  const struct bmi270_pwr_mode_conf *const pwr_mode_conf)
 {
-    if ((pwr_mode_conf == NULL) || (dev->spi_ctrl == NULL))
+    if ((dev == NULL) || (dev->spi_ctrl == NULL) || (pwr_mode_conf == NULL))
+    {
+        return BMI270_RES_ERR;
+    }
+
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
     {
         return BMI270_RES_ERR;
     }
@@ -711,11 +715,9 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
     {
         return BMI270_RES_ERR;
     }
-    else
-    {
-        pwr_conf_reg = buf[1];
-        pwr_ctrl_reg = buf[2];
-    }
+
+    pwr_conf_reg = buf[1];
+    pwr_ctrl_reg = buf[2];
 
     /* Read the ACC_CONF register value. */
     adr = BMI270_REG_ACC_CONF;
@@ -724,10 +726,8 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
     {
         return BMI270_RES_ERR;
     }
-    else
-    {
-        acc_conf_reg = buf[1];
-    }
+
+    acc_conf_reg = buf[1];
 
     /* Read the GYR_CONF register value. */
     adr = BMI270_REG_GYR_CONF;
@@ -736,11 +736,10 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
     {
         return BMI270_RES_ERR;
     }
-    else
-    {
-        gyr_conf_reg = buf[1];
-    }
 
+    gyr_conf_reg = buf[1];
+
+    /*
     pwr_conf_reg &= ~(pwr_mode_conf->pwr_conf_mask);
     pwr_conf_reg |=  (pwr_mode_conf->pwr_conf_val);
 
@@ -752,6 +751,7 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
 
     gyr_conf_reg &= ~(pwr_mode_conf->gyr_conf_mask);
     gyr_conf_reg |=  (pwr_mode_conf->gyr_conf_val);
+    */
 
     /* Write the PWR_CONF and PWR_CTRL registers values. */
     adr    = BMI270_REG_PWR_CONF;
@@ -773,13 +773,49 @@ bmi270_res_t bmi270_set_pwr_mode(const struct bmi270_dev *const dev,
     }
 
     /* Write the GYR_CONF register value. */
-    adr    = BMI270_REG_ACC_CONF;
+    adr    = BMI270_REG_GYR_CONF;
     buf[0] = gyr_conf_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_spi_ctrl_asg(struct bmi270_dev *const dev)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->spi_ctrl = spi_ctrl_dev_get();
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_stat_set(struct bmi270_dev *const dev, const bmi270_stat_t stat)
+{
+    if ((dev == NULL) || (stat < BMI270_STAT_BEGIN) || (stat >= BMI270_STAT_TOTAL))
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->stat = stat;
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_stat_get(const struct bmi270_dev *const dev, bmi270_stat_t *const stat)
+{
+    if ((dev == NULL) || (stat == NULL ))
+    {
+        return BMI270_RES_ERR;
+    }
+
+    *stat = dev->stat;
 
     return BMI270_RES_OK;
 }
@@ -791,9 +827,16 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
+    {
+        return BMI270_RES_ERR;
+    }
+
     uint8_t  adr;
     uint8_t  buf[2] = { 0 };
     uint32_t sz;
+    uint8_t  acc_slf_tst_reg = 0;
 
     int16_t pos_x, pos_y, pos_z;
     int16_t neg_x, neg_y, neg_z;
@@ -817,8 +860,9 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
     }
 
     /* Set self test amplitude to high by settign ACC_SELF_TEST.acc_self_test_amp = 0x01. */
+    acc_slf_tst_reg = BMI270_ACC_SLF_TST_AMP_HIGH;
     adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = BMI270_ACC_SLF_TST_AMP_HIGH;
+    buf[0] = acc_slf_tst_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
@@ -832,8 +876,9 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
     }
 
     /* Set positive self-test polarity (ACC_SELF_TEST.acc_self_test_sign = 0x01). */
+    acc_slf_tst_reg |= BMI270_ACC_SLF_TST_SIG_POS;
     adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = BMI270_ACC_SLF_TST_SIG_POS;
+    buf[0] = acc_slf_tst_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
@@ -841,8 +886,9 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
     }
 
     /* Enable self-test (ACC_SELF_TEST.acc_self_test_en = 0x01). */
+    acc_slf_tst_reg |= BMI270_ACC_SLF_TST_EN_ON;
     adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = BMI270_ACC_SLF_TST_EN_ON;
+    buf[0] = acc_slf_tst_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
@@ -862,8 +908,9 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
     bmi270_acc_get_z(dev, &pos_z);
 
     /* Set negative self-test polarity (ACC_SELF_TEST.acc_self_test_sign = 0x00). */
+    acc_slf_tst_reg &= ~(BMI270_ACC_SLF_TST_SIG_POS | BMI270_ACC_SLF_TST_EN_ON);
     adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = BMI270_ACC_SLF_TST_SIG_NEG;
+    buf[0] = acc_slf_tst_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
@@ -871,8 +918,9 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
     }
 
     /* Enable self-test (ACC_SELF_TEST.acc_self_test_en = 0x01). */
+    acc_slf_tst_reg |= BMI270_ACC_SLF_TST_EN_ON;
     adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = BMI270_ACC_SLF_TST_EN_ON;
+    buf[0] = acc_slf_tst_reg;
     sz     = 1;
     if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
     {
@@ -908,7 +956,13 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
 
 bmi270_res_t bmi270_gyr_slf_tst(struct bmi270_dev *const dev)
 {
-    if (dev == NULL)
+    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    {
+        return BMI270_RES_ERR;
+    }
+
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
     {
         return BMI270_RES_ERR;
     }
@@ -918,7 +972,7 @@ bmi270_res_t bmi270_gyr_slf_tst(struct bmi270_dev *const dev)
     uint32_t sz;
 
     /* Issue a soft reset or a power-on reset. */
-    if (bmi270_soft_rst(dev) != BMI270_RES_OK)
+    if (bmi270_cmd_soft_rst(dev) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
@@ -1001,7 +1055,13 @@ bmi270_res_t bmi270_gyr_slf_tst(struct bmi270_dev *const dev)
 
 bmi270_res_t bmi270_acc_read(struct bmi270_dev *const dev)
 {
-    if (dev == NULL)
+    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    {
+        return BMI270_RES_ERR;
+    }
+
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
     {
         return BMI270_RES_ERR;
     }
@@ -1034,6 +1094,18 @@ bmi270_res_t bmi270_acc_get_x(const struct bmi270_dev *const dev, int16_t *const
     return BMI270_RES_OK;
 }
 
+bmi270_res_t bmi270_acc_set_x(struct bmi270_dev *const dev, const int16_t x)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->acc.data.x = x;
+
+    return BMI270_RES_OK;
+}
+
 bmi270_res_t bmi270_acc_get_y(const struct bmi270_dev *const dev, int16_t *const y)
 {
     if ((dev == NULL) || (y == NULL))
@@ -1042,6 +1114,18 @@ bmi270_res_t bmi270_acc_get_y(const struct bmi270_dev *const dev, int16_t *const
     }
 
     *y = dev->acc.data.y;
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_acc_set_y(struct bmi270_dev *const dev, const int16_t y)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->acc.data.y = y;
 
     return BMI270_RES_OK;
 }
@@ -1058,9 +1142,27 @@ bmi270_res_t bmi270_acc_get_z(const struct bmi270_dev *const dev, int16_t *const
     return BMI270_RES_OK;
 }
 
-bmi270_res_t bmi270_gyr_read(struct bmi270_dev *const dev)
+bmi270_res_t bmi270_acc_set_z(struct bmi270_dev *const dev, const int16_t z)
 {
     if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->acc.data.z = z;
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_gyr_read(struct bmi270_dev *const dev)
+{
+    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    {
+        return BMI270_RES_ERR;
+    }
+
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
     {
         return BMI270_RES_ERR;
     }
@@ -1093,6 +1195,18 @@ bmi270_res_t bmi270_gyr_get_x(const struct bmi270_dev *const dev, int16_t *const
     return BMI270_RES_OK;
 }
 
+bmi270_res_t bmi270_gyr_set_x(struct bmi270_dev *const dev, const int16_t x)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->gyr.data.x = x;
+
+    return BMI270_RES_OK;
+}
+
 bmi270_res_t bmi270_gyr_get_y(const struct bmi270_dev *const dev, int16_t *const y)
 {
     if ((dev == NULL) || (y == NULL))
@@ -1101,6 +1215,18 @@ bmi270_res_t bmi270_gyr_get_y(const struct bmi270_dev *const dev, int16_t *const
     }
 
     *y = dev->gyr.data.y;
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_gyr_set_y(struct bmi270_dev *const dev, const int16_t y)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->gyr.data.y = y;
 
     return BMI270_RES_OK;
 }
@@ -1117,9 +1243,27 @@ bmi270_res_t bmi270_gyr_get_z(const struct bmi270_dev *const dev, int16_t *const
     return BMI270_RES_OK;
 }
 
-bmi270_res_t bmi270_temp_read(struct bmi270_dev *const dev)
+bmi270_res_t bmi270_gyr_set_z(struct bmi270_dev *const dev, const int16_t z)
 {
     if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->gyr.data.z = z;
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_temp_read(struct bmi270_dev *const dev)
+{
+    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    {
+        return BMI270_RES_ERR;
+    }
+
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
     {
         return BMI270_RES_ERR;
     }
@@ -1150,9 +1294,27 @@ bmi270_res_t bmi270_temp_get(const struct bmi270_dev *const dev, int16_t *const 
     return BMI270_RES_OK;
 }
 
-bmi270_res_t bmi270_time_read(struct bmi270_dev *const dev)
+bmi270_res_t bmi270_temp_set(struct bmi270_dev *const dev, int16_t temp)
 {
     if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->temp.data = temp;
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_time_read(struct bmi270_dev *const dev)
+{
+    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    {
+        return BMI270_RES_ERR;
+    }
+
+    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
+    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
     {
         return BMI270_RES_ERR;
     }
@@ -1179,6 +1341,18 @@ bmi270_res_t bmi270_time_get(const struct bmi270_dev *const dev, uint32_t *const
     }
 
     *time = dev->time.data;
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_time_set(struct bmi270_dev *const dev, const uint32_t time)
+{
+    if (dev == NULL)
+    {
+        return BMI270_RES_ERR;
+    }
+
+    dev->time.data = time;
 
     return BMI270_RES_OK;
 }
