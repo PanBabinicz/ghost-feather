@@ -6,7 +6,7 @@
 ///
 /// \brief This test performs packet serialization.
 ///
-TEST(serialization, perform)
+TEST(gtest_dust_serialization, perform)
 {
     dust_result_t result;
 
@@ -69,7 +69,7 @@ TEST(serialization, perform)
 ///
 /// \brief This test checks the size protection inside serialize function.
 ///
-TEST(serialization, size_protection)
+TEST(gtest_dust_serialization, size_protection)
 {
     dust_result_t result;
 
@@ -107,7 +107,7 @@ TEST(serialization, size_protection)
 ///
 /// \brief This test checks the null pointer protection inside serialize function.
 ///
-TEST(serialization, null_pointer_protection)
+TEST(gtest_dust_serialization, null_pointer_protection)
 {
     dust_result_t result;
     dust_protocol_instance_t instance = { 0 };

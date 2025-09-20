@@ -5,7 +5,7 @@
 ///
 /// \brief This test creates the packet.
 ///
-TEST(packet, create)
+TEST(gtest_dust_packet, create)
 {
     dust_result_t result;
     dust_packet_t packet = { 0 };
@@ -53,7 +53,7 @@ TEST(packet, create)
 ///
 /// \brief This test checks the null pointer protection inside create packet function.
 ///
-TEST(packet, null_pointer_protection)
+TEST(gtest_dust_packet, null_pointer_protection)
 {
     dust_result_t result;
     dust_packet_t packet = { 0 };

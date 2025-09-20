@@ -5,7 +5,7 @@
 ///
 /// \brief This test performs the handshake procedure.
 ///
-TEST(handshake, procedure)
+TEST(gtest_dust_handshake, procedure)
 {
     uint32_t usart = 3;
     uint8_t  expected_ack_frequency     = (1 << 0x00);
@@ -27,7 +27,7 @@ TEST(handshake, procedure)
 ///
 /// \brief This test checks the null pointer protection inside handshake function.
 ///
-TEST(handshake, null_pointer_protection)
+TEST(gtest_dust_handshake, null_pointer_protection)
 {
     uint32_t usart = 3;
     dust_result_t result;

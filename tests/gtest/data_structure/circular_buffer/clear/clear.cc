@@ -5,7 +5,7 @@
 ///
 /// \brief This test performs the single circular buffer instance clear procedure.
 ///
-TEST(clear, single)
+TEST(gtest_circ_buf_clear, single)
 {
     circular_buffer_result_t result;
 
@@ -16,7 +16,7 @@ TEST(clear, single)
 ///
 /// \brief This test performs all circular buffer instances clear procedure.
 ///
-TEST(clear, all)
+TEST(gtest_circ_buf_clear, all)
 {
     circular_buffer_result_t result;
 
@@ -27,7 +27,7 @@ TEST(clear, all)
 ///
 /// \brief This test checks the invalid instance protection inside clear function.
 ///
-TEST(clear, invalid_instance)
+TEST(gtest_circ_buf_clear, invalid_instance)
 {
     circular_buffer_result_t result;
 
