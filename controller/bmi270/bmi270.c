@@ -521,7 +521,7 @@ static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint3
 
 static bmi270_res_t bmi270_cmd_soft_rst(struct bmi270_dev *const dev)
 {
-    uint8_t  adr  = BMI270_REG_PWR_CONF;
+    uint8_t  adr  = BMI270_REG_CMD;
     uint8_t  buf  = BMI270_CMD_SOFTRESET;
     uint32_t sz   = 1;
 
