@@ -5,26 +5,50 @@
 
 #define START_APP   (0)
 
+///*************************************************************************************************
+/// Private functions - declaration.
+///*************************************************************************************************
+///
+/// \brief
+///
+__attribute__((naked))
+#if (defined(START_APP) && (START_APP == 1))
 static void app_startup(uint32_t pc, uint32_t sp);
+#else
 static void boot_updater_startup(uint32_t pc, uint32_t sp);
+#endif  /* START_APP */
+
+///
+/// \brief Sets the Reset and Clock Control registers.
+///
+/// This function initializes the system's clock configuration by setting up
+/// the Reset and Clock Control (RCC) registers for the desired system
+/// performance and peripheral clock settings.
+///
 static void rcc_setup(void);
+
+///
+/// \brief Sets GPIO pins for the application.
+///
+/// This function initializes the General Purpose Input/Output (GPIO) pins
+/// required by the application.
+///
 static void gpio_setup(void);
+
+///
+/// \brief Turns the LED on.
+///
 static void led_on(void);
 
+///*************************************************************************************************
+/// Private functions - definition.
+///*************************************************************************************************
 __attribute__((naked))
+#if (defined(START_APP) && (START_APP == 1))
 static void app_startup(uint32_t pc, uint32_t sp)
-{
-    __asm("                                             \n\
-          .syntax unified                               \n\
-          .cpu cortex-m7                                \n\
-          .thumb                                        \n\
-          msr msp, r1 /* load r1 into MSP */            \n\
-          bx r0       /* branch to the address at r0 */ \n\
-    ");
-}
-
-__attribute__((naked))
+#else
 static void boot_updater_startup(uint32_t pc, uint32_t sp)
+#endif  /* START_APP */
 {
     __asm("                                             \n\
           .syntax unified                               \n\
@@ -50,6 +74,9 @@ static void led_on(void)
     gpio_set(GPIOB, GPIO14);
 }
 
+///*************************************************************************************************
+/// Global functions - definition.
+///*************************************************************************************************
 void second_bootloader_start(void)
 {
     rcc_setup();
@@ -70,7 +97,7 @@ void second_bootloader_start(void)
     uint32_t boot_updater_reset_handler = boot_updater_code[1];
 
     boot_updater_startup(boot_updater_reset_handler, boot_updater_stack_pointer);
-#endif
+#endif  /* START_APP */
     
     /* Never return */
     while (1);
