@@ -25,6 +25,8 @@ get_cmake_property(stm32f722xx_boot_updater_startup_sources STM32F722XX_BOOT_UPD
 get_cmake_property(stm32f722xx_app_startup_sources STM32F722XX_APP_STARTUP_SOURCES)
 get_cmake_property(vectortable_sources VECTORTABLE_SOURCES)
 get_cmake_property(usart_controller_sources USART_CONTROLLER_SOURCES)
+get_cmake_property(bmi270_sources BMI270_SOURCES)
+get_cmake_property(spi_ctrl_sources SPI_CTRL_SOURCES)
 get_cmake_property(printf_sources PRINTF_SOURCES)
 
 message(STATUS "Add ghost-feather-first-bootloader executable")
@@ -59,6 +61,8 @@ add_executable(
     ghost-feather-app.elf
     ${app_sources}
     ${stm32f722xx_app_startup_sources}
+    ${bmi270_sources}
+    ${spi_ctrl_sources}
     ${vectortable_sources}
     )
 
@@ -181,6 +185,8 @@ target_include_directories(
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/app/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/controller/bmi270
+    ${PROJECT_SOURCE_DIR}/controller/spi
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     )
 
