@@ -1,0 +1,244 @@
+/***********************************************************************
+ *                    SEGGER Microcontroller GmbH                       *
+ *                        The Embedded Experts                          *
+ ************************************************************************
+ *                                                                      *
+ *                  (c) SEGGER Microcontroller GmbH                     *
+ *                        All rights reserved                           *
+ *                          www.segger.com                              *
+ *                                                                      *
+ ************************************************************************
+ *                                                                      *
+ ************************************************************************
+ *                                                                      *
+ *                                                                      *
+ *  Licensing terms                                                     *
+ *                                                                      *
+ * This software may be distributed to your customers free of charge.   *
+ * This grant of redistribution does not entitle YOU or enduser to      *
+ * receive from SEGGER hard-copy documentation, technical support,      *
+ * phone assistance, or enhancements or updates to the Software unless  *
+ * a specific agreement clearly states otherwise.                       *
+ *                                                                      *
+ *                                                                      *
+ * THIS SOFTWARE IS PROVIDED BY COPYRIGHT HOLDER "AS IS" AND ANY        *
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE    *
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR   *
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDER BE        *
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,     *
+ * OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,             *
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR   *
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY  *
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT         *
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE    *
+ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH     *
+ * DAMAGE.                                                              *
+ *                                                                      *
+ ************************************************************************
+
+ -------------------------- END-OF-HEADER -----------------------------
+
+Purpose: Template for PCode.
+
+Additional information:
+...
+ */
+
+/*********************************************************************
+ *
+ *       Constants (similar to defines)
+ *
+ **********************************************************************
+ */
+
+/*
+   Some are predefined by J-Link script files / PCode. See J-Link user guide for more information.
+   Below some examples of defined constants that can be used in the PCode
+
+   JLINK_CORESIGHT_DP_REG_IDCODE     = 0;   //  CS_DP_REG_IDCODE SW-DP only. JTAG-DP: IDCODE == own scan chain
+   JLINK_CORESIGHT_DP_REG_ABORT      = 0;   //  CS_DP_REG_ABORT  Write-only. SW-DP only. JTAG-DP: ABORT == own scan chain
+   JLINK_CORESIGHT_DP_REG_CTRL_STAT  = 1;  JLINK_CORESIGHT_DP_REG_SELECT     = 2;    JLINK_CORESIGHT_DP_REG_RDBUF      = 3;
+   JLINK_CORESIGHT_AP_REG_CTRL       = 0;  JLINK_CORESIGHT_AP_REG_ADDR       = 1;    JLINK_CORESIGHT_AP_REG_DATA       = 3;
+   JLINK_CORESIGHT_AP_REG_BD0        = 0;  JLINK_CORESIGHT_AP_REG_BD1        = 1;    JLINK_CORESIGHT_AP_REG_BD2        = 2;  JLINK_CORESIGHT_AP_REG_BD3        = 3;
+   JLINK_CORESIGHT_AP_REG_ROM        = 2;
+   JLINK_CORESIGHT_AP_REG_IDR        = 3;   //  CS_AP_REG_IDR CoreSight AP bank 15 register. Present on all APs (also custom ones)
+ */
+
+//
+// User-specified constants to be used by PCode
+//
+
+// __constant U32 IDENT = Value;
+// Example: __constant U32 MY_SFR_ADDR = 0x11223344;
+
+/*********************************************************************
+ *
+ *       Local functions
+ *
+ **********************************************************************
+ */
+
+/*********************************************************************
+ *
+ *       Global functions
+ *
+ **********************************************************************
+ */
+
+/*********************************************************************
+ *
+ *       ResetTarget()
+ *
+ *  Function description
+ *    If present, replaces the standard reset strategy.
+ *    No matter what reset type is selected in the DLL, if this function is present, it will be called instead of the selected reset.
+ *
+ *  Return value
+ *    >= 0:  O.K.
+ *     < 0:  Error
+ *
+ *  Notes
+ *    (1) Expects target CPU to be halted / in debug mode, when leaving this function
+ *    (2) MEM_ functions may be used
+ *    (3) The caller ensures that the J-Link SW / FW caches are invalidated after this function
+ */
+int ResetTarget(void)
+{
+    return 0;
+}
+
+/*********************************************************************
+ *
+ *       AfterResetTarget()
+ *
+ *  Function description
+ *    If present, called after ResetTarget(). Usually used to initialize peripheries which have been
+ *    reset during reset, disable watchdogs which may be active after reset, etc...Apart from this,
+ *    for some cores it is necessary to perform some special operations after reset to guarantee proper
+ *    device functionality after reset. This is mainly the case on devices which have some bugs that occur
+ *    at the time of a system reset (not power on reset).
+ *
+ *  Return value
+ *    >= 0:  O.K.
+ *     < 0:  Error
+ *
+ *  Notes
+ *    (1) DLL expects target CPU to be halted / in debug mode, when leaving this function
+ *    (2) Does not replace any DLL functionality but extends it
+ *    (3) May use MEM_ API functions
+ */
+//int AfterResetTarget(void)
+//{
+//    return 0;
+//}
+
+/*********************************************************************
+ *
+ *       SetupTarget()
+ *
+ *  Function description
+ *    If present, called after InitTarget() and after basic connect to target has been established.
+ *    Usually used for more high-level setup like writing certain memory locations etc.
+ *
+ *  Return value
+ *    >= 0:  O.K.
+ *     < 0:  Error
+ *
+ *  Notes
+ *    (1) Does not replace any DLL functionality but extends it.
+ *    (2) May use high-level API functions like JLINK_MEM_ JLINK_TARGET_HALT etc.
+ *    (3) Must not rely on the target being in halted state when entering this function
+ */
+//int SetupTarget(void)
+//{
+//    return 0;
+//}
+
+/*********************************************************************
+ *
+ *       ConfigTargetSettings()
+ *
+ *  Function description
+ *    If present, called before InitTarget(). Allows settings some DLL variables.
+ *    Used to for example pass the device name to the DLL in case debugger does not support this
+ *
+ *  Return value
+ *    >= 0:  O.K.
+ *     < 0:  Error
+ *
+ *  Notes
+ *    (1) May not, under absolutely *no* circumstances, perform target communication.
+ */
+//int ConfigTargetSettings(void)
+//{
+//    return 0;
+//}
+
+/*********************************************************************
+ *
+ *       OnTraceStop()
+ *
+ *  Function description
+ *    If present, called by J-Link DLL right before capturing of trace data is stopped on probe.
+ *    On some target, an explicit flush of the trace FIFOs is necessary to get the latest trace data.
+ *    If such a flush is not performed, the latest trace data may not be output by the target
+ *
+ *  Return value
+ *    >= 0:  O.K.
+ *     < 0:  Error
+ *
+ *  Notes
+ *    (1) May use high-level API functions like JLINK_MEM_ JLINK_TARGET_HALT etc.
+ */
+//int OnTraceStop(void)
+//{
+//    return 0;
+//}
+
+/*********************************************************************
+ *
+ *       OnDisconnectTarget()
+ *
+ *  Function description
+ *    If present, called right before performing generic disconnect sequence to disconnect from the target.
+ *    Usually used to restore some SFRs etc. on the target that might have been modified to support debugging.
+ *    E.g.: For ST STM32 targets the DBGMCU_CR register is modified by J-Link on connect, to make debugging in low-power modes possible.
+ *          This function may be used to restore this register.
+ *
+ *  Return value
+ *    >= 0:  O.K.
+ *     < 0:  Error
+ *
+ *  Notes
+ *    (1) May use high-level API functions like JLINK_MEM_ JLINK_TARGET_HALT etc.
+ */
+//int OnDisconnectTarget(void)
+//{
+//    return 0;
+//}
+
+/*********************************************************************
+ *
+ *       InitTarget()
+ *
+ *  Function description
+ *    If present, called right before performing generic connect sequence.
+ *    Usually used for targets which need a special connect sequence before communication via the debug interface is possible.
+ *    Sample candidates: TI devices with ICEPick TAP on them where core TAP needs to be enabled via specific ICEPick sequences first
+ *
+ *  Return value
+ *    >= 0:  O.K.
+ *     < 0:  Error
+ *
+ *  Additional information
+ *    ...
+ *
+ *  Notes
+ *    (1) MUST NOT use any MEM_ functions
+ *    (2) For target interface JTAG, this device has to setup the JTAG chain + JTAG TAP Ids.
+ *    (3) In any case, it has to set the "CPU" variable, so the DLL knows which CPU module to use internally.
+ */
+int InitTarget(void)
+{
+    return 0;
+}
