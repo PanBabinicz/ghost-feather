@@ -102,10 +102,10 @@ Additional information:
  *    (2) MEM_ functions may be used
  *    (3) The caller ensures that the J-Link SW / FW caches are invalidated after this function
  */
-int ResetTarget(void)
-{
-    return 0;
-}
+//int ResetTarget(void)
+//{
+//    return 0;
+//}
 
 /*********************************************************************
  *
