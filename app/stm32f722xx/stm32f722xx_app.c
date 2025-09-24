@@ -1,3 +1,5 @@
+#include "bmi270.h"
+#include "bmi270_conf.h"
 #include "stm32f722xx_app.h"
 #include "stm32f722xx_memory_map.h"
 #include "libopencm3/stm32/rcc.h"
@@ -33,17 +35,17 @@ static void led_on(void);
 ///*************************************************************************************************
 static void rcc_setup(void)
 {
-    rcc_periph_clock_enable(RCC_GPIOB);
+    rcc_periph_clock_enable(RCC_GPIOA);
 }
 
 static void gpio_setup(void)
 {
-    gpio_mode_setup(GPIOB, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO0);
+    gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO2);
 }
 
 static void led_on(void)
 {
-    gpio_set(GPIOB, GPIO0);
+    gpio_set(GPIOA, GPIO2);
 }
 
 ///*************************************************************************************************
@@ -56,6 +58,8 @@ void app_start(void)
 
     /* Turn on the green led to signalize that it reached the application. */
     led_on();
+
+    struct bmi270_dev *bmi270 = bmi270_dev_get();
 
     /* Never return */
     while (1);
