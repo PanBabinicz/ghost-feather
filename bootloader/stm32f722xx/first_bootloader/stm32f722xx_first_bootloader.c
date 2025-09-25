@@ -58,17 +58,17 @@ static void second_bootloader_startup(uint32_t pc, uint32_t sp)
 
 static void rcc_setup(void)
 {
-    rcc_periph_clock_enable(RCC_GPIOB);
+    rcc_periph_clock_enable(RCC_GPIOA);
 }
 
 static void gpio_setup(void)
 {
-    gpio_mode_setup(GPIOB, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO7);
+    gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO2);
 }
 
 static void led_on(void)
 {
-    gpio_set(GPIOB, GPIO7);
+    gpio_set(GPIOA, GPIO2);
 }
 
 ///*************************************************************************************************
@@ -76,11 +76,11 @@ static void led_on(void)
 ///*************************************************************************************************
 void first_bootloader_start(void)
 {
-    rcc_setup();
-    gpio_setup();
+    //rcc_setup();
+    //gpio_setup();
 
     /* Turn on the blue led to signalize that it reached the first bootloader. */
-    led_on();
+    //led_on();
 
     uint32_t *second_bootloader_code         = (uint32_t*)&__bootrom2_start__;
     uint32_t second_bootloader_stack_pointer = second_bootloader_code[0];
