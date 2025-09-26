@@ -1,9 +1,8 @@
+#include "ghost_feather_common.h"
 #include "stm32f722xx_second_bootloader.h"
 #include "stm32f722xx_memory_map.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
-
-#define START_APP   (0)
 
 ///*************************************************************************************************
 /// Private functions - declaration.
@@ -11,12 +10,9 @@
 ///
 /// \brief
 ///
-__attribute__((naked))
-#if (defined(START_APP) && (START_APP == 1))
 static void app_startup(uint32_t pc, uint32_t sp);
-#else
+
 static void boot_updater_startup(uint32_t pc, uint32_t sp);
-#endif  /* START_APP */
 
 ///
 /// \brief Sets the Reset and Clock Control registers.
@@ -44,11 +40,19 @@ static void led_on(void);
 /// Private functions - definition.
 ///*************************************************************************************************
 __attribute__((naked))
-#if (defined(START_APP) && (START_APP == 1))
 static void app_startup(uint32_t pc, uint32_t sp)
-#else
+{
+    __asm("                                             \n\
+          .syntax unified                               \n\
+          .cpu cortex-m7                                \n\
+          .thumb                                        \n\
+          msr msp, r1 /* load r1 into MSP */            \n\
+          bx r0       /* branch to the address at r0 */ \n\
+    ");
+}
+
+__attribute__((naked))
 static void boot_updater_startup(uint32_t pc, uint32_t sp)
-#endif  /* START_APP */
 {
     __asm("                                             \n\
           .syntax unified                               \n\
@@ -61,17 +65,17 @@ static void boot_updater_startup(uint32_t pc, uint32_t sp)
 
 static void rcc_setup(void)
 {
-    rcc_periph_clock_enable(RCC_GPIOB);
+    rcc_periph_clock_enable(RCC_GPIOA);
 }
 
 static void gpio_setup(void)
 {
-    gpio_mode_setup(GPIOB, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO14);
+    gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO2);
 }
 
 static void led_on(void)
 {
-    gpio_set(GPIOB, GPIO14);
+    gpio_set(GPIOA, GPIO2);
 }
 
 ///*************************************************************************************************
@@ -85,7 +89,8 @@ void second_bootloader_start(void)
     /* Turn on the red led to signalize that we reached the second bootloader */
     led_on();
 
-#if (defined(START_APP) && (START_APP == 1))
+#if (defined(GHOST_FEATHER_COMMON_START_APP) &&
+            (GHOST_FEATHER_COMMON_START_APP == 1))
     uint32_t *app_code         = (uint32_t*)&__approm_start__;
     uint32_t app_stack_pointer = app_code[0];
     uint32_t app_reset_handler = app_code[1];
