@@ -1,5 +1,5 @@
-#ifndef _STM32F722XX_APP_H
-#define _STM32F722XX_APP_H
+#ifndef _APP_H
+#define _APP_H
 
 #include <stdint.h>
 
@@ -8,4 +8,4 @@
 ///
 void app_start(void);
 
-#endif /* _STM32F722XX_APP_H */
+#endif /* _APP_H */

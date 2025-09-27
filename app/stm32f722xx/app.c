@@ -1,6 +1,6 @@
 #include "bmi270.h"
 #include "bmi270_conf.h"
-#include "stm32f722xx_app.h"
+#include "app.h"
 #include "stm32f722xx_memory_map.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
