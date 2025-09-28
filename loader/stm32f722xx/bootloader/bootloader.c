@@ -1,21 +1,26 @@
-#include "ghost_feather_common.h"
-#include "stm32f722xx_second_bootloader.h"
-#include "stm32f722xx_memory_map.h"
+#include "bootloader.h"
+#include "memory_map.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
+#include "libopencm3/cm3/systick.h"
 
 ///*************************************************************************************************
 /// Private functions - declaration.
 ///*************************************************************************************************
 ///
-/// \brief
+/// \brief Transfers control to another image.
 ///
-static void app_startup(uint32_t pc, uint32_t sp);
-
-static void boot_updater_startup(uint32_t pc, uint32_t sp);
+/// This function sets up the stack pointer and branches to a specified
+/// program counter (PC) address, effectively starting execution of an
+/// image.
+///
+/// \param[in] pc The program counter address to branch to.
+/// \param[in] sp The stack pointer value to initialize.
+///
+static void jump(uint32_t pc, uint32_t sp);
 
 ///
-/// \brief Sets the Reset and Clock Control registers.
+/// \brief Setups the Reset and Clock Control registers.
 ///
 /// This function initializes the system's clock configuration by setting up
 /// the Reset and Clock Control (RCC) registers for the desired system
@@ -24,35 +29,37 @@ static void boot_updater_startup(uint32_t pc, uint32_t sp);
 static void rcc_setup(void);
 
 ///
-/// \brief Sets GPIO pins for the application.
+/// \brief Setups GPIO pins for the first bootloader.
 ///
 /// This function initializes the General Purpose Input/Output (GPIO) pins
-/// required by the application.
+/// required by the first bootloader.
 ///
 static void gpio_setup(void);
+
+///
+/// \brief Setups the system tick timer.
+///
+/// This function configures and starts the system tick timer (SysTick),
+/// which is used for generating periodic interrupts and keeping
+/// track of system time.
+///
+static void systick_setup(void);
 
 ///
 /// \brief Turns the LED on.
 ///
 static void led_on(void);
 
+///
+/// \brief Turn the LED off.
+///
+static void led_off(void);
+
 ///*************************************************************************************************
 /// Private functions - definition.
 ///*************************************************************************************************
 __attribute__((naked))
-static void app_startup(uint32_t pc, uint32_t sp)
-{
-    __asm("                                             \n\
-          .syntax unified                               \n\
-          .cpu cortex-m7                                \n\
-          .thumb                                        \n\
-          msr msp, r1 /* load r1 into MSP */            \n\
-          bx r0       /* branch to the address at r0 */ \n\
-    ");
-}
-
-__attribute__((naked))
-static void boot_updater_startup(uint32_t pc, uint32_t sp)
+static void jump(uint32_t pc, uint32_t sp)
 {
     __asm("                                             \n\
           .syntax unified                               \n\
@@ -65,6 +72,9 @@ static void boot_updater_startup(uint32_t pc, uint32_t sp)
 
 static void rcc_setup(void)
 {
+    rcc_clock_setup_hse(&rcc_3v3[RCC_CLOCK_3V3_216MHZ], 16);
+
+    /* Enable clock for red led */
     rcc_periph_clock_enable(RCC_GPIOA);
 }
 
@@ -73,38 +83,38 @@ static void gpio_setup(void)
     gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO2);
 }
 
+static void systick_setup(void)
+{
+    /* Prescaled processor clock */
+    systick_set_clocksource(STK_CSR_CLKSOURCE_AHB_DIV8);
+    systick_counter_enable();
+}
+
 static void led_on(void)
 {
     gpio_set(GPIOA, GPIO2);
 }
 
+static void led_off(void)
+{
+    gpio_clear(GPIOA, GPIO2);
+}
+
 ///*************************************************************************************************
 /// Global functions - definition.
 ///*************************************************************************************************
-void second_bootloader_start(void)
+void bootloader_start(void)
 {
     rcc_setup();
     gpio_setup();
+    systick_setup();
 
-    /* Turn on the red led to signalize that we reached the second bootloader */
-    led_on();
+    uint32_t *img   = (uint32_t*)&__apploader_start__;
+    uint32_t img_sp = img[0];
+    uint32_t img_pc = img[1];
 
-#if (defined(GHOST_FEATHER_COMMON_START_APP) &&
-            (GHOST_FEATHER_COMMON_START_APP == 1))
-    uint32_t *app_code         = (uint32_t*)&__approm_start__;
-    uint32_t app_stack_pointer = app_code[0];
-    uint32_t app_reset_handler = app_code[1];
-
-    app_startup(app_reset_handler, app_stack_pointer);
-#else
-    uint32_t *boot_updater_code         = (uint32_t*)&__ubootrom_start__;
-    uint32_t boot_updater_stack_pointer = boot_updater_code[0];
-    uint32_t boot_updater_reset_handler = boot_updater_code[1];
-
-    boot_updater_startup(boot_updater_reset_handler, boot_updater_stack_pointer);
-#endif  /* START_APP */
+    jump(img_pc, img_sp);
     
     /* Never return */
     while (1);
-
 }

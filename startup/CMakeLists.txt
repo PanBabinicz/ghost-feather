@@ -1,83 +1,83 @@
-file(GLOB_RECURSE STM32F722XX_FIRST_BOOTLOADER_STARTUP_SOURCES stm32f722xx/first_bootloader/*.c)
-file(GLOB_RECURSE STM32F722XX_SECOND_BOOTLOADER_STARTUP_SOURCES stm32f722xx/second_bootloader/*.c)
-file(GLOB_RECURSE STM32F722XX_BOOT_UPDATER_STARTUP_SOURCES stm32f722xx/boot_updater/*.c)
-file(GLOB_RECURSE STM32F722XX_APP_STARTUP_SOURCES stm32f722xx/app/*.c)
+file(GLOB_RECURSE BOOTLOADER_STARTUP_SOURCES stm32f722xx/bootloader/*.c)
+file(GLOB_RECURSE APPLOADER_STARTUP_SOURCES stm32f722xx/apploader/*.c)
+file(GLOB_RECURSE UPDATER_STARTUP_SOURCES stm32f722xx/updater/*.c)
+file(GLOB_RECURSE APP_STARTUP_SOURCES stm32f722xx/app/*.c)
 
 set_property(
     GLOBAL
-    PROPERTY STM32F722XX_FIRST_BOOTLOADER_STARTUP_SOURCES
-    ${STM32F722XX_FIRST_BOOTLOADER_STARTUP_SOURCES}
-    )
-
-set_property(
-    GLOBAL
-    PROPERTY STM32F722XX_SECOND_BOOTLOADER_STARTUP_SOURCES
-    ${STM32F722XX_SECOND_BOOTLOADER_STARTUP_SOURCES}
+    PROPERTY BOOTLOADER_STARTUP_SOURCES
+    ${BOOTLOADER_STARTUP_SOURCES}
     )
 
 set_property(
     GLOBAL
-    PROPERTY STM32F722XX_BOOT_UPDATER_STARTUP_SOURCES
-    ${STM32F722XX_BOOT_UPDATER_STARTUP_SOURCES}
+    PROPERTY APPLOADER_STARTUP_SOURCES
+    ${APPLOADER_STARTUP_SOURCES}
     )
 
 set_property(
     GLOBAL
-    PROPERTY STM32F722XX_APP_STARTUP_SOURCES
-    ${STM32F722XX_APP_STARTUP_SOURCES}
+    PROPERTY UPDATER_STARTUP_SOURCES
+    ${UPDATER_STARTUP_SOURCES}
     )
 
-message(STATUS "Add stm32f722xx_first_bootloader_startup library")
+set_property(
+    GLOBAL
+    PROPERTY APP_STARTUP_SOURCES
+    ${APP_STARTUP_SOURCES}
+    )
+
+message(STATUS "Add bootloader_startup library")
 add_library(
-    stm32f722xx_first_bootloader_startup
-    ${STM32F722XX_FIRST_BOOTLOADER_STARTUP_SOURCES}
+    bootloader_startup
+    ${BOOTLOADER_STARTUP_SOURCES}
     )
 
-message(STATUS "Add stm32f722xx_second_bootloader_startup library")
+message(STATUS "Add apploader_startup library")
 add_library(
-    stm32f722xx_second_bootloader_startup
-    ${STM32F722XX_SECOND_BOOTLOADER_STARTUP_SOURCES}
+    apploader_startup
+    ${APPLOADER_STARTUP_SOURCES}
     )
 
-message(STATUS "Add stm32f722xx_boot_updater_startup library")
+message(STATUS "Add updater_startup library")
 add_library(
-    stm32f722xx_boot_updater_startup
-    ${STM32F722XX_BOOT_UPDATER_STARTUP_SOURCES}
+    updater_startup
+    ${UPDATER_STARTUP_SOURCES}
     )
 
-message(STATUS "Add stm32f722xx_app_startup library")
+message(STATUS "Add app_startup library")
 add_library(
-    stm32f722xx_app_startup
-    ${STM32F722XX_APP_STARTUP_SOURCES}
+    app_startup
+    ${APP_STARTUP_SOURCES}
     )
 
-message(STATUS "Add stm32f722xx_first_bootloader_startup target include directories")
+message(STATUS "Add bootloader_startup target include directories")
 target_include_directories(
-    stm32f722xx_first_bootloader_startup
+    bootloader_startup
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/bootloader/stm32f722xx/first_bootloader
+    ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/bootloader
     )
 
-message(STATUS "Add stm32f722xx_second_bootloader_startup target include directories")
+message(STATUS "Add apploader_startup target include directories")
 target_include_directories(
-    stm32f722xx_second_bootloader_startup
+    apploader_startup
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/bootloader/stm32f722xx/second_bootloader
+    ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/apploader
     )
 
-message(STATUS "Add stm32f722xx_boot_updater_startup target include directories")
+message(STATUS "Add updater_startup target include directories")
 target_include_directories(
-    stm32f722xx_boot_updater_startup
+    updater_startup
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/boot_updater
+    ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/updater
     )
 
-message(STATUS "Add stm32f722xx_app_startup target include directories")
+message(STATUS "Add app_startup target include directories")
 target_include_directories(
-    stm32f722xx_app_startup
+    app_startup
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/app/stm32f722xx

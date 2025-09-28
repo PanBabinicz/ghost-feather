@@ -1,64 +1,64 @@
-file(GLOB_RECURSE FIRST_BOOTLOADER_SOURCES stm32f722xx/first_bootloader/*.c)
-file(GLOB_RECURSE SECOND_BOOTLOADER_SOURCES stm32f722xx/second_bootloader/*.c)
+file(GLOB_RECURSE BOOTLOADER_SOURCES stm32f722xx/bootloader/*.c)
+file(GLOB_RECURSE APPLOADER_SOURCES stm32f722xx/apploader/*.c)
 
 set_property(
     GLOBAL
-    PROPERTY FIRST_BOOTLOADER_SOURCES
-    ${FIRST_BOOTLOADER_SOURCES}
+    PROPERTY BOOTLOADER_SOURCES
+    ${BOOTLOADER_SOURCES}
     )
 
 set_property(
     GLOBAL
-    PROPERTY SECOND_BOOTLOADER_SOURCES
-    ${SECOND_BOOTLOADER_SOURCES}
+    PROPERTY APPLOADER_SOURCES
+    ${APPLOADER_SOURCES}
     )
 
-message(STATUS "Add first_bootloader library")
+message(STATUS "Add bootloader library")
 add_library(
-    first_bootloader
-    ${FIRST_BOOTLOADER_SOURCES}
+    bootloader
+    ${BOOTLOADER_SOURCES}
     )
 
-message(STATUS "Add second_bootloader library")
+message(STATUS "Add apploader library")
 add_library(
-    second_bootloader
-    ${SECOND_BOOTLOADER_SOURCES}
+    apploader
+    ${APPLOADER_SOURCES}
     )
 
-message(STATUS "Add first_bootloader target include directories")
+message(STATUS "Add bootloader target include directories")
 target_include_directories(
-    first_bootloader
+    bootloader
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     )
 
-message(STATUS "Add second_bootloader target include directories")
+message(STATUS "Add apploader target include directories")
 target_include_directories(
-    second_bootloader
+    apploader
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     ${PROJECT_SOURCE_DIR}/shared
     )
 
-message(STATUS "Add first_bootloader target compile definitions")
+message(STATUS "Add bootloader target compile definitions")
 target_compile_definitions(
-    first_bootloader
+    bootloader
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     )
 
-message(STATUS "Add second_bootloader target compile definitions")
+message(STATUS "Add apploader target compile definitions")
 target_compile_definitions(
-    second_bootloader
+    apploader
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     )
 
-message(STATUS "Add first_bootloader target compile options")
+message(STATUS "Add bootloader target compile options")
 target_compile_options(
-    first_bootloader
+    bootloader
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
     "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv4-sp-d16>"
@@ -67,9 +67,9 @@ target_compile_options(
     "$<$<COMPILE_LANGUAGE:C>:-O3>"
     )
 
-message(STATUS "Add second_bootloader target compile options")
+message(STATUS "Add apploader target compile options")
 target_compile_options(
-    second_bootloader
+    apploader
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
     "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv4-sp-d16>"

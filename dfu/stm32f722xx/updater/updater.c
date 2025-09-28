@@ -1,4 +1,4 @@
-#include "stm32f722xx_boot_updater.h"
+#include "updater.h"
 #include "usart_controller.h"
 #include "dust.h"
 #include "printf.h"
@@ -20,32 +20,6 @@
 /// Private functions - declaration.
 ///*************************************************************************************************
 ///
-/// \brief Sets the Reset and Clock Control registers.
-///
-/// This function initializes the system's clock configuration by setting up
-/// the Reset and Clock Control (RCC) registers for the desired system
-/// performance and peripheral clock settings.
-///
-static void rcc_setup(void);
-
-///
-/// \brief Sets GPIO pins for the first bootloader.
-///
-/// This function initializes the General Purpose Input/Output (GPIO) pins
-/// required by the first bootloader.
-///
-static void gpio_setup(void);
-
-///
-/// \brief Initializes the system tick timer.
-///
-/// This function configures and starts the system tick timer (SysTick),
-/// which is used for generating periodic interrupts and keeping
-/// track of system time.
-///
-static void systick_init(void);
-
-///
 /// \brief Turns the LED on.
 ///
 static void led_on(void);
@@ -56,9 +30,7 @@ static void led_on(void);
 static void led_off(void);
 
 ///
-/// \brief The systick delay.
-///
-/// \param[in] ms The delay value in miliseconds.
+/// \brief
 ///
 static void systick_delay_ms(uint32_t ms);
 
@@ -69,11 +41,11 @@ static void transmit_ack(dust_packet_t *const packet, dust_serialized_t * serial
                          dust_ack_t ack, const uint32_t usart);
 
 ///
-/// \brief Initializes the system peripherals and debug USART.
+/// \brief Initializes the system peripherals.
 ///
 /// This function performs the initial setup required for the boot updater to operate.
 /// It includes configuring the RCC (Reset and Clock Control), initializing the
-/// system tick timer, setting up GPIO, and initializing the debug USART controller.
+/// system tick timer.
 ///
 /// Additionally, it provides a visual indicator of initialization through
 /// an LED blinking sequence.
@@ -106,43 +78,14 @@ static void update(void);
 ///*************************************************************************************************
 /// Private functions - definition.
 ///*************************************************************************************************
-static void rcc_setup(void)
-{
-    rcc_clock_setup_hsi(&rcc_3v3[RCC_CLOCK_3V3_216MHZ]);
-
-    /* USART3 uses PD8 and PD9 pins */
-    rcc_periph_clock_enable(RCC_GPIOD);
-    rcc_periph_clock_enable(RCC_USART3);
-
-    /* Enable clock for red led */
-    rcc_periph_clock_enable(RCC_GPIOB);
-}
-
-static void gpio_setup(void)
-{
-    /* USART3 gpio setup */
-    gpio_mode_setup(GPIOD, GPIO_MODE_AF, GPIO_PUPD_PULLUP, (GPIO8 | GPIO9));
-    gpio_set_af(GPIOD, GPIO_AF7, (GPIO8 | GPIO9));
-
-    /* LED gpio setup */
-    gpio_mode_setup(GPIOB, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO14);
-}
-
-static void systick_init(void)
-{
-    /* Prescaled processor clock */
-    systick_set_clocksource(STK_CSR_CLKSOURCE_AHB_DIV8);
-    systick_counter_enable();
-}
-
 static void led_on(void)
 {
-    gpio_set(GPIOB, GPIO14);
+    gpio_set(GPIOA, GPIO2);
 }
 
 static void led_off(void)
 {
-    gpio_clear(GPIOB, GPIO14);
+    gpio_clear(GPIOA, GPIO2);
 }
 
 static void systick_delay_ms(uint32_t ms)
@@ -179,11 +122,6 @@ static void transmit_ack(dust_packet_t *const packet, dust_serialized_t *seriali
 
 static void init(void)
 {
-    uint32_t *usart_instance;
-
-    rcc_setup();
-    systick_init();
-    gpio_setup();
     usart_controller_debug_init();
 
     for (uint32_t i = 0; i < 3; i++)
@@ -308,7 +246,7 @@ static void update(void)
 /// Global functions - definition.
 ///*************************************************************************************************
 
-void boot_updater_start(void)
+void updater_start(void)
 {
     init();
     prepare_flash();

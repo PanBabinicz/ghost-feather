@@ -1,4 +1,4 @@
-INCLUDE stm32f722xx_memory_map.ld
+INCLUDE "memory_map.ld"
 
 STACK_SIZE = DEFINED(STACK_SIZE) ? STACK_SIZE : DEFINED(__stack_size__) ? __stack_size__ : 0x2000;
 
@@ -13,7 +13,7 @@ SECTIONS
         *(.rodata*)
         . = ALIGN(4);
         _etext = .;
-    } > approm
+    } > rom_apploader
 
     .bss (NOLOAD) :
     {
@@ -23,7 +23,7 @@ SECTIONS
         *(COMMON)
         . = ALIGN(4);
         _ebss = .;
-    } > sram_app
+    } > sram_apploader
 
     .data :
     {
@@ -32,7 +32,7 @@ SECTIONS
         *(.data*)
         . = ALIGN(4);
         _edata = .;
-    } > sram_app AT > approm
+    } > sram_apploader AT > rom_apploader
 
     .stack (NOLOAD) :
     {
@@ -41,7 +41,7 @@ SECTIONS
         . = . + STACK_SIZE;
         . = ALIGN(8);
         _estack = .;
-    } > sram_app
+    } > sram_apploader
 
     . = ALIGN(4);
     _end = .;

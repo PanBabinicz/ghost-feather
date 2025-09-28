@@ -1,4 +1,4 @@
-#include "stm32f722xx_boot_updater.h"
+#include "updater.h"
 
 ///*************************************************************************************************
 /// Private objects - declaration.
@@ -44,7 +44,7 @@ void _reset_handler(void)
         }
     }
 
-    boot_updater_start();
+    updater_start();
 
     /* Never return. */
     while (1);

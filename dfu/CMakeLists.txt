@@ -1,10 +1,10 @@
-file(GLOB_RECURSE BOOT_UPDATER_SOURCES stm32f722xx/boot_updater/*.c)
+file(GLOB_RECURSE UPDATER_SOURCES stm32f722xx/updater/*.c)
 file(GLOB_RECURSE DUST_SOURCES stm32f722xx/dust/*.c)
 
 set_property(
     GLOBAL
-    PROPERTY BOOT_UPDATER_SOURCES
-    ${BOOT_UPDATER_SOURCES}
+    PROPERTY UPDATER_SOURCES
+    ${UPDATER_SOURCES}
     )
 
 set_property(
@@ -13,10 +13,10 @@ set_property(
     ${DUST_SOURCES}
     )
 
-message(STATUS "Add boot_updater library")
+message(STATUS "Add updater library")
 add_library(
-    boot_updater
-    ${BOOT_UPDATER_SOURCES}
+    updater
+    ${UPDATER_SOURCES}
     )
 
 message(STATUS "Add dust library")
@@ -25,9 +25,9 @@ add_library(
     ${DUST_SOURCES}
     )
 
-message(STATUS "Add boot_updater target include directories")
+message(STATUS "Add updater target include directories")
 target_include_directories(
-    boot_updater
+    updater
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/controller/usart
@@ -45,9 +45,9 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/submodules/printf
     )
 
-message(STATUS "Add boot_updater target compile definitions")
+message(STATUS "Add updater target compile definitions")
 target_compile_definitions(
-    boot_updater
+    updater
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     )
@@ -60,9 +60,9 @@ target_compile_definitions(
     "$<$<COMPILE_LANGUAGE:C>:DEBUG_DUST_PROTOCOL=1>"
     )
 
-message(STATUS "Add boot_updater target compile options")
+message(STATUS "Add updater target compile options")
 target_compile_options(
-    boot_updater
+    updater
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
     "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-sp-d16>"

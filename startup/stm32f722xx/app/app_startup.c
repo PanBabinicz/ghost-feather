@@ -1,6 +1,4 @@
-#include "stm32f722xx_first_bootloader.h"
-
-#define CPACR   (*(volatile uint32_t*)(0xe000ed88))
+#include "app.h"
 
 ///*************************************************************************************************
 /// Private objects - declaration.
@@ -12,19 +10,10 @@ extern uint32_t _edata;
 extern uint32_t _etext;
 
 ///*************************************************************************************************
-/// Private functions - declaration.
-///*************************************************************************************************
-///
-/// \breif Unlocks the FPU.
-///
-static void fpu_unlock();
-
-///*************************************************************************************************
 /// Global functions - declaration.
 ///*************************************************************************************************
 ///
-/// \brief The reset handler which initializes memory and start the
-///        first bootloader.
+/// \brief The reset handler which initializes memory and start the application.
 ///
 /// This function clears the BSS section, initializes global and static
 /// variables.
@@ -32,16 +21,7 @@ static void fpu_unlock();
 extern void _reset_handler(void);
 
 ///*************************************************************************************************
-/// Private functions - definition.
-///*************************************************************************************************
-static void fpu_unlock()
-{
-    /* CP11 and CP10 are (23-22) and (21-20) bits respectively. */
-    CPACR |= ((0x03 << 0x16) | (0x03 <<0x14));
-}
-
-///*************************************************************************************************
-/// Global functions - definition.
+/// Global functions - definiton.
 ///*************************************************************************************************
 void _reset_handler(void)
 {
@@ -63,10 +43,7 @@ void _reset_handler(void)
         }
     }
 
-    /* Unlock the FPU. */
-    fpu_unlock();
-
-    first_bootloader_start();
+    app_start();
 
     /* Never return. */
     while (1);

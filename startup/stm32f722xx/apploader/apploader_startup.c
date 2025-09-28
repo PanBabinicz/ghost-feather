@@ -1,4 +1,4 @@
-#include "stm32f722xx_app.h"
+#include "apploader.h"
 
 ///*************************************************************************************************
 /// Private objects - declaration.
@@ -10,10 +10,11 @@ extern uint32_t _edata;
 extern uint32_t _etext;
 
 ///*************************************************************************************************
-/// Global functions - declaration.
+/// Global funtions - declaration.
 ///*************************************************************************************************
 ///
-/// \brief The reset handler which initializes memory and start the application.
+/// \brief The reset handler which initializes memory and start the
+///        second bootloader.
 ///
 /// This function clears the BSS section, initializes global and static
 /// variables.
@@ -21,7 +22,7 @@ extern uint32_t _etext;
 extern void _reset_handler(void);
 
 ///*************************************************************************************************
-/// Global functions - definiton.
+/// Global funtions - definition.
 ///*************************************************************************************************
 void _reset_handler(void)
 {
@@ -43,7 +44,7 @@ void _reset_handler(void)
         }
     }
 
-    app_start();
+    apploader_start();
 
     /* Never return. */
     while (1);

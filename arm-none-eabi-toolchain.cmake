@@ -2,9 +2,9 @@
 set(CMAKE_SYSTEM_NAME Generic)
 
 # Specify the C and ASM compilers for ARM
-set(CMAKE_C_COMPILER /opt/homebrew/bin/arm-none-eabi-gcc)
-set(CMAKE_ASM_COMPILER /opt/homebrew/bin/arm-none-eabi-as)
-set(CMAKE_LINKER /opt/homebrew/bin/arm-none-eabi-ld)
+set(CMAKE_C_COMPILER /usr/bin/arm-none-eabi-gcc)
+set(CMAKE_ASM_COMPILER /usr/bin/arm-none-eabi-as)
+set(CMAKE_LINKER /usr/bin/arm-none-eabi-ld)
 
 # Prevent CMake from adding macOS-specific flags
 set(CMAKE_C_FLAGS "")
