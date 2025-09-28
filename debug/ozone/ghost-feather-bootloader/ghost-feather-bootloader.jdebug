@@ -4,8 +4,8 @@
 *                         www.segger.com                             *
 **********************************************************************
 
-File          : ghost-feather-boot-updater.jdebug
-Created       : 24. Sep 2025 23:36
+File          : ghost-feather-bootloader.jdebug
+Created       : 23. Sep 2025 22:28
 Ozone Version : V3.40b
 */
 
@@ -22,8 +22,8 @@ void OnProjectLoad (void) {
   //
   // Dialog-generated settings
   //
-  Project.AddPathSubstitute ("/home/km1t4h/workspace/ozone/ghost-feather-boot-updater", "$(ProjectDir)");
-  Project.AddPathSubstitute ("/home/km1t4h/workspace/ozone/ghost-feather-boot-updater", "$(ProjectDir)");
+  Project.AddPathSubstitute ("/home/km1t4h/workspace/ozone/ghost-feather-first-bootloader", "$(ProjectDir)");
+  Project.AddPathSubstitute ("/home/km1t4h/workspace/ozone/ghost-feather-first-bootloader", "$(ProjectDir)");
   Project.SetDevice ("STM32F722RE");
   Project.SetHostIF ("USB", "602001605");
   Project.SetTargetIF ("SWD");
@@ -32,7 +32,7 @@ void OnProjectLoad (void) {
   //
   // User settings
   //
-  File.Open ("/home/km1t4h/workspace/github/ghost-feather/build/Debug/ghost-feather-boot-updater.elf");
+  File.Open ("/home/km1t4h/workspace/github/ghost-feather/build/Debug/ghost-feather-first-bootloader.elf");
 }
 
 /*********************************************************************
