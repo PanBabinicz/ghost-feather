@@ -176,6 +176,7 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/updater
     ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/dust
     ${PROJECT_SOURCE_DIR}/controller/usart
+    ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     ${PROJECT_SOURCE_DIR}/submodules/printf
     )

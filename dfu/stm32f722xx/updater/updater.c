@@ -1,20 +1,17 @@
+#include "dust.h"
+#include "ghost_feather_common.h"
+#include "printf.h"
 #include "updater.h"
 #include "usart_controller.h"
-#include "dust.h"
-#include "printf.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 #include "libopencm3/stm32/usart.h"
 #include "libopencm3/stm32/flash.h"
-#include "libopencm3/cm3/systick.h"
 
-#define PROCESSOR_FREQUENCY (216000000u)
-#define CYCLE_TIME          (((1.0f / PROCESSOR_FREQUENCY) * 1000000000.0f))
-
-#define PSIZE_X8            (0x00u)
-#define PSIZE_X16           (0x01u)
-#define PSIZE_X32           (0x02u)
-#define PSIZE_X64           (0x03u)
+#define PSIZE_X8    (0x00u)
+#define PSIZE_X16   (0x01u)
+#define PSIZE_X32   (0x02u)
+#define PSIZE_X64   (0x03u)
 
 ///*************************************************************************************************
 /// Private functions - declaration.
@@ -28,11 +25,6 @@ static void led_on(void);
 /// \brief Turn the LED off.
 ///
 static void led_off(void);
-
-///
-/// \brief
-///
-static void systick_delay_ms(uint32_t ms);
 
 ///
 /// \brief Transmits the packet.
@@ -86,20 +78,6 @@ static void led_on(void)
 static void led_off(void)
 {
     gpio_clear(GPIOA, GPIO2);
-}
-
-static void systick_delay_ms(uint32_t ms)
-{
-    uint32_t reload_value;
-    uint32_t ns = ms * 1000000;
-
-    reload_value = (uint32_t)((float)ns / CYCLE_TIME);
-
-    systick_set_reload(reload_value);
-    systick_clear();
-
-    /* Wait for the count flag to be set */
-    while (!systick_get_countflag());
 }
 
 static void transmit_ack(dust_packet_t *const packet, dust_serialized_t *serialized,
