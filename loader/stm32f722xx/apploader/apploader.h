@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 ///
-/// \brief
+/// \brief Starts the apploader.
 ///
 void apploader_start(void);
 
