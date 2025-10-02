@@ -2,7 +2,7 @@
 #define _GHOST_FEATHER_COMMON_H
 
 #include <stdint.h>
-#include "libopencm3/cm3/systick.h"
+#include <stdbool.h>
 
 #define GHOST_FEATHER_COMMON_START_APP              (1U)
 #define GHOST_FEATHER_COMMON_PROCESSOR_FREQUENCY    (216000000U)
@@ -10,60 +10,38 @@
 #define GHOST_FEATHER_COMMON_US_IN_CYCLES           (216U)
 #define GHOST_FEATHER_COMMON_MS_IN_CYCLES           (216000U)
 
-///*************************************************************************************************
-/// Private objects - definition.
-///*************************************************************************************************
-///
-/// \brief The systick counter variable. It updates in _systick_handler.
-///
-static uint32_t systick_cntr;
-
-///*************************************************************************************************
-/// Private functions - declaration.
-///*************************************************************************************************
-///
-/// \brief Initializes the systick counter.
-///
-/// \param[in] rld The systick counter reload value.
-///
-static inline void systick_init(uint32_t rld);
+extern uint32_t gfc_systick_cnt;
 
 ///
-/// \brief Deinitializes the systick counter.
+/// \brief
 ///
-/// \param[in] rld The systick counter reload value.
-///
-static inline void systick_deinit(void);
+bool gfc_dwt_init(void);
 
 ///
-/// \brief Delays execution for a specified number of microseconds.
+/// \brief
 ///
-/// \param[in] us The number of microseconds.
+void gfc_dwt_delay_us(const uint32_t us);
+
 ///
-static inline void systick_delay_us(uint32_t ms);
+/// \brief
+///
+void gfc_dwt_delay_ms(const uint32_t ms);
 
-///*************************************************************************************************
-/// Private functions - definition.
-///*************************************************************************************************
-static inline void systick_init(uint32_t rld)
-{
-    systick_counter_disable();
-    systick_interrupt_enable();
-    systick_set_reload(rld - 1);
-    systick_clear();
-    systick_counter_enable();
-}
+///
+/// \brief Initializes the ghost feather common systick counter.
+///
+void gfc_systick_init(void);
 
-static inline void systick_deinit(void)
-{
-    systick_counter_disable();
-    systick_interrupt_disable();
-}
+///
+/// \brief Deinitializes the ghost feather common systick counter.
+///
+void gfc_systick_deinit(void);
 
-static inline void systick_delay_us(uint32_t us)
-{
-    systick_cntr = 0;
-    while (systick_cntr < us);
-}
+///
+/// \brief SysTick delay execution for a specified number of milliseconds.
+///
+/// \param[in] ms The number of milliseconds.
+///
+void gfc_systick_delay_ms(const uint32_t ms);
 
 #endif  /* _GHOST_FEATHER_COMMON_H */

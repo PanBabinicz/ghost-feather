@@ -1,34 +1,34 @@
-file(GLOB_RECURSE USART_PRINTF_SOURCES printf/*.c)
+file(GLOB GHOST_FEATHER_COMMON_SOURCES ghost_feather_common.c)
 
 set_property(
     GLOBAL
-    PROPERTY USART_PRINTF_SOURCES
-    ${USART_PRINTF_SOURCES}
+    PROPERTY GHOST_FEATHER_COMMON_SOURCES
+    ${GHOST_FEATHER_COMMON_SOURCES}
     )
 
-message(STATUS "Add usart_printf library")
+message(STATUS "Add ghost_feather_common library")
 add_library(
-    usart_printf
-    ${USART_PRINTF_SOURCES}
+    ghost_feather_common
+    ${GHOST_FEATHER_COMMON_SOURCES}
     )
 
-message(STATUS "Add usart_printf target include directories")
+message(STATUS "Add ghost_feather_common target include directories")
 target_include_directories(
-    usart_printf
+    ghost_feather_common
     PRIVATE
-    ${PROJECT_SOURCE_DIR}/libopencm3/include
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     )
 
-message(STATUS "Add usart_printf target compile definitions")
+message(STATUS "Add ghost_feather_common target compile definitions")
 target_compile_definitions(
-    usart_printf
+    ghost_feather_common
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     )
 
-message(STATUS "Add usart_printf target compile options")
+message(STATUS "Add ghost_feather_common target compile options")
 target_compile_options(
-    usart_printf
+    ghost_feather_common
     PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
     "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv4-sp-d16>"
