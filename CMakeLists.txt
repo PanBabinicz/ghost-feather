@@ -12,6 +12,7 @@ add_subdirectory(app)
 add_subdirectory(startup)
 add_subdirectory(vectortable)
 add_subdirectory(controller)
+add_subdirectory(shared)
 add_subdirectory(submodules)
 
 get_cmake_property(bootloader_sources BOOTLOADER_SOURCES)
@@ -28,6 +29,8 @@ get_cmake_property(usart_controller_sources USART_CONTROLLER_SOURCES)
 get_cmake_property(bmi270_sources BMI270_SOURCES)
 get_cmake_property(spi_ctrl_sources SPI_CTRL_SOURCES)
 get_cmake_property(printf_sources PRINTF_SOURCES)
+get_cmake_property(ghost_feather_common_sources GHOST_FEATHER_COMMON_SOURCES)
+get_cmake_property(timing_sources TIMING_SOURCES)
 
 message(STATUS "Add ghost-feather-bootloader executable")
 add_executable(
@@ -64,6 +67,8 @@ add_executable(
     ${bmi270_sources}
     ${spi_ctrl_sources}
     ${vectortable_sources}
+    ${ghost_feather_common_sources}
+    ${timing_sources}
     )
 
 message(STATUS "Add ghost-feather-bootloader target link directories")
@@ -103,6 +108,7 @@ target_link_directories(
     PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/shared
     /usr/arm-none-eabi/lib/thumb/v7+fp/hard
     )
 
@@ -146,6 +152,8 @@ target_link_libraries(
     app_startup
     app
     vectortable
+    ghost_feather_common
+    timing
     libopencm3_stm32f7.a
     )
 
@@ -190,6 +198,7 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/controller/bmi270
     ${PROJECT_SOURCE_DIR}/controller/spi
     ${PROJECT_SOURCE_DIR}/shared
+    ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     )
 
