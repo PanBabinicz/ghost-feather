@@ -4,35 +4,32 @@
 #include <stdbool.h>
 
 ///*************************************************************************************************
-/// Private functions - declaration.
-///*************************************************************************************************
-
-///*************************************************************************************************
-/// Private functions - definition.
-///*************************************************************************************************
-
-///*************************************************************************************************
 /// Global functions - definition.
 ///*************************************************************************************************
 timing_res_t timing_init(void)
 {
-	SCS_DEMCR |= SCS_DEMCR_TRCENA;
+    SCS_DEMCR |= SCS_DEMCR_TRCENA;
 
-	if (DWT_CTRL & DWT_CTRL_NOCYCCNT)
+    if (DWT_CTRL & DWT_CTRL_NOCYCCNT)
     {
-		return TIMING_RES_ERR;
-	}
+        return TIMING_RES_ERR;
+    }
 
-	return TIMING_RES_OK;
+    return TIMING_RES_OK;
 }
 
-void timing_start()
+void timing_start(void)
 {
 	DWT_CYCCNT = 0;
 	DWT_CTRL |= DWT_CTRL_CYCCNTENA;
 }
 
-void timing_stop()
+void timing_stop(void)
 {
 	DWT_CTRL &= ~DWT_CTRL_CYCCNTENA;
+}
+
+uint32_t timing_cnt_get(void)
+{
+    return DWT_CYCCNT;
 }

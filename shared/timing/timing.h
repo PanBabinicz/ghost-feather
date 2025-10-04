@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 ///
-/// \brief
+/// \brief The timing result type.
 ///
 typedef enum timing_res
 {
@@ -13,18 +13,29 @@ typedef enum timing_res
 } timing_res_t;
 
 ///
-/// \brief
+/// \brief Initializes the DWT unit.
+///
+/// \return timing_res_t   The timing result.
+/// \retval TIMING_RES_OK  On success.
+/// \retval TIMING_RES_ERR Otherwise.
 ///
 timing_res_t timing_init(void);
 
 ///
-/// \brief
+/// \brief Starts and resets the DWT cycle counter.
 ///
-void timing_start();
+void timing_start(void);
 
 ///
-/// \brief
+/// \brief Stops the DWT cycle counter.
 ///
-void timing_stop();
+void timing_stop(void);
+
+///
+/// \brief Gets the DWT cycle counter value.
+///
+/// \return uint32_t The DWT cycle counter value.
+///
+uint32_t timing_cnt_get(void);
 
 #endif  /* _TIMING_H */
