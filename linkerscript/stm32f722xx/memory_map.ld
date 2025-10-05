@@ -5,9 +5,9 @@ MEMORY
     rom_updater    (rx)  : ORIGIN = 0x00208000, LENGTH = 0x00008000
     rom_app        (rx)  : ORIGIN = 0x00210000, LENGTH = 0x00008000
     sram_bootloader(rwx) : ORIGIN = 0x20010000, LENGTH = 0x00004000
-    sram_apploader (rwx) : ORIGIN = 0x20014000, LENGTH = 0x00002000
-    sram_updater   (rwx) : ORIGIN = 0x20016000, LENGTH = 0x00008000
-    sram_app       (rwx) : ORIGIN = 0x2001e000, LENGTH = 0x0001dfff
+    sram_apploader (rwx) : ORIGIN = 0x20014000, LENGTH = 0x00004000
+    sram_updater   (rwx) : ORIGIN = 0x20018000, LENGTH = 0x00008000
+    sram_app       (rwx) : ORIGIN = 0x2001e000, LENGTH = 0x0001bfff
 }
 
 __bootloader_start__ = ORIGIN(rom_bootloader);
