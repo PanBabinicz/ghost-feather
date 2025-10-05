@@ -341,7 +341,8 @@ void _SetupTarget(void) {
   unsigned int PC;
   unsigned int VectorTableAddr;
 
-  VectorTableAddr = Elf.GetBaseAddr();
+  //VectorTableAddr = Elf.GetBaseAddr();
+  VectorTableAddr = 0x00200000;
   //
   // Set up initial stack pointer
   //

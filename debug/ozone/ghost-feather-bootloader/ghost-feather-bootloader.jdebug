@@ -22,8 +22,8 @@ void OnProjectLoad (void) {
   //
   // Dialog-generated settings
   //
-  Project.AddPathSubstitute ("/home/km1t4h/workspace/ozone/ghost-feather-first-bootloader", "$(ProjectDir)");
-  Project.AddPathSubstitute ("/home/km1t4h/workspace/ozone/ghost-feather-first-bootloader", "$(ProjectDir)");
+  Project.AddPathSubstitute ("/home/km1t4h/workspace/ozone/ghost-feather-bootloader", "$(ProjectDir)");
+  Project.AddPathSubstitute ("/home/km1t4h/workspace/ozone/ghost-feather-bootloader", "$(ProjectDir)");
   Project.SetDevice ("STM32F722RE");
   Project.SetHostIF ("USB", "602001605");
   Project.SetTargetIF ("SWD");
@@ -32,7 +32,7 @@ void OnProjectLoad (void) {
   //
   // User settings
   //
-  File.Open ("/home/km1t4h/workspace/github/ghost-feather/build/Debug/ghost-feather-first-bootloader.elf");
+  File.Open ("/home/km1t4h/workspace/github/ghost-feather/build/Debug/ghost-feather-bootloader.elf");
 }
 
 /*********************************************************************
