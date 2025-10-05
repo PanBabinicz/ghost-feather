@@ -25,6 +25,13 @@ add_library(
     ${TIMING_SOURCES}
     )
 
+message(STATUS "Add ghost_feather_common target include directories")
+target_include_directories(
+    ghost_feather_common
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
+    )
+
 message(STATUS "Add timing target include directories")
 target_include_directories(
     timing

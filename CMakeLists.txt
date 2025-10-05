@@ -38,6 +38,7 @@ add_executable(
     ${bootloader_sources}
     ${bootloader_startup_sources}
     ${vectortable_sources}
+    ${timing_sources}
     )
 
 message(STATUS "Add ghost-feather-apploader executable")
@@ -77,6 +78,7 @@ target_link_directories(
     PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/shared
     /usr/arm-none-eabi/lib/thumb/v7+fp/hard
     )
 
@@ -119,6 +121,7 @@ target_link_libraries(
     bootloader_startup
     bootloader
     vectortable
+    timing
     libopencm3_stm32f7.a
     )
 
@@ -163,6 +166,8 @@ target_include_directories(
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/bootloader
+    ${PROJECT_SOURCE_DIR}/shared
+    ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     )
 
