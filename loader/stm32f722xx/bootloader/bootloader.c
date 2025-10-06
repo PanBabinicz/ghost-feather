@@ -1,5 +1,6 @@
 #include "bootloader.h"
 #include "memory_map.h"
+#include "timing.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 #include "libopencm3/cm3/systick.h"
@@ -76,11 +77,18 @@ static void rcc_setup(void)
 
     /* Enable clock for red led */
     rcc_periph_clock_enable(RCC_GPIOA);
+
+    /* Enable clock for SPI1 */
+    rcc_periph_clock_enable(RCC_SPI1);
 }
 
 static void gpio_setup(void)
 {
-    gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO2);
+    gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO2 | GPIO4);
+
+    /* Set SPI1 gpios alternate function */
+    gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, (GPIO5 | GPIO6 | GPIO7));
+    gpio_set_af(GPIOA, GPIO_AF5, (GPIO5 | GPIO6 | GPIO7));
 }
 
 static void systick_setup(void)
@@ -88,6 +96,12 @@ static void systick_setup(void)
     /* Prescaled processor clock */
     systick_set_clocksource(STK_CSR_CLKSOURCE_AHB_DIV8);
     systick_counter_enable();
+}
+
+static void timing_setup(void)
+{
+    timing_init();
+    timing_start();
 }
 
 static void led_on(void)
@@ -108,6 +122,7 @@ void bootloader_start(void)
     rcc_setup();
     gpio_setup();
     systick_setup();
+    timing_setup();
 
     uint32_t *img   = (uint32_t*)&__apploader_start__;
     uint32_t img_sp = img[0];

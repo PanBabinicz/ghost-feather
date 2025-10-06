@@ -30,6 +30,7 @@ target_include_directories(
     bootloader
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     )
 
