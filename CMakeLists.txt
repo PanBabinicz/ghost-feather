@@ -19,41 +19,6 @@ project(
     )
 
 # --------------------------------------------------
-# Subdirectories
-# --------------------------------------------------
-# Each subdirectory defines and registers sources
-# via set_property(GLOBAL PROPERTY <NAME>_SOURCES ...)
-# --------------------------------------------------
-add_subdirectory(app)
-add_subdirectory(controller)
-add_subdirectory(dfu)
-add_subdirectory(loader)
-add_subdirectory(shared)
-add_subdirectory(startup)
-add_subdirectory(submodules)
-add_subdirectory(vectortable)
-
-# --------------------------------------------------
-# Collect source lists from global properties
-# --------------------------------------------------
-get_cmake_property(app_sources APP_SOURCES)
-get_cmake_property(app_startup_sources APP_STARTUP_SOURCES)
-get_cmake_property(apploader_sources APPLOADER_SOURCES)
-get_cmake_property(apploader_startup_sources APPLOADER_STARTUP_SOURCES)
-get_cmake_property(bootloader_sources BOOTLOADER_SOURCES)
-get_cmake_property(bootloader_startup_sources BOOTLOADER_STARTUP_SOURCES)
-get_cmake_property(bmi270_sources BMI270_SOURCES)
-get_cmake_property(dust_sources DUST_SOURCES)
-get_cmake_property(ghost_feather_common_sources GHOST_FEATHER_COMMON_SOURCES)
-get_cmake_property(printf_sources PRINTF_SOURCES)
-get_cmake_property(timing_sources TIMING_SOURCES)
-get_cmake_property(spi_ctrl_sources SPI_CTRL_SOURCES)
-get_cmake_property(updater_sources UPDATER_SOURCES)
-get_cmake_property(updater_startup_sources UPDATER_STARTUP_SOURCES)
-get_cmake_property(usart_controller_sources USART_CONTROLLER_SOURCES)
-get_cmake_property(vectortable_sources VECTORTABLE_SOURCES)
-
-# --------------------------------------------------
 # CPU / FPU configuration flags
 # --------------------------------------------------
 set(CPU_FLAGS
@@ -88,6 +53,71 @@ endif()
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Compiler flags: ${OPT_FLAGS}")
+
+
+# ================================================================
+# Define a reusable INTERFACE library for shared options
+# ================================================================
+
+add_library(
+    gfc_common_options
+    INTERFACE
+    )
+
+target_compile_definitions(
+    gfc_common_options
+    INTERFACE
+    $<$<COMPILE_LANGUAGE:C>:
+        STM32F7
+    >
+    )
+
+target_compile_options(
+    gfc_common_options
+    INTERFACE
+    $<$<COMPILE_LANGUAGE:C>:
+        ${CPU_FLAGS}
+        ${OPT_FLAGS}
+    >
+    $<$<COMPILE_LANGUAGE:ASM>:
+        ${CPU_FLAGS}
+    >
+    )
+
+# --------------------------------------------------
+# Subdirectories
+# --------------------------------------------------
+# Each subdirectory defines and registers sources
+# via set_property(GLOBAL PROPERTY <NAME>_SOURCES ...)
+# --------------------------------------------------
+add_subdirectory(app)
+add_subdirectory(controller)
+add_subdirectory(dfu)
+add_subdirectory(loader)
+add_subdirectory(shared)
+add_subdirectory(startup)
+add_subdirectory(submodules)
+add_subdirectory(vectortable)
+
+# --------------------------------------------------
+# Collect source lists from global properties
+# --------------------------------------------------
+get_cmake_property(app_sources APP_SOURCES)
+get_cmake_property(app_startup_sources APP_STARTUP_SOURCES)
+get_cmake_property(apploader_sources APPLOADER_SOURCES)
+get_cmake_property(apploader_startup_sources APPLOADER_STARTUP_SOURCES)
+get_cmake_property(bootloader_sources BOOTLOADER_SOURCES)
+get_cmake_property(bootloader_startup_sources BOOTLOADER_STARTUP_SOURCES)
+get_cmake_property(bmi270_sources BMI270_SOURCES)
+get_cmake_property(dust_sources DUST_SOURCES)
+get_cmake_property(ghost_feather_common_sources GHOST_FEATHER_COMMON_SOURCES)
+get_cmake_property(printf_sources PRINTF_SOURCES)
+get_cmake_property(timing_sources TIMING_SOURCES)
+get_cmake_property(spi_ctrl_sources SPI_CTRL_SOURCES)
+get_cmake_property(updater_sources UPDATER_SOURCES)
+get_cmake_property(updater_startup_sources UPDATER_STARTUP_SOURCES)
+get_cmake_property(usart_controller_sources USART_CONTROLLER_SOURCES)
+get_cmake_property(vectortable_sources VECTORTABLE_SOURCES)
 
 # --------------------------------------------------
 # Target: Bootloader
@@ -125,22 +155,10 @@ target_link_libraries(
     PRIVATE
     bootloader
     bootloader_startup
+    gfc_common_options
     libopencm3_stm32f7.a
     timing
     vectortable
-    )
-
-target_compile_definitions(
-    ghost-feather-bootloader.elf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    )
-
-target_compile_options(
-    ghost-feather-bootloader.elf
-    PRIVATE
-    $<$<COMPILE_LANGUAGE:C>:${CPU_FLAGS} ${OPT_FLAGS}>
-    $<$<COMPILE_LANGUAGE:ASM>:${CPU_FLAGS}>
     )
 
 target_link_options(
@@ -184,21 +202,9 @@ target_link_libraries(
     PRIVATE
     apploader
     apploader_startup
+    gfc_common_options
     libopencm3_stm32f7.a
     vectortable
-    )
-
-target_compile_definitions(
-    ghost-feather-apploader.elf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    )
-
-target_compile_options(
-    ghost-feather-apploader.elf
-    PRIVATE
-    $<$<COMPILE_LANGUAGE:C>:${CPU_FLAGS} ${OPT_FLAGS}>
-    $<$<COMPILE_LANGUAGE:ASM>:${CPU_FLAGS}>
     )
 
 target_link_options(
@@ -250,6 +256,7 @@ target_link_libraries(
     ghost-feather-updater.elf
     PRIVATE
     dust
+    gfc_common_options
     libopencm3_stm32f7.a
     printf
     updater
@@ -261,17 +268,9 @@ target_link_libraries(
 target_compile_definitions(
     ghost-feather-updater.elf
     PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     "$<$<COMPILE_LANGUAGE:C>:PRINTF_DISABLE_SUPPORT_LONG_LONG>"
     "$<$<COMPILE_LANGUAGE:C>:DEBUG_DUST_PROTOCOL=1>"
     "$<$<COMPILE_LANGUAGE:C>:DEBUG=1>"
-    )
-
-target_compile_options(
-    ghost-feather-updater.elf
-    PRIVATE
-    $<$<COMPILE_LANGUAGE:C>:${CPU_FLAGS} ${OPT_FLAGS}>
-    $<$<COMPILE_LANGUAGE:ASM>:${CPU_FLAGS}>
     )
 
 target_link_options(
@@ -323,23 +322,11 @@ target_link_libraries(
     PRIVATE
     app
     app_startup
+    gfc_common_options
     ghost_feather_common
     libopencm3_stm32f7.a
     timing
     vectortable
-    )
-
-target_compile_definitions(
-    ghost-feather-app.elf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    )
-
-target_compile_options(
-    ghost-feather-app.elf
-    PRIVATE
-    $<$<COMPILE_LANGUAGE:C>:${CPU_FLAGS} ${OPT_FLAGS}>
-    $<$<COMPILE_LANGUAGE:ASM>:${CPU_FLAGS}>
     )
 
 target_link_options(
