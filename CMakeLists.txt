@@ -69,13 +69,25 @@ set(CPU_FLAGS
 # Use `-DCMAKE_BUILD_TYPE=Debug` or `Release` on configure.
 # CMake will handle optimization automatically.
 # --------------------------------------------------
-set(CMAKE_C_FLAGS_DEBUG          "-O0 -g3")
-set(CMAKE_C_FLAGS_RELEASE        "-O3 -DNDEBUG")
-set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g3 -DNDEBUG")
-set(CMAKE_C_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
+set(OPT_FLAGS_DEBUG          -O0 -g3)
+set(OPT_FLAGS_RELEASE        -O3 -DNDEBUG)
+set(OPT_FLAGS_RELWITHDEBINFO -O2 -g3 -DNDEBUG)
+set(OPT_FLAGS_MINSIZEREL     -Os -DNDEBUG)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(OPT_FLAGS ${OPT_FLAGS_DEBUG})
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(OPT_FLAGS ${OPT_FLAGS_RELEASE})
+elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    set(OPT_FLAGS ${OPT_FLAGS_RELWITHDEBINFO})
+elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
+    set(OPT_FLAGS ${OPT_FLAGS_MINSIZEREL})
+else()
+    message(FATAL_ERROR "Unknown build type: ${CMAKE_BUILD_TYPE}")
+endif()
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
-message(STATUS "Compiler flags: ${CMAKE_C_FLAGS_${CMAKE_BUILD_TYPE}}")
+message(STATUS "Compiler flags: ${OPT_FLAGS}")
 
 # --------------------------------------------------
 # Target: Bootloader
@@ -127,7 +139,8 @@ target_compile_definitions(
 target_compile_options(
     ghost-feather-bootloader.elf
     PRIVATE
-    ${CPU_FLAGS}
+    $<$<COMPILE_LANGUAGE:C>:${CPU_FLAGS} ${OPT_FLAGS}>
+    $<$<COMPILE_LANGUAGE:ASM>:${CPU_FLAGS}>
     )
 
 target_link_options(
@@ -184,7 +197,8 @@ target_compile_definitions(
 target_compile_options(
     ghost-feather-apploader.elf
     PRIVATE
-    ${CPU_FLAGS}
+    $<$<COMPILE_LANGUAGE:C>:${CPU_FLAGS} ${OPT_FLAGS}>
+    $<$<COMPILE_LANGUAGE:ASM>:${CPU_FLAGS}>
     )
 
 target_link_options(
@@ -256,7 +270,8 @@ target_compile_definitions(
 target_compile_options(
     ghost-feather-updater.elf
     PRIVATE
-    ${CPU_FLAGS}
+    $<$<COMPILE_LANGUAGE:C>:${CPU_FLAGS} ${OPT_FLAGS}>
+    $<$<COMPILE_LANGUAGE:ASM>:${CPU_FLAGS}>
     )
 
 target_link_options(
@@ -323,7 +338,8 @@ target_compile_definitions(
 target_compile_options(
     ghost-feather-app.elf
     PRIVATE
-    ${CPU_FLAGS}
+    $<$<COMPILE_LANGUAGE:C>:${CPU_FLAGS} ${OPT_FLAGS}>
+    $<$<COMPILE_LANGUAGE:ASM>:${CPU_FLAGS}>
     )
 
 target_link_options(
