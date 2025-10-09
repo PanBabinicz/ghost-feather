@@ -1,16 +1,28 @@
+# --------------------------------------------------
+# SPDX-License-Identifier: Apache-2.0
+# --------------------------------------------------
+# Project: Ghost Feather Firmware (STM32F7)
+# Modules:
+#   - Updater
+#   - Dust protocol
+#
+# Description:
+#   Collects all source files related to the firmware
+#   updater and the Dust protocol implementation for
+#   the STM32F722 MCU.
+# --------------------------------------------------
+# Files list genereation
+# --------------------------------------------------
 file(GLOB_RECURSE UPDATER_SOURCES stm32f722xx/updater/*.c)
 file(GLOB_RECURSE DUST_SOURCES stm32f722xx/dust/*.c)
 
+# --------------------------------------------------
+# Target: Updater
+# --------------------------------------------------
 set_property(
     GLOBAL
     PROPERTY UPDATER_SOURCES
     ${UPDATER_SOURCES}
-    )
-
-set_property(
-    GLOBAL
-    PROPERTY DUST_SOURCES
-    ${DUST_SOURCES}
     )
 
 message(STATUS "Add updater library")
@@ -19,13 +31,6 @@ add_library(
     ${UPDATER_SOURCES}
     )
 
-message(STATUS "Add dust library")
-add_library(
-    dust
-    ${DUST_SOURCES}
-    )
-
-message(STATUS "Add updater target include directories")
 target_include_directories(
     updater
     PRIVATE
@@ -37,7 +42,27 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/submodules/printf
     )
 
-message(STATUS "Add dust target include directories")
+target_link_libraries(
+    updater
+    PRIVATE
+    gfc_common_options
+    )
+
+# --------------------------------------------------
+# Target: Dust protocol
+# --------------------------------------------------
+set_property(
+    GLOBAL
+    PROPERTY DUST_SOURCES
+    ${DUST_SOURCES}
+    )
+
+message(STATUS "Add dust library")
+add_library(
+    dust
+    ${DUST_SOURCES}
+    )
+
 target_include_directories(
     dust
     PRIVATE
@@ -46,41 +71,15 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/submodules/printf
     )
 
-message(STATUS "Add updater target compile definitions")
-target_compile_definitions(
-    updater
+target_link_libraries(
+    dust
     PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
+    gfc_common_options
     )
 
-message(STATUS "Add dust target compile definitions")
 target_compile_definitions(
     dust
     PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
     "$<$<COMPILE_LANGUAGE:C>:DEBUG_DUST_PROTOCOL=1>"
     )
 
-message(STATUS "Add updater target compile options")
-target_compile_options(
-    updater
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-sp-d16>"
-    "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
-    "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-Wcast-align>"
-    "$<$<COMPILE_LANGUAGE:C>:-O3>"
-    )
-
-message(STATUS "Add dust target compile options")
-target_compile_options(
-    dust
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-sp-d16>"
-    "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
-    "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-Wcast-align>"
-    "$<$<COMPILE_LANGUAGE:C>:-O3>"
-    )
