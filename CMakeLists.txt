@@ -1,5 +1,5 @@
 # --------------------------------------------------
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: MIT
 # --------------------------------------------------
 # Project: Ghost Feather Firmware (STM32F7)
 # Description: Top-level CMake configuration.
