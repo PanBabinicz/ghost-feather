@@ -1,16 +1,27 @@
+# --------------------------------------------------
+# SPDX-License-Identifier: Apache-2.0
+# --------------------------------------------------
+# Project: Ghost Feather Firmware (STM32F7)
+# Modules:
+#   - Bootloader
+#   - Apploader
+#
+# Description:
+#   Collects all source files related to the bootloader
+#   and apploader for the STM32F722 MCU.
+# --------------------------------------------------
+# Files list genereation
+# --------------------------------------------------
 file(GLOB_RECURSE BOOTLOADER_SOURCES stm32f722xx/bootloader/*.c)
 file(GLOB_RECURSE APPLOADER_SOURCES stm32f722xx/apploader/*.c)
 
+# --------------------------------------------------
+# Target: Bootloader
+# --------------------------------------------------
 set_property(
     GLOBAL
     PROPERTY BOOTLOADER_SOURCES
     ${BOOTLOADER_SOURCES}
-    )
-
-set_property(
-    GLOBAL
-    PROPERTY APPLOADER_SOURCES
-    ${APPLOADER_SOURCES}
     )
 
 message(STATUS "Add bootloader library")
@@ -19,13 +30,6 @@ add_library(
     ${BOOTLOADER_SOURCES}
     )
 
-message(STATUS "Add apploader library")
-add_library(
-    apploader
-    ${APPLOADER_SOURCES}
-    )
-
-message(STATUS "Add bootloader target include directories")
 target_include_directories(
     bootloader
     PRIVATE
@@ -34,7 +38,27 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     )
 
-message(STATUS "Add apploader target include directories")
+target_link_libraries(
+    bootloader
+    PRIVATE
+    gfc_common_options
+    )
+
+# --------------------------------------------------
+# Target: Bootloader
+# --------------------------------------------------
+set_property(
+    GLOBAL
+    PROPERTY APPLOADER_SOURCES
+    ${APPLOADER_SOURCES}
+    )
+
+message(STATUS "Add apploader library")
+add_library(
+    apploader
+    ${APPLOADER_SOURCES}
+    )
+
 target_include_directories(
     apploader
     PRIVATE
@@ -43,38 +67,8 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/shared
     )
 
-message(STATUS "Add bootloader target compile definitions")
-target_compile_definitions(
-    bootloader
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    )
-
-message(STATUS "Add apploader target compile definitions")
-target_compile_definitions(
+target_link_libraries(
     apploader
     PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    )
-
-message(STATUS "Add bootloader target compile options")
-target_compile_options(
-    bootloader
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv4-sp-d16>"
-    "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
-    "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O3>"
-    )
-
-message(STATUS "Add apploader target compile options")
-target_compile_options(
-    apploader
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv4-sp-d16>"
-    "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
-    "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O3>"
+    gfc_common_options
     )
