@@ -110,7 +110,6 @@ get_cmake_property(bootloader_sources BOOTLOADER_SOURCES)
 get_cmake_property(bootloader_startup_sources BOOTLOADER_STARTUP_SOURCES)
 get_cmake_property(bmi270_sources BMI270_SOURCES)
 get_cmake_property(dust_sources DUST_SOURCES)
-get_cmake_property(ghost_feather_common_sources GHOST_FEATHER_COMMON_SOURCES)
 get_cmake_property(printf_sources PRINTF_SOURCES)
 get_cmake_property(timing_sources TIMING_SOURCES)
 get_cmake_property(spi_ctrl_sources SPI_CTRL_SOURCES)
@@ -290,7 +289,6 @@ add_executable(
     ${app_sources}
     ${app_startup_sources}
     ${bmi270_sources}
-    ${ghost_feather_common_sources}
     ${spi_ctrl_sources}
     ${timing_sources}
     ${vectortable_sources}
@@ -323,7 +321,6 @@ target_link_libraries(
     app
     app_startup
     gfc_common_options
-    ghost_feather_common
     libopencm3_stm32f7.a
     timing
     vectortable
