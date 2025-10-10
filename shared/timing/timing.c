@@ -1,6 +1,7 @@
 #include "timing.h"
 #include "libopencm3/cm3/dwt.h"
 #include "libopencm3/cm3/itm.h"
+#include "libopencm3/cm3/scs.h"
 #include <stdbool.h>
 
 ///*************************************************************************************************
