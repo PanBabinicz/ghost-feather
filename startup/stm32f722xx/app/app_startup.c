@@ -1,4 +1,5 @@
 #include "app.h"
+#include "libopencm3/cm3/scb.h"
 
 ///*************************************************************************************************
 /// Private objects - declaration.
@@ -8,6 +9,7 @@ extern uint32_t _ebss;
 extern uint32_t _sdata;
 extern uint32_t _edata;
 extern uint32_t _etext;
+extern uint32_t _vector_table;
 
 ///*************************************************************************************************
 /// Global functions - declaration.
@@ -42,6 +44,8 @@ void _reset_handler(void)
             *data++ = *init_value++;
         }
     }
+
+    SCB_VTOR = (uint32_t)&_vector_table;
 
     app_start();
 
