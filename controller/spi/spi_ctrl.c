@@ -32,6 +32,7 @@ struct cr1_conf
     uint8_t  ssm      : 1;                          /*!< The software slave management index.               */
     uint8_t  ssi      : 1;                          /*!< The internal slave select index.                   */
     uint8_t  mstr     : 1;                          /*!< The master selection index.                        */
+    uint8_t  br       : 3;                          /*!< The baud rate control.                             */
 };
 
 ///
@@ -77,7 +78,7 @@ static struct spi_ctrl_dev spi_ctrl =
     .cr1 =
     {
         .cpha     = SPI_CTRL_CPHA_0,
-        .cpol     = SPI_CTRL_CPOL_1,
+        .cpol     = SPI_CTRL_CPOL_0,
         .bidimode = SPI_CTRL_BIDIMODE_0,
         .bidioe   = SPI_CTRL_BIDIOE_0,
         .rxonly   = SPI_CTRL_RXONLY_0,
@@ -86,6 +87,7 @@ static struct spi_ctrl_dev spi_ctrl =
         .ssm      = SPI_CTRL_SSM_0,
         .ssi      = SPI_CTRL_SSI_0,
         .mstr     = SPI_CTRL_MSTR_1,
+        .br       = SPI_CR1_BAUDRATE_FPCLK_DIV_64,
     },
     .cr2 =
     {
@@ -93,7 +95,7 @@ static struct spi_ctrl_dev spi_ctrl =
         .ssoe     = SPI_CTRL_SSOE_1,
         .frf      = SPI_CTRL_FRF_0,
         .nssp     = SPI_CTRL_NSSP_0,
-        .frxth    = SPI_CTRL_FRXTH_0,
+        .frxth    = SPI_CTRL_FRXTH_1,
         .ldmatx   = SPI_CTRL_LDMATX_0,
         .ldmarx   = SPI_CTRL_LDMARX_0,
     },
@@ -332,6 +334,7 @@ spi_ctrl_res_t spi_ctrl_dev_init(struct spi_ctrl_dev *const dev)
     spi_disable(dev->intf);
 
     /* The CR1 configuration. */
+    spi_set_baudrate_prescaler(dev->intf, (uint8_t)dev->cr1.br);
     spi_ctrl_set_cpha_arr[dev->cr1.cpha](dev->intf);
     spi_ctrl_set_cpol_arr[dev->cr1.cpol](dev->intf);
     spi_ctrl_set_bidimode_arr[dev->cr1.bidimode](dev->intf);
