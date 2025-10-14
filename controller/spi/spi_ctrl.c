@@ -87,7 +87,7 @@ static struct spi_ctrl_dev spi_ctrl =
         .ssm      = SPI_CTRL_SSM_0,
         .ssi      = SPI_CTRL_SSI_0,
         .mstr     = SPI_CTRL_MSTR_1,
-        .br       = SPI_CR1_BAUDRATE_FPCLK_DIV_64,
+        .br       = SPI_CR1_BR_FPCLK_DIV_64,
     },
     .cr2 =
     {
