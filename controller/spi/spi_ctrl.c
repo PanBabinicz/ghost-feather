@@ -338,7 +338,7 @@ spi_ctrl_res_t spi_ctrl_dev_init(struct spi_ctrl_dev *const dev)
     spi_ctrl_set_cpha_arr[dev->cr1.cpha](dev->intf);
     spi_ctrl_set_cpol_arr[dev->cr1.cpol](dev->intf);
     spi_ctrl_set_bidimode_arr[dev->cr1.bidimode](dev->intf);
-    spi_ctrl_set_bidioe_arr[dev->cr1.bidioe](dev->intf);
+    //spi_ctrl_set_bidioe_arr[dev->cr1.bidioe](dev->intf);
     spi_ctrl_set_lsbfirst_arr[dev->cr1.lsbfirst](dev->intf);
     spi_ctrl_set_crcen_arr[dev->cr1.crcen](dev->intf);
     spi_ctrl_set_crcl_arr[dev->cr1.crcl](dev->intf);
