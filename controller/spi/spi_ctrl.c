@@ -95,7 +95,7 @@ static struct spi_ctrl_dev spi_ctrl =
         .ssoe     = SPI_CTRL_SSOE_1,
         .frf      = SPI_CTRL_FRF_0,
         .nssp     = SPI_CTRL_NSSP_0,
-        .frxth    = SPI_CTRL_FRXTH_1,
+        .frxth    = SPI_CTRL_FRXTH_0,
         .ldmatx   = SPI_CTRL_LDMATX_0,
         .ldmarx   = SPI_CTRL_LDMARX_0,
     },
@@ -167,15 +167,14 @@ static void (*const spi_ctrl_set_crcl_arr[SPI_CTRL_CRCL_TOTAL])(uint32_t intf) =
     spi_set_crcl_16bit,
 };
 
-/// TODO found a bug, replace this functions with proper one
 ///
 /// \brief Contains function pointers that allow the software slave management to be set using the
 ///        libopencm3 functions.
 ///
 static void (*const spi_ctrl_set_ssm_arr[SPI_CTRL_SSM_TOTAL])(uint32_t intf) =
 {
-    //spi_set_crcl_8bit,
-    //spi_set_crcl_16bit,
+    spi_disable_software_slave_management,
+    spi_enable_software_slave_management,
 };
 
 ///
