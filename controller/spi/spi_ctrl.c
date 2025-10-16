@@ -167,14 +167,15 @@ static void (*const spi_ctrl_set_crcl_arr[SPI_CTRL_CRCL_TOTAL])(uint32_t intf) =
     spi_set_crcl_16bit,
 };
 
+/// TODO found a bug, replace this functions with proper one
 ///
 /// \brief Contains function pointers that allow the software slave management to be set using the
 ///        libopencm3 functions.
 ///
 static void (*const spi_ctrl_set_ssm_arr[SPI_CTRL_SSM_TOTAL])(uint32_t intf) =
 {
-    spi_set_crcl_8bit,
-    spi_set_crcl_16bit,
+    //spi_set_crcl_8bit,
+    //spi_set_crcl_16bit,
 };
 
 ///
