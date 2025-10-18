@@ -337,7 +337,8 @@ static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, uint8_t 
         uint16_t *const hword);
 
 ///
-/// \breif Reads the register multiple data from bmi270. BMI270 increments address automatically.
+/// \breif Reads multiple consecutive registers from the BMI270.
+///        The BMI270 automatically increments the register address after each read.
 ///
 /// \param[in]  dev        The bmi270 device.
 /// \param[in]  addr       The bmi270 register address.
@@ -366,7 +367,8 @@ static bmi270_res_t bmi270_reg_write(const struct bmi270_dev *const dev, uint8_t
         const uint8_t *const byte);
 
 ///
-/// \breif Writes multiple data to the bmi270 register. BMI270 increments address automatically.
+/// \breif Writes multiple bytes for consecutive addresses of the BMI270.
+///        The BMI270 automatically increments the register address after each write.
 ///
 /// \param[in] dev         The bmi270 device.
 /// \param[in] addr        The bmi270 register address.
