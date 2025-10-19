@@ -350,7 +350,7 @@ static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, uint8_t 
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uint8_t addr,
-        uint8_t *const buf, uint32_t sz);
+        uint16_t *const buf, uint32_t sz);
 
 ///
 /// \breif Writes byte to the bmi270 register.
@@ -364,7 +364,7 @@ static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uin
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 static bmi270_res_t bmi270_reg_write(const struct bmi270_dev *const dev, uint8_t addr,
-        const uint8_t *const byte);
+        const uint8_t byte);
 
 ///
 /// \breif Writes multiple bytes for consecutive addresses of the BMI270.
@@ -429,13 +429,6 @@ static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint3
 ///
 static bmi270_res_t bmi270_cmd_soft_rst(struct bmi270_dev *const dev);
 
-///
-/// \breif Loads bmi270 config to the bmi270 device.
-///
-/// \param[in] dev         The bmi270 device.
-///
-static void bmi270_load_conf(struct bmi270_dev *const dev);
-
 ///***********************************************************************************************************
 /// Private functions - definition.
 ///***********************************************************************************************************
@@ -466,7 +459,7 @@ static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, uint8_t 
 }
 
 static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uint8_t addr,
-        uint8_t *const buf, uint32_t sz)
+        uint16_t *const buf, uint32_t sz)
 {
     if ((dev == NULL ) || (buf == NULL))
     {
@@ -492,7 +485,7 @@ static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uin
 }
 
 static bmi270_res_t bmi270_reg_write(const struct bmi270_dev *const dev, uint8_t addr,
-        const uint8_t byte);
+        const uint8_t byte)
 {
     if (dev == NULL)
     {
