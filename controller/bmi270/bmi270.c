@@ -1,6 +1,7 @@
 #include "bmi270.h"
 #include "bmi270_conf.h"
 #include "libopencm3/stm32/gpio.h"
+#include "libopencm3/stm32/spi.h"
 #include "spi_ctrl.h"
 #include <stdbool.h>
 #include <string.h>
@@ -440,17 +441,15 @@ static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, uint8_t 
         return BMI270_RES_ERR;
     }
 
+    uint16_t dummy = 0x00;
+
     addr |= BMI270_OP_READ;
 
     gpio_clear(dev->gpio.port, dev->gpio.pin);
     spi_enable(dev->spi);
 
-    /* First iteration is for sending register address, second for reading the halfword. */
-    for (uint32_t i = 0; i < 2; i++)
-    {
-        /* Send address for the first time, then it behaves like a dummy byte. */
-        *hword = spi_xfer(dev->spi, addr);
-    }
+    (void)spi_xfer(dev->spi, addr);
+    *hword = spi_xfer(dev->spi, dummy);
 
     spi_disable(dev->spi);
     gpio_set(dev->gpio.port, dev->gpio.pin);
@@ -466,16 +465,17 @@ static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uin
         return BMI270_RES_ERR;
     }
 
+    uint16_t dummy = 0x00;
+
     addr |= BMI270_OP_READ;
 
     gpio_clear(dev->gpio.port, dev->gpio.pin);
     spi_enable(dev->spi);
 
-    /* First iteration is for sending register address, rest for reading the halfwords. */
-    for (uint32_t i = 0; i < (sz + 1); i++)
+    (void)spi_xfer(dev->spi, addr);
+    for (uint32_t i = 0; i < sz; i++)
     {
-        /* Send address for the first time, then it behaves like a dummy byte. */
-        buf[i] = spi_xfer(dev->spi, addr);
+        buf[i] = spi_xfer(dev->spi, dummy);
     }
 
     spi_disable(dev->spi);
@@ -536,7 +536,7 @@ static bmi270_res_t bmi270_upld_conf_file(const struct bmi270_dev *const dev)
     /* Whether the device is NULL was checked before. */
     uint8_t adr = BMI270_REG_INIT_DATA;
 
-    if (bmi270_reg_write(dev, adr, dev->conf.file, dev->conf.sz) != BMI270_RES_OK)
+    if (bmi270_reg_write_mult(dev, adr, dev->conf.file, dev->conf.sz) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
