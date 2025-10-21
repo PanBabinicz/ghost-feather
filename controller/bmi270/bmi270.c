@@ -351,7 +351,7 @@ static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, uint8_t 
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uint8_t addr,
-        uint16_t *const buf, uint32_t sz);
+        uint8_t *const buf, uint32_t sz);
 
 ///
 /// \breif Writes byte to the bmi270 register.
@@ -458,14 +458,14 @@ static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, uint8_t 
 }
 
 static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uint8_t addr,
-        uint16_t *const buf, uint32_t sz)
+        uint8_t *const buf, uint32_t sz)
 {
     if ((dev == NULL ) || (buf == NULL))
     {
         return BMI270_RES_ERR;
     }
 
-    uint16_t dummy = 0x00;
+    uint8_t dummy = 0x00;
 
     addr |= BMI270_OP_READ;
 
@@ -475,7 +475,8 @@ static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uin
     (void)spi_xfer(dev->spi, addr);
     for (uint32_t i = 0; i < sz; i++)
     {
-        buf[i] = spi_xfer(dev->spi, dummy);
+        spi_send8(dev->spi, dummy);
+        buf[i] = spi_read8(dev->spi);
     }
 
     spi_disable(dev->spi);
