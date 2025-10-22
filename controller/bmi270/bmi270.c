@@ -324,21 +324,21 @@ static const struct bmi270_pwr_mode_conf bmi270_pwr_mode_confs[BMI270_PWR_MODE_T
 /// Private functions - declaration.
 ///***********************************************************************************************************
 ///
-/// \breif Reads a 16-bit halfword by combining two consecutive 8-bit BMI270 registers.
+/// \breif Reads byte from BMI270 register.
 ///
 /// \param[in]  dev        The bmi270 device.
 /// \param[in]  addr       The bmi270 register address.
-/// \param[out] hword      The read halfword (16-bits).
+/// \param[out] byte       The read byte (8-bits).
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, uint8_t addr,
-        uint16_t *const hword);
+static bmi270_res_t bmi270_reg_read_byte(const struct bmi270_dev *const dev, uint8_t addr,
+        uint8_t *const byte);
 
 ///
-/// \breif Reads multiple consecutive registers from the BMI270.
+/// \breif Reads bytes from the multiple consecutive BMI270 registers.
 ///        The BMI270 automatically increments the register address after each read.
 ///
 /// \param[in]  dev        The bmi270 device.
@@ -350,7 +350,7 @@ static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, uint8_t 
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uint8_t addr,
+static bmi270_res_t bmi270_reg_read_mult_bytes(const struct bmi270_dev *const dev, uint8_t addr,
         uint8_t *const buf, uint32_t sz);
 
 ///
@@ -364,7 +364,7 @@ static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uin
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-static bmi270_res_t bmi270_reg_write(const struct bmi270_dev *const dev, uint8_t addr,
+static bmi270_res_t bmi270_reg_write_byte(const struct bmi270_dev *const dev, uint8_t addr,
         const uint8_t byte);
 
 ///
@@ -380,7 +380,7 @@ static bmi270_res_t bmi270_reg_write(const struct bmi270_dev *const dev, uint8_t
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-static bmi270_res_t bmi270_reg_write_mult(const struct bmi270_dev *const dev, uint8_t addr,
+static bmi270_res_t bmi270_reg_write_mult_bytes(const struct bmi270_dev *const dev, uint8_t addr,
         const uint8_t *const buf, const uint32_t sz);
 
 ///
@@ -433,23 +433,29 @@ static bmi270_res_t bmi270_cmd_soft_rst(struct bmi270_dev *const dev);
 ///***********************************************************************************************************
 /// Private functions - definition.
 ///***********************************************************************************************************
-static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, uint8_t addr,
-        uint16_t *const hword)
+static bmi270_res_t bmi270_reg_read_byte(const struct bmi270_dev *const dev, uint8_t addr,
+        uint8_t *const byte)
 {
-    if ((dev == NULL ) || (hword == NULL))
+    if (byte == NULL)
     {
         return BMI270_RES_ERR;
     }
 
-    uint16_t dummy = 0x00;
+    uint8_t dummy = 0x00;
 
     addr |= BMI270_OP_READ;
 
     gpio_clear(dev->gpio.port, dev->gpio.pin);
     spi_enable(dev->spi);
 
-    (void)spi_xfer(dev->spi, addr);
-    *hword = spi_xfer(dev->spi, dummy);
+    spi_send8(dev->spi, addr);
+    (void)spi_read8(dev->spi);
+
+    spi_send8(dev->spi, dummy);
+    (void)spi_read8(dev->spi);
+
+    spi_send8(dev->spi, dummy);
+    *byte = spi_read8(dev->spi);
 
     spi_disable(dev->spi);
     gpio_set(dev->gpio.port, dev->gpio.pin);
@@ -457,7 +463,7 @@ static bmi270_res_t bmi270_reg_read(const struct bmi270_dev *const dev, uint8_t 
     return BMI270_RES_OK;
 }
 
-static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uint8_t addr,
+static bmi270_res_t bmi270_reg_read_mult_bytes(const struct bmi270_dev *const dev, uint8_t addr,
         uint8_t *const buf, uint32_t sz)
 {
     if ((dev == NULL ) || (buf == NULL))
@@ -472,7 +478,12 @@ static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uin
     gpio_clear(dev->gpio.port, dev->gpio.pin);
     spi_enable(dev->spi);
 
-    (void)spi_xfer(dev->spi, addr);
+    spi_send8(dev->spi, addr);
+    (void)spi_read8(dev->spi);
+
+    spi_send8(dev->spi, dummy);
+    (void)spi_read8(dev->spi);
+
     for (uint32_t i = 0; i < sz; i++)
     {
         spi_send8(dev->spi, dummy);
@@ -485,21 +496,16 @@ static bmi270_res_t bmi270_reg_read_mult(const struct bmi270_dev *const dev, uin
     return BMI270_RES_OK;
 }
 
-static bmi270_res_t bmi270_reg_write(const struct bmi270_dev *const dev, uint8_t addr,
+static bmi270_res_t bmi270_reg_write_byte(const struct bmi270_dev *const dev, uint8_t addr,
         const uint8_t byte)
 {
-    if (dev == NULL)
-    {
-        return BMI270_RES_ERR;
-    }
-
     addr |= BMI270_OP_WRITE;
 
     gpio_clear(dev->gpio.port, dev->gpio.pin);
     spi_enable(dev->spi);
 
-    spi_write(addr, addr);
-    spi_write(addr, byte);
+    spi_send8(dev->spi, addr);
+    spi_send8(dev->spi, byte);
 
     spi_disable(dev->spi);
     gpio_set(dev->gpio.port, dev->gpio.pin);
@@ -507,10 +513,10 @@ static bmi270_res_t bmi270_reg_write(const struct bmi270_dev *const dev, uint8_t
     return BMI270_RES_OK;
 }
 
-static bmi270_res_t bmi270_reg_write_mult(const struct bmi270_dev *const dev, uint8_t addr,
+static bmi270_res_t bmi270_reg_write_mult_bytes(const struct bmi270_dev *const dev, uint8_t addr,
         const uint8_t *const buf, const uint32_t sz)
 {
-    if ((dev == NULL) || (buf == NULL))
+    if (buf == NULL)
     {
         return BMI270_RES_ERR;
     }
@@ -520,10 +526,10 @@ static bmi270_res_t bmi270_reg_write_mult(const struct bmi270_dev *const dev, ui
     gpio_clear(dev->gpio.port, dev->gpio.pin);
     spi_enable(dev->spi);
 
-    spi_write(addr, addr);
+    spi_send8(dev->spi, addr);
     for (uint32_t i = 0; i < sz; i++)
     {
-        spi_write(addr, buf[sz]);
+        spi_send8(dev->spi, buf[i]);
     }
 
     spi_disable(dev->spi);
@@ -537,7 +543,7 @@ static bmi270_res_t bmi270_upld_conf_file(const struct bmi270_dev *const dev)
     /* Whether the device is NULL was checked before. */
     uint8_t adr = BMI270_REG_INIT_DATA;
 
-    if (bmi270_reg_write_mult(dev, adr, dev->conf.file, dev->conf.sz) != BMI270_RES_OK)
+    if (bmi270_reg_write_mult_bytes(dev, adr, dev->conf.file, dev->conf.sz) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
