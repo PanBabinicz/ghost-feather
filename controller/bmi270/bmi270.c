@@ -3,6 +3,7 @@
 #include "libopencm3/stm32/gpio.h"
 #include "libopencm3/stm32/spi.h"
 #include "spi_ctrl.h"
+#include "timing.h"
 #include <stdbool.h>
 #include <string.h>
 

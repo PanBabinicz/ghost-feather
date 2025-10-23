@@ -65,13 +65,21 @@ target_include_directories(
     bmi270
     PRIVATE
     ${PROJECT_SOURCE_DIR}/controller/spi
+    ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
+    )
+
+target_link_directories(
+    bmi270
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/shared
     )
 
 target_link_libraries(
     bmi270
     PRIVATE
     gfc_common_options
+    timing
     )
 
 # --------------------------------------------------
