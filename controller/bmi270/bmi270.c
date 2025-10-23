@@ -421,15 +421,18 @@ static bmi270_res_t bmi270_vld_conf_file(const struct bmi270_dev *const dev);
 static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint32_t cycles);
 
 ///
-/// \breif Sends soft reset command to the bmi270 device.
+/// \breif Sends given command to the bmi270 device.
 ///
 /// \param[in] dev         The bmi270 device.
+/// \param[in] addr        The bmi270 register address.
+/// \param[in] cmd         The bmi270 command to be sent.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-static bmi270_res_t bmi270_cmd_soft_rst(struct bmi270_dev *const dev);
+static bmi270_res_t bmi270_cmd_send(struct bmi270_dev *const dev, const uint8_t addr,
+        const uint8_t cmd);
 
 ///***********************************************************************************************************
 /// Private functions - definition.
@@ -603,20 +606,12 @@ static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint3
     return BMI270_RES_OK;
 }
 
-static bmi270_res_t bmi270_cmd_soft_rst(struct bmi270_dev *const dev)
+static bmi270_res_t bmi270_cmd_send(struct bmi270_dev *const dev, const uint8_t addr,
+        const uint8_t cmd)
 {
-    uint8_t  adr  = BMI270_REG_CMD;
-    uint8_t  buf  = BMI270_CMD_SOFTRESET;
-    uint32_t sz   = 1;
-
-    if (dev->stat != BMI270_STAT_DEINIT)
+    if (bmi270_reg_write_byte(dev, addr, cmd) != BMI270_RES_OK)
     {
-        if (bmi270_reg_write(dev, adr, &buf, sz) != BMI270_RES_OK)
-        {
-            return BMI270_RES_ERR;
-        }
-
-        dev->stat = BMI270_STAT_DEINIT;
+        return BMI270_RES_ERR;
     }
 
     return BMI270_RES_OK;
@@ -1185,14 +1180,7 @@ bmi270_res_t bmi270_acc_set_x(struct bmi270_dev *const dev, const int16_t x)
         return BMI270_RES_ERR;
     }
 
-    dev->acc.data.x = x;
-
-    return BMI270_RES_OK;
-}
-
-bmi270_res_t bmi270_acc_get_y(const struct bmi270_dev *const dev, int16_t *const y)
-{
-    if ((dev == NULL) || (y == NULL))
+    if (bmi270_cmd_send(dev, BMI270_REG_CMD, BMI270_CMD_SOFTRESET) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
