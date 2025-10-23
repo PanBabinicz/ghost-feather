@@ -559,14 +559,14 @@ static bmi270_res_t bmi270_vld_conf_file(const struct bmi270_dev *const dev)
 {
     /* Whether the device is NULL was checked before. */
     uint8_t adr = BMI270_REG_INIT_DATA;
-    uint8_t buf[dev->conf.sz + 1];
+    uint8_t buf[dev->conf.sz];
 
-    if (bmi270_reg_read(dev, adr, &buf[0], sizeof(buf)) != BMI270_RES_OK)
+    if (bmi270_reg_read_mult_bytes(dev, adr, &buf[0], sizeof(buf)) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
-    if (memcmp(dev->conf.file, &buf[1], dev->conf.sz) != 0)
+    if (memcmp(dev->conf.file, &buf[0], dev->conf.sz) != 0)
     {
         return BMI270_RES_ERR;
     }
