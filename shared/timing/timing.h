@@ -4,6 +4,12 @@
 #include <stdint.h>
 
 ///
+/// \brief System clock frequency value (Hz) stored in shared memory for use across all firmware
+///        stages.
+///
+extern volatile uint32_t timing_sysclk_freq;
+
+///
 /// \brief The timing result type.
 ///
 typedef enum timing_res
@@ -37,5 +43,12 @@ void timing_stop(void);
 /// \return uint32_t The DWT cycle counter value.
 ///
 uint32_t timing_cnt_get(void);
+
+///
+/// \brief Delays for the given number of microseconds.
+///
+/// \param[in] us The given number of microseconds.
+///
+void timing_delay_us(const uint32_t us);
 
 #endif  /* _TIMING_H */

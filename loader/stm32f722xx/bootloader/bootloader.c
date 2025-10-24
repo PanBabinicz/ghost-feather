@@ -103,6 +103,7 @@ static void timing_setup(void)
 {
     timing_init();
     timing_start();
+    timing_sysclk_freq = rcc_ahb_frequency;
 }
 
 static void led_on(void)

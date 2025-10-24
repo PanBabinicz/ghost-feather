@@ -34,6 +34,15 @@ SECTIONS
         _edata = .;
     } > sram_app AT > rom_app
 
+    .shared :
+    {
+        . = ALIGN(4);
+        _sshared = .;
+        *(.shared*)
+        . = ALIGN(4);
+        _eshared = .;
+    } > sram_shared
+
     .stack (NOLOAD) :
     {
         . = ALIGN(8);
