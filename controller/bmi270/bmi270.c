@@ -637,20 +637,13 @@ const struct bmi270_pwr_mode_conf* bmi270_pwr_mode_get_conf(const bmi270_pwr_mod
 
 bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
 {
-    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    if (dev == NULL)
     {
         return BMI270_RES_ERR;
     }
 
-    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
-    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
-    {
-        return BMI270_RES_ERR;
-    }
-
-    uint8_t  adr;
-    uint8_t  buf[2] = { 0 };
-    uint32_t sz;
+    uint8_t addr;
+    uint8_t byte;
 
     memset(&dev->acc,  0, sizeof(dev->acc));
     memset(&dev->gyr,  0, sizeof(dev->gyr));
@@ -658,33 +651,29 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
 
     /* Read an arbitrary register of BMI270, discard the read response.
      * The MSB of the address is R/W indicator. */
-    adr = BMI270_REG_CHIP_ID;
-    sz  = 1;
-    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_CHIP_ID;
+    if ((bmi270_reg_read_byte(dev, addr, &byte) != BMI270_RES_OK) &&
+        (byte != BMI270_POR_CHIP_ID))
     {
         return BMI270_RES_ERR;
     }
 
     /* Disable advanced power save mode: PWR_CONF.adv_power_save = 0x00. */
-    adr    = BMI270_REG_PWR_CONF;
-    buf[0] = 0;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_PWR_CONF;
+    byte = BMI270_POR_PWR_CONF;
+    byte &= ~BMI270_PWR_CONF_APS_MSK;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
-    /* Wait for 450us. */
-    if (bmi270_wait_cycles(dev, BMI270_US_TO_CYCLES(450)) != BMI270_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
+    /* Wait for at least 450us. */
+    timing_delay_us(500);
 
     /* Write INIT_CTRL.init_ctrl = 0x00 to prepare config load. */
-    adr    = BMI270_REG_INIT_CTRL;
-    buf[0] = 0;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_INIT_CTRL;
+    byte = 0x00;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
@@ -706,20 +695,18 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
     /* Write INIT_CTRL.init_ctrl = 0x01 to complete config load.
      * NOTE: This operation must not be performed more than once after POR
      *       or soft reset. */
-    adr    = BMI270_REG_INIT_CTRL;
-    buf[0] = 0x01;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_INIT_CTRL;
+    byte = 0x01;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Wait until internal status register contains the value 0b0001. */
-    adr = BMI270_REG_INST;
-    sz  = 1;
-    while ((buf[1] & BMI270_INST_MSG_MSK) != BMI270_INST_MSG_INIT_OK)
+    addr = BMI270_REG_INST;
+    while ((byte & BMI270_INST_MSG_MSK) != BMI270_INST_MSG_INIT_OK)
     {
-        if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+        if (bmi270_reg_read_byte(dev, addr, &byte) != BMI270_RES_OK)
         {
             return BMI270_RES_ERR;
         }
