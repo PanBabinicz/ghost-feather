@@ -308,6 +308,12 @@ extern "C" {
 #define BMI270_OP_READ              (0x01 << 0x07)  /*!< The read operation indicator                       */
 
 ///
+/// \brief The bmi270 register values at POR.
+///
+#define BMI270_POR_CHIP_ID          (0x24)          /*!< The bmi270 chip id value at POR.                   */
+#define BMI270_POR_PWR_CONF         (0x03)          /*!< The bmi270 power configuration value at POR.       */
+
+///
 /// \brief The bmi270 device type.
 ///
 struct bmi270_dev;
