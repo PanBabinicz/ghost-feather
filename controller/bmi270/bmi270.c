@@ -674,13 +674,13 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
     addr = BMI270_REG_PWR_CONF;
     byte = BMI270_POR_PWR_CONF;
     byte &= ~BMI270_PWR_CONF_APS_MSK;
-    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
+    if ((bmi270_reg_read_byte(dev, addr, &byte) != BMI270_RES_OK))
     {
         return BMI270_RES_ERR;
     }
 
     /* Wait for at least 450us. */
-    timing_delay_us(500);
+    timing_delay_us(1000);
 
     /* Write INIT_CTRL.init_ctrl = 0x00 to prepare config load. */
     addr = BMI270_REG_INIT_CTRL;
@@ -716,13 +716,13 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
 
     /* Wait until internal status register contains the value 0b0001. */
     addr = BMI270_REG_INST;
-    while ((byte & BMI270_INST_MSG_MSK) != BMI270_INST_MSG_INIT_OK)
+    do
     {
         if (bmi270_reg_read_byte(dev, addr, &byte) != BMI270_RES_OK)
         {
             return BMI270_RES_ERR;
         }
-    }
+    } while ((byte & BMI270_INST_MSG_MSK) != BMI270_INST_MSG_INIT_OK);
 
     dev->stat = BMI270_STAT_INIT;
 
