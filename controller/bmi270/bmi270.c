@@ -325,6 +325,17 @@ static const struct bmi270_pwr_mode_conf bmi270_pwr_mode_confs[BMI270_PWR_MODE_T
 /// Private functions - declaration.
 ///***********************************************************************************************************
 ///
+/// \breif Exchanges a single byte of data with a BMI270 register. Performs a write and read transaction for
+///        one 8-bit register on the BMI270 over the configured SPI interface.
+///
+/// \param[in] dev  The bmi270 device.
+/// \param[in] data The date to be send (8-bits).
+///
+/// \return uint8_t The read byte from bmi270 register.
+///
+static uint8_t bmi270_reg_xfer_byte(const struct bmi270_dev *const dev, const uint8_t data);
+
+///
 /// \breif Reads byte from BMI270 register.
 ///
 /// \param[in]  dev        The bmi270 device.
@@ -437,6 +448,16 @@ static bmi270_res_t bmi270_cmd_send(struct bmi270_dev *const dev, const uint8_t 
 ///***********************************************************************************************************
 /// Private functions - definition.
 ///***********************************************************************************************************
+static uint8_t bmi270_reg_xfer_byte(const struct bmi270_dev *const dev, const uint8_t data)
+{
+    uint8_t byte;
+
+    spi_send8(dev->spi, data);
+    byte = spi_read8(dev->spi);
+
+    return byte;
+}
+
 static bmi270_res_t bmi270_reg_read_byte(const struct bmi270_dev *const dev, uint8_t addr,
         uint8_t *const byte)
 {
@@ -452,14 +473,9 @@ static bmi270_res_t bmi270_reg_read_byte(const struct bmi270_dev *const dev, uin
     gpio_clear(dev->gpio.port, dev->gpio.pin);
     spi_enable(dev->spi);
 
-    spi_send8(dev->spi, addr);
-    (void)spi_read8(dev->spi);
-
-    spi_send8(dev->spi, dummy);
-    (void)spi_read8(dev->spi);
-
-    spi_send8(dev->spi, dummy);
-    *byte = spi_read8(dev->spi);
+    (void)bmi270_reg_xfer_byte(dev, addr);
+    (void)bmi270_reg_xfer_byte(dev, dummy);
+    *byte = bmi270_reg_xfer_byte(dev, dummy);
 
     spi_disable(dev->spi);
     gpio_set(dev->gpio.port, dev->gpio.pin);
@@ -482,16 +498,12 @@ static bmi270_res_t bmi270_reg_read_mult_bytes(const struct bmi270_dev *const de
     gpio_clear(dev->gpio.port, dev->gpio.pin);
     spi_enable(dev->spi);
 
-    spi_send8(dev->spi, addr);
-    (void)spi_read8(dev->spi);
-
-    spi_send8(dev->spi, dummy);
-    (void)spi_read8(dev->spi);
+    (void)bmi270_reg_xfer_byte(dev, addr);
+    (void)bmi270_reg_xfer_byte(dev, dummy);
 
     for (uint32_t i = 0; i < sz; i++)
     {
-        spi_send8(dev->spi, dummy);
-        buf[i] = spi_read8(dev->spi);
+        buf[i] = bmi270_reg_xfer_byte(dev, dummy);
     }
 
     spi_disable(dev->spi);
@@ -508,8 +520,8 @@ static bmi270_res_t bmi270_reg_write_byte(const struct bmi270_dev *const dev, ui
     gpio_clear(dev->gpio.port, dev->gpio.pin);
     spi_enable(dev->spi);
 
-    spi_send8(dev->spi, addr);
-    spi_send8(dev->spi, byte);
+    (void)bmi270_reg_xfer_byte(dev, addr);
+    (void)bmi270_reg_xfer_byte(dev, byte);
 
     spi_disable(dev->spi);
     gpio_set(dev->gpio.port, dev->gpio.pin);
@@ -530,10 +542,10 @@ static bmi270_res_t bmi270_reg_write_mult_bytes(const struct bmi270_dev *const d
     gpio_clear(dev->gpio.port, dev->gpio.pin);
     spi_enable(dev->spi);
 
-    spi_send8(dev->spi, addr);
+    (void)bmi270_reg_xfer_byte(dev, addr);
     for (uint32_t i = 0; i < sz; i++)
     {
-        spi_send8(dev->spi, buf[i]);
+        (void)bmi270_reg_xfer_byte(dev, buf[i]);
     }
 
     spi_disable(dev->spi);
