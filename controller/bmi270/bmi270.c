@@ -766,58 +766,46 @@ bmi270_res_t bmi270_soft_rst(struct bmi270_dev *const dev)
 bmi270_res_t bmi270_pwr_mode_set(const struct bmi270_dev *const dev,
                                  const struct bmi270_pwr_mode_conf *const pwr_mode_conf)
 {
-    if ((dev == NULL) || (dev->spi_ctrl == NULL) || (pwr_mode_conf == NULL))
+    if ((dev == NULL) || (pwr_mode_conf == NULL))
     {
         return BMI270_RES_ERR;
     }
 
-    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
-    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
-    {
-        return BMI270_RES_ERR;
-    }
-
+    uint8_t addr;
+    uint8_t buf[2] = { 0 };
     uint8_t pwr_ctrl_reg;
     uint8_t acc_conf_reg;
     uint8_t gyr_conf_reg;
     uint8_t pwr_conf_reg;
 
-    uint8_t  adr;
-    uint8_t  buf[3] = { 0 };
-    uint32_t sz;
-
     /* Read the PWR_CONF and PWR_CTRL registers values. */
-    adr = BMI270_REG_PWR_CONF;
-    sz  = 2;
-    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_PWR_CONF;
+    if (bmi270_reg_read_mult_bytes(dev, addr, &buf[0], sizeof(buf)) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
-    pwr_conf_reg = buf[1];
-    pwr_ctrl_reg = buf[2];
+    pwr_conf_reg = buf[0];
+    pwr_ctrl_reg = buf[1];
 
     /* Read the ACC_CONF register value. */
-    adr = BMI270_REG_ACC_CONF;
-    sz  = 1;
-    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_ACC_CONF;
+    if (bmi270_reg_read_byte(dev, addr, &buf[0]) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
-    acc_conf_reg = buf[1];
+    acc_conf_reg = buf[0];
 
     /* Read the GYR_CONF register value. */
-    adr = BMI270_REG_GYR_CONF;
-    sz  = 1;
-    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_GYR_CONF;
+    if (bmi270_reg_read_byte(dev, addr, &buf[0]) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
-    gyr_conf_reg = buf[1];
+    gyr_conf_reg = buf[0];
 
-    /*
     pwr_conf_reg &= ~(pwr_mode_conf->pwr_conf_mask);
     pwr_conf_reg |=  (pwr_mode_conf->pwr_conf_val);
 
