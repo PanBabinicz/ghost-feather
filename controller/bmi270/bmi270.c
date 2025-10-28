@@ -674,13 +674,13 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev)
     addr = BMI270_REG_PWR_CONF;
     byte = BMI270_POR_PWR_CONF;
     byte &= ~BMI270_PWR_CONF_APS_MSK;
-    if ((bmi270_reg_read_byte(dev, addr, &byte) != BMI270_RES_OK))
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Wait for at least 450us. */
-    timing_delay_us(1000);
+    timing_delay_us(500);
 
     /* Write INIT_CTRL.init_ctrl = 0x00 to prepare config load. */
     addr = BMI270_REG_INIT_CTRL;
