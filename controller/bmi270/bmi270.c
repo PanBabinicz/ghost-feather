@@ -888,84 +888,66 @@ bmi270_res_t bmi270_stat_get(const struct bmi270_dev *const dev, bmi270_stat_t *
 
 bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
 {
-    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    if (dev == NULL)
     {
         return BMI270_RES_ERR;
     }
 
-    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
-    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
-    {
-        return BMI270_RES_ERR;
-    }
-
-    uint8_t  adr;
-    uint8_t  buf[2] = { 0 };
-    uint32_t sz;
-    uint8_t  acc_slf_tst_reg = 0;
+    uint8_t addr;
+    uint8_t byte;
+    uint8_t acc_slf_tst_reg = 0;
 
     int16_t pos_x, pos_y, pos_z;
     int16_t neg_x, neg_y, neg_z;
 
     /* Enable accelerometer with register PWR_CTRL.acc_en = 0x01. */
-    adr    = BMI270_REG_PWR_CTRL;
-    buf[0] = 1;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_PWR_CTRL;
+    byte = 0x01;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Set +/-16g range in register ACC_RANGE.acc_range. */
-    adr    = BMI270_REG_ACC_RANGE;
-    buf[0] = BMI270_ACC_RANGE_16G;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_ACC_RANGE;
+    byte = BMI270_ACC_RANGE_16G;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Set self test amplitude to high by settign ACC_SELF_TEST.acc_self_test_amp = 0x01. */
     acc_slf_tst_reg = BMI270_ACC_SLF_TST_AMP_HIGH;
-    adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = acc_slf_tst_reg;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_ACC_SLF_TST;
+    byte = acc_slf_tst_reg;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Wait for > 2ms. */
-    if (bmi270_wait_cycles(dev, BMI270_US_TO_CYCLES(2000)) != BMI270_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
+    timing_delay_us(3000);
 
     /* Set positive self-test polarity (ACC_SELF_TEST.acc_self_test_sign = 0x01). */
     acc_slf_tst_reg |= BMI270_ACC_SLF_TST_SIG_POS;
-    adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = acc_slf_tst_reg;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_ACC_SLF_TST;
+    byte = acc_slf_tst_reg;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Enable self-test (ACC_SELF_TEST.acc_self_test_en = 0x01). */
     acc_slf_tst_reg |= BMI270_ACC_SLF_TST_EN_ON;
-    adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = acc_slf_tst_reg;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_ACC_SLF_TST;
+    byte = acc_slf_tst_reg;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Wait for > 50ms. */
-    if (bmi270_wait_cycles(dev, BMI270_US_TO_CYCLES(50000)) != BMI270_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
+    timing_delay_us(55000);
 
     /* Read and store positive acceleration value of each axis from registers DATA_8 to DATA_13. */
     bmi270_acc_read(dev);
@@ -975,29 +957,24 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
 
     /* Set negative self-test polarity (ACC_SELF_TEST.acc_self_test_sign = 0x00). */
     acc_slf_tst_reg &= ~(BMI270_ACC_SLF_TST_SIG_POS | BMI270_ACC_SLF_TST_EN_ON);
-    adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = acc_slf_tst_reg;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_ACC_SLF_TST;
+    byte = acc_slf_tst_reg;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Enable self-test (ACC_SELF_TEST.acc_self_test_en = 0x01). */
     acc_slf_tst_reg |= BMI270_ACC_SLF_TST_EN_ON;
-    adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = acc_slf_tst_reg;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_ACC_SLF_TST;
+    byte = acc_slf_tst_reg;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Wait for > 50ms. */
-    if (bmi270_wait_cycles(dev, BMI270_US_TO_CYCLES(50000)) != BMI270_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
+    timing_delay_us(55000);
 
     /* Read and store negative acceleration value of each axis from registers DATA_8 to DATA_13. */
     bmi270_acc_read(dev);
@@ -1121,22 +1098,15 @@ bmi270_res_t bmi270_gyr_slf_tst(struct bmi270_dev *const dev)
 
 bmi270_res_t bmi270_acc_read(struct bmi270_dev *const dev)
 {
-    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    if (dev == NULL)
     {
         return BMI270_RES_ERR;
     }
 
-    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
-    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
-    {
-        return BMI270_RES_ERR;
-    }
+    uint8_t addr   = BMI270_REG_DATA_8;
+    uint8_t buf[6] = { 0 };
 
-    uint8_t  adr    = BMI270_REG_DATA_8;
-    uint8_t  buf[7] = { 0 };
-    uint32_t sz     = 6;
-
-    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    if (bmi270_reg_read_mult_bytes(dev, addr, &buf[0], sizeof(buf)) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
@@ -1167,7 +1137,14 @@ bmi270_res_t bmi270_acc_set_x(struct bmi270_dev *const dev, const int16_t x)
         return BMI270_RES_ERR;
     }
 
-    if (bmi270_cmd_send(dev, BMI270_REG_CMD, BMI270_CMD_SOFTRESET) != BMI270_RES_OK)
+    dev->acc.data.x = x;
+
+    return BMI270_RES_OK;
+}
+
+bmi270_res_t bmi270_acc_get_y(const struct bmi270_dev *const dev, int16_t *const y)
+{
+    if ((dev == NULL) || (y == NULL))
     {
         return BMI270_RES_ERR;
     }
