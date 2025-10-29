@@ -435,15 +435,13 @@ static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint3
 /// \breif Sends given command to the bmi270 device.
 ///
 /// \param[in] dev         The bmi270 device.
-/// \param[in] addr        The bmi270 register address.
 /// \param[in] cmd         The bmi270 command to be sent.
 ///
 /// \return bmi270_res_t   The bmi270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
-static bmi270_res_t bmi270_cmd_send(struct bmi270_dev *const dev, const uint8_t addr,
-        const uint8_t cmd);
+static bmi270_res_t bmi270_cmd_send(struct bmi270_dev *const dev, const uint8_t cmd);
 
 ///***********************************************************************************************************
 /// Private functions - definition.
@@ -618,10 +616,9 @@ static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint3
     return BMI270_RES_OK;
 }
 
-static bmi270_res_t bmi270_cmd_send(struct bmi270_dev *const dev, const uint8_t addr,
-        const uint8_t cmd)
+static bmi270_res_t bmi270_cmd_send(struct bmi270_dev *const dev, const uint8_t cmd)
 {
-    if (bmi270_reg_write_byte(dev, addr, cmd) != BMI270_RES_OK)
+    if (bmi270_reg_write_byte(dev, BMI270_REG_CMD, cmd) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
@@ -744,18 +741,12 @@ bmi270_res_t bmi270_deinit(struct bmi270_dev *const dev)
 /* TODO: Must not be performed while NVM writing operation is in progress. */
 bmi270_res_t bmi270_soft_rst(struct bmi270_dev *const dev)
 {
-    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    if (dev == NULL)
     {
         return BMI270_RES_ERR;
     }
 
-    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
-    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
-    {
-        return BMI270_RES_ERR;
-    }
-
-    if (bmi270_cmd_soft_rst(dev) != BMI270_RES_OK)
+    if (bmi270_cmd_send(dev, BMI270_CMD_SOFTRESET) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
@@ -817,47 +808,31 @@ bmi270_res_t bmi270_pwr_mode_set(const struct bmi270_dev *const dev,
 
     gyr_conf_reg &= ~(pwr_mode_conf->gyr_conf_mask);
     gyr_conf_reg |=  (pwr_mode_conf->gyr_conf_val);
-    */
 
     /* Write the PWR_CONF and PWR_CTRL registers values. */
-    adr    = BMI270_REG_PWR_CONF;
+    addr   = BMI270_REG_PWR_CONF;
     buf[0] = pwr_conf_reg;
     buf[1] = pwr_ctrl_reg;
-    sz     = 2;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    if (bmi270_reg_write_mult_bytes(dev, addr, &buf[0], sizeof(buf)) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Write the ACC_CONF register value. */
-    adr    = BMI270_REG_ACC_CONF;
+    addr   = BMI270_REG_ACC_CONF;
     buf[0] = acc_conf_reg;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    if (bmi270_reg_write_byte(dev, addr, buf[0]) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Write the GYR_CONF register value. */
-    adr    = BMI270_REG_GYR_CONF;
+    addr   = BMI270_REG_GYR_CONF;
     buf[0] = gyr_conf_reg;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    if (bmi270_reg_write_byte(dev, addr, buf[0]) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
-
-    return BMI270_RES_OK;
-}
-
-bmi270_res_t bmi270_spi_ctrl_asg(struct bmi270_dev *const dev)
-{
-    if (dev == NULL)
-    {
-        return BMI270_RES_ERR;
-    }
-
-    dev->spi_ctrl = spi_ctrl_dev_get();
 
     return BMI270_RES_OK;
 }
@@ -986,10 +961,9 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
      *       minimum difference signal values defined in the table below. */
 
     /* Disable self-test (ACC_SELF_TEST.acc_self_test_en = 0x01). */
-    adr    = BMI270_REG_ACC_SLF_TST;
-    buf[0] = BMI270_ACC_SLF_TST_EN_OFF;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_ACC_SLF_TST;
+    byte = BMI270_ACC_SLF_TST_EN_OFF;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
@@ -999,23 +973,16 @@ bmi270_res_t bmi270_acc_slf_tst(struct bmi270_dev *const dev)
 
 bmi270_res_t bmi270_gyr_slf_tst(struct bmi270_dev *const dev)
 {
-    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    if (dev == NULL)
     {
         return BMI270_RES_ERR;
     }
 
-    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
-    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
-    {
-        return BMI270_RES_ERR;
-    }
-
-    uint8_t  adr;
-    uint8_t  buf[2] = { 0 };
-    uint32_t sz;
+    uint8_t addr;
+    uint8_t byte;
 
     /* Issue a soft reset or a power-on reset. */
-    if (bmi270_cmd_soft_rst(dev) != BMI270_RES_OK)
+    if (bmi270_cmd_send(dev, BMI270_CMD_SOFTRESET) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
@@ -1027,68 +994,60 @@ bmi270_res_t bmi270_gyr_slf_tst(struct bmi270_dev *const dev)
     }
 
     /* Disable APS PWR_CONF.adv_pwr_save = 0x00. */
-    adr    = BMI270_REG_PWR_CONF;
-    buf[0] = BMI270_PWR_CONF_APS_OFF;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_PWR_CONF;
+    byte = BMI270_PWR_CONF_APS_OFF;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Wait for 450us. */
-    if (bmi270_wait_cycles(dev, BMI270_US_TO_CYCLES(450)) != BMI270_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
+    timing_delay_us(500);
 
     /* Enable accelerometer PWR_CTRL.acc_en = 0x01. */
-    adr    = BMI270_REG_PWR_CTRL;
-    buf[0] = BMI270_PWR_CTRL_ACC_ON;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_PWR_CTRL;
+    byte = BMI270_PWR_CTRL_ACC_ON;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* Send g_trigger command using the register CMD. */
-    adr    = BMI270_REG_CMD;
-    buf[0] = BMI270_CMD_G_TRIGGER;
-    sz     = 1;
-    if (bmi270_reg_write(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_CMD;
+    byte = BMI270_CMD_G_TRIGGER;
+    if (bmi270_reg_write_byte(dev, addr, byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
     /* GYR_GAIN_STATUS.g_trig_status reports of a successful self-test or execution errors. */
-    adr    = BMI270_REG_FEATURES_8;
-    sz     = 1;
-    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    addr = BMI270_REG_FEATURES_8;
+    if (bmi270_reg_read_byte(dev, addr, &byte) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
-    if ((buf[1] & BMI270_GYR_GAIN_STAT_PRECON) ||
-        (buf[1] & BMI270_GYR_GAIN_STAT_DL) ||
-        (buf[1] & BMI270_GYR_GAIN_STAT_ABORT))
+    if ((byte & BMI270_GYR_GAIN_STAT_PRECON) ||
+        (byte & BMI270_GYR_GAIN_STAT_DL) ||
+        (byte & BMI270_GYR_GAIN_STAT_ABORT))
     {
         return BMI270_RES_ERR;
     }
 
     /* Self test is complete, after the device sets GYR_SELF_TEST_AXES.gyr_st_axes_done = 0x01. */
-    adr    = BMI270_REG_GYR_SLF_TST_AXES;
-    sz     = 1;
-    while ((buf[1] & BMI270_GYR_SLF_TST_DONE_MSK) != BMI270_GYR_SLF_TST_DONE)
+    addr = BMI270_REG_GYR_SLF_TST_AXES;
+    while ((byte & BMI270_GYR_SLF_TST_DONE_MSK) != BMI270_GYR_SLF_TST_DONE)
     {
-        if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+        if (bmi270_reg_read_byte(dev, addr, &byte) != BMI270_RES_OK)
         {
             return BMI270_RES_ERR;
         }
     }
 
     /* The test passed if all axes report the status "ok" by GYR_SELF_TEST_AXES.gyr_axis[xyz]_ok = 0x01. */
-    if ((buf[1] & BMI270_GYR_SLF_TST_X_ERR) ||
-        (buf[1] & BMI270_GYR_SLF_TST_Y_ERR) ||
-        (buf[1] & BMI270_GYR_SLF_TST_Z_ERR))
+    if ((byte & BMI270_GYR_SLF_TST_X_ERR) ||
+        (byte & BMI270_GYR_SLF_TST_Y_ERR) ||
+        (byte & BMI270_GYR_SLF_TST_Z_ERR))
     {
         return BMI270_RES_ERR;
     }
@@ -1192,22 +1151,15 @@ bmi270_res_t bmi270_acc_set_z(struct bmi270_dev *const dev, const int16_t z)
 
 bmi270_res_t bmi270_gyr_read(struct bmi270_dev *const dev)
 {
-    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    if (dev == NULL)
     {
         return BMI270_RES_ERR;
     }
 
-    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
-    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
-    {
-        return BMI270_RES_ERR;
-    }
+    uint8_t addr   = BMI270_REG_DATA_14;
+    uint8_t buf[6] = { 0 };
 
-    uint8_t  adr    = BMI270_REG_DATA_14;
-    uint8_t  buf[7] = { 0 };
-    uint32_t sz     = 6;
-
-    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    if (bmi270_reg_read_mult_bytes(dev, addr, &buf[0], sizeof(buf)) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
@@ -1293,22 +1245,15 @@ bmi270_res_t bmi270_gyr_set_z(struct bmi270_dev *const dev, const int16_t z)
 
 bmi270_res_t bmi270_temp_read(struct bmi270_dev *const dev)
 {
-    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    if (dev == NULL)
     {
         return BMI270_RES_ERR;
     }
 
-    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
-    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
-    {
-        return BMI270_RES_ERR;
-    }
+    uint8_t addr   = BMI270_REG_TEMPERATURE_0;
+    uint8_t buf[2] = { 0 };
 
-    uint8_t  adr    = BMI270_REG_TEMPERATURE_0;
-    uint8_t  buf[3] = { 0 };
-    uint32_t sz     = 2;
-
-    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
+    if (bmi270_reg_read_mult_bytes(dev, addr, &buf[0], sizeof(buf)) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
@@ -1344,27 +1289,20 @@ bmi270_res_t bmi270_temp_set(struct bmi270_dev *const dev, int16_t temp)
 
 bmi270_res_t bmi270_time_read(struct bmi270_dev *const dev)
 {
-    if ((dev == NULL) || (dev->spi_ctrl == NULL))
+    if (dev == NULL)
     {
         return BMI270_RES_ERR;
     }
 
-    spi_ctrl_stat_t spi_ctrl_stat = spi_ctrl_stat_get(dev->spi_ctrl);
-    if (spi_ctrl_stat == SPI_CTRL_STAT_DEINIT)
+    uint8_t addr   = BMI270_REG_SENSORTIME_0;
+    uint8_t buf[2] = { 0 };
+
+    if (bmi270_reg_read_mult_bytes(dev, addr, &buf[0], sizeof(buf)) != BMI270_RES_OK)
     {
         return BMI270_RES_ERR;
     }
 
-    uint8_t  adr    = BMI270_REG_SENSORTIME_0;
-    uint8_t  buf[4] = { 0 };
-    uint32_t sz     = 3;
-
-    if (bmi270_reg_read(dev, adr, &buf[0], sz) != BMI270_RES_OK)
-    {
-        return BMI270_RES_ERR;
-    }
-
-    dev->time.data = ((buf[1] << 0x10) | (buf[2] << 0x08) | (buf[3] << 0x00));
+    dev->time.data = (((buf[1] & 0x00ff) << 0x10) | (buf[0] & 0xff00) | (buf[0] & 0x00ff));
 
     return BMI270_RES_OK;
 }
