@@ -326,6 +326,12 @@ target_link_libraries(
     vectortable
     )
 
+target_compile_definitions(
+    ghost-feather-app.elf
+    PRIVATE
+    "$<$<COMPILE_LANGUAGE:C>:BMI270_VLD_CONF_FILE=1>"
+    )
+
 target_link_options(
     ghost-feather-app.elf
     PRIVATE
