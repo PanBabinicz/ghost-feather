@@ -1070,9 +1070,9 @@ bmi270_res_t bmi270_acc_read(struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    dev->acc.data.x = ((buf[2] << 0x08) | (buf[1] << 0x00));
-    dev->acc.data.y = ((buf[4] << 0x08) | (buf[3] << 0x00));
-    dev->acc.data.z = ((buf[6] << 0x08) | (buf[5] << 0x00));
+    dev->acc.data.x = ((buf[1] << 0x08) | (buf[0] << 0x00));
+    dev->acc.data.y = ((buf[3] << 0x08) | (buf[2] << 0x00));
+    dev->acc.data.z = ((buf[5] << 0x08) | (buf[4] << 0x00));
 
     return BMI270_RES_OK;
 }
@@ -1164,9 +1164,9 @@ bmi270_res_t bmi270_gyr_read(struct bmi270_dev *const dev)
         return BMI270_RES_ERR;
     }
 
-    dev->gyr.data.x = ((buf[2] << 0x08) | (buf[1] << 0x00));
-    dev->gyr.data.y = ((buf[4] << 0x08) | (buf[3] << 0x00));
-    dev->gyr.data.z = ((buf[6] << 0x08) | (buf[5] << 0x00));
+    dev->gyr.data.x = ((buf[1] << 0x08) | (buf[0] << 0x00));
+    dev->gyr.data.y = ((buf[3] << 0x08) | (buf[2] << 0x00));
+    dev->gyr.data.z = ((buf[5] << 0x08) | (buf[4] << 0x00));
 
     return BMI270_RES_OK;
 }
