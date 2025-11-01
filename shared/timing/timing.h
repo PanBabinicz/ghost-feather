@@ -10,6 +10,12 @@
 extern volatile uint32_t timing_sysclk_freq;
 
 ///
+/// \brief APB2 frequency value (Hz) stored in shared memory for use across all firmware
+///        stages.
+///
+extern volatile uint32_t timing_apb2_freq;
+
+///
 /// \brief The timing result type.
 ///
 typedef enum timing_res
