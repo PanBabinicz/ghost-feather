@@ -87,7 +87,7 @@ static struct spi_ctrl_dev spi_ctrl =
         .ssm      = SPI_CTRL_SSM_0,
         .ssi      = SPI_CTRL_SSI_0,
         .mstr     = SPI_CTRL_MSTR_1,
-        .br       = SPI_CR1_BR_FPCLK_DIV_64,
+        .br       = SPI_CR1_BR_FPCLK_DIV_16,
     },
     .cr2 =
     {
@@ -95,7 +95,7 @@ static struct spi_ctrl_dev spi_ctrl =
         .ssoe     = SPI_CTRL_SSOE_1,
         .frf      = SPI_CTRL_FRF_0,
         .nssp     = SPI_CTRL_NSSP_0,
-        .frxth    = SPI_CTRL_FRXTH_0,
+        .frxth    = SPI_CTRL_FRXTH_1,
         .ldmatx   = SPI_CTRL_LDMATX_0,
         .ldmarx   = SPI_CTRL_LDMARX_0,
     },
@@ -381,122 +381,6 @@ spi_ctrl_res_t spi_ctrl_dev_deinit(struct spi_ctrl_dev *const dev)
 struct spi_ctrl_dev* spi_ctrl_dev_get(void)
 {
     return &spi_ctrl;
-}
-
-spi_ctrl_stat_t spi_ctrl_stat_get(const struct spi_ctrl_dev *const dev)
-{
-    if (dev == NULL)
-    {
-        return SPI_CTRL_STAT_DEINIT;
-    }
-
-    return dev->stat;
-}
-
-spi_ctrl_res_t spi_ctrl_begin(struct spi_ctrl_dev *const dev, const uint32_t gpio_port,
-                              const uint32_t gpios)
-{
-    if (dev == NULL)
-    {
-        return SPI_CTRL_RES_ERR;
-    }
-
-    if (dev->cr2.ssoe == SPI_CTRL_SSOE_0)
-    {
-        /* Change the NSS to low state. */
-        gpio_clear(gpio_port, gpios);
-    }
-
-    spi_enable(dev->intf);
-    dev->stat = SPI_CTRL_STAT_RUN;
-
-    return SPI_CTRL_RES_OK;
-}
-
-spi_ctrl_res_t spi_ctrl_end(struct spi_ctrl_dev *const dev, const uint32_t gpio_port,
-                            const uint32_t gpios)
-{
-    if (dev == NULL)
-    {
-        return SPI_CTRL_RES_ERR;
-    }
-
-    spi_disable(dev->intf);
-    dev->stat = SPI_CTRL_STAT_STOP;
-
-    if (dev->cr2.ssoe == SPI_CTRL_SSOE_0)
-    {
-        /* Change the NSS to high state. */
-        gpio_set(gpio_port, gpios);
-    }
-
-    return SPI_CTRL_RES_OK;
-}
-
-spi_ctrl_res_t spi_ctrl_recv(const struct spi_ctrl_dev *const dev, uint8_t *const buf,
-                             const uint32_t sz)
-{
-    if ((dev == NULL) || (buf == NULL))
-    {
-        return SPI_CTRL_RES_ERR;
-    }
-
-    const uint8_t step  = (dev->cr2.ds <= SPI_CTRL_DS_8) ? 1 : 2;
-    for (size_t i = 0; i < sz; i += step)
-    {
-        uint16_t data = spi_read(dev->intf);
-
-        if (step == 2)
-        {
-            if ((i + 1) >= sz)
-            {
-                return SPI_CTRL_RES_ERR;
-            }
-
-            buf[i]     = ((data >> 8) & 0xff);
-            buf[i + 1] = ((data >> 0) & 0xff);
-        }
-        else
-        {
-            buf[i] = ((data >> 0) & 0xff);
-        }
-    }
-
-    return SPI_CTRL_RES_OK;
-}
-
-spi_ctrl_res_t spi_ctrl_send(const struct spi_ctrl_dev *const dev, const uint8_t *const buf,
-                             const uint32_t sz)
-{
-    if ((dev == NULL) || (buf == NULL))
-    {
-        return SPI_CTRL_RES_ERR;
-    }
-
-    const uint8_t step = (dev->cr2.ds <= SPI_CTRL_DS_8) ? 1 : 2;
-
-    for (size_t i = 0; i < sz; i += step)
-    {
-        uint16_t data;
-
-        if (step == 2)
-        {
-            if ((i + 1) >= sz)
-            {
-                return SPI_CTRL_RES_ERR;
-            }
-
-            data = (((uint16_t)buf[i] << 8) | buf[i + 1]);
-        }
-        else
-        {
-            data = buf[i];
-        }
-
-        spi_send(dev->intf, data);
-    }
-
-    return SPI_CTRL_RES_OK;
 }
 
 spi_ctrl_res_t spi_ctrl_crcpr_set(struct spi_ctrl_dev *const dev, const uint16_t crcpoly)

@@ -138,7 +138,7 @@ struct bmi270_dev
     struct bmi270_time  time;                       /*!< The sensor time instance.                          */
     struct gpio_pair    gpio;                       /*!< The gpio pair.                                     */
     struct bmi270_conf  conf;                       /*!< The bmi270 config.                                 */
-    struct spi_ctrl_dev *spi_ctrl;                  /*!< The spi controller device.                         */
+    uint32_t            spi;                        /*!< The spi base address.                              */
     bool                stat;                       /*!< The status flag.                                   */
 };
 
@@ -179,7 +179,7 @@ static struct bmi270_dev bmi270 =
         .sz   = sizeof(bmi270_conf_file),
         .file = &bmi270_conf_file[0],
     },
-    .spi_ctrl = NULL,
+    .spi      = SPI1,
     .stat     = BMI270_STAT_DEINIT,
 };
 
