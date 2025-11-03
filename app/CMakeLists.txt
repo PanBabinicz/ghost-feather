@@ -1,5 +1,24 @@
+# --------------------------------------------------
+# SPDX-License-Identifier: MIT
+# --------------------------------------------------
+# Project: Ghost Feather Firmware (STM32F7)
+# Modules:
+#   - Application
+#
+# Description:
+#   Defines the main application build configuration
+#   for the STM32F722 MCU. Collects all application
+#   sources, sets include paths, and links against
+#   shared libraries and the common interface target
+#   (`gfc_common_options`).
+# --------------------------------------------------
+# Files list genereation
+# --------------------------------------------------
 file(GLOB_RECURSE APP_SOURCES stm32f722xx/*.c)
 
+# --------------------------------------------------
+# Target: Application
+# --------------------------------------------------
 set_property(
     GLOBAL
     PROPERTY APP_SOURCES
@@ -12,28 +31,18 @@ add_library(
     ${APP_SOURCES}
     )
 
-message(STATUS "Add app target include directories")
 target_include_directories(
     app
     PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/controller/bmi270
+    ${PROJECT_SOURCE_DIR}/controller/spi
+    ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     )
 
-message(STATUS "Add app target compile definitions")
-target_compile_definitions(
+target_link_libraries(
     app
     PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    )
-
-message(STATUS "Add app target compile options")
-target_compile_options(
-    app
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv4-sp-d16>"
-    "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
-    "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O3>"
+    gfc_common_options
     )
