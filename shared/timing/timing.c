@@ -18,6 +18,12 @@
 volatile uint32_t __attribute__((section(".shared"))) timing_sysclk_freq;
 
 ///
+/// \brief APB1 frequency value (Hz) stored in shared memory for use across all firmware
+///        stages.
+///
+volatile uint32_t __attribute__((section(".shared"))) timing_apb1_freq;
+
+///
 /// \brief APB2 frequency value (Hz) stored in shared memory for use across all firmware
 ///        stages.
 ///
