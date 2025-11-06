@@ -75,21 +75,49 @@ static void rcc_setup(void)
 {
     rcc_clock_setup_hse(&rcc_3v3[RCC_CLOCK_3V3_216MHZ], 16);
 
-    /* Enable clock for red led */
+    /* Enable clock for GPIOA.  */
     rcc_periph_clock_enable(RCC_GPIOA);
 
-    /* Enable clock for SPI1 */
+    /* Enable clock for GPIOB.  */
+    rcc_periph_clock_enable(RCC_GPIOB);
+
+    /* Enable clock for GPIOC.  */
+    rcc_periph_clock_enable(RCC_GPIOC);
+
+    /* Enable clock for SPI1. */
     rcc_periph_clock_enable(RCC_SPI1);
+
+    /* Enable clock for TIM4.  */
+    rcc_periph_clock_enable(RCC_TIM4);
+
+    /* Enable clock for TIM8.  */
+    rcc_periph_clock_enable(RCC_TIM8);
+
+    /* Enable clock for TIM12.  */
+    rcc_periph_clock_enable(RCC_TIM12);
 }
 
+/* TODO: Set te gpio speed and driver type for timers. */
 static void gpio_setup(void)
 {
     gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO2);
     gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_PULLUP, GPIO4);
 
-    /* Set SPI1 gpios alternate function */
+    /* Set SPI1 gpios alternate function. */
     gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, (GPIO5 | GPIO6 | GPIO7));
     gpio_set_af(GPIOA, GPIO_AF5, (GPIO5 | GPIO6 | GPIO7));
+
+    /* Set TIM4 gpios alternate function. */
+    gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, (GPIO6 | GPIO7 | GPIO8 | GPIO9));
+    gpio_set_af(GPIOB, GPIO_AF2, (GPIO6 | GPIO7 | GPIO8 | GPIO9));
+
+    /* Set TIM8 gpios alternate function. */
+    gpio_mode_setup(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, (GPIO6 | GPIO7 | GPIO8 | GPIO9));
+    gpio_set_af(GPIOC, GPIO_AF3, (GPIO6 | GPIO7 | GPIO8 | GPIO9));
+
+    /* Set TIM12 gpios alternate function. */
+    gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, (GPIO14 | GPIO15));
+    gpio_set_af(GPIOB, GPIO_AF9, (GPIO14 | GPIO15));
 }
 
 static void systick_setup(void)
