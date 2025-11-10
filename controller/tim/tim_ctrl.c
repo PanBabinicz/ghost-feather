@@ -693,6 +693,191 @@ union tim_ctrl_gpx_timx_ccmr2_alt
 ///
 /// \brief
 ///
+union tim_ctrl_gpx_timx_ccer
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t cc1e     : 1;
+        uint16_t cc1p     : 1;
+        uint16_t          : 1;
+        uint16_t cc1np    : 1;
+        uint16_t cc2e     : 1;
+        uint16_t cc2p     : 1;
+        uint16_t          : 1;
+        uint16_t cc2np    : 1;
+        uint16_t cc3e     : 1;
+        uint16_t cc3p     : 1;
+        uint16_t          : 1;
+        uint16_t cc3np    : 1;
+        uint16_t cc4e     : 1;
+        uint16_t cc4p     : 1;
+        uint16_t          : 1;
+        uint16_t cc4np    : 1;
+    };
+};
+
+///
+/// \brief
+///
+/// \note  TIM2 and TIM5 have 32bit counter. Use 'r' to get/modify content of the counter.
+///
+union tim_ctrl_gpx_timx_cnt
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t cnt      : 16;
+        uint32_t          : 15;
+        uint32_t uifcpy   : 1;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_timx_psc
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t psc      : 16;
+    };
+};
+
+///
+/// \brief
+///
+/// \note  TIM2 and TIM5 have 32bit auto reload register. Use 'r' to get/modify theirs content.
+///
+union tim_ctrl_gpx_timx_arr
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t arr      : 16;
+        uint32_t          : 16;
+    };
+};
+
+///
+/// \brief
+///
+/// \note  TIM2 and TIM5 have 32bit capture/compare register. Use 'r' to get/modify theirs content.
+///
+union tim_ctrl_gpx_timx_ccr1
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t ccr1     : 16;
+        uint32_t          : 16;
+    };
+};
+
+///
+/// \brief
+///
+/// \note  TIM2 and TIM5 have 32bit capture/compare register. Use 'r' to get/modify theirs content.
+///
+union tim_ctrl_gpx_timx_ccr2
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t ccr2     : 16;
+        uint32_t          : 16;
+    };
+};
+
+///
+/// \brief
+///
+/// \note  TIM2 and TIM5 have 32bit capture/compare register. Use 'r' to get/modify theirs content.
+///
+union tim_ctrl_gpx_timx_ccr3
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t ccr3     : 16;
+        uint32_t          : 16;
+    };
+};
+
+///
+/// \brief
+///
+/// \note  TIM2 and TIM5 have 32bit capture/compare register. Use 'r' to get/modify theirs content.
+///
+union tim_ctrl_gpx_timx_ccr4
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t ccr4     : 16;
+        uint32_t          : 16;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_timx_dcr
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t dba      : 5;
+        uint16_t          : 3;
+        uint16_t dbl      : 5;
+        uint16_t          : 3;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_timx_dmar
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t dmab     : 16;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim2_or
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t          : 10;
+        uint16_t itr1_rmp : 2;
+        uint16_t          : 4;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim5_or
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t          : 6;
+        uint16_t ti4_rmp  : 2;
+        uint16_t          : 8;
+    };
+};
+
+///
+/// \brief
+///
 struct tim_ctrl_ch32
 {
     uint32_t ar;
