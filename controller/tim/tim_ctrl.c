@@ -478,7 +478,7 @@ union tim_ctrl_adv4_timx_ccr6
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_cr1
+union tim_ctrl_gpx_tim2345_cr1
 {
     uint16_t r;
     struct bit_field
@@ -500,7 +500,7 @@ union tim_ctrl_gpx_timx_cr1
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_cr2
+union tim_ctrl_gpx_tim2345_cr2
 {
     uint16_t r;
     struct bit_field
@@ -516,7 +516,7 @@ union tim_ctrl_gpx_timx_cr2
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_smcr
+union tim_ctrl_gpx_tim2345_smcr
 {
     uint32_t r;
     struct bit_field
@@ -537,7 +537,7 @@ union tim_ctrl_gpx_timx_smcr
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_dier
+union tim_ctrl_gpx_tim2345_dier
 {
     uint16_t r;
     struct bit_field
@@ -564,7 +564,7 @@ union tim_ctrl_gpx_timx_dier
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_sr
+union tim_ctrl_gpx_tim2345_sr
 {
     uint16_t r;
     struct bit_field
@@ -588,7 +588,7 @@ union tim_ctrl_gpx_timx_sr
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_egr
+union tim_ctrl_gpx_tim2345_egr
 {
     uint16_t r;
     struct bit_field
@@ -607,7 +607,7 @@ union tim_ctrl_gpx_timx_egr
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_ccmr1
+union tim_ctrl_gpx_tim2345_ccmr1
 {
     uint32_t r;
     struct bit_field
@@ -625,7 +625,7 @@ union tim_ctrl_gpx_timx_ccmr1
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_ccmr1_alt
+union tim_ctrl_gpx_tim2345_ccmr1_alt
 {
     uint32_t r;
     struct bit_field
@@ -650,7 +650,7 @@ union tim_ctrl_gpx_timx_ccmr1_alt
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_ccmr2
+union tim_ctrl_gpx_tim2345_ccmr2
 {
     uint32_t r;
     struct bit_field
@@ -668,7 +668,7 @@ union tim_ctrl_gpx_timx_ccmr2
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_ccmr2_alt
+union tim_ctrl_gpx_tim2345_ccmr2_alt
 {
     uint32_t r;
     struct bit_field
@@ -693,7 +693,7 @@ union tim_ctrl_gpx_timx_ccmr2_alt
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_ccer
+union tim_ctrl_gpx_tim2345_ccer
 {
     uint16_t r;
     struct bit_field
@@ -722,7 +722,7 @@ union tim_ctrl_gpx_timx_ccer
 ///
 /// \note  TIM2 and TIM5 have 32bit counter. Use 'r' to get/modify content of the counter.
 ///
-union tim_ctrl_gpx_timx_cnt
+union tim_ctrl_gpx_tim2345_cnt
 {
     uint32_t r;
     struct bit_field
@@ -736,7 +736,7 @@ union tim_ctrl_gpx_timx_cnt
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_psc
+union tim_ctrl_gpx_tim2345_psc
 {
     uint16_t r;
     struct bit_field
@@ -750,7 +750,7 @@ union tim_ctrl_gpx_timx_psc
 ///
 /// \note  TIM2 and TIM5 have 32bit auto reload register. Use 'r' to get/modify theirs content.
 ///
-union tim_ctrl_gpx_timx_arr
+union tim_ctrl_gpx_tim2345_arr
 {
     uint32_t r;
     struct bit_field
@@ -765,7 +765,7 @@ union tim_ctrl_gpx_timx_arr
 ///
 /// \note  TIM2 and TIM5 have 32bit capture/compare register. Use 'r' to get/modify theirs content.
 ///
-union tim_ctrl_gpx_timx_ccr1
+union tim_ctrl_gpx_tim2345_ccr1
 {
     uint32_t r;
     struct bit_field
@@ -780,7 +780,7 @@ union tim_ctrl_gpx_timx_ccr1
 ///
 /// \note  TIM2 and TIM5 have 32bit capture/compare register. Use 'r' to get/modify theirs content.
 ///
-union tim_ctrl_gpx_timx_ccr2
+union tim_ctrl_gpx_tim2345_ccr2
 {
     uint32_t r;
     struct bit_field
@@ -795,7 +795,7 @@ union tim_ctrl_gpx_timx_ccr2
 ///
 /// \note  TIM2 and TIM5 have 32bit capture/compare register. Use 'r' to get/modify theirs content.
 ///
-union tim_ctrl_gpx_timx_ccr3
+union tim_ctrl_gpx_tim2345_ccr3
 {
     uint32_t r;
     struct bit_field
@@ -810,7 +810,7 @@ union tim_ctrl_gpx_timx_ccr3
 ///
 /// \note  TIM2 and TIM5 have 32bit capture/compare register. Use 'r' to get/modify theirs content.
 ///
-union tim_ctrl_gpx_timx_ccr4
+union tim_ctrl_gpx_tim2345_ccr4
 {
     uint32_t r;
     struct bit_field
@@ -823,7 +823,7 @@ union tim_ctrl_gpx_timx_ccr4
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_dcr
+union tim_ctrl_gpx_tim2345_dcr
 {
     uint16_t r;
     struct bit_field
@@ -838,7 +838,7 @@ union tim_ctrl_gpx_timx_dcr
 ///
 /// \brief
 ///
-union tim_ctrl_gpx_timx_dmar
+union tim_ctrl_gpx_tim2345_dmar
 {
     uint16_t r;
     struct bit_field
@@ -872,6 +872,401 @@ union tim_ctrl_gpx_tim5_or
         uint16_t          : 6;
         uint16_t ti4_rmp  : 2;
         uint16_t          : 8;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_cr1
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t cen      : 1;
+        uint16_t udis     : 1;
+        uint16_t urs      : 1;
+        uint16_t opm      : 1;
+        uint16_t          : 3;
+        uint16_t arpe     : 1;
+        uint16_t ckd      : 2;
+        uint16_t          : 1;
+        uint16_t uifremap : 1;
+        uint16_t          : 4;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_smcr
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t sms      : 3;
+        uint32_t          : 1;
+        uint32_t ts       : 3;
+        uint32_t msm      : 1;
+        uint32_t          : 8;
+        uint32_t sms_msb  : 1;
+        uint32_t          : 15;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_dier
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t uie      : 1;
+        uint16_t cc1ie    : 1;
+        uint16_t cc2ie    : 1;
+        uint16_t          : 3;
+        uint16_t tie      : 1;
+        uint16_t          : 9;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_sr
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t uif      : 1;
+        uint16_t cc1if    : 1;
+        uint16_t cc2if    : 1;
+        uint16_t          : 3;
+        uint16_t tif      : 1;
+        uint16_t          : 2;
+        uint16_t cc1of    : 1;
+        uint16_t cc2of    : 1;
+        uint16_t          : 5;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_egr
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t ug       : 1;
+        uint16_t cc1g     : 1;
+        uint16_t cc2g     : 1;
+        uint16_t          : 3;
+        uint16_t tg       : 1;
+        uint16_t          : 9;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_ccmr1
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t cc1s     : 2;
+        uint32_t ic1psc   : 2;
+        uint32_t ic1f     : 4;
+        uint32_t cc2s     : 2;
+        uint32_t ic2psc   : 2;
+        uint32_t ic2f     : 4;
+        uint32_t          : 16;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_ccmr1_alt
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t cc1s     : 2;
+        uint32_t oc1fe    : 1;
+        uint32_t oc1pe    : 1;
+        uint32_t oc1m     : 3;
+        uint32_t          : 1;
+        uint32_t cc2s     : 2;
+        uint32_t oc2fe    : 1;
+        uint32_t oc2pe    : 1;
+        uint32_t oc2m     : 3;
+        uint32_t          : 1;
+        uint32_t oc1m_msb : 1;
+        uint32_t          : 7;
+        uint32_t oc2m_msb : 1;
+        uint32_t          : 7;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_ccer
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t cc1e     : 1;
+        uint16_t cc1p     : 1;
+        uint16_t          : 1;
+        uint16_t cc1np    : 1;
+        uint16_t cc2e     : 1;
+        uint16_t cc2p     : 1;
+        uint16_t          : 1;
+        uint16_t cc2np    : 1;
+        uint16_t          : 8;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_cnt
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t cnt      : 16;
+        uint32_t          : 15;
+        uint32_t uifcpy   : 1;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_psc
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t psc      : 16;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_arr
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint32_t arr      : 16;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_ccr1
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t ccr1     : 16;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim912_ccr2
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t ccr2     : 16;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim10111314_cr1
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t cen      : 1;
+        uint16_t udis     : 1;
+        uint16_t urs      : 1;
+        uint16_t opm      : 1;
+        uint16_t          : 3;
+        uint16_t arpe     : 1;
+        uint16_t ckd      : 2;
+        uint16_t          : 1;
+        uint16_t uifremap : 1;
+        uint16_t          : 4;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim10111314_dier
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t uie      : 1;
+        uint16_t cc1ie    : 1;
+        uint16_t          : 10;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim10111314_sr
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t uif      : 1;
+        uint16_t cc1if    : 1;
+        uint16_t          : 7;
+        uint16_t cc1of    : 1;
+        uint16_t          : 6;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim10111314_egr
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t ug       : 1;
+        uint16_t cc1g     : 1;
+        uint16_t          : 10;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim10111314_ccmr1
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t cc1s     : 2;
+        uint32_t ic1psc   : 2;
+        uint32_t ic1f     : 4;
+        uint32_t          : 24;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim10111314_ccmr1_alt
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t cc1s     : 2;
+        uint32_t oc1fe    : 1;
+        uint32_t oc1pe    : 1;
+        uint32_t oc1m     : 3;
+        uint32_t          : 9;
+        uint32_t oc1m_msb : 1;
+        uint32_t          : 15;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim10111314_ccer
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t cc1e     : 1;
+        uint16_t cc1p     : 1;
+        uint16_t          : 1;
+        uint16_t cc1np    : 1;
+        uint16_t          : 12;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim10111314_cnt
+{
+    uint32_t r;
+    struct bit_field
+    {
+        uint32_t cnt      : 16;
+        uint32_t          : 15;
+        uint32_t uifcpy   : 1;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim10111314_psc
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t psc      : 16;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim10111314_arr
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint32_t arr      : 16;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim10111314_ccr1
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t ccr1     : 16;
+    };
+};
+
+///
+/// \brief
+///
+union tim_ctrl_gpx_tim11_or
+{
+    uint16_t r;
+    struct bit_field
+    {
+        uint16_t ti1_rmp  : 2;
+        uint16_t ccr1     : 14;
     };
 };
 
