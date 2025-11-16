@@ -1,7 +1,8 @@
 #include "tim_ctrl.h"
-#include "tim_ctrl_adv.h"
-#include "tim_ctrl_base.h"
-#include "tim_ctrl_gp.h"
+#include "tim_ctrl_advx.h"
+#include "tim_ctrl_basex.h"
+#include "tim_ctrl_common.h"
+#include "tim_ctrl_gpx.h"
 
 ///***********************************************************************************************************
 /// Private objects - declaration.
@@ -54,6 +55,32 @@ struct tim_ctrl_gp2
     tim_ctrl_ch16 ch_arr[2];
     bool is_init;
 };
+
+///
+/// Used timers inside ghost feather system:
+///
+/// MOTOR0 -> TIM4_CH4  (PB9)   gp4_16
+/// MOTOR1 -> TIM4_CH3  (PB8)   gp4_16
+/// MOTOR2 -> TIM4_CH2  (PB7)   gp4_16
+/// MOTOR3 -> TIM4_CH1  (PB6)   gp4_16
+///
+/// RFCH1  -> TIM8_CH4  (PC9)   adv4
+/// RFCH2  -> TIM8_CH3  (PC8)   adv4
+/// RFCH3  -> TIM8_CH2  (PC7)   adv4
+/// RFCH4  -> TIM8_CH1  (PC6)   adv4
+/// RFCH5  -> TIM12_CH2 (PB15)  gp2
+/// RFCH6  -> TIM12_CH1 (PB14)  gp2
+///
+///  ----------------------------
+/// |                    BAT |*+-|
+/// |                    CH6 |s+-|  --> SWB
+/// |                    CH5 |s+-|  --> SWA
+/// |   FLYSKY FS-R6B    CH4 |s+-|
+/// |                    CH3 |s+-|
+/// |                    CH2 |s+-|
+/// |                    CH1 |s+-|
+///  ----------------------------
+///
 
 ///
 /// \brief
