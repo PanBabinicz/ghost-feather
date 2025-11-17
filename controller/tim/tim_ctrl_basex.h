@@ -137,6 +137,26 @@ struct tim_ctrl_base1_timx_regs
     union tim_ctrl_base1_timx_arr  arr;
 };
 
+///
+/// \brief
+///
+struct tim_ctrl_base1_timx_dev
+{
+    volatile struct tim_ctrl_base1_timx_regs *rmap;
+    struct tim_ctrl_base1_timx_regs rtmp;
+    bool is_init;
+};
+
+///
+/// \brief
+///
+tim_ctrl_res_t tim_ctrl_base1_timx_init(void *tim);
+
+///
+/// \brief
+///
+tim_ctrl_res_t tim_ctrl_base1_timx_deinit(void *tim);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
