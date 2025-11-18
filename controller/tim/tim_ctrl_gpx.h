@@ -7,6 +7,20 @@
 extern "C" {
 #endif  /* __cplusplus */
 
+typedef enum tim_ctrl_gpx_tim2345_id
+{
+    TIM_CTRL_GPX_TIM2345_ID_2 = 0,
+    TIM_CTRL_GPX_TIM2345_ID_3,
+    TIM_CTRL_GPX_TIM2345_ID_4,
+    TIM_CTRL_GPX_TIM2345_ID_5,
+} tim_ctrl_gpx_tim2345_id_t;
+
+typedef enum tim_ctrl_gpx_tim2345_mode
+{
+    TIM_CTRL_GPX_TIM2345_MODE_IN_CAP = 0,
+    TIM_CTRL_GPX_TIM2345_MODE_OUT_COMP,
+} tim_ctrl_gpx_tim2345_mode_t;
+
 ///
 /// \brief
 ///
@@ -887,6 +901,19 @@ struct tim_ctrl_gpx_tim10111314_regs
     union tim_ctrl_gpx_tim10111314_ccr1          ccr1;
     uint32_t                                     res3[6];
     union tim_ctrl_gpx_tim11_or                  tim11_or;
+}
+
+///
+/// \brief
+///
+struct tim_ctrl_gpx_tim2345_dev
+{
+    volatile struct tim_ctrl_gpx_tim2345_regs *rmap;
+    struct tim_ctrl_gpx_tim2345_regs rtmp;
+    tim_ctrl_gpx_tim2345_id_t id;
+    tim_ctrl_gpx_tim2345_mode_t ccmr1_mode;
+    tim_ctrl_gpx_tim2345_mode_t ccmr2_mode;
+    bool is_init;
 }
 
 #ifdef __cplusplus
