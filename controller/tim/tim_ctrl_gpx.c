@@ -96,19 +96,6 @@ static const tim_ctrl_gpx_tim2345_por =
         },
     },
 
-    .egr =
-    {
-        .bit_fields =
-        {
-            .ug       = 0x00,
-            .cc1g     = 0x00,
-            .cc2g     = 0x00,
-            .cc3g     = 0x00,
-            .cc4g     = 0x00,
-            .tg       = 0x00,
-        },
-    },
-
     .ccmr1 =
     {
         .out =
@@ -263,6 +250,171 @@ static const tim_ctrl_gpx_tim2345_por =
     },
 };
 
+///
+/// \brief
+///
+struct tim_ctrl_gpx_tim912_regs
+{
+    union tim_ctrl_gpx_tim912_cr1           cr1;
+    union tim_ctrl_gpx_tim912_smcr          smcr;
+    union tim_ctrl_gpx_tim912_dier          dier;
+    union tim_ctrl_gpx_tim912_sr            sr;
+    union tim_ctrl_gpx_tim912_egr           egr;
+    union
+    {
+        union tim_ctrl_gpx_tim912_ccmr1_in  in;
+        union tim_ctrl_gpx_tim912_ccmr1_out out;
+    } ccmr1;
+    uint32_t                                res0[1];
+    union tim_ctrl_gpx_tim912_ccer          ccer;
+    union tim_ctrl_gpx_tim912_cnt           cnt;
+    union tim_ctrl_gpx_tim912_psc           psc;
+    union tim_ctrl_gpx_tim912_arr           arr;
+    uint32_t                                res1[1];
+    union tim_ctrl_gpx_tim912_ccr1          ccr1;
+    union tim_ctrl_gpx_tim912_ccr2          ccr2;
+};
+
+///
+/// \brief
+///
+static const tim_ctrl_gpx_tim912_por =
+{
+    .cr1 =
+    {
+        .bit_fields =
+        {
+            .cen      = 0x00,
+            .udis     = 0x00,
+            .urs      = 0x00,
+            .opm      = 0x00,
+            .arpe     = 0x00,
+            .ckd      = 0x00,
+            .uifremap = 0x00,
+        },
+    },
+
+    .smcr =
+    {
+        .bit_fields =
+        {
+            .sms      = 0x00,
+            .ts       = 0x00,
+            .msm      = 0x00,
+            .sms_msb  = 0x00,
+        },
+    },
+
+    .dier =
+    {
+        .bit_fields =
+        {
+            .uie      = 0x00,
+            .cc1ie    = 0x00,
+            .cc2ie    = 0x00,
+            .tie      = 0x00,
+        },
+    },
+
+    .sr =
+    {
+        .bit_fields =
+        {
+            .uif      = 0x00,
+            .cc1if    = 0x00,
+            .cc2if    = 0x00,
+            .tif      = 0x00,
+            .cc1of    = 0x00,
+            .cc2of    = 0x00,
+        },
+    },
+
+    .egr =
+    {
+        .bit_fields =
+        {
+            .ug       = 0x00,
+            .cc1g     = 0x00,
+            .cc2g     = 0x00,
+            .tg       = 0x00,
+        },
+    },
+
+    .ccmr1 =
+    {
+        .out =
+        {
+            .bit_fields =
+            {
+                .cc1s     = 0x00,
+                .oc1fe    = 0x00,
+                .oc1pe    = 0x00,
+                .oc1m     = 0x00,
+                .cc2s     = 0x00,
+                .oc2fe    = 0x00,
+                .oc2pe    = 0x00,
+                .oc2m     = 0x00,
+                .oc1m_msb = 0x00,
+                .oc2m_msb = 0x00,
+            },
+        },
+    },
+
+    .ccer =
+    {
+        .bit_fields =
+        {
+            .cc1e     = 0x00,
+            .cc1p     = 0x00,
+            .cc1np    = 0x00,
+            .cc2e     = 0x00,
+            .cc2p     = 0x00,
+            .cc2np    = 0x00,
+        },
+    },
+
+    .cnt =
+    {
+        .bit_fields =
+        {
+            .cnt      = 0x00,
+            .uifcpy   = 0x00,
+        },
+    },
+
+    .psc =
+    {
+        .bit_fields =
+        {
+            .psc      = 0x00,
+        },
+    },
+
+    .arr =
+    {
+        .bit_fields =
+        {
+            .arr      = 0x0000,
+        },
+    },
+
+    .ccr1 =
+    {
+        .bit_fields =
+        {
+            .ccr1     = 0x00,
+        },
+    },
+
+    .ccr2 =
+    {
+        .bit_fields =
+        {
+            .ccr2     = 0x00,
+        },
+    },
+};
+
 tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim)
 {
     if (tim == NULL)
@@ -325,6 +477,40 @@ tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim)
     return TIM_CTRL_RES_OK;
 }
 
+tim_ctrl_res_t tim_ctrl_gpx_tim912_init(void *tim)
+{
+    if (tim == NULL)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
+
+    dev->rmap->cr1.r  = dev->rtmp.cr1.r;
+    dev->rmap->smcr.r = dev->rtmp.smcr.r;
+    dev->rmap->dier.r = dev->rtmp.dier.r;
+    dev->rmap->sr.r   = dev->rtmp.sr.r;
+    dev->rmap->egr.r  = dev->rtmp.egr.r;
+
+    if (dev->ccmr1_mode == TIM_CTRL_GPX_TIM912_MODE_IN_CAP)
+    {
+        dev->rmap->ccmr1.in.r = dev->rtmp.ccmr1.in.r;
+    }
+    else
+    {
+        dev->rmap->ccmr1.out.r = dev->rtmp.ccmr1.out.r;
+    }
+
+    dev->rmap->ccer.r = dev->rtmp.ccer.r;
+    dev->rmap->cnt.r  = dev->rtmp.cnt.r;
+    dev->rmap->psc.r  = dev->rtmp.psc.r;
+    dev->rmap->arr.r  = dev->rtmp.arr.r;
+    dev->rmap->ccr1.r = dev->rtmp.ccr1.r;
+    dev->rmap->ccr2.r = dev->rtmp.ccr2.r;
+
+    return TIM_CTRL_RES_OK;
+}
+
 tim_ctrl_res_t tim_ctrl_gpx_tim2345_deinit(void *tim)
 {
     if (tim == NULL)
@@ -354,6 +540,31 @@ tim_ctrl_res_t tim_ctrl_gpx_tim2345_deinit(void *tim)
     dev->rmap->dmar.r      = tim_ctrl_gpx_tim2345_por.dmar.r;
     dev->rmap->tim2_or.r   = tim_ctrl_gpx_tim2345_por.tim2_or.r;
     dev->rmap->tim5_or.r   = tim_ctrl_gpx_tim2345_por.tim5_or.r;
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_gpx_tim912_deinit(void *tim)
+{
+    if (tim == NULL)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
+
+    dev->rmap->cr1.r       = tim_ctrl_gpx_tim912_por.cr1.r;
+    dev->rmap->smcr.r      = tim_ctrl_gpx_tim912_por.smcr.r;
+    dev->rmap->dier.r      = tim_ctrl_gpx_tim912_por.dier.r;
+    dev->rmap->sr.r        = tim_ctrl_gpx_tim912_por.sr.r;
+    dev->rmap->egr.r       = tim_ctrl_gpx_tim912_por.egr.r;
+    dev->rmap->ccmr1.out.r = tim_ctrl_gpx_tim912_por.ccmr1.out.r;
+    dev->rmap->ccer.r      = tim_ctrl_gpx_tim912_por.ccer.r;
+    dev->rmap->cnt.r       = tim_ctrl_gpx_tim912_por.cnt.r;
+    dev->rmap->psc.r       = tim_ctrl_gpx_tim912_por.psc.r;
+    dev->rmap->arr.r       = tim_ctrl_gpx_tim912_por.arr.r;
+    dev->rmap->ccr1.r      = tim_ctrl_gpx_tim912_por.ccr1.r;
+    dev->rmap->ccr2.r      = tim_ctrl_gpx_tim912_por.ccr2.r;
 
     return TIM_CTRL_RES_OK;
 }
