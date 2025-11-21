@@ -7,6 +7,9 @@
 extern "C" {
 #endif  /* __cplusplus */
 
+///
+/// \brief
+///
 typedef enum tim_ctrl_gpx_tim2345_id
 {
     TIM_CTRL_GPX_TIM2345_ID_2 = 0,
@@ -15,11 +18,52 @@ typedef enum tim_ctrl_gpx_tim2345_id
     TIM_CTRL_GPX_TIM2345_ID_5,
 } tim_ctrl_gpx_tim2345_id_t;
 
+///
+/// \brief
+///
 typedef enum tim_ctrl_gpx_tim2345_mode
 {
     TIM_CTRL_GPX_TIM2345_MODE_IN_CAP = 0,
     TIM_CTRL_GPX_TIM2345_MODE_OUT_COMP,
 } tim_ctrl_gpx_tim2345_mode_t;
+
+///
+/// \brief
+///
+typedef enum tim_ctrl_gpx_tim912_id
+{
+    TIM_CTRL_GPX_TIM912_ID_9 = 0,
+    TIM_CTRL_GPX_TIM912_ID_12,
+} tim_ctrl_gpx_tim912_id_t;
+
+///
+/// \brief
+///
+typedef enum tim_ctrl_gpx_tim912_mode
+{
+    TIM_CTRL_GPX_TIM912_MODE_IN_CAP = 0,
+    TIM_CTRL_GPX_TIM912_MODE_OUT_COMP,
+} tim_ctrl_gpx_tim912_mode_t;
+
+///
+/// \brief
+///
+typedef enum tim_ctrl_gpx_tim10111314_id
+{
+    TIM_CTRL_GPX_TIM10111314_ID_10 = 0,
+    TIM_CTRL_GPX_TIM10111314_ID_11,
+    TIM_CTRL_GPX_TIM10111314_ID_13,
+    TIM_CTRL_GPX_TIM10111314_ID_14,
+} tim_ctrl_gpx_tim10111314_id_t;
+
+///
+/// \brief
+///
+typedef enum tim_ctrl_gpx_tim10111314_mode
+{
+    TIM_CTRL_GPX_TIM912_MODE_IN_CAP = 0,
+    TIM_CTRL_GPX_TIM912_MODE_OUT_COMP,
+} tim_ctrl_gpx_tim10111314_mode_t;
 
 ///
 /// \brief
@@ -915,6 +959,60 @@ struct tim_ctrl_gpx_tim2345_dev
     tim_ctrl_gpx_tim2345_mode_t ccmr2_mode;
     bool is_init;
 }
+
+///
+/// \brief
+///
+struct tim_ctrl_gpx_tim912_dev
+{
+    volatile struct tim_ctrl_gpx_tim912_regs *rmap;
+    struct tim_ctrl_gpx_tim912_regs rtmp;
+    tim_ctrl_gpx_tim912_id_t id;
+    tim_ctrl_gpx_tim912_mode_t ccmr1_mode;
+    bool is_init;
+}
+
+///
+/// \brief
+///
+struct tim_ctrl_gpx_tim10111314_dev
+{
+    volatile struct tim_ctrl_gpx_tim10111314_regs *rmap;
+    struct tim_ctrl_gpx_tim10111314_regs rtmp;
+    tim_ctrl_gpx_tim10111314_id_t id;
+    tim_ctrl_gpx_tim10111314_mode_t ccmr1_mode;
+    bool is_init;
+}
+
+///
+/// \brief
+///
+tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim);
+
+///
+/// \brief
+///
+tim_ctrl_res_t tim_ctrl_gpx_tim912_init(void *tim);
+
+///
+/// \brief
+///
+tim_ctrl_res_t tim_ctrl_gpx_tim10111314_init(void *tim);
+
+///
+/// \brief
+///
+tim_ctrl_res_t tim_ctrl_gpx_tim2345_deinit(void *tim);
+
+///
+/// \brief
+///
+tim_ctrl_res_t tim_ctrl_gpx_tim912_deinit(void *tim);
+
+///
+/// \brief
+///
+tim_ctrl_res_t tim_ctrl_gpx_tim10111314_deinit(void *tim);
 
 #ifdef __cplusplus
 }
