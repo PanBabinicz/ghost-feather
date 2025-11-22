@@ -3,11 +3,11 @@
 ///
 /// \brief
 ///
-static const tim_ctrl_gpx_tim2345_por =
+static const struct tim_ctrl_gpx_tim2345_regs tim_ctrl_gpx_tim2345_por =
 {
     .cr1 =
     {
-        .bit_fields =
+        .bf =
         {
             .cen      = 0x00,
             .udis     = 0x00,
@@ -23,76 +23,76 @@ static const tim_ctrl_gpx_tim2345_por =
 
     .cr2 =
     {
-        .bit_fields =
+        .bf =
         {
-            .ccds     = 0x00,
-            .mms      = 0x00,
-            .ti1s     = 0x00,
+            .ccds = 0x00,
+            .mms  = 0x00,
+            .ti1s = 0x00,
         },
     },
 
     .smcr =
     {
-        .bit_fields =
+        .bf =
         {
-            .sms      = 0x00,
-            .occs     = 0x00,
-            .ts       = 0x00,
-            .msm      = 0x00,
-            .etf      = 0x00,
-            .etps     = 0x00,
-            .ece      = 0x00,
-            .etp      = 0x00,
-            .sms_msb  = 0x00,
+            .sms     = 0x00,
+            .occs    = 0x00,
+            .ts      = 0x00,
+            .msm     = 0x00,
+            .etf     = 0x00,
+            .etps    = 0x00,
+            .ece     = 0x00,
+            .etp     = 0x00,
+            .sms_msb = 0x00,
         },
     },
 
     .dier =
     {
-        .bit_fields =
+        .bf =
         {
-            .uie      = 0x00,
-            .cc1ie    = 0x00,
-            .cc2ie    = 0x00,
-            .cc3ie    = 0x00,
-            .cc4ie    = 0x00,
-            .tie      = 0x00,
-            .ude      = 0x00,
-            .cc1de    = 0x00,
-            .cc2de    = 0x00,
-            .cc3de    = 0x00,
-            .cc4de    = 0x00,
-            .tde      = 0x00,
+            .uie   = 0x00,
+            .cc1ie = 0x00,
+            .cc2ie = 0x00,
+            .cc3ie = 0x00,
+            .cc4ie = 0x00,
+            .tie   = 0x00,
+            .ude   = 0x00,
+            .cc1de = 0x00,
+            .cc2de = 0x00,
+            .cc3de = 0x00,
+            .cc4de = 0x00,
+            .tde   = 0x00,
         },
     },
 
     .sr =
     {
-        .bit_fields =
+        .bf =
         {
-            .uif      = 0x00,
-            .cc1if    = 0x00,
-            .cc2if    = 0x00,
-            .cc3if    = 0x00,
-            .cc4if    = 0x00,
-            .tif      = 0x00,
-            .cc1of    = 0x00,
-            .cc2of    = 0x00,
-            .cc3of    = 0x00,
-            .cc4of    = 0x00,
+            .uif   = 0x00,
+            .cc1if = 0x00,
+            .cc2if = 0x00,
+            .cc3if = 0x00,
+            .cc4if = 0x00,
+            .tif   = 0x00,
+            .cc1of = 0x00,
+            .cc2of = 0x00,
+            .cc3of = 0x00,
+            .cc4of = 0x00,
         },
     },
 
     .egr =
     {
-        .bit_fields =
+        .bf =
         {
-            .ug       = 0x00,
-            .cc1g     = 0x00,
-            .cc2g     = 0x00,
-            .cc3g     = 0x00,
-            .cc4g     = 0x00,
-            .tg       = 0x00,
+            .ug   = 0x00,
+            .cc1g = 0x00,
+            .cc2g = 0x00,
+            .cc3g = 0x00,
+            .cc4g = 0x00,
+            .tg   = 0x00,
         },
     },
 
@@ -100,7 +100,7 @@ static const tim_ctrl_gpx_tim2345_por =
     {
         .out =
         {
-            .bit_fields =
+            .bf =
             {
                 .cc1s     = 0x00,
                 .oc1fe    = 0x00,
@@ -122,7 +122,7 @@ static const tim_ctrl_gpx_tim2345_por =
     {
         .out =
         {
-            .bit_fields =
+            .bf =
             {
                 .cc3s     = 0x00,
                 .oc3fe    = 0x00,
@@ -142,110 +142,110 @@ static const tim_ctrl_gpx_tim2345_por =
 
     .ccer =
     {
-        .bit_fields =
+        .bf =
         {
-            .cc1e     = 0x00,
-            .cc1p     = 0x00,
-            .cc1np    = 0x00,
-            .cc2e     = 0x00,
-            .cc2p     = 0x00,
-            .cc2np    = 0x00,
-            .cc3e     = 0x00,
-            .cc3p     = 0x00,
-            .cc3np    = 0x00,
-            .cc4e     = 0x00,
-            .cc4p     = 0x00,
-            .cc4np    = 0x00,
+            .cc1e  = 0x00,
+            .cc1p  = 0x00,
+            .cc1np = 0x00,
+            .cc2e  = 0x00,
+            .cc2p  = 0x00,
+            .cc2np = 0x00,
+            .cc3e  = 0x00,
+            .cc3p  = 0x00,
+            .cc3np = 0x00,
+            .cc4e  = 0x00,
+            .cc4p  = 0x00,
+            .cc4np = 0x00,
         },
     },
 
     .cnt =
     {
-        .bit_fields =
+        .bf =
         {
-            .cnt      = 0x00,
-            .uifcpy   = 0x00,
+            .cnt    = 0x00,
+            .uifcpy = 0x00,
         },
     },
 
     .psc =
     {
-        .bit_fields =
+        .bf =
         {
-            .psc      = 0x00,
+            .psc = 0x00,
         },
     },
 
     .arr =
     {
-        .bit_fields =
+        .bf =
         {
-            .arr      = 0xffff,
+            .arr = 0xffff,
         },
     },
 
     .ccr1 =
     {
-        .bit_fields =
+        .bf =
         {
-            .ccr1     = 0x00,
+            .ccr1 = 0x00,
         },
     },
 
     .ccr2 =
     {
-        .bit_fields =
+        .bf =
         {
-            .ccr2     = 0x00,
+            .ccr2 = 0x00,
         },
     },
 
     .ccr3 =
     {
-        .bit_fields =
+        .bf =
         {
-            .ccr3     = 0x00,
+            .ccr3 = 0x00,
         },
     },
 
     .ccr4 =
     {
-        .bit_fields =
+        .bf =
         {
-            .ccr4     = 0x00,
+            .ccr4 = 0x00,
         },
     },
 
     .dcr =
     {
-        .bit_fields =
+        .bf =
         {
-            .dba      = 0x00,
-            .dbl      = 0x00,
+            .dba = 0x00,
+            .dbl = 0x00,
         },
     },
 
     .dmar =
     {
-        .bit_fields =
+        .bf =
         {
-            .dmab     = 0x00,
+            .dmab = 0x00,
         },
     },
 
     .tim2_or =
     {
-        .bit_fields =
+        .bf =
         {
             .itr1_rmp = 0x00,
         },
     },
 
-    .tim2_or =
+    .tim5_or =
     {
-        .bit_fields =
+        .bf =
         {
-            .ti4_rmp  = 0x00,
+            .ti4_rmp = 0x00,
         },
     },
 };
@@ -253,11 +253,11 @@ static const tim_ctrl_gpx_tim2345_por =
 ///
 /// \brief
 ///
-static const tim_ctrl_gpx_tim912_por =
+static const struct tim_ctrl_gpx_tim912_regs tim_ctrl_gpx_tim912_por =
 {
     .cr1 =
     {
-        .bit_fields =
+        .bf =
         {
             .cen      = 0x00,
             .udis     = 0x00,
@@ -271,47 +271,47 @@ static const tim_ctrl_gpx_tim912_por =
 
     .smcr =
     {
-        .bit_fields =
+        .bf =
         {
-            .sms      = 0x00,
-            .ts       = 0x00,
-            .msm      = 0x00,
-            .sms_msb  = 0x00,
+            .sms     = 0x00,
+            .ts      = 0x00,
+            .msm     = 0x00,
+            .sms_msb = 0x00,
         },
     },
 
     .dier =
     {
-        .bit_fields =
+        .bf =
         {
-            .uie      = 0x00,
-            .cc1ie    = 0x00,
-            .cc2ie    = 0x00,
-            .tie      = 0x00,
+            .uie   = 0x00,
+            .cc1ie = 0x00,
+            .cc2ie = 0x00,
+            .tie   = 0x00,
         },
     },
 
     .sr =
     {
-        .bit_fields =
+        .bf =
         {
-            .uif      = 0x00,
-            .cc1if    = 0x00,
-            .cc2if    = 0x00,
-            .tif      = 0x00,
-            .cc1of    = 0x00,
-            .cc2of    = 0x00,
+            .uif   = 0x00,
+            .cc1if = 0x00,
+            .cc2if = 0x00,
+            .tif   = 0x00,
+            .cc1of = 0x00,
+            .cc2of = 0x00,
         },
     },
 
     .egr =
     {
-        .bit_fields =
+        .bf =
         {
-            .ug       = 0x00,
-            .cc1g     = 0x00,
-            .cc2g     = 0x00,
-            .tg       = 0x00,
+            .ug   = 0x00,
+            .cc1g = 0x00,
+            .cc2g = 0x00,
+            .tg   = 0x00,
         },
     },
 
@@ -319,7 +319,7 @@ static const tim_ctrl_gpx_tim912_por =
     {
         .out =
         {
-            .bit_fields =
+            .bf =
             {
                 .cc1s     = 0x00,
                 .oc1fe    = 0x00,
@@ -337,55 +337,55 @@ static const tim_ctrl_gpx_tim912_por =
 
     .ccer =
     {
-        .bit_fields =
+        .bf =
         {
-            .cc1e     = 0x00,
-            .cc1p     = 0x00,
-            .cc1np    = 0x00,
-            .cc2e     = 0x00,
-            .cc2p     = 0x00,
-            .cc2np    = 0x00,
+            .cc1e  = 0x00,
+            .cc1p  = 0x00,
+            .cc1np = 0x00,
+            .cc2e  = 0x00,
+            .cc2p  = 0x00,
+            .cc2np = 0x00,
         },
     },
 
     .cnt =
     {
-        .bit_fields =
+        .bf =
         {
-            .cnt      = 0x00,
-            .uifcpy   = 0x00,
+            .cnt    = 0x00,
+            .uifcpy = 0x00,
         },
     },
 
     .psc =
     {
-        .bit_fields =
+        .bf =
         {
-            .psc      = 0x00,
+            .psc = 0x00,
         },
     },
 
     .arr =
     {
-        .bit_fields =
+        .bf =
         {
-            .arr      = 0x0000,
+            .arr = 0x00,
         },
     },
 
     .ccr1 =
     {
-        .bit_fields =
+        .bf =
         {
-            .ccr1     = 0x00,
+            .ccr1 = 0x00,
         },
     },
 
     .ccr2 =
     {
-        .bit_fields =
+        .bf =
         {
-            .ccr2     = 0x00,
+            .ccr2 = 0x00,
         },
     },
 };
@@ -540,6 +540,34 @@ tim_ctrl_res_t tim_ctrl_gpx_tim912_deinit(void *tim)
     dev->rmap->arr.r       = tim_ctrl_gpx_tim912_por.arr.r;
     dev->rmap->ccr1.r      = tim_ctrl_gpx_tim912_por.ccr1.r;
     dev->rmap->ccr2.r      = tim_ctrl_gpx_tim912_por.ccr2.r;
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_gpx_tim2345_enable(void *tim)
+{
+    if (tim == NULL)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
+
+    dev->rmap->cr1.bf.cen = 0x01;
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_gpx_tim2345_disable(void *tim)
+{
+    if (tim == NULL)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
+
+    dev->rmap->cr1.bf.cen = 0x00;
 
     return TIM_CTRL_RES_OK;
 }
