@@ -235,7 +235,7 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/updater
     ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/dust
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/shared
+    ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     ${PROJECT_SOURCE_DIR}/submodules/printf
     )
@@ -300,6 +300,7 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/app/stm32f722xx
     ${PROJECT_SOURCE_DIR}/controller/bmi270
     ${PROJECT_SOURCE_DIR}/controller/spi
+    ${PROJECT_SOURCE_DIR}/controller/tim
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/shared/timing
@@ -322,6 +323,7 @@ target_link_libraries(
     app_startup
     gfc_common_options
     libopencm3_stm32f7.a
+    tim_ctrl
     timing
     vectortable
     )

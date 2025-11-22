@@ -37,6 +37,7 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/controller/bmi270
     ${PROJECT_SOURCE_DIR}/controller/spi
+    ${PROJECT_SOURCE_DIR}/controller/tim
     ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     )
