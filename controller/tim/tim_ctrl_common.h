@@ -16,6 +16,15 @@ typedef enum tim_ctrl_res
     TIM_CTRL_RES_ERR,
 } tim_ctrl_res_t;
 
+///
+/// \breif The TIM controller status type.
+///
+typedef enum tim_ctrl_stat
+{
+    TIM_CTRL_STAT_DEINIT = 0,
+    TIM_CTRL_STAT_INIT,
+} tim_ctrl_stat_t;
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
