@@ -277,7 +277,7 @@ static struct tim_ctrl_gpx_tim2345_dev tim_ctrl_tim4_dev =
     .id         = TIM_CTRL_GPX_TIM2345_ID_4,
     .ccmr1_mode = TIM_CTRL_GPX_TIM2345_MODE_OUT_COMP,
     .ccmr2_mode = TIM_CTRL_GPX_TIM2345_MODE_OUT_COMP,
-    .is_init    = false,
+    .stat       = false,
 };
 
 ///
