@@ -390,6 +390,121 @@ static const struct tim_ctrl_gpx_tim912_regs tim_ctrl_gpx_tim912_por =
     },
 };
 
+
+///
+/// \brief
+///
+static const struct tim_ctrl_gpx_tim10111314_regs tim_ctrl_gpx_tim10111314_por =
+{
+    .cr1 =
+    {
+        .bf =
+        {
+            .cen      = 0x00;
+            .udis     = 0x00;
+            .urs      = 0x00;
+            .opm      = 0x00;
+            .arpe     = 0x00;
+            .ckd      = 0x00;
+            .uifremap = 0x00;
+        },
+    },
+
+    .dier =
+    {
+        .bf =
+        {
+            .uie   = 0x00,
+            .cc1ie = 0x00,
+        },
+    },
+
+    .sr =
+    {
+        .bf =
+        {
+            .uif   = 0x00,
+            .cc1if = 0x00,
+            .cc1of = 0x00,
+        },
+    },
+
+    .egr =
+    {
+        .bf =
+        {
+            .ug   = 0x00,
+            .cc1g = 0x00,
+        },
+    },
+
+    .ccmr1 =
+    {
+        .out =
+        {
+            .bf =
+            {
+                .cc1s     = 0x00;
+                .oc1fe    = 0x00;
+                .oc1pe    = 0x00;
+                .oc1m     = 0x00;
+                .oc1m_msb = 0x00;
+            },
+        },
+    },
+
+    .ccer =
+    {
+        .bf =
+        {
+            .cc1e  = 0x00;
+            .cc1p  = 0x00;
+            .cc1np = 0x00;
+        },
+    },
+
+    .cnt =
+    {
+        .bf =
+        {
+            .cnt    = 0x00,
+            .uifcpy = 0x00,
+        },
+    },
+
+    .psc =
+    {
+        .bf =
+        {
+            .psc = 0x00,
+        },
+    },
+
+    .arr =
+    {
+        .bf =
+        {
+            .arr = 0x00,
+        },
+    },
+
+    .ccr1 =
+    {
+        .bf =
+        {
+            .ccr1 = 0x00,
+        },
+    },
+
+    .tim11_or =
+    {
+        .bf =
+        {
+            .ti1_rmp = 0x00;
+        }
+    }
+};
+
 tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim)
 {
     if (tim == NULL)
@@ -635,21 +750,21 @@ tim_ctrl_res_t tim_ctrl_gpx_tim10111314_deinit(void *tim)
         return TIM_CTRL_RES_ERR;
     }
 
-    dev->rmap->cr1.r       = dev->rtmp.cr1.r;
-    dev->rmap->dier.r      = dev->rtmp.dier.r;
-    dev->rmap->sr.r        = dev->rtmp.sr.r;
-    dev->rmap->egr.r       = dev->rtmp.egr.r;
-    dev->rmap->ccmr1.out.r = dev->rtmp.ccmr1.out.r;
-    dev->rmap->ccer.r      = dev->rtmp.ccer.r;
-    dev->rmap->cnt.r       = dev->rtmp.cnt.r;
-    dev->rmap->psc.r       = dev->rtmp.psc.r;
-    dev->rmap->arr.r       = dev->rtmp.arr.r;
-    dev->rmap->ccr1.r      = dev->rtmp.ccr1.r;
+    dev->rmap->cr1.r       = tim_ctrl_gpx_tim10111314_por.cr1.r;
+    dev->rmap->dier.r      = tim_ctrl_gpx_tim10111314_por.dier.r;
+    dev->rmap->sr.r        = tim_ctrl_gpx_tim10111314_por.sr.r;
+    dev->rmap->egr.r       = tim_ctrl_gpx_tim10111314_por.egr.r;
+    dev->rmap->ccmr1.out.r = tim_ctrl_gpx_tim10111314_por.ccmr1.out.r;
+    dev->rmap->ccer.r      = tim_ctrl_gpx_tim10111314_por.ccer.r;
+    dev->rmap->cnt.r       = tim_ctrl_gpx_tim10111314_por.cnt.r;
+    dev->rmap->psc.r       = tim_ctrl_gpx_tim10111314_por.psc.r;
+    dev->rmap->arr.r       = tim_ctrl_gpx_tim10111314_por.arr.r;
+    dev->rmap->ccr1.r      = tim_ctrl_gpx_tim10111314_por.ccr1.r;
 
     switch(dev->id)
     {
         case TIM_CTRL_GPX_TIM10111314_ID_11:
-            dev->rmap->tim11_or.r = dev->rtmp.tim11_or.r;
+            dev->rmap->tim11_or.r = tim_ctrl_gpx_tim10111314_por.tim11_or.r;
             break;
 
         default:
