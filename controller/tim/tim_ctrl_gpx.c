@@ -400,13 +400,13 @@ static const struct tim_ctrl_gpx_tim10111314_regs tim_ctrl_gpx_tim10111314_por =
     {
         .bf =
         {
-            .cen      = 0x00;
-            .udis     = 0x00;
-            .urs      = 0x00;
-            .opm      = 0x00;
-            .arpe     = 0x00;
-            .ckd      = 0x00;
-            .uifremap = 0x00;
+            .cen      = 0x00,
+            .udis     = 0x00,
+            .urs      = 0x00,
+            .opm      = 0x00,
+            .arpe     = 0x00,
+            .ckd      = 0x00,
+            .uifremap = 0x00,
         },
     },
 
@@ -444,11 +444,11 @@ static const struct tim_ctrl_gpx_tim10111314_regs tim_ctrl_gpx_tim10111314_por =
         {
             .bf =
             {
-                .cc1s     = 0x00;
-                .oc1fe    = 0x00;
-                .oc1pe    = 0x00;
-                .oc1m     = 0x00;
-                .oc1m_msb = 0x00;
+                .cc1s     = 0x00,
+                .oc1fe    = 0x00,
+                .oc1pe    = 0x00,
+                .oc1m     = 0x00,
+                .oc1m_msb = 0x00,
             },
         },
     },
@@ -457,9 +457,9 @@ static const struct tim_ctrl_gpx_tim10111314_regs tim_ctrl_gpx_tim10111314_por =
     {
         .bf =
         {
-            .cc1e  = 0x00;
-            .cc1p  = 0x00;
-            .cc1np = 0x00;
+            .cc1e  = 0x00,
+            .cc1p  = 0x00,
+            .cc1np = 0x00,
         },
     },
 
@@ -500,7 +500,7 @@ static const struct tim_ctrl_gpx_tim10111314_regs tim_ctrl_gpx_tim10111314_por =
     {
         .bf =
         {
-            .ti1_rmp = 0x00;
+            .ti1_rmp = 0x00,
         }
     }
 };
