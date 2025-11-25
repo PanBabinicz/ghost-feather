@@ -1,7 +1,10 @@
 #ifndef _TIM_CTRL_BASE_H
 #define _TIM_CTRL_BASE_H
 
+#include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
+#include "tim_ctrl_common.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,21 +13,30 @@ extern "C" {
 ///
 /// \brief
 ///
+typedef enum tim_ctrl_base1_timx_id
+{
+    TIM_CTRL_BASE1_TIMX_ID_6 = 0,
+    TIM_CTRL_BASE1_TIMX_ID_7,
+} tim_ctrl_base1_timx_id_t;
+
+///
+/// \brief
+///
 union tim_ctrl_base1_timx_cr1
 {
-    uint16_t r;
-    struct bit_field
+    uint32_t r;
+    struct
     {
-        uint16_t cen      : 1;
-        uint16_t udis     : 1;
-        uint16_t urs      : 1;
-        uint16_t opm      : 1;
-        uint16_t          : 3;
-        uint16_t arpe     : 1;
-        uint16_t          : 3;
-        uint16_t uifremap : 1;
-        uint16_t          : 4;
-    };
+        uint32_t cen      : 1;
+        uint32_t udis     : 1;
+        uint32_t urs      : 1;
+        uint32_t opm      : 1;
+        uint32_t          : 3;
+        uint32_t arpe     : 1;
+        uint32_t          : 3;
+        uint32_t uifremap : 1;
+        uint32_t          : 20;
+    } bf;
 };
 
 ///
@@ -32,13 +44,13 @@ union tim_ctrl_base1_timx_cr1
 ///
 union tim_ctrl_base1_timx_cr2
 {
-    uint16_t r;
-    struct bit_field
+    uint32_t r;
+    struct
     {
-        uint16_t          : 4;
-        uint16_t mms      : 3;
-        uint16_t          : 9;
-    };
+        uint32_t     : 4;
+        uint32_t mms : 3;
+        uint32_t     : 25;
+    } bf;
 };
 
 ///
@@ -46,14 +58,14 @@ union tim_ctrl_base1_timx_cr2
 ///
 union tim_ctrl_base1_timx_dier
 {
-    uint16_t r;
-    struct bit_field
+    uint32_t r;
+    struct
     {
-        uint16_t uie      : 1;
-        uint16_t          : 7;
-        uint16_t ude      : 1;
-        uint16_t          : 7;
-    };
+        uint32_t uie : 1;
+        uint32_t     : 7;
+        uint32_t ude : 1;
+        uint32_t     : 23;
+    } bf;
 };
 
 ///
@@ -61,12 +73,12 @@ union tim_ctrl_base1_timx_dier
 ///
 union tim_ctrl_base1_timx_sr
 {
-    uint16_t r;
-    struct bit_field
+    uint32_t r;
+    struct
     {
-        uint16_t uif      : 1;
-        uint16_t          : 15;
-    };
+        uint32_t uif : 1;
+        uint32_t     : 31;
+    } bf;
 };
 
 ///
@@ -74,12 +86,12 @@ union tim_ctrl_base1_timx_sr
 ///
 union tim_ctrl_base1_timx_egr
 {
-    uint16_t r;
-    struct bit_field
+    uint32_t r;
+    struct
     {
-        uint16_t ug       : 1;
-        uint16_t          : 15;
-    };
+        uint32_t ug : 1;
+        uint32_t    : 31;
+    } bf;
 };
 
 ///
@@ -88,12 +100,12 @@ union tim_ctrl_base1_timx_egr
 union tim_ctrl_base1_timx_cnt
 {
     uint32_t r;
-    struct bit_field
+    struct
     {
-        uint32_t cnt      : 16;
-        uint32_t          : 15;
-        uint32_t uifcpy   : 1;
-    };
+        uint32_t cnt    : 16;
+        uint32_t        : 15;
+        uint32_t uifcpy : 1;
+    } bf;
 };
 
 ///
@@ -101,11 +113,12 @@ union tim_ctrl_base1_timx_cnt
 ///
 union tim_ctrl_base1_timx_psc
 {
-    uint16_t r;
-    struct bit_field
+    uint32_t r;
+    struct
     {
-        uint16_t psc      : 16;
-    };
+        uint32_t psc : 16;
+        uint32_t     : 16;
+    } bf;
 };
 
 ///
@@ -113,11 +126,12 @@ union tim_ctrl_base1_timx_psc
 ///
 union tim_ctrl_base1_timx_arr
 {
-    uint16_t r;
-    struct bit_field
+    uint32_t r;
+    struct
     {
-        uint16_t arr      : 16;
-    };
+        uint32_t arr : 16;
+        uint32_t     : 16;
+    } bf;
 };
 
 ///
@@ -144,7 +158,8 @@ struct tim_ctrl_base1_timx_dev
 {
     volatile struct tim_ctrl_base1_timx_regs *rmap;
     struct tim_ctrl_base1_timx_regs rtmp;
-    bool is_init;
+    tim_ctrl_base1_timx_id_t id;
+    tim_ctrl_stat_t stat;
 };
 
 ///
@@ -156,6 +171,16 @@ tim_ctrl_res_t tim_ctrl_base1_timx_init(void *tim);
 /// \brief
 ///
 tim_ctrl_res_t tim_ctrl_base1_timx_deinit(void *tim);
+
+///
+/// \brief
+///
+tim_ctrl_res_t tim_ctrl_base1_timx_enable(void *tim);
+
+///
+/// \brief
+///
+tim_ctrl_res_t tim_ctrl_base1_timx_disable(void *tim);
 
 #ifdef __cplusplus
 }
