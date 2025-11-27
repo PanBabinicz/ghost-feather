@@ -1,5 +1,5 @@
-#ifndef _TIM_CTRL_GP_H
-#define _TIM_CTRL_GP_H
+#ifndef _TIM_CTRL_GPX_H
+#define _TIM_CTRL_GPX_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -1079,4 +1079,4 @@ tim_ctrl_res_t tim_ctrl_gpx_tim10111314_disable(void *tim);
 }
 #endif  /* __cplusplus */
 
-#endif  /* _TIM_CTRL_GP_H */
+#endif  /* _TIM_CTRL_GPX_H */

@@ -1,5 +1,5 @@
-#ifndef _TIM_CTRL_BASE_H
-#define _TIM_CTRL_BASE_H
+#ifndef _TIM_CTRL_BASEX_H
+#define _TIM_CTRL_BASEX_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -186,4 +186,4 @@ tim_ctrl_res_t tim_ctrl_base1_timx_disable(void *tim);
 }
 #endif  /* __cplusplus */
 
-#endif  /* _TIM_CTRL_BASE_H */
+#endif  /* _TIM_CTRL_BASEX_H */
