@@ -333,39 +333,6 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
     {
         return TIM_CTRL_RES_ERR;
     }
-    union tim_ctrl_adv6_tim18_cr1  cr1;
-    union tim_ctrl_adv6_tim18_cr2  cr2;
-    union tim_ctrl_adv6_tim18_smcr smcr;
-    union tim_ctrl_adv6_tim18_dier dier;
-    union tim_ctrl_adv6_tim18_sr   sr;
-    union tim_ctrl_adv6_tim18_egr  egr;
-    union
-    {
-        union tim_ctrl_adv6_tim18_ccmr1_in  in;
-        union tim_ctrl_adv6_tim18_ccmr1_out out;
-
-    } ccmr1;
-    union
-    {
-        union tim_ctrl_adv6_tim18_ccmr2_in  in;
-        union tim_ctrl_adv6_tim18_ccmr2_out out;
-
-    } ccmr2;
-    union tim_ctrl_adv6_tim18_ccer  ccer;
-    union tim_ctrl_adv6_tim18_cnt   cnt;
-    union tim_ctrl_adv6_tim18_psc   psc;
-    union tim_ctrl_adv6_tim18_arr   arr;
-    union tim_ctrl_adv6_tim18_rcr   rcr;
-    union tim_ctrl_adv6_tim18_ccr1  ccr1;
-    union tim_ctrl_adv6_tim18_ccr2  ccr2;
-    union tim_ctrl_adv6_tim18_ccr3  ccr3;
-    union tim_ctrl_adv6_tim18_ccr4  ccr4;
-    union tim_ctrl_adv6_tim18_bdtr  bdtr;
-    union tim_ctrl_adv6_tim18_dcr   dcr;
-    union tim_ctrl_adv6_tim18_dmar  dmar;
-    union tim_ctrl_adv6_tim18_ccmr3 ccmr3;
-    union tim_ctrl_adv6_tim18_ccr5  ccr5;
-    union tim_ctrl_adv6_tim18_ccr6  ccr6;
 
     struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
 
@@ -382,7 +349,7 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
     dev->rmap->egr.r  = dev->rtmp.egr.r;
 
     /* TODO: Not every channel can be input. */
-    if (dev->ccmr1_mode == TIM_CTRL_GPX_TIM2345_MODE_IN_CAP)
+    if (dev->ccmr1_mode == TIM_CTRL_ADV6_TIM18_MODE_IN_CAP)
     {
         dev->rmap->ccmr1.in.r = dev->rtmp.ccmr1.in.r;
     }
@@ -391,7 +358,7 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
         dev->rmap->ccmr1.out.r = dev->rtmp.ccmr1.out.r;
     }
 
-    if (dev->ccmr2_mode == TIM_CTRL_GPX_TIM2345_MODE_IN_CAP)
+    if (dev->ccmr2_mode == TIM_CTRL_ADV6_TIM18_MODE_IN_CAP)
     {
         dev->rmap->ccmr2.in.r = dev->rtmp.ccmr2.in.r;
     }
@@ -463,14 +430,14 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_deinit(void *tim)
     return TIM_CTRL_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
+tim_ctrl_res_t tim_ctrl_adv6_tim18_enable(void *tim)
 {
     if (tim == NULL)
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
+    struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_INIT)
     {
@@ -482,14 +449,14 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
     return TIM_CTRL_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
+tim_ctrl_res_t tim_ctrl_adv6_tim18_disable(void *tim)
 {
     if (tim == NULL)
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
+    struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_INIT)
     {
