@@ -283,6 +283,149 @@ static struct tim_ctrl_gpx_tim2345_dev tim_ctrl_tim4_dev =
 ///
 /// \brief
 ///
+static struct tim_ctrl_gpx_tim912_dev tim_ctrl_tim12_dev =
+{
+    .rmap = (volatile struct tim_ctrl_gpx_tim912_regs *)(0x40001800),
+    .rtmp =
+    {
+        .cr1 =
+        {
+            .bf =
+            {
+                .cen      = 0x00,
+                .udis     = 0x00,
+                .urs      = 0x00,
+                .opm      = 0x00,
+                .arpe     = 0x00,
+                .ckd      = 0x00,
+                .uifremap = 0x00,
+            },
+        },
+
+        .smcr =
+        {
+            .bf =
+            {
+                .sms     = 0x00,
+                .ts      = 0x00,
+                .msm     = 0x00,
+                .sms_msb = 0x00,
+            },
+        },
+
+        .dier =
+        {
+            .bf =
+            {
+                .uie   = 0x00,
+                .cc1ie = 0x01,
+                .cc2ie = 0x01,
+                .tie   = 0x00,
+            },
+        },
+
+        .sr =
+        {
+            .bf =
+            {
+                .uif   = 0x00,
+                .cc1if = 0x00,
+                .cc2if = 0x00,
+                .tif   = 0x00,
+                .cc1of = 0x00,
+                .cc2of = 0x00,
+            },
+        },
+
+        .egr =
+        {
+            .bf =
+            {
+                .ug   = 0x00,
+                .cc1g = 0x00,
+                .cc2g = 0x00,
+                .tg   = 0x00,
+            },
+        },
+
+        .ccmr1 =
+        {
+            .in =
+            {
+                .bf =
+                {
+                    .cc1s   = 0x01,
+                    .ic1psc = 0x00,
+                    .ic1f   = 0x00,
+                    .cc2s   = 0x01,
+                    .ic2psc = 0x00,
+                    .ic2f   = 0x00,
+                },
+            },
+        },
+
+        .ccer =
+        {
+            .bf =
+            {
+                .cc1e  = 0x01,
+                .cc1p  = 0x01,
+                .cc1np = 0x01,
+                .cc2e  = 0x01,
+                .cc2p  = 0x01,
+                .cc2np = 0x01,
+            },
+        },
+
+        .cnt =
+        {
+            .bf =
+            {
+                .cnt    = 0x00,
+                .uifcpy = 0x00,
+            },
+        },
+
+        .psc =
+        {
+            .bf =
+            {
+                .psc = 0x6b,
+            },
+        },
+
+        .arr =
+        {
+            .bf =
+            {
+                .arr = 0x00,
+            },
+        },
+
+        .ccr1 =
+        {
+            .bf =
+            {
+                .ccr1 = 0x00,
+            },
+        },
+
+        .ccr2 =
+        {
+            .bf =
+            {
+                .ccr2 = 0x00,
+            },
+        },
+    },
+    .id         = TIM_CTRL_GPX_TIM912_ID_12,
+    .ccmr1_mode = TIM_CTRL_GPX_TIM912_MODE_OUT_COMP,
+    .stat       = false,
+};
+
+///
+/// \brief
+///
 const struct tim_ctrl_dev tim_ctrl_dev_arr[] =
 {
     [0] =
@@ -292,6 +435,15 @@ const struct tim_ctrl_dev tim_ctrl_dev_arr[] =
         .deinit  = &tim_ctrl_gpx_tim2345_deinit,
         .enable  = &tim_ctrl_gpx_tim2345_enable,
         .disable = &tim_ctrl_gpx_tim2345_disable,
+    },
+
+    [1] =
+    {
+        .tim     = &tim_ctrl_tim12_dev,
+        .init    = &tim_ctrl_gpx_tim912_init,
+        .deinit  = &tim_ctrl_gpx_tim912_deinit,
+        .enable  = &tim_ctrl_gpx_tim912_enable,
+        .disable = &tim_ctrl_gpx_tim912_disable,
     },
 };
 
