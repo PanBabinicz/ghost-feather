@@ -1,9 +1,10 @@
 #include "bootloader.h"
 #include "memory_map.h"
 #include "timing.h"
-#include "libopencm3/stm32/rcc.h"
-#include "libopencm3/stm32/gpio.h"
+#include "libopencm3/cm3/nvic.h"
 #include "libopencm3/cm3/systick.h"
+#include "libopencm3/stm32/gpio.h"
+#include "libopencm3/stm32/rcc.h"
 
 ///*************************************************************************************************
 /// Private functions - declaration.
@@ -28,6 +29,15 @@ static void jump(uint32_t pc, uint32_t sp);
 /// performance and peripheral clock settings.
 ///
 static void rcc_setup(void);
+
+/// TODO:
+/// \brief Setups the Reset and Clock Control registers.
+///
+/// This function initializes the system's clock configuration by setting up
+/// the Reset and Clock Control (RCC) registers for the desired system
+/// performance and peripheral clock settings.
+///
+static void nvic_setup(void);
 
 ///
 /// \brief Setups GPIO pins for the first bootloader.
@@ -75,26 +85,31 @@ static void rcc_setup(void)
 {
     rcc_clock_setup_hse(&rcc_3v3[RCC_CLOCK_3V3_216MHZ], 16);
 
-    /* Enable clock for GPIOA.  */
+    /* Enable clock for GPIOA. */
     rcc_periph_clock_enable(RCC_GPIOA);
 
-    /* Enable clock for GPIOB.  */
+    /* Enable clock for GPIOB. */
     rcc_periph_clock_enable(RCC_GPIOB);
 
-    /* Enable clock for GPIOC.  */
+    /* Enable clock for GPIOC. */
     rcc_periph_clock_enable(RCC_GPIOC);
 
     /* Enable clock for SPI1. */
     rcc_periph_clock_enable(RCC_SPI1);
 
-    /* Enable clock for TIM4.  */
+    /* Enable clock for TIM4. */
     rcc_periph_clock_enable(RCC_TIM4);
 
-    /* Enable clock for TIM8.  */
+    /* Enable clock for TIM8. */
     rcc_periph_clock_enable(RCC_TIM8);
 
-    /* Enable clock for TIM12.  */
+    /* Enable clock for TIM12. */
     rcc_periph_clock_enable(RCC_TIM12);
+}
+
+static void nvic_setup()
+{
+    nvic_enable_irq(NVIC_TIM8_BRK_TIM12_IRQ);
 }
 
 /* TODO: Set te gpio speed and driver type for timers. */
@@ -152,6 +167,7 @@ static void led_off(void)
 void bootloader_start(void)
 {
     rcc_setup();
+    nvic_setup();
     gpio_setup();
     systick_setup();
     timing_setup();
