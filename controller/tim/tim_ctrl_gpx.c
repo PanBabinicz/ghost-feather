@@ -785,7 +785,7 @@ tim_ctrl_res_t tim_ctrl_gpx_tim2345_enable(void *tim)
 
     struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == TIM_CTRL_STAT_DEINIT)
     {
         return TIM_CTRL_RES_ERR;
     }
@@ -804,6 +804,11 @@ tim_ctrl_res_t tim_ctrl_gpx_tim912_enable(void *tim)
 
     struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
 
+    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
     dev->rmap->cr1.bf.cen = 0x01;
 
     return TIM_CTRL_RES_OK;
@@ -818,7 +823,7 @@ tim_ctrl_res_t tim_ctrl_gpx_tim10111314_enable(void *tim)
 
     struct tim_ctrl_gpx_tim10111314_dev *dev = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == TIM_CTRL_STAT_DEINIT)
     {
         return TIM_CTRL_RES_ERR;
     }

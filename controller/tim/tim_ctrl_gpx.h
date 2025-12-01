@@ -933,6 +933,7 @@ struct tim_ctrl_gpx_tim2345_regs
 struct tim_ctrl_gpx_tim912_regs
 {
     union tim_ctrl_gpx_tim912_cr1  cr1;
+    uint32_t res0[1];
     union tim_ctrl_gpx_tim912_smcr smcr;
     union tim_ctrl_gpx_tim912_dier dier;
     union tim_ctrl_gpx_tim912_sr   sr;
@@ -942,12 +943,12 @@ struct tim_ctrl_gpx_tim912_regs
         union tim_ctrl_gpx_tim912_ccmr1_in  in;
         union tim_ctrl_gpx_tim912_ccmr1_out out;
     } ccmr1;
-    uint32_t res0[1];
+    uint32_t res1[1];
     union tim_ctrl_gpx_tim912_ccer ccer;
     union tim_ctrl_gpx_tim912_cnt  cnt;
     union tim_ctrl_gpx_tim912_psc  psc;
     union tim_ctrl_gpx_tim912_arr  arr;
-    uint32_t res1[1];
+    uint32_t res2[1];
     union tim_ctrl_gpx_tim912_ccr1 ccr1;
     union tim_ctrl_gpx_tim912_ccr2 ccr2;
 };
