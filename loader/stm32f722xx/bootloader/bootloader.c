@@ -110,6 +110,7 @@ static void rcc_setup(void)
 static void nvic_setup()
 {
     nvic_enable_irq(NVIC_TIM8_BRK_TIM12_IRQ);
+    nvic_enable_irq(NVIC_TIM8_CC_IRQ);
 }
 
 /* TODO: Set te gpio speed and driver type for timers. */
