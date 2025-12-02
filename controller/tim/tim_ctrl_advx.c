@@ -1,6 +1,5 @@
 #include "tim_ctrl_advx.h"
 
-
 ///
 /// \brief
 ///
@@ -401,6 +400,7 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_deinit(void *tim)
     {
         return TIM_CTRL_RES_ERR;
     }
+
     dev->rmap->cr1.r       = dev->rtmp.cr1.r;
     dev->rmap->cr2.r       = dev->rtmp.cr2.r;
     dev->rmap->smcr.r      = dev->rtmp.smcr.r;
@@ -439,7 +439,7 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_enable(void *tim)
 
     struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == TIM_CTRL_STAT_DEINIT)
     {
         return TIM_CTRL_RES_ERR;
     }
@@ -458,7 +458,7 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_disable(void *tim)
 
     struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == TIM_CTRL_STAT_DEINIT)
     {
         return TIM_CTRL_RES_ERR;
     }

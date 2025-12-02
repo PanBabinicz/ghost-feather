@@ -142,7 +142,7 @@ tim_ctrl_res_t tim_ctrl_base1_timx_enable(void *tim)
 
     struct tim_ctrl_base1_timx_dev *dev = (struct tim_ctrl_base1_timx_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == TIM_CTRL_STAT_DEINIT)
     {
         return TIM_CTRL_RES_ERR;
     }
@@ -161,7 +161,7 @@ tim_ctrl_res_t tim_ctrl_base1_timx_disable(void *tim)
 
     struct tim_ctrl_base1_timx_dev *dev = (struct tim_ctrl_base1_timx_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == TIM_CTRL_STAT_DEINIT)
     {
         return TIM_CTRL_RES_ERR;
     }

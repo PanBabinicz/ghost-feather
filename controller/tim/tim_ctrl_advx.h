@@ -15,10 +15,8 @@ extern "C" {
 ///
 typedef enum tim_ctrl_adv6_tim18_id
 {
-    TIM_CTRL_ADV6_TIM18_ID_2 = 0,
-    TIM_CTRL_ADV6_TIM18_ID_3,
-    TIM_CTRL_ADV6_TIM18_ID_4,
-    TIM_CTRL_ADV6_TIM18_ID_5,
+    TIM_CTRL_ADV6_TIM18_ID_1 = 0,
+    TIM_CTRL_ADV6_TIM18_ID_8,
 } tim_ctrl_adv6_tim18_id_t;
 
 ///
