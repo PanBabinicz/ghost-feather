@@ -19,31 +19,20 @@ file(GLOB_RECURSE APP_SOURCES stm32f722xx/*.c)
 # --------------------------------------------------
 # Target: Application
 # --------------------------------------------------
-set_property(
-    GLOBAL
-    PROPERTY APP_SOURCES
-    ${APP_SOURCES}
-    )
-
 message(STATUS "Add app library")
-add_library(
-    app
+add_library(app
     ${APP_SOURCES}
-    )
+)
 
-target_include_directories(
-    app
-    PRIVATE
+target_include_directories(app PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/controller/bmi270
     ${PROJECT_SOURCE_DIR}/controller/spi
     ${PROJECT_SOURCE_DIR}/controller/tim
     ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
-    )
+)
 
-target_link_libraries(
-    app
-    PRIVATE
+target_link_libraries(app PRIVATE
     gfc_common_options
-    )
+)

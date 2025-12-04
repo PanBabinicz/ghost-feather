@@ -16,26 +16,15 @@ file(GLOB_RECURSE TIMING_SOURCES timing/*.c)
 # --------------------------------------------------
 # Target: Timing
 # --------------------------------------------------
-set_property(
-    GLOBAL
-    PROPERTY TIMING_SOURCES
-    ${TIMING_SOURCES}
-    )
-
 message(STATUS "Add timing library")
-add_library(
-    timing
+add_library(timing
     ${TIMING_SOURCES}
-    )
+)
 
-target_include_directories(
-    timing
-    PRIVATE
+target_include_directories(timing PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
-    )
+)
 
-target_link_libraries(
-    timing
-    PRIVATE
+target_link_libraries(timing PRIVATE
     gfc_common_options
-    )
+)

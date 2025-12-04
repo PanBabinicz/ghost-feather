@@ -17,27 +17,16 @@ file(GLOB_RECURSE PRINTF_SOURCES printf/*.c)
 # --------------------------------------------------
 # Target: Printf
 # --------------------------------------------------
-set_property(
-    GLOBAL
-    PROPERTY PRINTF_SOURCES
-    ${PRINTF_SOURCES}
-    )
-
 message(STATUS "Add printf library")
-add_library(
-    printf
+add_library(printf
     ${PRINTF_SOURCES}
-    )
+)
 
-target_include_directories(
-    printf
-    PRIVATE
+target_include_directories(printf PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     ${PROJECT_SOURCE_DIR}/submodules/printf
-    )
+)
 
-target_link_libraries(
-    printf
-    PRIVATE
+target_link_libraries(printf PRIVATE
     gfc_common_options
-    )
+)
