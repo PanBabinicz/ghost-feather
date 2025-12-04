@@ -22,6 +22,10 @@ add_library(printf
     ${PRINTF_SOURCES}
 )
 
+target_compile_definitions(printf PRIVATE
+    "$<$<COMPILE_LANGUAGE:C>:PRINTF_DISABLE_SUPPORT_LONG_LONG>"
+)
+
 target_include_directories(printf PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     ${PROJECT_SOURCE_DIR}/submodules/printf

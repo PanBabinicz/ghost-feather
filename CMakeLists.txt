@@ -171,7 +171,6 @@ target_link_options(ghost-feather-apploader.elf PRIVATE
 message(STATUS "Configuring ghost-feather-updater.elf")
 add_executable(ghost-feather-updater.elf
     misc/empty.c
-    ${printf_sources}
 )
 
 target_include_directories(ghost-feather-updater.elf PRIVATE
@@ -198,15 +197,10 @@ target_link_libraries(ghost-feather-updater.elf PRIVATE
     updater
     usart_controller
     dust
+    printf
     gfc_common_options
     libopencm3_stm32f7.a
     vectortable
-)
-
-target_compile_definitions(ghost-feather-updater.elf PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:PRINTF_DISABLE_SUPPORT_LONG_LONG>"
-    "$<$<COMPILE_LANGUAGE:C>:DEBUG_DUST_PROTOCOL=1>"
-    "$<$<COMPILE_LANGUAGE:C>:DEBUG=1>"
 )
 
 target_link_options(ghost-feather-updater.elf PRIVATE
@@ -251,10 +245,6 @@ target_link_libraries(ghost-feather-app.elf PRIVATE
     tim_ctrl
     timing
     vectortable
-)
-
-target_compile_definitions(ghost-feather-app.elf PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:BMI270_VLD_CONF_FILE=1>"
 )
 
 target_link_options(ghost-feather-app.elf PRIVATE
