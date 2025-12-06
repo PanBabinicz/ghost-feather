@@ -574,12 +574,12 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_deinit(void *tim);
 ///
 /// \brief
 ///
-tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim);
+tim_ctrl_res_t tim_ctrl_adv6_tim18_enable(void *tim);
 
 ///
 /// \brief
 ///
-tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim);
+tim_ctrl_res_t tim_ctrl_adv6_tim18_disable(void *tim);
 
 #ifdef __cplusplus
 }
