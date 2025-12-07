@@ -89,14 +89,14 @@ add_subdirectory(loader)
 add_subdirectory(shared)
 add_subdirectory(submodules)
 add_subdirectory(startup)
-add_subdirectory(vectortable)
 
 # --------------------------------------------------
 # Target: Bootloader
 # --------------------------------------------------
 message(STATUS "Configuring ghost-feather-bootloader.elf")
 add_executable(ghost-feather-bootloader.elf
-    misc/empty.c
+    ${PROJECT_SOURCE_DIR}/misc/empty.c
+    ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
 )
 
 target_include_directories(ghost-feather-bootloader.elf PUBLIC
@@ -121,7 +121,6 @@ target_link_libraries(ghost-feather-bootloader.elf PRIVATE
     gfc_common_options
     libopencm3_stm32f7.a
     timing
-    vectortable
 )
 
 target_link_options(ghost-feather-bootloader.elf PRIVATE
@@ -135,7 +134,8 @@ target_link_options(ghost-feather-bootloader.elf PRIVATE
 # --------------------------------------------------
 message(STATUS "Configuring ghost-feather-apploader.elf")
 add_executable(ghost-feather-apploader.elf
-    misc/empty.c
+    ${PROJECT_SOURCE_DIR}/misc/empty.c
+    ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
 )
 
 target_include_directories(ghost-feather-apploader.elf PRIVATE
@@ -156,7 +156,6 @@ target_link_libraries(ghost-feather-apploader.elf PRIVATE
     apploader
     gfc_common_options
     libopencm3_stm32f7.a
-    vectortable
 )
 
 target_link_options(ghost-feather-apploader.elf PRIVATE
@@ -170,7 +169,8 @@ target_link_options(ghost-feather-apploader.elf PRIVATE
 # --------------------------------------------------
 message(STATUS "Configuring ghost-feather-updater.elf")
 add_executable(ghost-feather-updater.elf
-    misc/empty.c
+    ${PROJECT_SOURCE_DIR}/misc/empty.c
+    ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
 )
 
 target_include_directories(ghost-feather-updater.elf PRIVATE
@@ -200,7 +200,6 @@ target_link_libraries(ghost-feather-updater.elf PRIVATE
     printf
     gfc_common_options
     libopencm3_stm32f7.a
-    vectortable
 )
 
 target_link_options(ghost-feather-updater.elf PRIVATE
@@ -214,7 +213,8 @@ target_link_options(ghost-feather-updater.elf PRIVATE
 # --------------------------------------------------
 message(STATUS "Configuring ghost-feather-app.elf")
 add_executable(ghost-feather-app.elf
-    misc/empty.c
+    ${PROJECT_SOURCE_DIR}/misc/empty.c
+    ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
 )
 
 target_include_directories(ghost-feather-app.elf PRIVATE
@@ -244,7 +244,6 @@ target_link_libraries(ghost-feather-app.elf PRIVATE
     libopencm3_stm32f7.a
     tim_ctrl
     timing
-    vectortable
 )
 
 target_link_options(ghost-feather-app.elf PRIVATE

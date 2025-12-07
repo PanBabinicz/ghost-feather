@@ -10,7 +10,7 @@
             .word \name
         .endm
 
-        .section ._vector_table, "a"
+        .section ._vector_table, "a", %progbits
         .balign 4
         .global _vector_table
         .type _vector_table, %object

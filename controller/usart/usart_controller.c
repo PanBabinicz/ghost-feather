@@ -36,6 +36,10 @@ void _putchar(char character)
 {
     usart_send_blocking(USART_CONTROLLER_DEBUG_INTERFACE, (uint16_t)character);
 }
+#else
+void _putchar(char character)
+{
+}
 #endif  /* DEBUG */
 
 usart_controller_status_t usart_controller_is_initialized(void)
