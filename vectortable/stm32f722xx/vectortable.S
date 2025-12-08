@@ -3,7 +3,6 @@
         .thumb
 
         .macro defisr name
-            .global \name
             .weak \name
             .type \name, %function
             .thumb_set \name, _default_handler
@@ -16,7 +15,7 @@
         .type _vector_table, %object
 _vector_table:                                  @ |-   Offset   -|
         .word _estack                           @ |- 0x00000000 -|
-        defisr _reset_handler                   @ |- 0x00000004 -|
+        .word _reset_handler                    @ |- 0x00000004 -|
         defisr _nmi_handler                     @ |- 0x00000008 -|
         defisr _hardfault_handler               @ |- 0x0000000c -|
         defisr _memmanage_handler               @ |- 0x00000010 -|
