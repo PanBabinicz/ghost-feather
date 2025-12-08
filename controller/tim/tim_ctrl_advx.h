@@ -78,7 +78,7 @@ union tim_ctrl_adv6_tim18_cr2
         uint32_t ois6  : 1;
         uint32_t       : 1;
         uint32_t mms2  : 4;
-        uint32_t       : 8;
+        uint32_t       : 7;
     } bf;
 };
 
@@ -543,6 +543,7 @@ struct tim_ctrl_adv6_tim18_regs
     union tim_ctrl_adv6_tim18_bdtr  bdtr;
     union tim_ctrl_adv6_tim18_dcr   dcr;
     union tim_ctrl_adv6_tim18_dmar  dmar;
+    uint32_t res0[1];
     union tim_ctrl_adv6_tim18_ccmr3 ccmr3;
     union tim_ctrl_adv6_tim18_ccr5  ccr5;
     union tim_ctrl_adv6_tim18_ccr6  ccr6;
