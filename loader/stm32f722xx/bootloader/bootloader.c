@@ -126,6 +126,7 @@ static void gpio_setup(void)
     /* Set TIM4 gpios alternate function. */
     gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, (GPIO6 | GPIO7 | GPIO8 | GPIO9));
     gpio_set_af(GPIOB, GPIO_AF2, (GPIO6 | GPIO7 | GPIO8 | GPIO9));
+    gpio_set_output_options(GPIOB, GPIO_OTYPE_PP, GPIO_OSPEED_100MHZ, (GPIO6 | GPIO7 | GPIO8 | GPIO9));
 
     /* Set TIM8 gpios alternate function. */
     gpio_mode_setup(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, (GPIO6 | GPIO7 | GPIO8 | GPIO9));
