@@ -7,17 +7,6 @@
 ///***********************************************************************************************************
 /// Private objects - declaration.
 ///***********************************************************************************************************
-///
-/// \brief
-///
-struct tim_ctrl_dev
-{
-    void *tim;
-    tim_ctrl_res_t (*init)(void *tim);
-    tim_ctrl_res_t (*deinit)(void *tim);
-    tim_ctrl_res_t (*enable)(void *tim);
-    tim_ctrl_res_t (*disable)(void *tim);
-};
 
 ///***********************************************************************************************************
 /// Private objects - definition.
@@ -612,7 +601,7 @@ static struct tim_ctrl_adv6_tim18_dev tim_ctrl_tim8_dev =
         {
             .bf =
             {
-                .psc = 0x00,
+                .psc = 0xd7,
             },
         },
 
@@ -745,9 +734,9 @@ static struct tim_ctrl_adv6_tim18_dev tim_ctrl_tim8_dev =
 ///
 /// \brief
 ///
-static const struct tim_ctrl_dev tim_ctrl_dev_arr[] =
+static const struct tim_ctrl_dev tim_ctrl_dev_arr[TIM_CTRL_INST_TOTAL] =
 {
-    [0] =
+    [TIM_CTRL_INST_TIM4] =
     {
         .tim     = &tim_ctrl_tim4_dev,
         .init    = &tim_ctrl_gpx_tim2345_init,
@@ -756,7 +745,7 @@ static const struct tim_ctrl_dev tim_ctrl_dev_arr[] =
         .disable = &tim_ctrl_gpx_tim2345_disable,
     },
 
-    [1] =
+    [TIM_CTRL_INST_TIM12] =
     {
         .tim      = &tim_ctrl_tim12_dev,
         .init     = &tim_ctrl_gpx_tim912_init,
@@ -765,7 +754,7 @@ static const struct tim_ctrl_dev tim_ctrl_dev_arr[] =
         .disable  = &tim_ctrl_gpx_tim912_disable,
     },
 
-    [2] =
+    [TIM_CTRL_INST_TIM8] =
     {
         .tim      = &tim_ctrl_tim8_dev,
         .init     = &tim_ctrl_adv6_tim18_init,
@@ -799,11 +788,20 @@ static const struct tim_ctrl_dev tim_ctrl_dev_arr[] =
 /// |                    CH2 |s+-|
 /// |                    CH1 |s+-|
 ///  ----------------------------
-///
+
+struct tim_ctrl_dev* tim_ctrl_dev_get(tim_ctrl_inst_t inst)
+{
+    if ((inst < TIM_CTRL_INST_BEGIN) || (inst >= TIM_CTRL_INST_TOTAL))
+    {
+        return NULL;
+    }
+
+    return &tim_ctrl_dev_arr[inst];
+}
 
 void tim_ctrl_init(void)
 {
-    for (uint32_t i = 0; i < sizeof(tim_ctrl_dev_arr)/sizeof(tim_ctrl_dev_arr[0]); i++)
+    for (uint32_t i = 0; i < sizeof(tim_ctrl_dev_arr)/sizeof(tim_ctrl_dev_arr[TIM_CTRL_INST_BEGIN]); i++)
     {
         tim_ctrl_dev_arr[i].init(tim_ctrl_dev_arr[i].tim);
         tim_ctrl_dev_arr[i].enable(tim_ctrl_dev_arr[i].tim);
