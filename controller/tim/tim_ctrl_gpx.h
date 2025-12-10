@@ -986,6 +986,7 @@ struct tim_ctrl_gpx_tim2345_dev
 {
     volatile struct tim_ctrl_gpx_tim2345_regs *rmap;
     struct tim_ctrl_gpx_tim2345_regs rtmp;
+    struct tim_ctrl_ccr_data ccr_data[4];
     tim_ctrl_gpx_tim2345_id_t id;
     tim_ctrl_gpx_tim2345_mode_t ccmr1_mode;
     tim_ctrl_gpx_tim2345_mode_t ccmr2_mode;
@@ -999,6 +1000,7 @@ struct tim_ctrl_gpx_tim912_dev
 {
     volatile struct tim_ctrl_gpx_tim912_regs *rmap;
     struct tim_ctrl_gpx_tim912_regs rtmp;
+    struct tim_ctrl_ccr_data ccr_data[2];
     tim_ctrl_gpx_tim912_id_t id;
     tim_ctrl_gpx_tim912_mode_t ccmr1_mode;
     tim_ctrl_stat_t stat;
@@ -1011,6 +1013,7 @@ struct tim_ctrl_gpx_tim10111314_dev
 {
     volatile struct tim_ctrl_gpx_tim10111314_regs *rmap;
     struct tim_ctrl_gpx_tim10111314_regs rtmp;
+    struct tim_ctrl_ccr_data ccr_data[1];
     tim_ctrl_gpx_tim10111314_id_t id;
     tim_ctrl_gpx_tim10111314_mode_t ccmr1_mode;
     tim_ctrl_stat_t stat;

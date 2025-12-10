@@ -263,6 +263,7 @@ static struct tim_ctrl_gpx_tim2345_dev tim_ctrl_tim4_dev =
             },
         },
     },
+    .ccr_data   = { 0 },
     .id         = TIM_CTRL_GPX_TIM2345_ID_4,
     .ccmr1_mode = TIM_CTRL_GPX_TIM2345_MODE_OUT_COMP,
     .ccmr2_mode = TIM_CTRL_GPX_TIM2345_MODE_OUT_COMP,
@@ -407,6 +408,7 @@ static struct tim_ctrl_gpx_tim912_dev tim_ctrl_tim12_dev =
             },
         },
     },
+    .ccr_data   = { 0 },
     .id         = TIM_CTRL_GPX_TIM912_ID_12,
     .ccmr1_mode = TIM_CTRL_GPX_TIM912_MODE_IN_CAP,
     .stat       = false,
@@ -725,6 +727,7 @@ static struct tim_ctrl_adv6_tim18_dev tim_ctrl_tim8_dev =
             },
         },
     },
+    .ccr_data   = { 0 },
     .id         = TIM_CTRL_ADV6_TIM18_ID_8,
     .ccmr1_mode = TIM_CTRL_ADV6_TIM18_MODE_IN_CAP,
     .ccmr2_mode = TIM_CTRL_ADV6_TIM18_MODE_IN_CAP,
@@ -734,7 +737,7 @@ static struct tim_ctrl_adv6_tim18_dev tim_ctrl_tim8_dev =
 ///
 /// \brief
 ///
-static const struct tim_ctrl_dev tim_ctrl_dev_arr[TIM_CTRL_INST_TOTAL] =
+static struct tim_ctrl_dev tim_ctrl_dev_arr[TIM_CTRL_INST_TOTAL] =
 {
     [TIM_CTRL_INST_TIM4] =
     {

@@ -556,6 +556,7 @@ struct tim_ctrl_adv6_tim18_dev
 {
     volatile struct tim_ctrl_adv6_tim18_regs *rmap;
     struct tim_ctrl_adv6_tim18_regs rtmp;
+    struct tim_ctrl_ccr_data ccr_data[6];
     tim_ctrl_adv6_tim18_id_t id;
     tim_ctrl_adv6_tim18_mode_t ccmr1_mode;
     tim_ctrl_adv6_tim18_mode_t ccmr2_mode;

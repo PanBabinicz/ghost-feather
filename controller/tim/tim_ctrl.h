@@ -2,6 +2,7 @@
 #define _TIM_CTRL_H
 
 #include <stdint.h>
+#include "tim_ctrl_common.h"
 
 #ifdef __cplusplus
 extern "C" {
