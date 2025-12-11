@@ -792,6 +792,66 @@ static struct tim_ctrl_dev tim_ctrl_dev_arr[TIM_CTRL_INST_TOTAL] =
 /// |                    CH1 |s+-|
 ///  ----------------------------
 
+void _tim8brktim12_handler(void)
+{
+    volatile struct tim_ctrl_gpx_tim912_dev *tim12 =
+        (volatile struct tim_ctrl_gpx_tim912_dev *)tim_ctrl_dev_arr[TIM_CTRL_INST_TIM12].tim;
+
+    if (tim12->rmap->sr.bf.cc1if)
+    {
+        uint16_t curr = tim12->rmap->ccr1.bf.ccr1;
+
+        tim12->ccr_data[TIM_CTRL_INST_CCR1].prev = tim12->ccr_data[TIM_CTRL_INST_CCR1].curr;
+        tim12->ccr_data[TIM_CTRL_INST_CCR1].curr = curr;
+    }
+
+    if (tim12->rmap->sr.bf.cc2if)
+    {
+        uint16_t curr = tim12->rmap->ccr2.bf.ccr2;
+
+        tim12->ccr_data[TIM_CTRL_INST_CCR2].prev = tim12->ccr_data[TIM_CTRL_INST_CCR2].curr;
+        tim12->ccr_data[TIM_CTRL_INST_CCR2].curr = curr;
+    }
+}
+
+void _tim8cc_handler(void)
+{
+    volatile struct tim_ctrl_adv6_tim18_dev *tim8 =
+        (volatile struct tim_ctrl_adv6_tim18_dev *)tim_ctrl_dev_arr[TIM_CTRL_INST_TIM8].tim;
+
+    if (tim8->rmap->sr.bf.cc1if)
+    {
+        uint16_t curr = tim8->rmap->ccr1.bf.ccr1;
+
+        tim8->ccr_data[TIM_CTRL_INST_CCR1].prev = tim8->ccr_data[TIM_CTRL_INST_CCR1].curr;
+        tim8->ccr_data[TIM_CTRL_INST_CCR1].curr = curr;
+    }
+
+    if (tim8->rmap->sr.bf.cc2if)
+    {
+        uint16_t curr = tim8->rmap->ccr2.bf.ccr2;
+
+        tim8->ccr_data[TIM_CTRL_INST_CCR2].prev = tim8->ccr_data[TIM_CTRL_INST_CCR2].curr;
+        tim8->ccr_data[TIM_CTRL_INST_CCR2].curr = curr;
+    }
+
+    if (tim8->rmap->sr.bf.cc3if)
+    {
+        uint16_t curr = tim8->rmap->ccr3.bf.ccr3;
+
+        tim8->ccr_data[TIM_CTRL_INST_CCR3].prev = tim8->ccr_data[TIM_CTRL_INST_CCR3].curr;
+        tim8->ccr_data[TIM_CTRL_INST_CCR3].curr = curr;
+    }
+
+    if (tim8->rmap->sr.bf.cc4if)
+    {
+        uint16_t curr = tim8->rmap->ccr4.bf.ccr4;
+
+        tim8->ccr_data[TIM_CTRL_INST_CCR4].prev = tim8->ccr_data[TIM_CTRL_INST_CCR4].curr;
+        tim8->ccr_data[TIM_CTRL_INST_CCR4].curr = curr;
+    }
+}
+
 struct tim_ctrl_dev* tim_ctrl_dev_get(tim_ctrl_inst_t inst)
 {
     if ((inst < TIM_CTRL_INST_BEGIN) || (inst >= TIM_CTRL_INST_TOTAL))
