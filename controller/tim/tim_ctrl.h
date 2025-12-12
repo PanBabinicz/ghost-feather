@@ -9,7 +9,11 @@ extern "C" {
 #endif  /* __cplusplus */
 
 ///
-/// \brief
+/// \brief Enumeration of available TIM controller instances.
+///
+/// This enum lists all supported TIM peripherals that can be accessed through
+/// the TIM control layer. The values start at zero and increase sequentially.
+/// `TIM_CTRL_INST_TOTAL` represents the count of valid instances.
 ///
 typedef enum tim_ctrl_inst
 {
@@ -21,7 +25,12 @@ typedef enum tim_ctrl_inst
 } tim_ctrl_inst_t;
 
 ///
-/// \brief
+/// \brief The TIM device interface.
+///
+/// This structure provides a generic interface to a TIM peripheral.
+/// The `tim` pointer references the underlying hardware instance, and the
+/// function pointers implement lifecycle and state-control operations.
+/// Each function returns a `tim_ctrl_res_t` indicating success or error.
 ///
 struct tim_ctrl_dev
 {
@@ -33,12 +42,18 @@ struct tim_ctrl_dev
 };
 
 ///
-/// \brief
+/// \brief Gets the TIM device.
+///
+/// \param[in] inst The selected TIM instance.
+///
+/// \return struct tim_ctrl_dev* The TIM device pointer.
 ///
 struct tim_ctrl_dev* tim_ctrl_dev_get(tim_ctrl_inst_t inst);
 
 ///
-/// \brief
+/// \brief Initializes the TIM devices.
+///
+/// This function should be called during system initialization.
 ///
 void tim_ctrl_init(void);
 

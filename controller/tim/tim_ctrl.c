@@ -5,14 +5,10 @@
 #include "tim_ctrl_gpx.h"
 
 ///***********************************************************************************************************
-/// Private objects - declaration.
-///***********************************************************************************************************
-
-///***********************************************************************************************************
 /// Private objects - definition.
 ///***********************************************************************************************************
 ///
-/// \brief
+/// \brief The TIM4 device.
 ///
 static struct tim_ctrl_gpx_tim2345_dev tim_ctrl_tim4_dev =
 {
@@ -271,7 +267,7 @@ static struct tim_ctrl_gpx_tim2345_dev tim_ctrl_tim4_dev =
 };
 
 ///
-/// \brief
+/// \brief The TIM12 device.
 ///
 static struct tim_ctrl_gpx_tim912_dev tim_ctrl_tim12_dev =
 {
@@ -414,6 +410,9 @@ static struct tim_ctrl_gpx_tim912_dev tim_ctrl_tim12_dev =
     .stat       = false,
 };
 
+///
+/// \brief The TIM8 device.
+///
 static struct tim_ctrl_adv6_tim18_dev tim_ctrl_tim8_dev =
 {
     .rmap = (volatile struct tim_ctrl_adv6_tim18_regs *)(0x40010400),
@@ -735,7 +734,7 @@ static struct tim_ctrl_adv6_tim18_dev tim_ctrl_tim8_dev =
 };
 
 ///
-/// \brief
+/// \brief The TIM devices array.
 ///
 static struct tim_ctrl_dev tim_ctrl_dev_arr[TIM_CTRL_INST_TOTAL] =
 {
@@ -791,7 +790,11 @@ static struct tim_ctrl_dev tim_ctrl_dev_arr[TIM_CTRL_INST_TOTAL] =
 /// |                    CH2 |s+-|
 /// |                    CH1 |s+-|
 ///  ----------------------------
+///
 
+///***********************************************************************************************************
+/// Global functions - definition.
+///***********************************************************************************************************
 void _tim8brktim12_handler(void)
 {
     volatile struct tim_ctrl_gpx_tim912_dev *tim12 =
