@@ -741,7 +741,7 @@ union tim_ctrl_gpx_tim912_ccr2
 };
 
 ///
-/// \brief
+/// \brief Control Register 1 (CR1) for general-purpose timers TIM10–TIM14.
 ///
 union tim_ctrl_gpx_tim10111314_cr1
 {
@@ -762,7 +762,7 @@ union tim_ctrl_gpx_tim10111314_cr1
 };
 
 ///
-/// \brief
+/// \brief Interrupt Enable Register (DIER) for general-purpose timers TIM10–TIM14.
 ///
 union tim_ctrl_gpx_tim10111314_dier
 {
@@ -776,7 +776,7 @@ union tim_ctrl_gpx_tim10111314_dier
 };
 
 ///
-/// \brief
+/// \brief Status Register (SR) for general-purpose timers TIM10–TIM14.
 ///
 union tim_ctrl_gpx_tim10111314_sr
 {
@@ -792,7 +792,7 @@ union tim_ctrl_gpx_tim10111314_sr
 };
 
 ///
-/// \brief
+/// \brief Event Generation Register (EGR) for general-purpose timers TIM10–TIM14.
 ///
 union tim_ctrl_gpx_tim10111314_egr
 {
@@ -806,7 +806,8 @@ union tim_ctrl_gpx_tim10111314_egr
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 1 Input Mode (CCMR1) for general-purpose
+///        timers TIM10-TIM14.
 ///
 union tim_ctrl_gpx_tim10111314_ccmr1_in
 {
@@ -821,7 +822,8 @@ union tim_ctrl_gpx_tim10111314_ccmr1_in
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 1 Output Mode (CCMR1) for general-purpose
+///        timers TIM10-TIM14.
 ///
 union tim_ctrl_gpx_tim10111314_ccmr1_out
 {
@@ -839,7 +841,7 @@ union tim_ctrl_gpx_tim10111314_ccmr1_out
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Enable Register (CCER) for general-purpose timers TIM10-TIM14.
 ///
 union tim_ctrl_gpx_tim10111314_ccer
 {
@@ -855,7 +857,7 @@ union tim_ctrl_gpx_tim10111314_ccer
 };
 
 ///
-/// \brief
+/// \brief Counter Register (CNT) for general-purpose timers TIM10-TIM14.
 ///
 union tim_ctrl_gpx_tim10111314_cnt
 {
@@ -869,7 +871,7 @@ union tim_ctrl_gpx_tim10111314_cnt
 };
 
 ///
-/// \brief
+/// \brief Prescaler Register (PSC) for general-purpose timers TIM10-TIM14.
 ///
 union tim_ctrl_gpx_tim10111314_psc
 {
@@ -882,7 +884,7 @@ union tim_ctrl_gpx_tim10111314_psc
 };
 
 ///
-/// \brief
+/// \brief Auto-Reload Register (ARR) for general-purpose timers TIM10-TIM14.
 ///
 union tim_ctrl_gpx_tim10111314_arr
 {
@@ -895,7 +897,7 @@ union tim_ctrl_gpx_tim10111314_arr
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register (CCR1) for general-purpose timers TIM10-TIM14.
 ///
 union tim_ctrl_gpx_tim10111314_ccr1
 {
@@ -908,7 +910,7 @@ union tim_ctrl_gpx_tim10111314_ccr1
 };
 
 ///
-/// \brief
+/// \brief TIM11 Option Register (TIM11_OR).
 ///
 union tim_ctrl_gpx_tim11_or
 {
