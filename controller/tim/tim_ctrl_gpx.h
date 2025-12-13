@@ -517,7 +517,7 @@ union tim_ctrl_gpx_tim5_or
 };
 
 ///
-/// \brief
+/// \brief Control Register 1 (CR1) for general-purpose timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_cr1
 {
@@ -538,7 +538,7 @@ union tim_ctrl_gpx_tim912_cr1
 };
 
 ///
-/// \brief
+/// \brief Slave Mode Control Register (SMCR) for general-purpose timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_smcr
 {
@@ -556,7 +556,7 @@ union tim_ctrl_gpx_tim912_smcr
 };
 
 ///
-/// \brief
+/// \brief Interrupt Enable Register (DIER) for general-purpose timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_dier
 {
@@ -573,7 +573,7 @@ union tim_ctrl_gpx_tim912_dier
 };
 
 ///
-/// \brief
+/// \brief Status Register (SR) for general-purpose timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_sr
 {
@@ -593,7 +593,7 @@ union tim_ctrl_gpx_tim912_sr
 };
 
 ///
-/// \brief
+/// \brief Event Generation Register (EGR) for general-purpose timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_egr
 {
@@ -610,7 +610,8 @@ union tim_ctrl_gpx_tim912_egr
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 1 Input Mode (CCMR1) for general-purpose
+///        timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_ccmr1_in
 {
@@ -628,7 +629,8 @@ union tim_ctrl_gpx_tim912_ccmr1_in
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 1 Output Mode (CCMR1) for general-purpose
+///        timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_ccmr1_out
 {
@@ -653,7 +655,7 @@ union tim_ctrl_gpx_tim912_ccmr1_out
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Enable Register (CCER) for general-purpose timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_ccer
 {
@@ -673,7 +675,7 @@ union tim_ctrl_gpx_tim912_ccer
 };
 
 ///
-/// \brief
+/// \brief Counter Register (CNT) for general-purpose timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_cnt
 {
@@ -687,7 +689,7 @@ union tim_ctrl_gpx_tim912_cnt
 };
 
 ///
-/// \brief
+/// \brief Prescaler Register (CNT) for general-purpose timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_psc
 {
@@ -700,7 +702,7 @@ union tim_ctrl_gpx_tim912_psc
 };
 
 ///
-/// \brief
+/// \brief Auto-Reload Register (ARR) for general-purpose timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_arr
 {
@@ -713,7 +715,7 @@ union tim_ctrl_gpx_tim912_arr
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register 1 (CCR1) for general-purpose timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_ccr1
 {
@@ -726,7 +728,7 @@ union tim_ctrl_gpx_tim912_ccr1
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register 2 (CCR2) for general-purpose timers TIM9 and TIM12.
 ///
 union tim_ctrl_gpx_tim912_ccr2
 {
