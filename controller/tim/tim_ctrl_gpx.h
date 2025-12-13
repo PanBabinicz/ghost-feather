@@ -11,7 +11,12 @@ extern "C" {
 #endif  /* __cplusplus */
 
 ///
-/// \brief
+/// \brief Output Compare (OC) modes for TIM2, TIM3, TIM4, and TIM5.
+///
+/// This enum defines the available output compare operating modes supported
+/// by general-purpose timers TIM2–TIM5. These modes control how the timer
+/// output behaves when a compare match occurs, including frozen output,
+/// toggling, PWM generation, and one-pulse operation.
 ///
 typedef enum tim_ctrl_gpx_tim2345_oc_mode
 {
@@ -32,7 +37,9 @@ typedef enum tim_ctrl_gpx_tim2345_oc_mode
 } tim_ctrl_gpx_tim2345_oc_mode_t;
 
 ///
-/// \brief
+/// \brief Identifier for general-purpose timers TIM2–TIM5.
+///
+/// This enum selects which general-purpose timer instance is being referenced.
 ///
 typedef enum tim_ctrl_gpx_tim2345_id
 {
@@ -43,7 +50,10 @@ typedef enum tim_ctrl_gpx_tim2345_id
 } tim_ctrl_gpx_tim2345_id_t;
 
 ///
-/// \brief
+/// \brief Operating mode for general-purpose timers TIM2–TIM5.
+///
+/// Specifies whether the timer is configured for input capture or
+/// output compare functionality.
 ///
 typedef enum tim_ctrl_gpx_tim2345_mode
 {
@@ -52,7 +62,9 @@ typedef enum tim_ctrl_gpx_tim2345_mode
 } tim_ctrl_gpx_tim2345_mode_t;
 
 ///
-/// \brief
+/// \brief Identifier for general-purpose timers TIM9 and TIM12.
+///
+/// This enum selects which general-purpose timer instance is being referenced.
 ///
 typedef enum tim_ctrl_gpx_tim912_id
 {
@@ -60,6 +72,12 @@ typedef enum tim_ctrl_gpx_tim912_id
     TIM_CTRL_GPX_TIM912_ID_12,
 } tim_ctrl_gpx_tim912_id_t;
 
+///
+/// \brief Operating mode for general-purpose timers TIM9 and TIM12.
+///
+/// Specifies whether the timer is configured for input capture or
+/// output compare functionality.
+///
 typedef enum tim_ctrl_gpx_tim912_mode
 {
     TIM_CTRL_GPX_TIM912_MODE_IN_CAP = 0,
@@ -67,7 +85,9 @@ typedef enum tim_ctrl_gpx_tim912_mode
 } tim_ctrl_gpx_tim912_mode_t;
 
 ///
-/// \brief
+/// \brief Identifier for general-purpose timers TIM10-TIM14.
+///
+/// This enum selects which general-purpose timer instance is being referenced.
 ///
 typedef enum tim_ctrl_gpx_tim10111314_id
 {
@@ -78,7 +98,10 @@ typedef enum tim_ctrl_gpx_tim10111314_id
 } tim_ctrl_gpx_tim10111314_id_t;
 
 ///
-/// \brief
+/// \brief Operating mode for general-purpose timers TIM10-TIM14.
+///
+/// Specifies whether the timer is configured for input capture or
+/// output compare functionality.
 ///
 typedef enum tim_ctrl_gpx_tim10111314_mode
 {
@@ -87,7 +110,7 @@ typedef enum tim_ctrl_gpx_tim10111314_mode
 } tim_ctrl_gpx_tim10111314_mode_t;
 
 ///
-/// \brief
+/// \brief Control Register 1 (CR1) for general-purpose timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_cr1
 {
@@ -109,7 +132,7 @@ union tim_ctrl_gpx_tim2345_cr1
 };
 
 ///
-/// \brief
+/// \brief Control Register 2 (CR2) for general-purpose timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_cr2
 {
@@ -125,7 +148,7 @@ union tim_ctrl_gpx_tim2345_cr2
 };
 
 ///
-/// \brief
+/// \brief Slave Mode Control Register (SMCR) for general-purpose timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_smcr
 {
@@ -146,7 +169,7 @@ union tim_ctrl_gpx_tim2345_smcr
 };
 
 ///
-/// \brief
+/// \brief DMA/Interrupt Enable Register (DIER) for general-purpose timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_dier
 {
@@ -173,7 +196,7 @@ union tim_ctrl_gpx_tim2345_dier
 };
 
 ///
-/// \brief
+/// \brief Status Register (SR) for general-purpose timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_sr
 {
@@ -197,7 +220,7 @@ union tim_ctrl_gpx_tim2345_sr
 };
 
 ///
-/// \brief
+/// \brief Event Generation Register (EGR) for general-purpose timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_egr
 {
@@ -216,7 +239,8 @@ union tim_ctrl_gpx_tim2345_egr
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 1 Input Mode (CCMR1) for general-purpose
+///        timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_ccmr1_in
 {
@@ -234,7 +258,8 @@ union tim_ctrl_gpx_tim2345_ccmr1_in
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 1 Output Mode (CCMR1) for general-purpose
+///        timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_ccmr1_out
 {
@@ -257,8 +282,10 @@ union tim_ctrl_gpx_tim2345_ccmr1_out
         uint32_t          : 7;
     } bf;
 };
+
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 2 Input Mode (CCMR2) for general-purpose
+///        timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_ccmr2_in
 {
@@ -276,7 +303,8 @@ union tim_ctrl_gpx_tim2345_ccmr2_in
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 2 Output Mode (CCMR2) for general-purpose
+///        timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_ccmr2_out
 {
@@ -301,7 +329,7 @@ union tim_ctrl_gpx_tim2345_ccmr2_out
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Enable Register (CCER) for general-purpose timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_ccer
 {
@@ -329,7 +357,7 @@ union tim_ctrl_gpx_tim2345_ccer
 };
 
 ///
-/// \brief
+/// \brief Counter Register (CNT) for general-purpose timers TIM2–TIM5.
 ///
 /// \note  TIM2 and TIM5 have 32bit counter. Use 'r' to get/modify content of the counter.
 ///
@@ -345,7 +373,7 @@ union tim_ctrl_gpx_tim2345_cnt
 };
 
 ///
-/// \brief
+/// \brief Prescaler Register (PSC) for general-purpose timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_psc
 {
@@ -358,7 +386,7 @@ union tim_ctrl_gpx_tim2345_psc
 };
 
 ///
-/// \brief
+/// \brief Auto-Reload Register (ARR) for general-purpose timers TIM2–TIM5.
 ///
 /// \note  TIM2 and TIM5 have 32bit auto reload register. Use 'r' to get/modify theirs content.
 ///
@@ -373,7 +401,7 @@ union tim_ctrl_gpx_tim2345_arr
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register 1 (CCR1) for general-purpose timers TIM2–TIM5.
 ///
 /// \note  TIM2 and TIM5 have 32bit capture/compare register. Use 'r' to get/modify theirs content.
 ///
@@ -388,7 +416,7 @@ union tim_ctrl_gpx_tim2345_ccr1
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register 2 (CCR2) for general-purpose timers TIM2–TIM5.
 ///
 /// \note  TIM2 and TIM5 have 32bit capture/compare register. Use 'r' to get/modify theirs content.
 ///
@@ -403,7 +431,7 @@ union tim_ctrl_gpx_tim2345_ccr2
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register 3 (CCR3) for general-purpose timers TIM2–TIM5.
 ///
 /// \note  TIM2 and TIM5 have 32bit capture/compare register. Use 'r' to get/modify theirs content.
 ///
@@ -418,7 +446,7 @@ union tim_ctrl_gpx_tim2345_ccr3
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register 4 (CCR4) for general-purpose timers TIM2–TIM5.
 ///
 /// \note  TIM2 and TIM5 have 32bit capture/compare register. Use 'r' to get/modify theirs content.
 ///
@@ -433,7 +461,7 @@ union tim_ctrl_gpx_tim2345_ccr4
 };
 
 ///
-/// \brief
+/// \brief DMA Control Register (DCR) for general-purpose timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_dcr
 {
@@ -448,7 +476,7 @@ union tim_ctrl_gpx_tim2345_dcr
 };
 
 ///
-/// \brief
+/// \brief DMA Address For Full Transfer Register (DMAR) for general-purpose timers TIM2–TIM5.
 ///
 union tim_ctrl_gpx_tim2345_dmar
 {
@@ -461,7 +489,7 @@ union tim_ctrl_gpx_tim2345_dmar
 };
 
 ///
-/// \brief
+/// \brief TIM2 Option Register (TIM2_OR).
 ///
 union tim_ctrl_gpx_tim2_or
 {
@@ -475,7 +503,7 @@ union tim_ctrl_gpx_tim2_or
 };
 
 ///
-/// \brief
+/// \brief TIM5 Option Register (TIM5_OR).
 ///
 union tim_ctrl_gpx_tim5_or
 {
