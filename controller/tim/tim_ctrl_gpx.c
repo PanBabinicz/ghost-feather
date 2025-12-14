@@ -1,7 +1,15 @@
 #include "tim_ctrl_gpx.h"
 
+///***********************************************************************************************************
+/// Private objects - definition.
+///***********************************************************************************************************
 ///
-/// \brief
+/// \brief Default register configuration for TIM2–TIM5 after power-on reset.
+///
+/// This constant structure represents the expected reset (POR) state of the
+/// general-purpose timer registers TIM2, TIM3, TIM4, and TIM5. It is used as a
+/// known-good baseline for initialization and for restoring registers to their
+/// default values before applying custom configuration.
 ///
 static const struct tim_ctrl_gpx_tim2345_regs tim_ctrl_gpx_tim2345_por =
 {
@@ -251,7 +259,12 @@ static const struct tim_ctrl_gpx_tim2345_regs tim_ctrl_gpx_tim2345_por =
 };
 
 ///
-/// \brief
+/// \brief Default register configuration for TIM9 and TIM12 after power-on reset.
+///
+/// This constant structure represents the expected reset (POR) state of the
+/// general-purpose timer registers TIM9 and TIM12. It is used as a known-good
+/// baseline for initialization and for restoring registers to their
+/// default values before applying custom configuration.
 ///
 static const struct tim_ctrl_gpx_tim912_regs tim_ctrl_gpx_tim912_por =
 {
@@ -392,7 +405,12 @@ static const struct tim_ctrl_gpx_tim912_regs tim_ctrl_gpx_tim912_por =
 
 
 ///
-/// \brief
+/// \brief Default register configuration for TIM10–TIM14 after power-on reset.
+///
+/// This constant structure represents the expected reset (POR) state of the
+/// general-purpose timer registers TIM10, TIM11, TIM13, and TIM14. It is used as a
+/// known-good baseline for initialization and for restoring registers to their
+/// default values before applying custom configuration.
 ///
 static const struct tim_ctrl_gpx_tim10111314_regs tim_ctrl_gpx_tim10111314_por =
 {
@@ -505,6 +523,9 @@ static const struct tim_ctrl_gpx_tim10111314_regs tim_ctrl_gpx_tim10111314_por =
     }
 };
 
+///***********************************************************************************************************
+/// Global functions - definition.
+///***********************************************************************************************************
 tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim)
 {
     if (tim == NULL)

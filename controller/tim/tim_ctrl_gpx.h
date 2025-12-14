@@ -923,7 +923,12 @@ union tim_ctrl_gpx_tim11_or
 };
 
 ///
-/// \brief
+/// \brief Register map for general-purpose timers TIM2–TIM5.
+///
+/// This structure represents the memory-mapped register layout of the
+/// general-purpose timers TIM2, TIM3, TIM4, and TIM5. The register order
+/// and reserved fields are aligned with the device reference manual to
+/// allow direct access via a peripheral base address.
 ///
 struct tim_ctrl_gpx_tim2345_regs
 {
@@ -960,7 +965,11 @@ struct tim_ctrl_gpx_tim2345_regs
 };
 
 ///
-/// \brief
+/// \brief Register map for timers TIM9 and TIM12.
+///
+/// This structure defines the memory-mapped register layout for TIM9 and
+/// TIM12. The register order and reserved fields are aligned with the
+/// device reference manual to allow direct access via a peripheral base address.
 ///
 struct tim_ctrl_gpx_tim912_regs
 {
@@ -986,7 +995,11 @@ struct tim_ctrl_gpx_tim912_regs
 };
 
 ///
-/// \brief
+/// \brief Register map for timers TIM10-TIM14.
+///
+/// This structure defines the memory-mapped register layout for TIM10, TIM11,
+/// TIM13, and TIM14. The register order and reserved fields are aligned with the
+/// device reference manual to allow direct access via a peripheral base address.
 ///
 struct tim_ctrl_gpx_tim10111314_regs
 {
@@ -1012,7 +1025,12 @@ struct tim_ctrl_gpx_tim10111314_regs
 };
 
 ///
-/// \brief
+/// \brief Runtime device context for general-purpose timers TIM2–TIM5.
+///
+/// This structure holds all runtime state required to control a TIM2–TIM5
+/// instance. It includes a pointer to the memory-mapped registers, a temporary
+/// shadow copy for safe modification, capture/compare history, configuration
+/// modes, and initialization status.
 ///
 struct tim_ctrl_gpx_tim2345_dev
 {
@@ -1026,7 +1044,12 @@ struct tim_ctrl_gpx_tim2345_dev
 };
 
 ///
-/// \brief
+/// \brief Runtime device context for general-purpose timers TIM9 and TIM12.
+///
+/// This structure holds all runtime state required to control a TIM9 and TIM12
+/// instance. It includes a pointer to the memory-mapped registers, a temporary
+/// shadow copy for safe modification, capture/compare history, configuration
+/// modes, and initialization status.
 ///
 struct tim_ctrl_gpx_tim912_dev
 {
@@ -1039,7 +1062,12 @@ struct tim_ctrl_gpx_tim912_dev
 };
 
 ///
-/// \brief
+/// \brief Runtime device context for general-purpose timers TIM10-TIM14.
+///
+/// This structure holds all runtime state required to control a TIM10-TIM14
+/// instance. It includes a pointer to the memory-mapped registers, a temporary
+/// shadow copy for safe modification, capture/compare history, configuration
+/// modes, and initialization status.
 ///
 struct tim_ctrl_gpx_tim10111314_dev
 {
@@ -1052,62 +1080,134 @@ struct tim_ctrl_gpx_tim10111314_dev
 };
 
 ///
-/// \brief
+/// \brief Initializes the general-purpose timer (TIM2-TIM5).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim);
 
 ///
-/// \brief
+/// \brief Initializes the general-purpose timer (TIM9 and TIM12).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_gpx_tim912_init(void *tim);
 
 ///
-/// \brief
+/// \brief Initializes the general-purpose timer (TIM10-TIM14).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_gpx_tim10111314_init(void *tim);
 
 ///
-/// \brief
+/// \brief Deinitializes the general-purpose timer (TIM2-TIM5).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_gpx_tim2345_deinit(void *tim);
 
 ///
-/// \brief
+/// \brief Deinitializes the general-purpose timer (TIM9 and TIM12).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_gpx_tim912_deinit(void *tim);
 
 ///
-/// \brief
+/// \brief Deinitializes the general-purpose timer (TIM10-TIM14).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_gpx_tim10111314_deinit(void *tim);
 
 ///
-/// \brief
+/// \brief Enables the general-purpose timer (TIM2-TIM5).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_gpx_tim2345_enable(void *tim);
 
 ///
-/// \brief
+/// \brief Enables the general-purpose timer (TIM9 and TIM12).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_gpx_tim912_enable(void *tim);
 
 ///
-/// \brief
+/// \brief Enables the general-purpose timer (TIM10-TIM14).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_gpx_tim10111314_enable(void *tim);
 
 ///
-/// \brief
+/// \brief Disables the general-purpose timer (TIM2-TIM5).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_gpx_tim2345_disable(void *tim);
 
 ///
-/// \brief
+/// \brief Disables the general-purpose timer (TIM9 and TIM12).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_gpx_tim912_disable(void *tim);
 
 ///
-/// \brief
+/// \brief Disables the general-purpose timer (TIM10-TIM14).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_gpx_tim10111314_disable(void *tim);
 
