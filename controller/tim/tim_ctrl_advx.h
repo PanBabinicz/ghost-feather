@@ -11,7 +11,9 @@ extern "C" {
 #endif  /* __cplusplus */
 
 ///
-/// \brief
+/// \brief Identifier for advanced timers TIM1 and TIM8.
+///
+/// This enum selects which general-purpose timer instance is being referenced.
 ///
 typedef enum tim_ctrl_adv6_tim18_id
 {
@@ -20,7 +22,10 @@ typedef enum tim_ctrl_adv6_tim18_id
 } tim_ctrl_adv6_tim18_id_t;
 
 ///
-/// \brief
+/// \brief Operating mode for advanced timers TIM8 and TIM8.
+///
+/// Specifies whether the timer is configured for input capture or
+/// output compare functionality.
 ///
 typedef enum tim_ctrl_adv6_tim18_mode
 {
@@ -29,7 +34,7 @@ typedef enum tim_ctrl_adv6_tim18_mode
 } tim_ctrl_adv6_tim18_mode_t;
 
 ///
-/// \brief
+/// \brief Control Register 1 (CR1) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_cr1
 {
@@ -51,7 +56,7 @@ union tim_ctrl_adv6_tim18_cr1
 };
 
 ///
-/// \brief
+/// \brief Control Register 2 (CR2) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_cr2
 {
@@ -83,7 +88,7 @@ union tim_ctrl_adv6_tim18_cr2
 };
 
 ///
-/// \brief
+/// \brief Slave Mode Control Register (SMCR) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_smcr
 {
@@ -104,7 +109,7 @@ union tim_ctrl_adv6_tim18_smcr
 };
 
 ///
-/// \brief
+/// \brief DMA/Interrupt Enable Register (DIER) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_dier
 {
@@ -131,7 +136,7 @@ union tim_ctrl_adv6_tim18_dier
 };
 
 ///
-/// \brief
+/// \brief Status Register (SR) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_sr
 {
@@ -159,7 +164,7 @@ union tim_ctrl_adv6_tim18_sr
 };
 
 ///
-/// \brief
+/// \brief Event Generation Register (EGR) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_egr
 {
@@ -180,7 +185,8 @@ union tim_ctrl_adv6_tim18_egr
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 1 Input Mode (CCMR1) for advanced
+///        timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_ccmr1_in
 {
@@ -198,7 +204,8 @@ union tim_ctrl_adv6_tim18_ccmr1_in
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 1 Output Mode (CCMR1) for advanced
+///        timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_ccmr1_out
 {
@@ -223,7 +230,8 @@ union tim_ctrl_adv6_tim18_ccmr1_out
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 2 Input Mode (CCMR2) for advanced
+///        timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_ccmr2_in
 {
@@ -241,7 +249,8 @@ union tim_ctrl_adv6_tim18_ccmr2_in
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 2 Output Mode (CCMR2) for advanced
+///        timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_ccmr2_out
 {
@@ -266,7 +275,7 @@ union tim_ctrl_adv6_tim18_ccmr2_out
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Enable Register (CCER) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_ccer
 {
@@ -299,7 +308,7 @@ union tim_ctrl_adv6_tim18_ccer
 };
 
 ///
-/// \brief
+/// \brief Counter Register (CNT) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_cnt
 {
@@ -313,7 +322,7 @@ union tim_ctrl_adv6_tim18_cnt
 };
 
 ///
-/// \brief
+/// \brief Prescaler Register (PSC) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_psc
 {
@@ -326,7 +335,7 @@ union tim_ctrl_adv6_tim18_psc
 };
 
 ///
-/// \brief
+/// \brief Auto-Reload Register (ARR) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_arr
 {
@@ -339,7 +348,7 @@ union tim_ctrl_adv6_tim18_arr
 };
 
 ///
-/// \brief
+/// \brief Repetition Counter Register (RCR) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_rcr
 {
@@ -352,7 +361,7 @@ union tim_ctrl_adv6_tim18_rcr
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register 1 (CCR1) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_ccr1
 {
@@ -365,7 +374,7 @@ union tim_ctrl_adv6_tim18_ccr1
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register 2 (CCR2) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_ccr2
 {
@@ -378,7 +387,7 @@ union tim_ctrl_adv6_tim18_ccr2
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register 3 (CCR3) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_ccr3
 {
@@ -391,7 +400,7 @@ union tim_ctrl_adv6_tim18_ccr3
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register 4 (CCR4) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_ccr4
 {
@@ -404,7 +413,7 @@ union tim_ctrl_adv6_tim18_ccr4
 };
 
 ///
-/// \brief
+/// \brief Break And Dead-Time Register (BDTR) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_bdtr
 {
@@ -428,7 +437,7 @@ union tim_ctrl_adv6_tim18_bdtr
 };
 
 ///
-/// \brief
+/// \brief DMA Control Register (DCR) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_dcr
 {
@@ -443,7 +452,7 @@ union tim_ctrl_adv6_tim18_dcr
 };
 
 ///
-/// \brief
+/// \brief DMA Address For Full Transfer Register (DMAR) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_dmar
 {
@@ -455,7 +464,7 @@ union tim_ctrl_adv6_tim18_dmar
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Mode Register 3 (CCMR3) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_ccmr3
 {
@@ -480,7 +489,7 @@ union tim_ctrl_adv6_tim18_ccmr3
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register 5 (CCR5) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_ccr5
 {
@@ -496,7 +505,7 @@ union tim_ctrl_adv6_tim18_ccr5
 };
 
 ///
-/// \brief
+/// \brief Capture/Compare Register 6 (CCR6) for advanced timers TIM1 and TIM8.
 ///
 union tim_ctrl_adv6_tim18_ccr6
 {
@@ -509,7 +518,12 @@ union tim_ctrl_adv6_tim18_ccr6
 };
 
 ///
-/// \brief
+/// \brief Register map for advanced timers TIM1 and TIM8.
+///
+/// This structure represents the memory-mapped register layout of the
+/// advanced timers TIM1 and TIM8. The register order and reserved
+/// fields are aligned with the device reference manual to allow
+/// direct access via a peripheral base address.
 ///
 struct tim_ctrl_adv6_tim18_regs
 {
@@ -550,7 +564,12 @@ struct tim_ctrl_adv6_tim18_regs
 };
 
 ///
-/// \brief
+/// \brief Runtime device context for advanced timers TIM1 and TIM8.
+///
+/// This structure holds all runtime state required to control a TIM1 and TIM8
+/// instance. It includes a pointer to the memory-mapped registers, a temporary
+/// shadow copy for safe modification, capture/compare history, configuration
+/// modes, and initialization status.
 ///
 struct tim_ctrl_adv6_tim18_dev
 {
@@ -564,22 +583,46 @@ struct tim_ctrl_adv6_tim18_dev
 };
 
 ///
-/// \brief
+/// \brief Initializes the advanced timer (TIM1 and TIM8).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim);
 
 ///
-/// \brief
+/// \brief Deinitializes the advanced timer (TIM1 and TIM8).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_adv6_tim18_deinit(void *tim);
 
 ///
-/// \brief
+/// \brief Enables the advanced timer (TIM1 and TIM8).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_adv6_tim18_enable(void *tim);
 
 ///
-/// \brief
+/// \brief Disables the advanced timer (TIM1 and TIM8).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
 tim_ctrl_res_t tim_ctrl_adv6_tim18_disable(void *tim);
 

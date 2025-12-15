@@ -1,7 +1,15 @@
 #include "tim_ctrl_advx.h"
 
+///***********************************************************************************************************
+/// Private objects - definition.
+///***********************************************************************************************************
 ///
-/// \brief
+/// \brief Default register configuration for TIM1 and TIM8 after power-on reset.
+///
+/// This constant structure represents the expected reset (POR) state of the
+/// advanced timer registers TIM1 and TIM8. It is used as a known-good baseline
+/// for initialization and for restoring registers to their default values
+/// before applying custom configuration.
 ///
 static const struct tim_ctrl_adv6_tim18_regs tim_ctrl_adv6_tim18_por =
 {
@@ -326,6 +334,9 @@ static const struct tim_ctrl_adv6_tim18_regs tim_ctrl_adv6_tim18_por =
     },
 };
 
+///***********************************************************************************************************
+/// Global functions - definition.
+///***********************************************************************************************************
 tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
 {
     if (tim == NULL)
