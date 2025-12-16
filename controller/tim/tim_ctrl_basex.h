@@ -11,18 +11,20 @@ extern "C" {
 #endif  /* __cplusplus */
 
 ///
-/// \brief
+/// \brief Identifier for general-purpose timers TIM6 and TIM7.
 ///
-typedef enum tim_ctrl_base1_timx_id
+/// This enum selects which base timer instance is being referenced.
+///
+typedef enum tim_ctrl_base1_tim67_id
 {
     TIM_CTRL_BASE1_TIMX_ID_6 = 0,
     TIM_CTRL_BASE1_TIMX_ID_7,
 } tim_ctrl_base1_timx_id_t;
 
 ///
-/// \brief
+/// \brief Control Register 1 (CR1) for base timers TIM6 and TIM7.
 ///
-union tim_ctrl_base1_timx_cr1
+union tim_ctrl_base1_tim67_cr1
 {
     uint32_t r;
     struct
@@ -40,9 +42,9 @@ union tim_ctrl_base1_timx_cr1
 };
 
 ///
-/// \brief
+/// \brief Control Register 2 (CR2) for base timers TIM6 and TIM7.
 ///
-union tim_ctrl_base1_timx_cr2
+union tim_ctrl_base1_tim67_cr2
 {
     uint32_t r;
     struct
@@ -54,9 +56,9 @@ union tim_ctrl_base1_timx_cr2
 };
 
 ///
-/// \brief
+/// \brief DMA/Interrupt Enable Register (DIER) for base timers TIM6 and TIM7.
 ///
-union tim_ctrl_base1_timx_dier
+union tim_ctrl_base1_tim67_dier
 {
     uint32_t r;
     struct
@@ -69,9 +71,9 @@ union tim_ctrl_base1_timx_dier
 };
 
 ///
-/// \brief
+/// \brief Status Register (SR) for base timers TIM6 and TIM7.
 ///
-union tim_ctrl_base1_timx_sr
+union tim_ctrl_base1_tim67_sr
 {
     uint32_t r;
     struct
@@ -82,9 +84,9 @@ union tim_ctrl_base1_timx_sr
 };
 
 ///
-/// \brief
+/// \brief Event Generation Register (EGR) for base timers TIM6 and TIM7.
 ///
-union tim_ctrl_base1_timx_egr
+union tim_ctrl_base1_tim67_egr
 {
     uint32_t r;
     struct
@@ -95,9 +97,9 @@ union tim_ctrl_base1_timx_egr
 };
 
 ///
-/// \brief
+/// \brief Counter Register (CNT) for base timers TIM6 and TIM7.
 ///
-union tim_ctrl_base1_timx_cnt
+union tim_ctrl_base1_tim67_cnt
 {
     uint32_t r;
     struct
@@ -109,9 +111,9 @@ union tim_ctrl_base1_timx_cnt
 };
 
 ///
-/// \brief
+/// \brief Prescaler Register (PSC) for base timers TIM6 and TIM7.
 ///
-union tim_ctrl_base1_timx_psc
+union tim_ctrl_base1_tim67_psc
 {
     uint32_t r;
     struct
@@ -122,9 +124,9 @@ union tim_ctrl_base1_timx_psc
 };
 
 ///
-/// \brief
+/// \brief Auto-Reload Register (ARR) for base timers TIM6 and TIM7.
 ///
-union tim_ctrl_base1_timx_arr
+union tim_ctrl_base1_tim67_arr
 {
     uint32_t r;
     struct
@@ -135,52 +137,84 @@ union tim_ctrl_base1_timx_arr
 };
 
 ///
-/// \brief
+/// \brief Register map for timers TIM6 and TIM7.
 ///
-struct tim_ctrl_base1_timx_regs
+/// This structure defines the memory-mapped register layout for TIM6 and
+/// TIM7. The register order and reserved fields are aligned with the
+/// device reference manual to allow direct access via a peripheral base address.
+///
+struct tim_ctrl_base1_tim67_regs
 {
-    union tim_ctrl_base1_timx_cr1  cr1;
-    union tim_ctrl_base1_timx_cr2  cr2;
-    uint32_t                       res0[1];
-    union tim_ctrl_base1_timx_dier dier;
-    union tim_ctrl_base1_timx_sr   sr;
-    union tim_ctrl_base1_timx_egr  egr;
-    uint32_t                       res1[3];
-    union tim_ctrl_base1_timx_cnt  cnt;
-    union tim_ctrl_base1_timx_psc  psc;
-    union tim_ctrl_base1_timx_arr  arr;
+    union tim_ctrl_base1_tim67_cr1  cr1;
+    union tim_ctrl_base1_tim67_cr2  cr2;
+    uint32_t res0[1];
+    union tim_ctrl_base1_tim67_dier dier;
+    union tim_ctrl_base1_tim67_sr   sr;
+    union tim_ctrl_base1_tim67_egr  egr;
+    uint32_t res1[3];
+    union tim_ctrl_base1_tim67_cnt  cnt;
+    union tim_ctrl_base1_tim67_psc  psc;
+    union tim_ctrl_base1_tim67_arr  arr;
 };
 
 ///
-/// \brief
+/// \brief Runtime device context for base timers TIM6 and TIM7.
 ///
-struct tim_ctrl_base1_timx_dev
+/// This structure holds all runtime state required to control a TIM6 and TIM7
+/// instance. It includes a pointer to the memory-mapped registers, a temporary
+/// shadow copy for safe modification, configuration modes, and initialization status.
+///
+struct tim_ctrl_base1_tim67_dev
 {
-    volatile struct tim_ctrl_base1_timx_regs *rmap;
-    struct tim_ctrl_base1_timx_regs rtmp;
-    tim_ctrl_base1_timx_id_t id;
+    volatile struct tim_ctrl_base1_tim67_regs *rmap;
+    struct tim_ctrl_base1_tim67_regs rtmp;
+    tim_ctrl_base1_tim67_id_t id;
     tim_ctrl_stat_t stat;
 };
 
 ///
-/// \brief
+/// \brief Initializes the base timer (TIM6 and TIM7).
 ///
-tim_ctrl_res_t tim_ctrl_base1_timx_init(void *tim);
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
+///
+tim_ctrl_res_t tim_ctrl_base1_tim67_init(void *tim);
 
 ///
-/// \brief
+/// \brief Deinitializes the base timer (TIM6 and TIM7).
 ///
-tim_ctrl_res_t tim_ctrl_base1_timx_deinit(void *tim);
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
+///
+tim_ctrl_res_t tim_ctrl_base1_tim67_deinit(void *tim);
 
 ///
-/// \brief
+/// \brief Enables the base timer (TIM6 and TIM7).
 ///
-tim_ctrl_res_t tim_ctrl_base1_timx_enable(void *tim);
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
+///
+tim_ctrl_res_t tim_ctrl_base1_tim67_enable(void *tim);
 
 ///
-/// \brief
+/// \brief Disables the base timer (TIM6 and TIM7).
 ///
-tim_ctrl_res_t tim_ctrl_base1_timx_disable(void *tim);
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
+///
+tim_ctrl_res_t tim_ctrl_base1_tim67_disable(void *tim);
 
 #ifdef __cplusplus
 }
