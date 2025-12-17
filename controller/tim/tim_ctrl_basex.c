@@ -88,14 +88,14 @@ static const struct tim_ctrl_base1_tim67_regs tim_ctrl_base1_tim67_por =
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-tim_ctrl_res_t tim_ctrl_base1_timx_init(void *tim)
+tim_ctrl_res_t tim_ctrl_base1_tim67_init(void *tim)
 {
     if (tim == NULL)
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    struct tim_ctrl_base1_timx_dev *dev = (struct tim_ctrl_base1_timx_dev *)tim;
+    struct tim_ctrl_base1_tim67_dev *dev = (struct tim_ctrl_base1_tim67_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_INIT)
     {
@@ -116,42 +116,42 @@ tim_ctrl_res_t tim_ctrl_base1_timx_init(void *tim)
     return TIM_CTRL_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_base1_timx_deinit(void *tim)
+tim_ctrl_res_t tim_ctrl_base1_tim67_deinit(void *tim)
 {
     if (tim == NULL)
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    struct tim_ctrl_base1_timx_dev *dev = (struct tim_ctrl_base1_timx_dev *)tim;
+    struct tim_ctrl_base1_tim67_dev *dev = (struct tim_ctrl_base1_tim67_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_DEINIT)
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    dev->rmap->cr1.r  = tim_ctrl_base1_timx_por.cr1.r;
-    dev->rmap->cr2.r  = tim_ctrl_base1_timx_por.cr2.r;
-    dev->rmap->dier.r = tim_ctrl_base1_timx_por.dier.r;
-    dev->rmap->sr.r   = tim_ctrl_base1_timx_por.sr.r;
-    dev->rmap->egr.r  = tim_ctrl_base1_timx_por.egr.r;
-    dev->rmap->cnt.r  = tim_ctrl_base1_timx_por.cnt.r;
-    dev->rmap->psc.r  = tim_ctrl_base1_timx_por.psc.r;
-    dev->rmap->arr.r  = tim_ctrl_base1_timx_por.arr.r;
+    dev->rmap->cr1.r  = tim_ctrl_base1_tim67_por.cr1.r;
+    dev->rmap->cr2.r  = tim_ctrl_base1_tim67_por.cr2.r;
+    dev->rmap->dier.r = tim_ctrl_base1_tim67_por.dier.r;
+    dev->rmap->sr.r   = tim_ctrl_base1_tim67_por.sr.r;
+    dev->rmap->egr.r  = tim_ctrl_base1_tim67_por.egr.r;
+    dev->rmap->cnt.r  = tim_ctrl_base1_tim67_por.cnt.r;
+    dev->rmap->psc.r  = tim_ctrl_base1_tim67_por.psc.r;
+    dev->rmap->arr.r  = tim_ctrl_base1_tim67_por.arr.r;
 
     dev->stat = TIM_CTRL_STAT_DEINIT;
 
     return TIM_CTRL_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_base1_timx_enable(void *tim)
+tim_ctrl_res_t tim_ctrl_base1_tim67_enable(void *tim)
 {
     if (tim == NULL)
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    struct tim_ctrl_base1_timx_dev *dev = (struct tim_ctrl_base1_timx_dev *)tim;
+    struct tim_ctrl_base1_tim67_dev *dev = (struct tim_ctrl_base1_tim67_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_DEINIT)
     {
@@ -163,14 +163,14 @@ tim_ctrl_res_t tim_ctrl_base1_timx_enable(void *tim)
     return TIM_CTRL_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_base1_timx_disable(void *tim)
+tim_ctrl_res_t tim_ctrl_base1_tim67_disable(void *tim)
 {
     if (tim == NULL)
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    struct tim_ctrl_base1_timx_dev *dev = (struct tim_ctrl_base1_timx_dev *)tim;
+    struct tim_ctrl_base1_tim67_dev *dev = (struct tim_ctrl_base1_tim67_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_DEINIT)
     {

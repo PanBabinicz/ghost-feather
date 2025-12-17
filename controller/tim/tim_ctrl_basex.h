@@ -17,9 +17,9 @@ extern "C" {
 ///
 typedef enum tim_ctrl_base1_tim67_id
 {
-    TIM_CTRL_BASE1_TIMX_ID_6 = 0,
-    TIM_CTRL_BASE1_TIMX_ID_7,
-} tim_ctrl_base1_timx_id_t;
+    TIM_CTRL_BASE1_TIM67_ID_6 = 0,
+    TIM_CTRL_BASE1_TIM67_ID_7,
+} tim_ctrl_base1_tim67_id_t;
 
 ///
 /// \brief Control Register 1 (CR1) for base timers TIM6 and TIM7.
