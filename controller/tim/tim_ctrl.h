@@ -51,6 +51,13 @@ struct tim_ctrl_dev
 struct tim_ctrl_dev* tim_ctrl_dev_get(tim_ctrl_inst_t inst);
 
 ///
+/// \brief Gets the TIM device array.
+///
+/// \return struct tim_ctrl_dev* The begin of the TIM control device array.
+///
+struct tim_ctrl_dev* tim_ctrl_dev_arr_get(void);
+
+///
 /// \brief Initializes the TIM devices.
 ///
 /// This function should be called during system initialization.

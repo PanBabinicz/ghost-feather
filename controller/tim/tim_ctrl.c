@@ -865,6 +865,11 @@ struct tim_ctrl_dev* tim_ctrl_dev_get(tim_ctrl_inst_t inst)
     return &tim_ctrl_dev_arr[inst];
 }
 
+struct tim_ctrl_dev* tim_ctrl_dev_arr_get(void)
+{
+    return &tim_ctrl_dev_arr[0];
+}
+
 void tim_ctrl_init(void)
 {
     for (uint32_t i = 0; i < sizeof(tim_ctrl_dev_arr)/sizeof(tim_ctrl_dev_arr[TIM_CTRL_INST_BEGIN]); i++)
