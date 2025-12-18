@@ -15,7 +15,7 @@ extern uint32_t _etext;
 /// Private functions - declaration.
 ///*************************************************************************************************
 ///
-/// \breif Unlocks the FPU.
+/// \brief Unlocks the FPU.
 ///
 static void fpu_unlock();
 

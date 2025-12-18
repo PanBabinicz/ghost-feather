@@ -8,7 +8,7 @@ extern "C" {
 #endif  /* __cplusplus */
 
 ///
-/// \breif The bmi270 registers definition.
+/// \brief The bmi270 registers definition.
 ///
 #define BMI270_REG_CHIP_ID                  (0x00)  /*!< Chip identification code.                          */
 #define BMI270_REG_ERR_REG                  (0x02)  /*!< Reports sensor error condition.                    */
@@ -319,12 +319,12 @@ extern "C" {
 struct bmi270_dev;
 
 ///
-/// \breif The bmi270 power mode configuration type.
+/// \brief The bmi270 power mode configuration type.
 ///
 struct bmi270_pwr_mode_conf;
 
 ///
-/// \breif The bmi270 result type.
+/// \brief The bmi270 result type.
 ///
 typedef enum bmi270_res
 {
@@ -336,7 +336,7 @@ typedef enum bmi270_res
 } bmi270_res_t;
 
 ///
-/// \breif The bmi270 status type.
+/// \brief The bmi270 status type.
 ///
 typedef enum bmi270_stat
 {
@@ -347,7 +347,7 @@ typedef enum bmi270_stat
 } bmi270_stat_t;
 
 ///
-/// \breif The bmi270 power mode type.
+/// \brief The bmi270 power mode type.
 ///
 typedef enum bmi270_pwr_mode
 {
@@ -367,14 +367,14 @@ typedef enum bmi270_pwr_mode
 } bmi270_pwr_mode_t;
 
 ///
-/// \breif Gets the bmi270 instance.
+/// \brief Gets the bmi270 instance.
 ///
 /// \return struct bmi270_dev* The bmi270 instance address.
 ///
 struct bmi270_dev* bmi270_dev_get(void);
 
 ///
-/// \breif Gets the bmi270 power mode config.
+/// \brief Gets the bmi270 power mode config.
 ///
 /// \param[in] pwr_mode            The selected power mode.
 ///
@@ -383,7 +383,7 @@ struct bmi270_dev* bmi270_dev_get(void);
 const struct bmi270_pwr_mode_conf* bmi270_pwr_mode_get_conf(const bmi270_pwr_mode_t pwr_mode);
 
 ///
-/// \breif Initializes the bmi270.
+/// \brief Initializes the bmi270.
 ///
 /// \param[in] dev         The bmi270 device.
 ///
@@ -394,7 +394,7 @@ const struct bmi270_pwr_mode_conf* bmi270_pwr_mode_get_conf(const bmi270_pwr_mod
 bmi270_res_t bmi270_init(struct bmi270_dev *const dev);
 
 ///
-/// \breif Deinitializes the bmi270.
+/// \brief Deinitializes the bmi270.
 ///
 /// \param[in] dev         The bmi270 device.
 ///
@@ -405,7 +405,7 @@ bmi270_res_t bmi270_init(struct bmi270_dev *const dev);
 bmi270_res_t bmi270_deinit(struct bmi270_dev *const dev);
 
 ///
-/// \breif Performs soft reset of the bmi270.
+/// \brief Performs soft reset of the bmi270.
 ///
 /// \note  After every POR or soft reset, the IMU remains in suspend mode. To get ready for
 ///        operation the device must be initialized through init procedure.

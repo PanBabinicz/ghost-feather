@@ -24,7 +24,7 @@ typedef struct
 /// Private objects - definition.
 ///*************************************************************************************************
 ///
-/// \breif The usart controller.
+/// \brief The usart controller.
 ///
 static usart_controller_t usart_controller;
 

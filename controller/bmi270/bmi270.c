@@ -143,7 +143,7 @@ struct bmi270_dev
 };
 
 ///
-/// \breif The bmi270 power mode config type.
+/// \brief The bmi270 power mode config type.
 ///
 struct bmi270_pwr_mode_conf
 {
@@ -161,7 +161,7 @@ struct bmi270_pwr_mode_conf
 /// Private objects - definition.
 ///***********************************************************************************************************
 ///
-/// \breif The bmi270 device.
+/// \brief The bmi270 device.
 ///
 static struct bmi270_dev bmi270 =
 {
@@ -184,7 +184,7 @@ static struct bmi270_dev bmi270 =
 };
 
 ///
-/// \breif The bmi270 power mode configuration look-up table.
+/// \brief The bmi270 power mode configuration look-up table.
 ///
 static const struct bmi270_pwr_mode_conf bmi270_pwr_mode_confs[BMI270_PWR_MODE_TOTAL] =
 {
@@ -325,7 +325,7 @@ static const struct bmi270_pwr_mode_conf bmi270_pwr_mode_confs[BMI270_PWR_MODE_T
 /// Private functions - declaration.
 ///***********************************************************************************************************
 ///
-/// \breif Exchanges a single byte of data with a BMI270 register. Performs a write and read transaction for
+/// \brief Exchanges a single byte of data with a BMI270 register. Performs a write and read transaction for
 ///        one 8-bit register on the BMI270 over the configured SPI interface.
 ///
 /// \param[in] dev  The bmi270 device.
@@ -336,7 +336,7 @@ static const struct bmi270_pwr_mode_conf bmi270_pwr_mode_confs[BMI270_PWR_MODE_T
 static uint8_t bmi270_reg_xfer_byte(const struct bmi270_dev *const dev, const uint8_t data);
 
 ///
-/// \breif Reads byte from BMI270 register.
+/// \brief Reads byte from BMI270 register.
 ///
 /// \param[in]  dev        The bmi270 device.
 /// \param[in]  addr       The bmi270 register address.
@@ -350,7 +350,7 @@ static bmi270_res_t bmi270_reg_read_byte(const struct bmi270_dev *const dev, uin
         uint8_t *const byte);
 
 ///
-/// \breif Reads bytes from the multiple consecutive BMI270 registers.
+/// \brief Reads bytes from the multiple consecutive BMI270 registers.
 ///        The BMI270 automatically increments the register address after each read.
 ///
 /// \param[in]  dev        The bmi270 device.
@@ -366,7 +366,7 @@ static bmi270_res_t bmi270_reg_read_mult_bytes(const struct bmi270_dev *const de
         uint8_t *const buf, uint32_t sz);
 
 ///
-/// \breif Writes byte to the bmi270 register.
+/// \brief Writes byte to the bmi270 register.
 ///
 /// \param[in] dev         The bmi270 device.
 /// \param[in] addr        The bmi270 register address.
@@ -380,7 +380,7 @@ static bmi270_res_t bmi270_reg_write_byte(const struct bmi270_dev *const dev, ui
         const uint8_t byte);
 
 ///
-/// \breif Writes multiple bytes for consecutive addresses of the BMI270.
+/// \brief Writes multiple bytes for consecutive addresses of the BMI270.
 ///        The BMI270 automatically increments the register address after each write.
 ///
 /// \param[in] dev         The bmi270 device.
@@ -396,7 +396,7 @@ static bmi270_res_t bmi270_reg_write_mult_bytes(const struct bmi270_dev *const d
         const uint8_t *const buf, const uint32_t sz);
 
 ///
-/// \breif Uploads the bmi270 configuration file.
+/// \brief Uploads the bmi270 configuration file.
 ///
 /// \param[in] dev         The bmi270 device.
 ///
@@ -407,7 +407,7 @@ static bmi270_res_t bmi270_reg_write_mult_bytes(const struct bmi270_dev *const d
 static bmi270_res_t bmi270_upld_conf_file(const struct bmi270_dev *const dev);
 
 ///
-/// \breif Validates the bmi270 configuration file.
+/// \brief Validates the bmi270 configuration file.
 ///
 /// \param[in] dev         The bmi270 device.
 ///
@@ -418,7 +418,7 @@ static bmi270_res_t bmi270_upld_conf_file(const struct bmi270_dev *const dev);
 static bmi270_res_t bmi270_vld_conf_file(const struct bmi270_dev *const dev);
 
 ///
-/// \breif Delays execution for the specified number of bmi270 sensor time cycles.
+/// \brief Delays execution for the specified number of bmi270 sensor time cycles.
 ///
 /// \note  One cycle is equal to 39.0625us.
 ///
@@ -432,7 +432,7 @@ static bmi270_res_t bmi270_vld_conf_file(const struct bmi270_dev *const dev);
 static bmi270_res_t bmi270_wait_cycles(struct bmi270_dev *const dev, const uint32_t cycles);
 
 ///
-/// \breif Sends given command to the bmi270 device.
+/// \brief Sends given command to the bmi270 device.
 ///
 /// \param[in] dev         The bmi270 device.
 /// \param[in] cmd         The bmi270 command to be sent.
