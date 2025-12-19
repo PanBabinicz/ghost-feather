@@ -2,7 +2,8 @@
 #include "bmi270_conf.h"
 #include "app.h"
 #include "memory_map.h"
-#include "ghost_feather_common.h"
+#include "tim_ctrl.h"
+#include "timing.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 
@@ -39,16 +40,6 @@ static void led_off(void)
 
 static void led_panic(void)
 {
-    while (1)
-    {
-        systick_delay_us(500000);
-        gpio_toggle(GPIOA, GPIO2);
-    }
-}
-
-void _systick_handler(void)
-{
-    systick_cnt++;
 }
 
 ///*************************************************************************************************
@@ -56,12 +47,20 @@ void _systick_handler(void)
 ///*************************************************************************************************
 void app_start(void)
 {
-    systick_init(GHOST_FEATHER_COMMON_US_IN_CYCLES);
-
-    //led_on();
-    led_panic();
+    led_on();
+    tim_ctrl_init();
 
     struct bmi270_dev *bmi270 = bmi270_dev_get();
+    struct tim_ctrl_dev *tim_ctrl_dev_arr = tim_ctrl_dev_arr_get();
+
+    volatile struct tim_ctrl_gpx_tim2345_dev *tim4 =
+        (volatile struct tim_ctrl_gpx_tim2345_dev *)tim_ctrl_dev_arr[TIM_CTRL_INST_TIM4].tim;
+
+    volatile struct tim_ctrl_adv6_tim18_dev *tim8 =
+        (volatile struct tim_ctrl_adv6_tim18_dev *)tim_ctrl_dev_arr[TIM_CTRL_INST_TIM8].tim;
+
+    volatile struct tim_ctrl_gpx_tim912_dev *tim12 =
+        (volatile struct tim_ctrl_gpx_tim912_dev *)tim_ctrl_dev_arr[TIM_CTRL_INST_TIM12].tim;
 
     /* Never return */
     while (1);

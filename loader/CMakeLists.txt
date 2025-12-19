@@ -18,57 +18,35 @@ file(GLOB_RECURSE APPLOADER_SOURCES stm32f722xx/apploader/*.c)
 # --------------------------------------------------
 # Target: Bootloader
 # --------------------------------------------------
-set_property(
-    GLOBAL
-    PROPERTY BOOTLOADER_SOURCES
-    ${BOOTLOADER_SOURCES}
-    )
-
 message(STATUS "Add bootloader library")
-add_library(
-    bootloader
+add_library(bootloader
     ${BOOTLOADER_SOURCES}
-    )
+)
 
-target_include_directories(
-    bootloader
-    PRIVATE
+target_include_directories(bootloader PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
-    )
+)
 
-target_link_libraries(
-    bootloader
-    PRIVATE
+target_link_libraries(bootloader PRIVATE
     gfc_common_options
-    )
+)
 
 # --------------------------------------------------
-# Target: Bootloader
+# Target: Apploader
 # --------------------------------------------------
-set_property(
-    GLOBAL
-    PROPERTY APPLOADER_SOURCES
-    ${APPLOADER_SOURCES}
-    )
-
 message(STATUS "Add apploader library")
-add_library(
-    apploader
+add_library(apploader
     ${APPLOADER_SOURCES}
-    )
+)
 
-target_include_directories(
-    apploader
-    PRIVATE
+target_include_directories(apploader PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     ${PROJECT_SOURCE_DIR}/shared
-    )
+)
 
-target_link_libraries(
-    apploader
-    PRIVATE
+target_link_libraries(apploader PRIVATE
     gfc_common_options
-    )
+)

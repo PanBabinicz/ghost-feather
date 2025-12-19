@@ -16,7 +16,7 @@ extern "C" {
 #define DUST_CRC16_LUT_SIZE                 (0x0100u)
 
 ///
-/// \breif The dust result type.
+/// \brief The dust result type.
 ///
 typedef enum
 {
@@ -27,7 +27,7 @@ typedef enum
 } dust_result_t;
 
 ///
-/// \breif The dust opcode type.
+/// \brief The dust opcode type.
 ///
 typedef enum
 {
@@ -38,7 +38,7 @@ typedef enum
 } dust_opcode_t;
 
 ///
-/// \breif The dust length type.
+/// \brief The dust length type.
 ///
 typedef enum
 {
@@ -49,7 +49,7 @@ typedef enum
 } dust_length_t;
 
 ///
-/// \breif The dust length type.
+/// \brief The dust length type.
 ///
 typedef enum
 {
@@ -58,7 +58,7 @@ typedef enum
 } dust_ack_t;
 
 ///
-/// \breif The dust packet ACK frequency type.
+/// \brief The dust packet ACK frequency type.
 ///
 typedef enum
 {
@@ -74,7 +74,7 @@ typedef enum
 } dust_ack_frequency_t;
 
 ///
-/// \breif The dust header type.
+/// \brief The dust header type.
 ///
 typedef struct
 {
@@ -86,7 +86,7 @@ typedef struct
 } dust_header_t;
 
 ///
-/// \breif The dust payload type.
+/// \brief The dust payload type.
 ///
 typedef struct
 {
@@ -95,7 +95,7 @@ typedef struct
 } dust_payload_t;
 
 ///
-/// \breif The dust packet type.
+/// \brief The dust packet type.
 ///
 typedef struct
 {
@@ -105,7 +105,7 @@ typedef struct
 } dust_packet_t;
 
 ///
-/// \breif The dust handshake options type.
+/// \brief The dust handshake options type.
 ///
 typedef struct
 {
@@ -115,7 +115,7 @@ typedef struct
 } dust_handshake_options_t;
 
 ///
-/// \breif The dust serialized packet type.
+/// \brief The dust serialized packet type.
 ///
 typedef struct
 {
@@ -124,7 +124,7 @@ typedef struct
 } dust_serialized_t;
 
 ///
-/// \breif The dust protocol instance type.
+/// \brief The dust protocol instance type.
 ///
 typedef struct
 {

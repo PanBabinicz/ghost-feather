@@ -10,6 +10,12 @@
 extern volatile uint32_t timing_sysclk_freq;
 
 ///
+/// \brief APB1 frequency value (Hz) stored in shared memory for use across all firmware
+///        stages.
+///
+extern volatile uint32_t timing_apb1_freq;
+
+///
 /// \brief APB2 frequency value (Hz) stored in shared memory for use across all firmware
 ///        stages.
 ///

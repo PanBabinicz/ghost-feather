@@ -24,7 +24,7 @@ typedef struct
 /// Private objects - definition.
 ///*************************************************************************************************
 ///
-/// \breif The usart controller.
+/// \brief The usart controller.
 ///
 static usart_controller_t usart_controller;
 
@@ -35,6 +35,10 @@ static usart_controller_t usart_controller;
 void _putchar(char character)
 {
     usart_send_blocking(USART_CONTROLLER_DEBUG_INTERFACE, (uint16_t)character);
+}
+#else
+void _putchar(char character)
+{
 }
 #endif  /* DEBUG */
 

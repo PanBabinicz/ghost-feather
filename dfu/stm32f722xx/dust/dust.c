@@ -9,12 +9,12 @@
 /// Private objects - definition.
 ///*************************************************************************************************
 ///
-/// \breif Dust protocol crc16 look-up table.
+/// \brief Dust protocol crc16 look-up table.
 ///
 static uint16_t dust_crc16_lut[DUST_CRC16_LUT_SIZE];
 
 ///
-/// \breif Dust handshake ack frequency option hash table.
+/// \brief Dust handshake ack frequency option hash table.
 ///
 static uint16_t dust_ack_frequency_hash_table[DUST_ACK_FREQUENCY_TOTAL_SIZE] =
 {
@@ -80,7 +80,7 @@ static void dust_packet_calculate_payload_size(dust_packet_t *const packet);
 static dust_result_t dust_packet_calculate_checksum(dust_packet_t *const packet);
 
 ///
-/// \breif Serialize the packet header.
+/// \brief Serialize the packet header.
 ///
 /// \param[in]  header            The dust packet header.
 /// \param[out] serialized_header The serialized header buffer.
@@ -90,7 +90,7 @@ static void dust_serialize_header(const dust_header_t *const header, uint8_t *co
                                   const uint32_t header_size);
 
 ///
-/// \breif Serialize the packet payload.
+/// \brief Serialize the packet payload.
 ///
 /// \param[in]  packet             The dust packet.
 /// \param[out] serialized_payload The serialized payload buffer.
@@ -100,7 +100,7 @@ static void dust_serialize_payload(const dust_packet_t *const packet, uint8_t *c
                                    const uint32_t payload_size);
 
 ///
-/// \breif Serialize the packet.
+/// \brief Serialize the packet.
 ///
 /// \param[in]  packet                 The dust packet.
 /// \param[out] serialized_packet      The serialized packet buffer.
@@ -108,7 +108,7 @@ static void dust_serialize_payload(const dust_packet_t *const packet, uint8_t *c
 static void dust_serialize_packet(const dust_packet_t *const packet, uint8_t *const serialized_packet);
 
 ///
-/// \breif Deserialize bytes stream into packet header.
+/// \brief Deserialize bytes stream into packet header.
 ///
 /// \param[out] header    The dust packet header.
 /// \param[out] data      The data buffer.
@@ -118,7 +118,7 @@ static void dust_deserialize_header(dust_header_t *const header, const uint8_t *
                                     const uint32_t data_size);
 
 ///
-/// \breif Deserialize payload bytes stream into packet data.
+/// \brief Deserialize payload bytes stream into packet data.
 ///
 /// \param[out] packet    The dust packet.
 /// \param[out] data      The data buffer.
@@ -128,7 +128,7 @@ static void dust_deserialize_payload(dust_packet_t *const packet, const uint8_t 
                                      const uint32_t data_size);
 
 ///
-/// \breif Deserialize bytes stream into packet.
+/// \brief Deserialize bytes stream into packet.
 ///
 /// \param[out] packet    The dust packet.
 /// \param[out] data      The data buffer.

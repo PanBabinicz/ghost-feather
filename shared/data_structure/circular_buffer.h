@@ -11,7 +11,7 @@ extern "C" {
 #endif  /* __cplusplus */
 
 ///
-/// \breif The circular buffer instance type.
+/// \brief The circular buffer instance type.
 ///
 typedef enum
 {
@@ -23,7 +23,7 @@ typedef enum
 } circular_buffer_instance_t;
 
 ///
-/// \breif The circular buffer result type.
+/// \brief The circular buffer result type.
 ///
 typedef enum
 {
