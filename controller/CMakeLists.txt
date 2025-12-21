@@ -5,18 +5,20 @@
 # Modules:
 #   - USART controller
 #   - BMI270 sensor driver
+#   - PID controller
 #   - SPI controller
 #   - TIM controller
 #
 # Description:
 #   Collects all controller-related source files for
 #   the STM32F722 MCU. This includes USART, BMI270,
-#   and SPI subsystems.
+#   PID and SPI subsystems.
 # --------------------------------------------------
 # Files list genereation
 # --------------------------------------------------
 file(GLOB_RECURSE USART_CONTROLLER_SOURCES usart/*.c)
 file(GLOB_RECURSE BMI270_SOURCES bmi270/*.c)
+file(GLOB_RECURSE PID_CTRL_SOURCES pid/*.c)
 file(GLOB_RECURSE SPI_CTRL_SOURCES spi/*.c)
 file(GLOB_RECURSE TIM_CTRL_SOURCES tim/*.c)
 
@@ -61,6 +63,28 @@ target_link_libraries(bmi270 PRIVATE
 )
 
 # --------------------------------------------------
+# Target: PID controller
+# --------------------------------------------------
+message(STATUS "Add pid_ctrl library")
+add_library(pid_ctrl
+    ${PID_CTRL_SOURCES}
+)
+
+target_include_directories(pid_ctrl PRIVATE
+    ${PROJECT_SOURCE_DIR}/shared/timing
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
+)
+
+target_link_directories(pid_ctrl PRIVATE
+    ${PROJECT_SOURCE_DIR}/shared
+)
+
+target_link_libraries(pid_ctrl PRIVATE
+    gfc_common_options
+    timing
+)
+
+# --------------------------------------------------
 # Target: SPI controller
 # --------------------------------------------------
 message(STATUS "Add spi_ctrl library")
@@ -77,7 +101,7 @@ target_link_libraries(spi_ctrl PRIVATE
 )
 
 # --------------------------------------------------
-# Target: Tim controller
+# Target: TIM controller
 # --------------------------------------------------
 message(STATUS "Add tim_ctrl library")
 add_library(tim_ctrl
