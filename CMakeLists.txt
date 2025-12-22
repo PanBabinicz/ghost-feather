@@ -20,7 +20,16 @@ project(ghost-feather
 # --------------------------------------------------
 # CPU / FPU configuration flags
 # --------------------------------------------------
-set(CPU_FLAGS
+set(COMPILER_OPTIONS
+    -mfloat-abi=hard
+    -mfpu=fpv5-sp-d16
+    -mcpu=cortex-m7
+    -mthumb
+)
+
+set(LINKER_OPTIONS
+    -nostartfiles
+    -specs=nano.specs
     -mfloat-abi=hard
     -mfpu=fpv5-sp-d16
     -mcpu=cortex-m7
@@ -68,12 +77,16 @@ target_compile_definitions(gfc_common_options INTERFACE
 
 target_compile_options(gfc_common_options INTERFACE
     $<$<COMPILE_LANGUAGE:C>:
-        ${CPU_FLAGS}
+        ${COMPILER_OPTIONS}
         ${OPT_FLAGS}
     >
     $<$<COMPILE_LANGUAGE:ASM>:
-        ${CPU_FLAGS}
+        ${COMPILER_OPTIONS}
     >
+)
+
+target_link_options(gfc_common_options INTERFACE
+    ${LINKER_OPTIONS}
 )
 
 # --------------------------------------------------
@@ -112,21 +125,18 @@ target_link_directories(ghost-feather-bootloader.elf PRIVATE
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
-    /usr/arm-none-eabi/lib/thumb/v7+fp/hard
 )
 
 target_link_libraries(ghost-feather-bootloader.elf PRIVATE
+    gfc_common_options
     bootloader_startup
     bootloader
-    gfc_common_options
     libopencm3_stm32f7.a
     timing
 )
 
 target_link_options(ghost-feather-bootloader.elf PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/bootloader.ld
-    -nostartfiles
-    -specs=nano.specs
 )
 
 # --------------------------------------------------
@@ -148,20 +158,17 @@ target_include_directories(ghost-feather-apploader.elf PRIVATE
 target_link_directories(ghost-feather-apploader.elf PRIVATE
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
-    /usr/arm-none-eabi/lib/thumb/v7+fp/hard
 )
 
 target_link_libraries(ghost-feather-apploader.elf PRIVATE
+    gfc_common_options
     apploader_startup
     apploader
-    gfc_common_options
     libopencm3_stm32f7.a
 )
 
 target_link_options(ghost-feather-apploader.elf PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/apploader.ld
-    -nostartfiles
-    -specs=nano.specs
 )
 
 # --------------------------------------------------
@@ -189,23 +196,20 @@ target_link_directories(ghost-feather-updater.elf PRIVATE
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
     ${PROJECT_SOURCE_DIR}/submodules
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
-    /usr/arm-none-eabi/lib/thumb/v7+fp/hard
 )
 
 target_link_libraries(ghost-feather-updater.elf PRIVATE
+    gfc_common_options
     updater_startup
     updater
     usart_controller
     dust
     printf
-    gfc_common_options
     libopencm3_stm32f7.a
 )
 
 target_link_options(ghost-feather-updater.elf PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/updater.ld
-    -nostartfiles
-    -specs=nano.specs
 )
 
 # --------------------------------------------------
@@ -220,6 +224,7 @@ add_executable(ghost-feather-app.elf
 target_include_directories(ghost-feather-app.elf PRIVATE
     ${PROJECT_SOURCE_DIR}/app/stm32f722xx
     ${PROJECT_SOURCE_DIR}/controller/bmi270
+    ${PROJECT_SOURCE_DIR}/controller/pid
     ${PROJECT_SOURCE_DIR}/controller/spi
     ${PROJECT_SOURCE_DIR}/controller/tim
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
@@ -233,14 +238,14 @@ target_link_directories(ghost-feather-app.elf PRIVATE
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
-    /usr/arm-none-eabi/lib/thumb/v7+fp/hard
 )
 
 target_link_libraries(ghost-feather-app.elf PRIVATE
+    gfc_common_options
     app_startup
     app
     bmi270
-    gfc_common_options
+    pid_ctrl
     libopencm3_stm32f7.a
     tim_ctrl
     timing
@@ -248,8 +253,6 @@ target_link_libraries(ghost-feather-app.elf PRIVATE
 
 target_link_options(ghost-feather-app.elf PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/app.ld
-    -nostartfiles
-    -specs=nano.specs
 )
 
 # --------------------------------------------------
