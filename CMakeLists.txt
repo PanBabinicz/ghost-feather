@@ -18,6 +18,14 @@ project(ghost-feather
 )
 
 # --------------------------------------------------
+# Project settings
+# --------------------------------------------------
+set(BOOTLOADER_ELF ${PROJECT_NAME}-bootloader.elf)
+set(APPLOADER_ELF  ${PROJECT_NAME}-apploader.elf)
+set(UPDATER_ELF    ${PROJECT_NAME}-updater.elf)
+set(APP_ELF        ${PROJECT_NAME}-app.elf)
+
+# --------------------------------------------------
 # CPU / FPU configuration flags
 # --------------------------------------------------
 set(COMPILER_OPTIONS
@@ -106,13 +114,13 @@ add_subdirectory(startup)
 # --------------------------------------------------
 # Target: Bootloader
 # --------------------------------------------------
-message(STATUS "Configuring ghost-feather-bootloader.elf")
-add_executable(ghost-feather-bootloader.elf
+message(STATUS "Configuring ${BOOTLOADER_ELF}")
+add_executable(${BOOTLOADER_ELF}
     ${PROJECT_SOURCE_DIR}/misc/empty.c
     ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
 )
 
-target_include_directories(ghost-feather-bootloader.elf PUBLIC
+target_include_directories(${BOOTLOADER_ELF} PUBLIC
     ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/bootloader
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/shared
@@ -120,14 +128,14 @@ target_include_directories(ghost-feather-bootloader.elf PUBLIC
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
-target_link_directories(ghost-feather-bootloader.elf PRIVATE
+target_link_directories(${BOOTLOADER_ELF} PRIVATE
     ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/bootloader
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
 )
 
-target_link_libraries(ghost-feather-bootloader.elf PRIVATE
+target_link_libraries(${BOOTLOADER_ELF} PRIVATE
     gfc_common_options
     bootloader_startup
     bootloader
@@ -135,52 +143,52 @@ target_link_libraries(ghost-feather-bootloader.elf PRIVATE
     timing
 )
 
-target_link_options(ghost-feather-bootloader.elf PRIVATE
+target_link_options(${BOOTLOADER_ELF} PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/bootloader.ld
 )
 
 # --------------------------------------------------
 # Target: Apploader
 # --------------------------------------------------
-message(STATUS "Configuring ghost-feather-apploader.elf")
-add_executable(ghost-feather-apploader.elf
+message(STATUS "Configuring ${APPLOADER_ELF}")
+add_executable(${APPLOADER_ELF}
     ${PROJECT_SOURCE_DIR}/misc/empty.c
     ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
 )
 
-target_include_directories(ghost-feather-apploader.elf PRIVATE
+target_include_directories(${APPLOADER_ELF} PRIVATE
     ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/apploader
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
-target_link_directories(ghost-feather-apploader.elf PRIVATE
+target_link_directories(${APPLOADER_ELF} PRIVATE
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
 )
 
-target_link_libraries(ghost-feather-apploader.elf PRIVATE
+target_link_libraries(${APPLOADER_ELF} PRIVATE
     gfc_common_options
     apploader_startup
     apploader
     libopencm3_stm32f7.a
 )
 
-target_link_options(ghost-feather-apploader.elf PRIVATE
+target_link_options(${APPLOADER_ELF} PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/apploader.ld
 )
 
 # --------------------------------------------------
 # Target: Updater
 # --------------------------------------------------
-message(STATUS "Configuring ghost-feather-updater.elf")
-add_executable(ghost-feather-updater.elf
+message(STATUS "Configuring ${UPDATER_ELF}")
+add_executable(${UPDATER_ELF}
     ${PROJECT_SOURCE_DIR}/misc/empty.c
     ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
 )
 
-target_include_directories(ghost-feather-updater.elf PRIVATE
+target_include_directories(${UPDATER_ELF} PRIVATE
     ${PROJECT_SOURCE_DIR}/controller/usart
     ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/updater
     ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/dust
@@ -190,7 +198,7 @@ target_include_directories(ghost-feather-updater.elf PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/printf
 )
 
-target_link_directories(ghost-feather-updater.elf PRIVATE
+target_link_directories(${UPDATER_ELF} PRIVATE
     ${PROJECT_SOURCE_DIR}/controller
     ${PROJECT_SOURCE_DIR}/dfu
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
@@ -198,7 +206,7 @@ target_link_directories(ghost-feather-updater.elf PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
 )
 
-target_link_libraries(ghost-feather-updater.elf PRIVATE
+target_link_libraries(${UPDATER_ELF} PRIVATE
     gfc_common_options
     updater_startup
     updater
@@ -208,20 +216,20 @@ target_link_libraries(ghost-feather-updater.elf PRIVATE
     libopencm3_stm32f7.a
 )
 
-target_link_options(ghost-feather-updater.elf PRIVATE
+target_link_options(${UPDATER_ELF} PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/updater.ld
 )
 
 # --------------------------------------------------
 # Target: Main application
 # --------------------------------------------------
-message(STATUS "Configuring ghost-feather-app.elf")
-add_executable(ghost-feather-app.elf
+message(STATUS "Configuring ${APP_ELF}")
+add_executable(${APP_ELF}
     ${PROJECT_SOURCE_DIR}/misc/empty.c
     ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
 )
 
-target_include_directories(ghost-feather-app.elf PRIVATE
+target_include_directories(${APP_ELF} PRIVATE
     ${PROJECT_SOURCE_DIR}/app/stm32f722xx
     ${PROJECT_SOURCE_DIR}/controller/bmi270
     ${PROJECT_SOURCE_DIR}/controller/pid
@@ -233,14 +241,14 @@ target_include_directories(ghost-feather-app.elf PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
-target_link_directories(ghost-feather-app.elf PRIVATE
+target_link_directories(${APP_ELF} PRIVATE
     ${PROJECT_SOURCE_DIR}/controller
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
 )
 
-target_link_libraries(ghost-feather-app.elf PRIVATE
+target_link_libraries(${APP_ELF} PRIVATE
     gfc_common_options
     app_startup
     app
@@ -251,7 +259,7 @@ target_link_libraries(ghost-feather-app.elf PRIVATE
     timing
 )
 
-target_link_options(ghost-feather-app.elf PRIVATE
+target_link_options(${APP_ELF} PRIVATE
     -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/app.ld
 )
 
