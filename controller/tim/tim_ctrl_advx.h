@@ -33,6 +33,17 @@ typedef enum tim_ctrl_adv6_tim18_mode
     TIM_CTRL_ADV6_TIM18_MODE_OUT_COMP,
 } tim_ctrl_adv6_tim18_mode_t;
 
+/// TODO
+/// \brief Operating mode for general-purpose timers TIM10-TIM14.
+///
+/// Specifies whether the timer is configured for input capture or
+/// output compare functionality.
+///
+typedef enum tim_ctrl_adv6_tim_inst
+{
+    TIM_CTRL_ADV6_TIM18 = 0,
+} tim_ctrl_adv6_tim_inst_t;
+
 ///
 /// \brief Control Register 1 (CR1) for advanced timers TIM1 and TIM8.
 ///
@@ -579,52 +590,83 @@ struct tim_ctrl_adv6_tim18_dev
     tim_ctrl_adv6_tim18_id_t id;
     tim_ctrl_adv6_tim18_mode_t ccmr1_mode;
     tim_ctrl_adv6_tim18_mode_t ccmr2_mode;
+    tim_ctrl_adv6_tim_inst_t inst;
     tim_ctrl_stat_t stat;
 };
 
-///
+/// TODO
 /// \brief Initializes the advanced timer (TIM1 and TIM8).
 ///
-/// \param[in] tim The pointer to timer device.
+/// \param[in] tim  The pointer to timer device.
+/// \param[in] inst The pointer to timer instance.
 ///
 /// \return tim_ctrl_res_t   The tim controller result.
 /// \retval TIM_CTRL_RES_OK  On success.
 /// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim);
+tim_ctrl_res_t tim_ctrl_adv6_timx_init(void *tim, void *inst);
 
-///
+/// TODO
 /// \brief Deinitializes the advanced timer (TIM1 and TIM8).
 ///
-/// \param[in] tim The pointer to timer device.
+/// \param[in] tim  The pointer to timer device.
+/// \param[in] inst The pointer to timer instance.
 ///
 /// \return tim_ctrl_res_t   The tim controller result.
 /// \retval TIM_CTRL_RES_OK  On success.
 /// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_adv6_tim18_deinit(void *tim);
+tim_ctrl_res_t tim_ctrl_adv6_timx_deinit(void *tim, void *inst);
 
-///
+/// TODO
 /// \brief Enables the advanced timer (TIM1 and TIM8).
 ///
-/// \param[in] tim The pointer to timer device.
+/// \param[in] tim  The pointer to timer device.
+/// \param[in] inst The pointer to timer instance.
 ///
 /// \return tim_ctrl_res_t   The tim controller result.
 /// \retval TIM_CTRL_RES_OK  On success.
 /// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_adv6_tim18_enable(void *tim);
+tim_ctrl_res_t tim_ctrl_adv6_timx_enable(void *tim, void *inst);
 
-///
+/// TODO
 /// \brief Disables the advanced timer (TIM1 and TIM8).
 ///
-/// \param[in] tim The pointer to timer device.
+/// \param[in] tim  The pointer to timer device.
+/// \param[in] inst The pointer to timer instance.
 ///
 /// \return tim_ctrl_res_t   The tim controller result.
 /// \retval TIM_CTRL_RES_OK  On success.
 /// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_adv6_tim18_disable(void *tim);
+tim_ctrl_res_t tim_ctrl_adv6_timx_disable(void *tim, void *inst);
+
+/// TODO
+/// \brief Disables the advanced timer (TIM1 and TIM8).
+///
+/// \param[in]  tim      The pointer to timer device.
+/// \param[in]  inst     The pointer to timer instance.
+/// \param[out] ccr_data The pointer to ccr data structure.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
+///
+tim_ctrl_res_t tim_ctrl_adv6_timx_ccr_data_get(void *tim, void *inst, struct tim_ctrl_ccr_data **ccr_data);
+
+/// TODO
+/// \brief Disables the advanced timer (TIM1 and TIM8).
+///
+/// \param[in]  tim      The pointer to timer device.
+/// \param[in]  inst     The pointer to timer instance.
+/// \param[out] ccr_data The pointer to ccr data structure.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
+///
+tim_ctrl_res_t tim_ctrl_adv6_timx_ccr_set(void *tim, void *inst, tim_ctrl_inst_ccr_t ch, uint32_t ccr);
 
 #ifdef __cplusplus
 }

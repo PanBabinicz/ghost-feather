@@ -335,15 +335,35 @@ static const struct tim_ctrl_adv6_tim18_regs tim_ctrl_adv6_tim18_por =
 };
 
 ///***********************************************************************************************************
-/// Global functions - definition.
+/// Private functions - declaration.
+///***********************************************************************************************************
+/// TODO
+/// \brief Initializes the advanced timer (TIM1 and TIM8).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
+///
+tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim);
+
+/// TODO
+/// \brief Deinitializes the advanced timer (TIM1 and TIM8).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return tim_ctrl_res_t   The tim controller result.
+/// \retval TIM_CTRL_RES_OK  On success.
+/// \retval TIM_CTRL_RES_ERR Otherwise.
+///
+tim_ctrl_res_t tim_ctrl_adv6_tim18_deinit(void *tim);
+
+///***********************************************************************************************************
+/// Private functions - definition.
 ///***********************************************************************************************************
 tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
 {
-    if (tim == NULL)
-    {
-        return TIM_CTRL_RES_ERR;
-    }
-
     struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_INIT)
@@ -400,11 +420,6 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
 
 tim_ctrl_res_t tim_ctrl_adv6_tim18_deinit(void *tim)
 {
-    if (tim == NULL)
-    {
-        return TIM_CTRL_RES_ERR;
-    }
-
     struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_DEINIT)
@@ -441,40 +456,135 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_deinit(void *tim)
     return TIM_CTRL_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_adv6_tim18_enable(void *tim)
+///***********************************************************************************************************
+/// Global functions - definition.
+///***********************************************************************************************************
+tim_ctrl_res_t tim_ctrl_adv6_timx_init(void *tim, void *inst)
 {
-    if (tim == NULL)
+    if ((tim == NULL) || (inst == NULL))
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
+    switch (*(tim_ctrl_adv6_tim_inst_t *)inst)
+    {
+        case TIM_CTRL_ADV6_TIM18:
+            return tim_ctrl_adv6_tim18_init(tim);
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+        default:
+            return TIM_CTRL_RES_ERR;
+    }
+}
+
+tim_ctrl_res_t tim_ctrl_adv6_timx_deinit(void *tim, void *inst)
+{
+    if ((tim == NULL) || (inst == NULL))
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    dev->rmap->cr1.bf.cen = 0x01;
+    switch (*(tim_ctrl_adv6_tim_inst_t *)inst)
+    {
+        case TIM_CTRL_ADV6_TIM18:
+            return tim_ctrl_adv6_tim18_deinit(tim);
+
+        default:
+            return TIM_CTRL_RES_ERR;
+    }
+}
+
+tim_ctrl_res_t tim_ctrl_adv6_timx_enable(void *tim, void *inst)
+{
+    if ((tim == NULL) || (inst == NULL))
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    switch (*(tim_ctrl_adv6_tim_inst_t *)inst)
+    {
+        case TIM_CTRL_ADV6_TIM18:
+            struct tim_ctrl_adv6_tim18_dev *tim18 = (struct tim_ctrl_adv6_tim18_dev *)tim;
+            tim18->rmap->cr1.bf.cen = 0x01;
+            break;
+
+        default:
+            return TIM_CTRL_RES_ERR;
+    }
 
     return TIM_CTRL_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_adv6_tim18_disable(void *tim)
+tim_ctrl_res_t tim_ctrl_adv6_timx_disable(void *tim, void *inst)
 {
-    if (tim == NULL)
+    if ((tim == NULL) || (inst == NULL))
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
+    switch (*(tim_ctrl_adv6_tim_inst_t *)inst)
+    {
+        case TIM_CTRL_ADV6_TIM18:
+            struct tim_ctrl_adv6_tim18_dev *tim18 = (struct tim_ctrl_adv6_tim18_dev *)tim;
+            tim18->rmap->cr1.bf.cen = 0x00;
+            break;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+        default:
+            return TIM_CTRL_RES_ERR;
+    }
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_adv6_timx_ccr_data_get(void *tim, void *inst, struct tim_ctrl_ccr_data **ccr_data)
+{
+    if ((tim == NULL) || (inst == NULL) || (ccr_data == NULL))
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    dev->rmap->cr1.bf.cen = 0x00;
+    switch (*(tim_ctrl_adv6_tim_inst_t *)inst)
+    {
+        case TIM_CTRL_ADV6_TIM18:
+            struct tim_ctrl_adv6_tim18_dev *tim18 = (struct tim_ctrl_adv6_tim18_dev *)tim;
+            *ccr_data = &tim18->ccr_data[0];
+            break;
+
+        default:
+            return TIM_CTRL_RES_ERR;
+    }
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_adv6_timx_ccr_set(void *tim, void *inst, tim_ctrl_inst_ccr_t ch, uint32_t ccr)
+{
+    if ((tim == NULL) || (inst == NULL))
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    switch (*(tim_ctrl_adv6_tim_inst_t *)inst)
+    {
+        case TIM_CTRL_ADV6_TIM18:
+            struct tim_ctrl_adv6_tim18_dev *tim18 = (struct tim_ctrl_adv6_tim18_dev *)tim;
+            volatile uint32_t *ccr18 = (ch == TIM_CTRL_INST_CCR1) ? &tim18->rmap->ccr1.r
+                                     : (ch == TIM_CTRL_INST_CCR2) ? &tim18->rmap->ccr2.r
+                                     : (ch == TIM_CTRL_INST_CCR3) ? &tim18->rmap->ccr3.r
+                                     : (ch == TIM_CTRL_INST_CCR4) ? &tim18->rmap->ccr4.r
+                                     : (ch == TIM_CTRL_INST_CCR5) ? &tim18->rmap->ccr5.r
+                                     : (ch == TIM_CTRL_INST_CCR6) ? &tim18->rmap->ccr6.r : NULL;
+
+            if (ccr18 == NULL)
+            {
+                return  TIM_CTRL_RES_ERR;
+            }
+
+            *ccr18 = (ccr & 0x0000ffff);
+            break;
+
+        default:
+            return TIM_CTRL_RES_ERR;
+    }
 
     return TIM_CTRL_RES_OK;
 }

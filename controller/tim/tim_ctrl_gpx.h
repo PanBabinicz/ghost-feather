@@ -109,6 +109,19 @@ typedef enum tim_ctrl_gpx_tim10111314_mode
     TIM_CTRL_GPX_TIM10111314_MODE_OUT_COMP,
 } tim_ctrl_gpx_tim10111314_mode_t;
 
+/// TODO
+/// \brief Operating mode for general-purpose timers TIM10-TIM14.
+///
+/// Specifies whether the timer is configured for input capture or
+/// output compare functionality.
+///
+typedef enum tim_ctrl_gpx_tim_inst
+{
+    TIM_CTRL_GPX_TIM2345 = 0,
+    TIM_CTRL_GPX_TIM912,
+    TIM_CTRL_GPX_TIM10111314,
+} tim_ctrl_gpx_tim_inst_t;
+
 ///
 /// \brief Control Register 1 (CR1) for general-purpose timers TIM2–TIM5.
 ///
@@ -1040,6 +1053,7 @@ struct tim_ctrl_gpx_tim2345_dev
     tim_ctrl_gpx_tim2345_id_t id;
     tim_ctrl_gpx_tim2345_mode_t ccmr1_mode;
     tim_ctrl_gpx_tim2345_mode_t ccmr2_mode;
+    tim_ctrl_gpx_tim_inst_t inst;
     tim_ctrl_stat_t stat;
 };
 
@@ -1058,6 +1072,7 @@ struct tim_ctrl_gpx_tim912_dev
     struct tim_ctrl_ccr_data ccr_data[2];
     tim_ctrl_gpx_tim912_id_t id;
     tim_ctrl_gpx_tim912_mode_t ccmr1_mode;
+    tim_ctrl_gpx_tim_inst_t inst;
     tim_ctrl_stat_t stat;
 };
 
@@ -1076,76 +1091,35 @@ struct tim_ctrl_gpx_tim10111314_dev
     struct tim_ctrl_ccr_data ccr_data[1];
     tim_ctrl_gpx_tim10111314_id_t id;
     tim_ctrl_gpx_tim10111314_mode_t ccmr1_mode;
+    tim_ctrl_gpx_tim_inst_t inst;
     tim_ctrl_stat_t stat;
 };
 
-///
+/// TODO
 /// \brief Initializes the general-purpose timer (TIM2-TIM5).
 ///
-/// \param[in] tim The pointer to timer device.
+/// \param[in] tim  The pointer to timer device.
+/// \param[in] inst The pointer to timer device.
 ///
 /// \return tim_ctrl_res_t   The tim controller result.
 /// \retval TIM_CTRL_RES_OK  On success.
 /// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim);
+tim_ctrl_res_t tim_ctrl_gpx_timx_init(void *tim, void *inst);
 
-///
-/// \brief Initializes the general-purpose timer (TIM9 and TIM12).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_gpx_tim912_init(void *tim);
-
-///
-/// \brief Initializes the general-purpose timer (TIM10-TIM14).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_gpx_tim10111314_init(void *tim);
-
-///
-/// \brief Deinitializes the general-purpose timer (TIM2-TIM5).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_gpx_tim2345_deinit(void *tim);
-
-///
-/// \brief Deinitializes the general-purpose timer (TIM9 and TIM12).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_gpx_tim912_deinit(void *tim);
-
-///
+/// TODO
 /// \brief Deinitializes the general-purpose timer (TIM10-TIM14).
 ///
-/// \param[in] tim The pointer to timer device.
+/// \param[in] tim  The pointer to timer device.
+/// \param[in] inst The pointer to timer device.
 ///
 /// \return tim_ctrl_res_t   The tim controller result.
 /// \retval TIM_CTRL_RES_OK  On success.
 /// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_gpx_tim10111314_deinit(void *tim);
+tim_ctrl_res_t tim_ctrl_gpx_timx_deinit(void *tim, void *inst);
 
-///
+/// TODO
 /// \brief Enables the general-purpose timer (TIM2-TIM5).
 ///
 /// \param[in] tim The pointer to timer device.
@@ -1154,31 +1128,9 @@ tim_ctrl_res_t tim_ctrl_gpx_tim10111314_deinit(void *tim);
 /// \retval TIM_CTRL_RES_OK  On success.
 /// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_gpx_tim2345_enable(void *tim);
+tim_ctrl_res_t tim_ctrl_gpx_timx_enable(void *tim, void *inst);
 
-///
-/// \brief Enables the general-purpose timer (TIM9 and TIM12).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_gpx_tim912_enable(void *tim);
-
-///
-/// \brief Enables the general-purpose timer (TIM10-TIM14).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_gpx_tim10111314_enable(void *tim);
-
-///
+/// TODO
 /// \brief Disables the general-purpose timer (TIM2-TIM5).
 ///
 /// \param[in] tim The pointer to timer device.
@@ -1187,10 +1139,10 @@ tim_ctrl_res_t tim_ctrl_gpx_tim10111314_enable(void *tim);
 /// \retval TIM_CTRL_RES_OK  On success.
 /// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_gpx_tim2345_disable(void *tim);
+tim_ctrl_res_t tim_ctrl_gpx_timx_disable(void *tim, void *inst);
 
-///
-/// \brief Disables the general-purpose timer (TIM9 and TIM12).
+/// TODO
+/// \brief Disables the general-purpose timer (TIM2-TIM5).
 ///
 /// \param[in] tim The pointer to timer device.
 ///
@@ -1198,10 +1150,10 @@ tim_ctrl_res_t tim_ctrl_gpx_tim2345_disable(void *tim);
 /// \retval TIM_CTRL_RES_OK  On success.
 /// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_gpx_tim912_disable(void *tim);
+tim_ctrl_res_t tim_ctrl_gpx_timx_ccr_data_get(void *tim, void *inst, struct tim_ctrl_ccr_data **ccr_data);
 
-///
-/// \brief Disables the general-purpose timer (TIM10-TIM14).
+/// TODO
+/// \brief Disables the general-purpose timer (TIM2-TIM5).
 ///
 /// \param[in] tim The pointer to timer device.
 ///
@@ -1209,7 +1161,7 @@ tim_ctrl_res_t tim_ctrl_gpx_tim912_disable(void *tim);
 /// \retval TIM_CTRL_RES_OK  On success.
 /// \retval TIM_CTRL_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_gpx_tim10111314_disable(void *tim);
+tim_ctrl_res_t tim_ctrl_gpx_timx_ccr_set(void *tim, void *inst, tim_ctrl_inst_ccr_t ch, uint32_t ccr);
 
 #ifdef __cplusplus
 }

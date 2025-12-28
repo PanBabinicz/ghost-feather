@@ -39,7 +39,7 @@ typedef enum tim_ctrl_stat
 ///
 typedef enum tim_ctrl_inst_ccr
 {
-    TIM_CTRL_INST_CCR1 = 0,
+    TIM_CTRL_INST_CCR1 = 1,
     TIM_CTRL_INST_CCR2,
     TIM_CTRL_INST_CCR3,
     TIM_CTRL_INST_CCR4,

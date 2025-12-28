@@ -263,6 +263,7 @@ static struct tim_ctrl_gpx_tim2345_dev tim_ctrl_tim4_dev =
     .id         = TIM_CTRL_GPX_TIM2345_ID_4,
     .ccmr1_mode = TIM_CTRL_GPX_TIM2345_MODE_OUT_COMP,
     .ccmr2_mode = TIM_CTRL_GPX_TIM2345_MODE_OUT_COMP,
+    .inst       = TIM_CTRL_GPX_TIM2345,
     .stat       = false,
 };
 
@@ -407,6 +408,7 @@ static struct tim_ctrl_gpx_tim912_dev tim_ctrl_tim12_dev =
     .ccr_data   = { 0 },
     .id         = TIM_CTRL_GPX_TIM912_ID_12,
     .ccmr1_mode = TIM_CTRL_GPX_TIM912_MODE_IN_CAP,
+    .inst       = TIM_CTRL_GPX_TIM912,
     .stat       = false,
 };
 
@@ -730,6 +732,7 @@ static struct tim_ctrl_adv6_tim18_dev tim_ctrl_tim8_dev =
     .id         = TIM_CTRL_ADV6_TIM18_ID_8,
     .ccmr1_mode = TIM_CTRL_ADV6_TIM18_MODE_IN_CAP,
     .ccmr2_mode = TIM_CTRL_ADV6_TIM18_MODE_IN_CAP,
+    .inst       = TIM_CTRL_ADV6_TIM18,
     .stat       = false,
 };
 
@@ -740,29 +743,38 @@ static struct tim_ctrl_dev tim_ctrl_dev_arr[TIM_CTRL_INST_TOTAL] =
 {
     [TIM_CTRL_INST_TIM4] =
     {
-        .tim     = &tim_ctrl_tim4_dev,
-        .init    = &tim_ctrl_gpx_tim2345_init,
-        .deinit  = &tim_ctrl_gpx_tim2345_deinit,
-        .enable  = &tim_ctrl_gpx_tim2345_enable,
-        .disable = &tim_ctrl_gpx_tim2345_disable,
+        .tim          = &tim_ctrl_tim4_dev,
+        .inst         = &tim_ctrl_tim4_dev.inst,
+        .init         = &tim_ctrl_gpx_timx_init,
+        .deinit       = &tim_ctrl_gpx_timx_deinit,
+        .enable       = &tim_ctrl_gpx_timx_enable,
+        .disable      = &tim_ctrl_gpx_timx_disable,
+        .ccr_data_get = &tim_ctrl_gpx_timx_ccr_data_get,
+        .ccr_set      = &tim_ctrl_gpx_timx_ccr_set,
     },
 
     [TIM_CTRL_INST_TIM12] =
     {
-        .tim      = &tim_ctrl_tim12_dev,
-        .init     = &tim_ctrl_gpx_tim912_init,
-        .deinit   = &tim_ctrl_gpx_tim912_deinit,
-        .enable   = &tim_ctrl_gpx_tim912_enable,
-        .disable  = &tim_ctrl_gpx_tim912_disable,
+        .tim          = &tim_ctrl_tim12_dev,
+        .inst         = &tim_ctrl_tim12_dev.inst,
+        .init         = &tim_ctrl_gpx_timx_init,
+        .deinit       = &tim_ctrl_gpx_timx_deinit,
+        .enable       = &tim_ctrl_gpx_timx_enable,
+        .disable      = &tim_ctrl_gpx_timx_disable,
+        .ccr_data_get = &tim_ctrl_gpx_timx_ccr_data_get,
+        .ccr_set      = &tim_ctrl_gpx_timx_ccr_set,
     },
 
     [TIM_CTRL_INST_TIM8] =
     {
-        .tim      = &tim_ctrl_tim8_dev,
-        .init     = &tim_ctrl_adv6_tim18_init,
-        .deinit   = &tim_ctrl_adv6_tim18_deinit,
-        .enable   = &tim_ctrl_adv6_tim18_enable,
-        .disable  = &tim_ctrl_adv6_tim18_disable,
+        .tim          = &tim_ctrl_tim8_dev,
+        .inst         = &tim_ctrl_tim8_dev.inst,
+        .init         = &tim_ctrl_adv6_timx_init,
+        .deinit       = &tim_ctrl_adv6_timx_deinit,
+        .enable       = &tim_ctrl_adv6_timx_enable,
+        .disable      = &tim_ctrl_adv6_timx_disable,
+        .ccr_data_get = &tim_ctrl_adv6_timx_ccr_data_get,
+        .ccr_set      = &tim_ctrl_adv6_timx_ccr_set,
     },
 };
 
@@ -874,7 +886,7 @@ void tim_ctrl_init(void)
 {
     for (uint32_t i = 0; i < sizeof(tim_ctrl_dev_arr)/sizeof(tim_ctrl_dev_arr[TIM_CTRL_INST_BEGIN]); i++)
     {
-        tim_ctrl_dev_arr[i].init(tim_ctrl_dev_arr[i].tim);
-        tim_ctrl_dev_arr[i].enable(tim_ctrl_dev_arr[i].tim);
+        tim_ctrl_dev_arr[i].init(tim_ctrl_dev_arr[i].tim, tim_ctrl_dev_arr[i].inst);
+        tim_ctrl_dev_arr[i].enable(tim_ctrl_dev_arr[i].tim, tim_ctrl_dev_arr[i].inst);
     }
 }
