@@ -44,7 +44,7 @@ add_library(apploader
 target_include_directories(apploader PRIVATE
     ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
-    ${PROJECT_SOURCE_DIR}/shared
+    ${PROJECT_SOURCE_DIR}/shared/ghost_feather_common
 )
 
 target_link_libraries(apploader PRIVATE

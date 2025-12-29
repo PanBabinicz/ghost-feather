@@ -104,10 +104,10 @@ static void init(void)
 
     for (uint32_t i = 0; i < 3; i++)
     {
-        led_off();
-        systick_delay_ms(500);
-        led_on();
-        systick_delay_ms(500);
+        //led_off();
+        //systick_delay_ms(500);
+        //led_on();
+        //systick_delay_ms(500);
     }
 }
 

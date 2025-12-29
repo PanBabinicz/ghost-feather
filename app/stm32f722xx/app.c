@@ -1,7 +1,9 @@
+#include "app.h"
 #include "bmi270.h"
 #include "bmi270_conf.h"
-#include "app.h"
+#include "ghf.h"
 #include "memory_map.h"
+#include "rf_ctrl.h"
 #include "tim_ctrl.h"
 #include "tim_ctrl_advx.h"
 #include "tim_ctrl_gpx.h"
@@ -51,6 +53,10 @@ void app_start(void)
 {
     led_on();
     tim_ctrl_init();
+    rf_ctrl_init();
+
+    struct ghf_dev ghf = { 0 };
+    ghf_dev_init(&ghf);
 
     struct bmi270_dev *bmi270 = bmi270_dev_get();
     struct tim_ctrl_dev *tim_ctrl_dev_arr = tim_ctrl_dev_arr_get();
@@ -68,72 +74,18 @@ void app_start(void)
     uint32_t motor4_prev = 0;
     uint32_t motor4_curr = 0;
 
-    uint32_t pitch_ch_prev = 0;
-    uint32_t pitch_ch_curr = 0;
-
-    uint32_t roll_ch_prev = 0;
-    uint32_t roll_ch_curr = 0;
-
-    uint8_t start = 0;
-
     /* Never return */
     while (1)
     {
+
+        ghf_launch_proc(&ghf);
+
         motor4_prev = tim8->ccr_data[TIM_CTRL_INST_CCR1].prev;
         motor4_curr = tim8->ccr_data[TIM_CTRL_INST_CCR1].curr;
 
-        roll_ch_prev = tim12->ccr_data[TIM_CTRL_INST_CCR1].prev;
-        roll_ch_curr = tim12->ccr_data[TIM_CTRL_INST_CCR1].curr;
-
-        pitch_ch_prev = tim12->ccr_data[TIM_CTRL_INST_CCR2].prev;
-        pitch_ch_curr = tim12->ccr_data[TIM_CTRL_INST_CCR2].curr;
-
-
-        if ((pitch_ch_curr > pitch_ch_prev) && (pitch_ch_curr - pitch_ch_prev < 2500) && (motor4_curr > motor4_prev))
-        {
-            if (((pitch_ch_curr - pitch_ch_prev) < 1150) && ((motor4_curr - motor4_prev) < 1100) && (start == 0))
-            {
-                start = 1;
-            }
-            else if (((pitch_ch_curr - pitch_ch_prev) > 1450) && ((motor4_curr - motor4_prev) < 1100) && (start == 3))
-            {
-                start = 4;
-            }
-
-            if (((pitch_ch_curr - pitch_ch_prev) < 1150) && ((motor4_curr - motor4_prev) < 1100) && (start == 4))
-            {
-                start = 5;
-            }
-            else if (((pitch_ch_curr - pitch_ch_prev) > 1450) && ((motor4_curr - motor4_prev) < 1100) && (start == 7))
-            {
-                start = 0;
-            }
-        }
-
-        if ((roll_ch_curr > roll_ch_prev) && (roll_ch_curr - roll_ch_prev < 2500) && (motor4_curr > motor4_prev))
-        {
-            if (((roll_ch_curr - roll_ch_prev) < 1150) && ((motor4_curr - motor4_prev) < 1100) && (start == 1))
-            {
-                start = 2;
-            }
-            else if (((roll_ch_curr - roll_ch_prev) > 1450) && ((motor4_curr - motor4_prev) < 1100) && (start == 2))
-            {
-                start = 3;
-            }
-
-            if (((roll_ch_curr - roll_ch_prev) < 1150) && ((motor4_curr - motor4_prev) < 1100) && (start == 5))
-            {
-                start = 6;
-            }
-            else if (((roll_ch_curr - roll_ch_prev) > 1450) && ((motor4_curr - motor4_prev) < 1100) && (start == 6))
-            {
-                start = 7;
-            }
-        }
-
         if (motor4_curr > motor4_prev)
         {
-            if (start == 4)
+            if (ghf.stat == GHF_STAT_ON)
             {
                 motor4_pwm = (motor4_curr - motor4_prev) < 2500 ? (motor4_curr - motor4_prev) : motor4_pwm;
                 motor4_pwm = (motor4_pwm > 1250) ? 1250 : motor4_pwm;
@@ -145,5 +97,7 @@ void app_start(void)
                 tim4->rmap->ccr4.bf.ccr4 = motor4_pwm;
             }
         }
+
+        ghf_land_proc(&ghf);
     }
 }

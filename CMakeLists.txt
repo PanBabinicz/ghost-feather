@@ -105,6 +105,7 @@ target_link_options(gfc_common_options INTERFACE
 # --------------------------------------------------
 add_subdirectory(app)
 add_subdirectory(controller)
+add_subdirectory(core)
 add_subdirectory(dfu)
 add_subdirectory(loader)
 add_subdirectory(shared)
@@ -243,6 +244,7 @@ target_include_directories(${APP_ELF} PRIVATE
 
 target_link_directories(${APP_ELF} PRIVATE
     ${PROJECT_SOURCE_DIR}/controller
+    ${PROJECT_SOURCE_DIR}/core
     ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
@@ -255,6 +257,8 @@ target_link_libraries(${APP_ELF} PRIVATE
     bmi270
     pid_ctrl
     libopencm3_stm32f7.a
+    ghf
+    rf_ctrl
     tim_ctrl
     timing
 )

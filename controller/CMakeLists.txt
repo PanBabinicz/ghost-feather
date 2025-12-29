@@ -19,6 +19,7 @@
 file(GLOB_RECURSE USART_CONTROLLER_SOURCES usart/*.c)
 file(GLOB_RECURSE BMI270_SOURCES bmi270/*.c)
 file(GLOB_RECURSE PID_CTRL_SOURCES pid/*.c)
+file(GLOB_RECURSE RF_CTRL_SOURCES rf/*.c)
 file(GLOB_RECURSE SPI_CTRL_SOURCES spi/*.c)
 file(GLOB_RECURSE TIM_CTRL_SOURCES tim/*.c)
 
@@ -82,6 +83,27 @@ target_link_directories(pid_ctrl PRIVATE
 target_link_libraries(pid_ctrl PRIVATE
     gfc_common_options
     timing
+)
+
+# --------------------------------------------------
+# Target: RF controller
+# --------------------------------------------------
+message(STATUS "Add rf_ctrl library")
+add_library(rf_ctrl
+    ${RF_CTRL_SOURCES}
+)
+
+target_include_directories(rf_ctrl PRIVATE
+    ${PROJECT_SOURCE_DIR}/controller/tim
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
+)
+
+#target_link_directories(rf_ctrl PRIVATE
+#${PROJECT_SOURCE_DIR}/shared
+#)
+
+target_link_libraries(rf_ctrl PRIVATE
+    gfc_common_options
 )
 
 # --------------------------------------------------

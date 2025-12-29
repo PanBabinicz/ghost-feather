@@ -29,6 +29,7 @@ target_include_directories(updater PRIVATE
     ${PROJECT_SOURCE_DIR}/controller/usart
     ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/dust
     ${PROJECT_SOURCE_DIR}/shared/timing
+    ${PROJECT_SOURCE_DIR}/shared/ghost_feather_common
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     ${PROJECT_SOURCE_DIR}/submodules/printf
 )

@@ -35,13 +35,12 @@ typedef enum tim_ctrl_inst
 struct tim_ctrl_dev
 {
     void *tim;
-    void *inst;
-    tim_ctrl_res_t (*init)(void *tim, void *inst);
-    tim_ctrl_res_t (*deinit)(void *tim, void *inst);
-    tim_ctrl_res_t (*enable)(void *tim, void *inst);
-    tim_ctrl_res_t (*disable)(void *tim, void *inst);
-    tim_ctrl_res_t (*ccr_data_get)(void *tim, void *inst, struct tim_ctrl_ccr_data **ccr_data);
-    tim_ctrl_res_t (*ccr_set)(void *tim, void *inst, tim_ctrl_inst_ccr_t ch, uint32_t ccr);
+    tim_ctrl_res_t (*init)(void *tim);
+    tim_ctrl_res_t (*deinit)(void *tim);
+    tim_ctrl_res_t (*enable)(void *tim);
+    tim_ctrl_res_t (*disable)(void *tim);
+    tim_ctrl_res_t (*ccr_data_get)(void *tim, const tim_ctrl_inst_ccr_t ccr_inst, struct tim_ctrl_ccr_data *ccr_data);
+    tim_ctrl_res_t (*ccr_set)(void *tim, const tim_ctrl_inst_ccr_t ccr_inst, const uint32_t ccr);
 };
 
 ///

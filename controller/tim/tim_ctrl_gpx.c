@@ -524,79 +524,15 @@ static const struct tim_ctrl_gpx_tim10111314_regs tim_ctrl_gpx_tim10111314_por =
 };
 
 ///***********************************************************************************************************
-/// Private functions - declaration.
-///***********************************************************************************************************
-/// TODO
-/// \brief Initializes the general-purpose timer (TIM2-TIM5).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim);
-
-/// TODO
-/// \brief Initializes the general-purpose timer (TIM9 and TIM12).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_gpx_tim912_init(void *tim);
-
-/// TODO
-/// \brief Initializes the general-purpose timer (TIM10-TIM14).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_gpx_tim10111314_init(void *tim);
-
-/// TODO
-/// \brief Deinitializes the general-purpose timer (TIM2-TIM5).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_gpx_tim2345_deinit(void *tim);
-
-/// TODO
-/// \brief Deinitializes the general-purpose timer (TIM9 and TIM12).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_gpx_tim912_deinit(void *tim);
-
-/// TODO
-/// \brief Deinitializes the general-purpose timer (TIM10-TIM14).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_gpx_tim10111314_deinit(void *tim);
-
-///***********************************************************************************************************
-/// Private functions - definition.
+/// Global functions - definition.
 ///***********************************************************************************************************
 tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim)
 {
+    if (tim == NULL)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
     struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_INIT)
@@ -640,7 +576,7 @@ tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim)
     dev->rmap->dcr.r  = dev->rtmp.dcr.r;
     dev->rmap->dmar.r = dev->rtmp.dmar.r;
 
-    switch (dev->id)
+    switch(dev->id)
     {
         case TIM_CTRL_GPX_TIM2345_ID_2:
             dev->rmap->tim2_or.r = dev->rtmp.tim2_or.r;
@@ -661,6 +597,11 @@ tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim)
 
 tim_ctrl_res_t tim_ctrl_gpx_tim912_init(void *tim)
 {
+    if (tim == NULL)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
     struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_INIT)
@@ -697,6 +638,11 @@ tim_ctrl_res_t tim_ctrl_gpx_tim912_init(void *tim)
 
 tim_ctrl_res_t tim_ctrl_gpx_tim10111314_init(void *tim)
 {
+    if (tim == NULL)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
     struct tim_ctrl_gpx_tim10111314_dev *dev = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_INIT)
@@ -724,7 +670,7 @@ tim_ctrl_res_t tim_ctrl_gpx_tim10111314_init(void *tim)
     dev->rmap->arr.r  = dev->rtmp.arr.r;
     dev->rmap->ccr1.r = dev->rtmp.ccr1.r;
 
-    switch (dev->id)
+    switch(dev->id)
     {
         case TIM_CTRL_GPX_TIM10111314_ID_11:
             dev->rmap->tim11_or.r = dev->rtmp.tim11_or.r;
@@ -741,6 +687,11 @@ tim_ctrl_res_t tim_ctrl_gpx_tim10111314_init(void *tim)
 
 tim_ctrl_res_t tim_ctrl_gpx_tim2345_deinit(void *tim)
 {
+    if (tim == NULL)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
     struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_DEINIT)
@@ -776,6 +727,11 @@ tim_ctrl_res_t tim_ctrl_gpx_tim2345_deinit(void *tim)
 
 tim_ctrl_res_t tim_ctrl_gpx_tim912_deinit(void *tim)
 {
+    if (tim == NULL)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
     struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_DEINIT)
@@ -803,6 +759,11 @@ tim_ctrl_res_t tim_ctrl_gpx_tim912_deinit(void *tim)
 
 tim_ctrl_res_t tim_ctrl_gpx_tim10111314_deinit(void *tim)
 {
+    if (tim == NULL)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
     struct tim_ctrl_gpx_tim10111314_dev *dev = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
 
     if (dev->stat == TIM_CTRL_STAT_DEINIT)
@@ -836,200 +797,218 @@ tim_ctrl_res_t tim_ctrl_gpx_tim10111314_deinit(void *tim)
     return TIM_CTRL_RES_OK;
 }
 
-///***********************************************************************************************************
-/// Global functions - definition.
-///***********************************************************************************************************
-tim_ctrl_res_t tim_ctrl_gpx_timx_init(void *tim, void *inst)
+tim_ctrl_res_t tim_ctrl_gpx_tim2345_enable(void *tim)
 {
-    if ((tim == NULL) || (inst == NULL))
+    if (tim == NULL)
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    switch (*(tim_ctrl_gpx_tim_inst_t *)inst)
-    {
-        case TIM_CTRL_GPX_TIM2345:
-            return tim_ctrl_gpx_tim2345_init(tim);
+    struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
 
-        case TIM_CTRL_GPX_TIM912:
-            return tim_ctrl_gpx_tim912_init(tim);
-
-        case TIM_CTRL_GPX_TIM10111314:
-            return tim_ctrl_gpx_tim10111314_init(tim);
-
-        default:
-            return TIM_CTRL_RES_ERR;
-    }
-}
-
-tim_ctrl_res_t tim_ctrl_gpx_timx_deinit(void *tim, void *inst)
-{
-    if ((tim == NULL) || (inst == NULL))
+    if (dev->stat == TIM_CTRL_STAT_DEINIT)
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    switch (*(tim_ctrl_gpx_tim_inst_t *)inst)
-    {
-        case TIM_CTRL_GPX_TIM2345:
-            return tim_ctrl_gpx_tim2345_deinit(tim);
-
-        case TIM_CTRL_GPX_TIM912:
-            return tim_ctrl_gpx_tim912_deinit(tim);
-
-        case TIM_CTRL_GPX_TIM10111314:
-            return tim_ctrl_gpx_tim10111314_deinit(tim);
-
-        default:
-            return TIM_CTRL_RES_ERR;
-    }
-}
-
-tim_ctrl_res_t tim_ctrl_gpx_timx_enable(void *tim, void *inst)
-{
-    if ((tim == NULL) || (inst == NULL))
-    {
-        return TIM_CTRL_RES_ERR;
-    }
-
-    switch (*(tim_ctrl_gpx_tim_inst_t *)inst)
-    {
-        case TIM_CTRL_GPX_TIM2345:
-            struct tim_ctrl_gpx_tim2345_dev *tim2345 = (struct tim_ctrl_gpx_tim2345_dev *)tim;
-            tim2345->rmap->cr1.bf.cen = 0x01;
-            break;
-
-        case TIM_CTRL_GPX_TIM912:
-            struct tim_ctrl_gpx_tim912_dev *tim912 = (struct tim_ctrl_gpx_tim912_dev *)tim;
-            tim912->rmap->cr1.bf.cen = 0x01;
-            break;
-
-        case TIM_CTRL_GPX_TIM10111314:
-            struct tim_ctrl_gpx_tim10111314_dev *tim10111314 = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
-            tim10111314->rmap->cr1.bf.cen = 0x01;
-            break;
-
-        default:
-            return TIM_CTRL_RES_ERR;
-    }
+    dev->rmap->cr1.bf.cen = 0x01;
 
     return TIM_CTRL_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_timx_disable(void *tim, void *inst)
+tim_ctrl_res_t tim_ctrl_gpx_tim912_enable(void *tim)
 {
-    if ((tim == NULL) || (inst == NULL))
+    if (tim == NULL)
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    switch (*(tim_ctrl_gpx_tim_inst_t *)inst)
+    struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
+
+    if (dev->stat == TIM_CTRL_STAT_DEINIT)
     {
-        case TIM_CTRL_GPX_TIM2345:
-            struct tim_ctrl_gpx_tim2345_dev *tim2345 = (struct tim_ctrl_gpx_tim2345_dev *)tim;
-            tim2345->rmap->cr1.bf.cen = 0x00;
-            break;
-
-        case TIM_CTRL_GPX_TIM912:
-            struct tim_ctrl_gpx_tim912_dev *tim912 = (struct tim_ctrl_gpx_tim912_dev *)tim;
-            tim912->rmap->cr1.bf.cen = 0x00;
-            break;
-
-        case TIM_CTRL_GPX_TIM10111314:
-            struct tim_ctrl_gpx_tim10111314_dev *tim10111314 = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
-            tim10111314->rmap->cr1.bf.cen = 0x00;
-            break;
-
-        default:
-            return TIM_CTRL_RES_ERR;
+        return TIM_CTRL_RES_ERR;
     }
+
+    dev->rmap->cr1.bf.cen = 0x01;
 
     return TIM_CTRL_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_timx_ccr_data_get(void *tim, void *inst, struct tim_ctrl_ccr_data **ccr_data)
+tim_ctrl_res_t tim_ctrl_gpx_tim10111314_enable(void *tim)
 {
-    if ((tim == NULL) || (inst == NULL) || (ccr_data == NULL))
+    if (tim == NULL)
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    switch (*(tim_ctrl_gpx_tim_inst_t *)inst)
+    struct tim_ctrl_gpx_tim10111314_dev *dev = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
+
+    if (dev->stat == TIM_CTRL_STAT_DEINIT)
     {
-        case TIM_CTRL_GPX_TIM2345:
-            struct tim_ctrl_gpx_tim2345_dev *tim2345 = (struct tim_ctrl_gpx_tim2345_dev *)tim;
-            *ccr_data = &tim2345->ccr_data[0];
-            break;
-
-        case TIM_CTRL_GPX_TIM912:
-            struct tim_ctrl_gpx_tim912_dev *tim912 = (struct tim_ctrl_gpx_tim912_dev *)tim;
-            *ccr_data = &tim912->ccr_data[0];
-            break;
-
-        case TIM_CTRL_GPX_TIM10111314:
-            struct tim_ctrl_gpx_tim10111314_dev *tim10111314 = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
-            *ccr_data = &tim10111314->ccr_data[0];
-            break;
-
-        default:
-            return TIM_CTRL_RES_ERR;
+        return TIM_CTRL_RES_ERR;
     }
+
+    dev->rmap->cr1.bf.cen = 0x01;
 
     return TIM_CTRL_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_timx_ccr_set(void *tim, void *inst, tim_ctrl_inst_ccr_t ch, uint32_t ccr)
+tim_ctrl_res_t tim_ctrl_gpx_tim2345_disable(void *tim)
 {
-    if ((tim == NULL) || (inst == NULL))
+    if (tim == NULL)
     {
         return TIM_CTRL_RES_ERR;
     }
 
-    switch (*(tim_ctrl_gpx_tim_inst_t *)inst)
+    struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
+
+    if (dev->stat == TIM_CTRL_STAT_INIT)
     {
-        case TIM_CTRL_GPX_TIM2345:
-            struct tim_ctrl_gpx_tim2345_dev *tim2345 = (struct tim_ctrl_gpx_tim2345_dev *)tim;
-            volatile uint32_t *ccr2345 = (ch == TIM_CTRL_INST_CCR1) ? &tim2345->rmap->ccr1.r
-                                       : (ch == TIM_CTRL_INST_CCR2) ? &tim2345->rmap->ccr2.r
-                                       : (ch == TIM_CTRL_INST_CCR3) ? &tim2345->rmap->ccr3.r
-                                       : (ch == TIM_CTRL_INST_CCR4) ? &tim2345->rmap->ccr4.r : NULL;
-
-            if (ccr2345 == NULL)
-            {
-                return  TIM_CTRL_RES_ERR;
-            }
-
-            *ccr2345 = ccr;
-            break;
-
-        case TIM_CTRL_GPX_TIM912:
-            struct tim_ctrl_gpx_tim912_dev *tim912 = (struct tim_ctrl_gpx_tim912_dev *)tim;
-            volatile uint32_t *ccr912 = (ch == TIM_CTRL_INST_CCR1) ? &tim912->rmap->ccr1.r
-                                      : (ch == TIM_CTRL_INST_CCR2) ? &tim912->rmap->ccr2.r : NULL;
-
-            if (ccr912 == NULL)
-            {
-                return  TIM_CTRL_RES_ERR;
-            }
-
-            *ccr912 = (ccr & 0x0000ffff);
-            break;
-
-        case TIM_CTRL_GPX_TIM10111314:
-            struct tim_ctrl_gpx_tim10111314_dev *tim10111314 = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
-            volatile uint32_t *ccr10111314 = (ch == TIM_CTRL_INST_CCR1) ? &tim10111314->rmap->ccr1.r : NULL;
-
-            if (ccr10111314 == NULL)
-            {
-                return  TIM_CTRL_RES_ERR;
-            }
-
-            *ccr10111314 = (ccr & 0x0000ffff);
-            break;
-
-        default:
-            return TIM_CTRL_RES_ERR;
+        return TIM_CTRL_RES_ERR;
     }
+
+    dev->rmap->cr1.bf.cen = 0x00;
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_gpx_tim912_disable(void *tim)
+{
+    if (tim == NULL)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
+
+    if (dev->stat == TIM_CTRL_STAT_INIT)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    dev->rmap->cr1.bf.cen = 0x00;
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_gpx_tim10111314_disable(void *tim)
+{
+    if (tim == NULL)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    struct tim_ctrl_gpx_tim10111314_dev *dev = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
+
+    if (dev->stat == TIM_CTRL_STAT_INIT)
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    dev->rmap->cr1.bf.cen = 0x00;
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_gpx_tim2345_ccr_data_get(void *tim, const tim_ctrl_inst_ccr_t ccr_inst,
+        struct tim_ctrl_ccr_data *ccr_data)
+{
+    if ((tim == NULL) || (ccr_inst < TIM_CTRL_INST_CCR1) || (ccr_inst > TIM_CTRL_INST_CCR4) || (ccr_data == NULL))
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
+
+    ccr_data->prev = dev->ccr_data[ccr_inst].prev;
+    ccr_data->curr = dev->ccr_data[ccr_inst].curr;
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_gpx_tim912_ccr_data_get(void *tim, const tim_ctrl_inst_ccr_t ccr_inst,
+        struct tim_ctrl_ccr_data *ccr_data)
+{
+    if ((tim == NULL) || (ccr_inst < TIM_CTRL_INST_CCR1) || (ccr_inst > TIM_CTRL_INST_CCR2) || (ccr_data == NULL))
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
+
+    ccr_data->prev = dev->ccr_data[ccr_inst].prev;
+    ccr_data->curr = dev->ccr_data[ccr_inst].curr;
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_gpx_tim10111314_ccr_data_get(void *tim, const tim_ctrl_inst_ccr_t ccr_inst,
+        struct tim_ctrl_ccr_data *ccr_data)
+{
+    if ((tim == NULL) || (ccr_inst != TIM_CTRL_INST_CCR1) || (ccr_data == NULL))
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
+
+    ccr_data->prev = dev->ccr_data[ccr_inst].prev;
+    ccr_data->curr = dev->ccr_data[ccr_inst].curr;
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_gpx_tim2345_ccr_set(void *tim, const tim_ctrl_inst_ccr_t ccr_inst,
+        const uint32_t ccr)
+{
+    if ((tim == NULL) || (ccr_inst < TIM_CTRL_INST_CCR1) || (ccr_inst > TIM_CTRL_INST_CCR4))
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
+
+    volatile uint32_t *ccrx = (ccr_inst == TIM_CTRL_INST_CCR1) ? &dev->rmap->ccr1.r
+                            : (ccr_inst == TIM_CTRL_INST_CCR2) ? &dev->rmap->ccr2.r
+                            : (ccr_inst == TIM_CTRL_INST_CCR3) ? &dev->rmap->ccr3.r : &dev->rmap->ccr4.r;
+
+    *ccrx = ccr;
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_gpx_tim912_ccr_set(void *tim, const tim_ctrl_inst_ccr_t ccr_inst,
+        const uint32_t ccr)
+{
+    if ((tim == NULL) || (ccr_inst < TIM_CTRL_INST_CCR1) || (ccr_inst > TIM_CTRL_INST_CCR2))
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
+
+    volatile uint32_t *ccrx = (ccr_inst == TIM_CTRL_INST_CCR1) ? &dev->rmap->ccr1.r : &dev->rmap->ccr2.r;
+
+    *ccrx = ccr;
+
+    return TIM_CTRL_RES_OK;
+}
+
+tim_ctrl_res_t tim_ctrl_gpx_tim10111314_ccr_set(void *tim, const tim_ctrl_inst_ccr_t ccr_inst,
+        const uint32_t ccr)
+{
+
+    if ((tim == NULL) || (ccr_inst != TIM_CTRL_INST_CCR1))
+    {
+        return TIM_CTRL_RES_ERR;
+    }
+
+    struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
+
+    volatile uint32_t *ccrx = &dev->rmap->ccr1.r;
+
+    *ccrx = ccr;
 
     return TIM_CTRL_RES_OK;
 }
