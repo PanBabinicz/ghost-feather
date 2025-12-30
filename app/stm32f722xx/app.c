@@ -85,7 +85,7 @@ void app_start(void)
 
         if (motor4_curr > motor4_prev)
         {
-            if (ghf.stat == GHF_STAT_ON)
+            if (ghf.op.stat == GHF_STAT_ON)
             {
                 motor4_pwm = (motor4_curr - motor4_prev) < 2500 ? (motor4_curr - motor4_prev) : motor4_pwm;
                 motor4_pwm = (motor4_pwm > 1250) ? 1250 : motor4_pwm;

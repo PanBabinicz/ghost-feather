@@ -111,13 +111,21 @@ struct ghf_sys
 ///
 /// \brief
 ///
+struct ghf_op
+{
+    ghf_launch_step_t launch_step;
+    ghf_land_step_t land_step;
+    ghf_stat_t stat;
+};
+
+///
+/// \brief
+///
 struct ghf_dev
 {
     struct ghf_ctrl ctrl;
     struct ghf_sys sys;
-    ghf_launch_step_t launch_step;
-    ghf_land_step_t land_step;
-    ghf_stat_t stat;
+    struct ghf_op op;
 };
 
 ///

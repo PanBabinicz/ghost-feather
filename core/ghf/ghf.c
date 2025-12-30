@@ -94,9 +94,9 @@ ghf_res_t ghf_launch_proc(struct ghf_dev *const ghf)
         return GHF_RES_ERR;
     }
 
-    if (ghf->stat == GHF_STAT_OFF)
+    if (ghf->op.stat == GHF_STAT_OFF)
     {
-        switch (ghf->launch_step)
+        switch (ghf->op.launch_step)
         {
             case GHF_LAUNCH_STEP_1:
                 ghf_cap_upd(ghf, RF_CTRL_CH_1, &ghf->ctrl.pitch.ccr_data);
@@ -107,7 +107,7 @@ ghf_res_t ghf_launch_proc(struct ghf_dev *const ghf)
                 if (ghf->ctrl.pitch.sig_raw > 900 && ghf->ctrl.pitch.sig_raw < 1100 &&
                     ghf->ctrl.throttle.sig_raw > 900 && ghf->ctrl.throttle.sig_raw < 1100)
                 {
-                    ghf->launch_step = GHF_LAUNCH_STEP_2;
+                    ghf->op.launch_step = GHF_LAUNCH_STEP_2;
                 }
 
                 break;
@@ -121,7 +121,7 @@ ghf_res_t ghf_launch_proc(struct ghf_dev *const ghf)
                 if (ghf->ctrl.roll.sig_raw > 900 && ghf->ctrl.roll.sig_raw < 1100 &&
                     ghf->ctrl.throttle.sig_raw > 900 && ghf->ctrl.throttle.sig_raw < 1100)
                 {
-                    ghf->launch_step = GHF_LAUNCH_STEP_3;
+                    ghf->op.launch_step = GHF_LAUNCH_STEP_3;
                 }
 
                 break;
@@ -135,7 +135,7 @@ ghf_res_t ghf_launch_proc(struct ghf_dev *const ghf)
                 if (ghf->ctrl.roll.sig_raw > 1450 && ghf->ctrl.roll.sig_raw < 1550 &&
                     ghf->ctrl.throttle.sig_raw > 900 && ghf->ctrl.throttle.sig_raw < 1100)
                 {
-                    ghf->launch_step = GHF_LAUNCH_STEP_4;
+                    ghf->op.launch_step = GHF_LAUNCH_STEP_4;
                 }
 
                 break;
@@ -149,8 +149,8 @@ ghf_res_t ghf_launch_proc(struct ghf_dev *const ghf)
                 if (ghf->ctrl.pitch.sig_raw > 1450 && ghf->ctrl.pitch.sig_raw < 1550 &&
                     ghf->ctrl.throttle.sig_raw > 900 && ghf->ctrl.throttle.sig_raw < 1100)
                 {
-                    ghf->launch_step = GHF_LAUNCH_STEP_1;
-                    ghf->stat = GHF_STAT_ON;
+                    ghf->op.launch_step = GHF_LAUNCH_STEP_1;
+                    ghf->op.stat = GHF_STAT_ON;
                 }
 
                 break;
@@ -170,9 +170,9 @@ ghf_res_t ghf_land_proc(struct ghf_dev *const ghf)
         return GHF_RES_ERR;
     }
 
-    if (ghf->stat == GHF_STAT_ON)
+    if (ghf->op.stat == GHF_STAT_ON)
     {
-        switch (ghf->land_step)
+        switch (ghf->op.land_step)
         {
             case GHF_LAND_STEP_1:
                 ghf_cap_upd(ghf, RF_CTRL_CH_1, &ghf->ctrl.pitch.ccr_data);
@@ -183,7 +183,7 @@ ghf_res_t ghf_land_proc(struct ghf_dev *const ghf)
                 if (ghf->ctrl.pitch.sig_raw > 900 && ghf->ctrl.pitch.sig_raw < 1100 &&
                     ghf->ctrl.throttle.sig_raw > 900 && ghf->ctrl.throttle.sig_raw < 1100)
                 {
-                    ghf->land_step = GHF_LAND_STEP_2;
+                    ghf->op.land_step = GHF_LAND_STEP_2;
                 }
 
                 break;
@@ -197,7 +197,7 @@ ghf_res_t ghf_land_proc(struct ghf_dev *const ghf)
                 if (ghf->ctrl.roll.sig_raw > 900 && ghf->ctrl.roll.sig_raw < 1100 &&
                     ghf->ctrl.throttle.sig_raw > 900 && ghf->ctrl.throttle.sig_raw < 1100)
                 {
-                    ghf->land_step = GHF_LAND_STEP_3;
+                    ghf->op.land_step = GHF_LAND_STEP_3;
                 }
 
                 break;
@@ -211,7 +211,7 @@ ghf_res_t ghf_land_proc(struct ghf_dev *const ghf)
                 if (ghf->ctrl.roll.sig_raw > 1450 && ghf->ctrl.roll.sig_raw < 1550 &&
                     ghf->ctrl.throttle.sig_raw > 900 && ghf->ctrl.throttle.sig_raw < 1100)
                 {
-                    ghf->land_step = GHF_LAND_STEP_4;
+                    ghf->op.land_step = GHF_LAND_STEP_4;
                 }
 
                 break;
@@ -225,8 +225,8 @@ ghf_res_t ghf_land_proc(struct ghf_dev *const ghf)
                 if (ghf->ctrl.pitch.sig_raw > 1450 && ghf->ctrl.pitch.sig_raw < 1550 &&
                     ghf->ctrl.throttle.sig_raw > 900 && ghf->ctrl.throttle.sig_raw < 1100)
                 {
-                    ghf->land_step = GHF_LAUNCH_STEP_1;
-                    ghf->stat = GHF_STAT_OFF;
+                    ghf->op.land_step = GHF_LAUNCH_STEP_1;
+                    ghf->op.stat = GHF_STAT_OFF;
                 }
 
                 break;
