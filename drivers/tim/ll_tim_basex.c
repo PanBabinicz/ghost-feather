@@ -1,4 +1,4 @@
-#include "tim_ctrl_basex.h"
+#include "ll_tim_basex.h"
 
 ///***********************************************************************************************************
 /// Private objects - definition.
@@ -11,7 +11,7 @@
 /// for initialization and for restoring registers to their default values
 /// before applying custom configuration.
 ///
-static const struct tim_ctrl_base1_tim67_regs tim_ctrl_base1_tim67_por =
+static const struct ll_tim_base1_tim67_regs ll_tim_base1_tim67_por =
 {
     .cr1 =
     {
@@ -88,18 +88,18 @@ static const struct tim_ctrl_base1_tim67_regs tim_ctrl_base1_tim67_por =
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-tim_ctrl_res_t tim_ctrl_base1_tim67_init(void *tim)
+ll_tim_res_t ll_tim_base1_tim67_init(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_base1_tim67_dev *dev = (struct tim_ctrl_base1_tim67_dev *)tim;
+    struct ll_tim_base1_tim67_dev *dev = (struct ll_tim_base1_tim67_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == LL_TIM_STAT_INIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.r  = dev->rtmp.cr1.r;
@@ -111,73 +111,74 @@ tim_ctrl_res_t tim_ctrl_base1_tim67_init(void *tim)
     dev->rmap->psc.r  = dev->rtmp.psc.r;
     dev->rmap->arr.r  = dev->rtmp.arr.r;
 
-    dev->stat = TIM_CTRL_STAT_INIT;
+    dev->stat = LL_TIM_STAT_INIT;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_base1_tim67_deinit(void *tim)
+ll_tim_res_t ll_tim_base1_tim67_deinit(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
+    }
     }
 
-    struct tim_ctrl_base1_tim67_dev *dev = (struct tim_ctrl_base1_tim67_dev *)tim;
+    struct ll_tim_base1_tim67_dev *dev = (struct ll_tim_base1_tim67_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    if (dev->stat == LL_TIM_STAT_DEINIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    dev->rmap->cr1.r  = tim_ctrl_base1_tim67_por.cr1.r;
-    dev->rmap->cr2.r  = tim_ctrl_base1_tim67_por.cr2.r;
-    dev->rmap->dier.r = tim_ctrl_base1_tim67_por.dier.r;
-    dev->rmap->sr.r   = tim_ctrl_base1_tim67_por.sr.r;
-    dev->rmap->egr.r  = tim_ctrl_base1_tim67_por.egr.r;
-    dev->rmap->cnt.r  = tim_ctrl_base1_tim67_por.cnt.r;
-    dev->rmap->psc.r  = tim_ctrl_base1_tim67_por.psc.r;
-    dev->rmap->arr.r  = tim_ctrl_base1_tim67_por.arr.r;
+    dev->rmap->cr1.r  = ll_tim_base1_tim67_por.cr1.r;
+    dev->rmap->cr2.r  = ll_tim_base1_tim67_por.cr2.r;
+    dev->rmap->dier.r = ll_tim_base1_tim67_por.dier.r;
+    dev->rmap->sr.r   = ll_tim_base1_tim67_por.sr.r;
+    dev->rmap->egr.r  = ll_tim_base1_tim67_por.egr.r;
+    dev->rmap->cnt.r  = ll_tim_base1_tim67_por.cnt.r;
+    dev->rmap->psc.r  = ll_tim_base1_tim67_por.psc.r;
+    dev->rmap->arr.r  = ll_tim_base1_tim67_por.arr.r;
 
-    dev->stat = TIM_CTRL_STAT_DEINIT;
+    dev->stat = LL_TIM_STAT_DEINIT;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_base1_tim67_enable(void *tim)
+ll_tim_res_t ll_tim_base1_tim67_enable(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_base1_tim67_dev *dev = (struct tim_ctrl_base1_tim67_dev *)tim;
+    struct ll_tim_base1_tim67_dev *dev = (struct ll_tim_base1_tim67_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    if (dev->stat == LL_TIM_STAT_DEINIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.bf.cen = 0x01;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_base1_tim67_disable(void *tim)
+ll_tim_res_t ll_tim_base1_tim67_disable(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_base1_tim67_dev *dev = (struct tim_ctrl_base1_tim67_dev *)tim;
+    struct ll_tim_base1_tim67_dev *dev = (struct ll_tim_base1_tim67_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    if (dev->stat == LL_TIM_STAT_DEINIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.bf.cen = 0x00;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }

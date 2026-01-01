@@ -1,10 +1,10 @@
-#ifndef _TIM_CTRL_ADVX_H
-#define _TIM_CTRL_ADVX_H
+#ifndef _LL_TIM_ADVX_H
+#define _LL_TIM_ADVX_H
 
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
-#include "tim_ctrl_common.h"
+#include "ll_tim_common.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,11 +15,11 @@ extern "C" {
 ///
 /// This enum selects which general-purpose timer instance is being referenced.
 ///
-typedef enum tim_ctrl_adv6_tim18_id
+typedef enum ll_tim_adv6_tim18_id
 {
-    TIM_CTRL_ADV6_TIM18_ID_1 = 0,
-    TIM_CTRL_ADV6_TIM18_ID_8,
-} tim_ctrl_adv6_tim18_id_t;
+    LL_TIM_ADV6_TIM18_ID_1 = 0,
+    LL_TIM_ADV6_TIM18_ID_8,
+} ll_tim_adv6_tim18_id_t;
 
 ///
 /// \brief Operating mode for advanced timers TIM8 and TIM8.
@@ -27,16 +27,16 @@ typedef enum tim_ctrl_adv6_tim18_id
 /// Specifies whether the timer is configured for input capture or
 /// output compare functionality.
 ///
-typedef enum tim_ctrl_adv6_tim18_mode
+typedef enum ll_tim_adv6_tim18_mode
 {
-    TIM_CTRL_ADV6_TIM18_MODE_IN_CAP = 0,
-    TIM_CTRL_ADV6_TIM18_MODE_OUT_COMP,
-} tim_ctrl_adv6_tim18_mode_t;
+    LL_TIM_ADV6_TIM18_MODE_IN_CAP = 0,
+    LL_TIM_ADV6_TIM18_MODE_OUT_COMP,
+} ll_tim_adv6_tim18_mode_t;
 
 ///
 /// \brief Control Register 1 (CR1) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_cr1
+union ll_tim_adv6_tim18_cr1
 {
     uint32_t r;
     struct
@@ -58,7 +58,7 @@ union tim_ctrl_adv6_tim18_cr1
 ///
 /// \brief Control Register 2 (CR2) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_cr2
+union ll_tim_adv6_tim18_cr2
 {
     uint32_t r;
     struct
@@ -90,7 +90,7 @@ union tim_ctrl_adv6_tim18_cr2
 ///
 /// \brief Slave Mode Control Register (SMCR) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_smcr
+union ll_tim_adv6_tim18_smcr
 {
     uint32_t r;
     struct
@@ -111,7 +111,7 @@ union tim_ctrl_adv6_tim18_smcr
 ///
 /// \brief DMA/Interrupt Enable Register (DIER) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_dier
+union ll_tim_adv6_tim18_dier
 {
     uint32_t r;
     struct
@@ -138,7 +138,7 @@ union tim_ctrl_adv6_tim18_dier
 ///
 /// \brief Status Register (SR) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_sr
+union ll_tim_adv6_tim18_sr
 {
     uint32_t r;
     struct
@@ -166,7 +166,7 @@ union tim_ctrl_adv6_tim18_sr
 ///
 /// \brief Event Generation Register (EGR) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_egr
+union ll_tim_adv6_tim18_egr
 {
     uint32_t r;
     struct
@@ -188,7 +188,7 @@ union tim_ctrl_adv6_tim18_egr
 /// \brief Capture/Compare Mode Register 1 Input Mode (CCMR1) for advanced
 ///        timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_ccmr1_in
+union ll_tim_adv6_tim18_ccmr1_in
 {
     uint32_t r;
     struct
@@ -207,7 +207,7 @@ union tim_ctrl_adv6_tim18_ccmr1_in
 /// \brief Capture/Compare Mode Register 1 Output Mode (CCMR1) for advanced
 ///        timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_ccmr1_out
+union ll_tim_adv6_tim18_ccmr1_out
 {
     uint32_t r;
     struct
@@ -233,7 +233,7 @@ union tim_ctrl_adv6_tim18_ccmr1_out
 /// \brief Capture/Compare Mode Register 2 Input Mode (CCMR2) for advanced
 ///        timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_ccmr2_in
+union ll_tim_adv6_tim18_ccmr2_in
 {
     uint32_t r;
     struct
@@ -252,7 +252,7 @@ union tim_ctrl_adv6_tim18_ccmr2_in
 /// \brief Capture/Compare Mode Register 2 Output Mode (CCMR2) for advanced
 ///        timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_ccmr2_out
+union ll_tim_adv6_tim18_ccmr2_out
 {
     uint32_t r;
     struct
@@ -277,7 +277,7 @@ union tim_ctrl_adv6_tim18_ccmr2_out
 ///
 /// \brief Capture/Compare Enable Register (CCER) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_ccer
+union ll_tim_adv6_tim18_ccer
 {
     uint32_t r;
     struct
@@ -310,7 +310,7 @@ union tim_ctrl_adv6_tim18_ccer
 ///
 /// \brief Counter Register (CNT) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_cnt
+union ll_tim_adv6_tim18_cnt
 {
     uint32_t r;
     struct
@@ -324,7 +324,7 @@ union tim_ctrl_adv6_tim18_cnt
 ///
 /// \brief Prescaler Register (PSC) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_psc
+union ll_tim_adv6_tim18_psc
 {
     uint32_t r;
     struct
@@ -337,7 +337,7 @@ union tim_ctrl_adv6_tim18_psc
 ///
 /// \brief Auto-Reload Register (ARR) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_arr
+union ll_tim_adv6_tim18_arr
 {
     uint32_t r;
     struct
@@ -350,7 +350,7 @@ union tim_ctrl_adv6_tim18_arr
 ///
 /// \brief Repetition Counter Register (RCR) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_rcr
+union ll_tim_adv6_tim18_rcr
 {
     uint32_t r;
     struct
@@ -363,7 +363,7 @@ union tim_ctrl_adv6_tim18_rcr
 ///
 /// \brief Capture/Compare Register 1 (CCR1) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_ccr1
+union ll_tim_adv6_tim18_ccr1
 {
     uint32_t r;
     struct
@@ -376,7 +376,7 @@ union tim_ctrl_adv6_tim18_ccr1
 ///
 /// \brief Capture/Compare Register 2 (CCR2) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_ccr2
+union ll_tim_adv6_tim18_ccr2
 {
     uint32_t r;
     struct
@@ -389,7 +389,7 @@ union tim_ctrl_adv6_tim18_ccr2
 ///
 /// \brief Capture/Compare Register 3 (CCR3) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_ccr3
+union ll_tim_adv6_tim18_ccr3
 {
     uint32_t r;
     struct
@@ -402,7 +402,7 @@ union tim_ctrl_adv6_tim18_ccr3
 ///
 /// \brief Capture/Compare Register 4 (CCR4) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_ccr4
+union ll_tim_adv6_tim18_ccr4
 {
     uint32_t r;
     struct
@@ -415,7 +415,7 @@ union tim_ctrl_adv6_tim18_ccr4
 ///
 /// \brief Break And Dead-Time Register (BDTR) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_bdtr
+union ll_tim_adv6_tim18_bdtr
 {
     uint32_t r;
     struct
@@ -439,7 +439,7 @@ union tim_ctrl_adv6_tim18_bdtr
 ///
 /// \brief DMA Control Register (DCR) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_dcr
+union ll_tim_adv6_tim18_dcr
 {
     uint32_t r;
     struct
@@ -454,7 +454,7 @@ union tim_ctrl_adv6_tim18_dcr
 ///
 /// \brief DMA Address For Full Transfer Register (DMAR) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_dmar
+union ll_tim_adv6_tim18_dmar
 {
     uint32_t r;
     struct
@@ -466,7 +466,7 @@ union tim_ctrl_adv6_tim18_dmar
 ///
 /// \brief Capture/Compare Mode Register 3 (CCMR3) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_ccmr3
+union ll_tim_adv6_tim18_ccmr3
 {
     uint32_t r;
     struct
@@ -491,7 +491,7 @@ union tim_ctrl_adv6_tim18_ccmr3
 ///
 /// \brief Capture/Compare Register 5 (CCR5) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_ccr5
+union ll_tim_adv6_tim18_ccr5
 {
     uint32_t r;
     struct
@@ -507,7 +507,7 @@ union tim_ctrl_adv6_tim18_ccr5
 ///
 /// \brief Capture/Compare Register 6 (CCR6) for advanced timers TIM1 and TIM8.
 ///
-union tim_ctrl_adv6_tim18_ccr6
+union ll_tim_adv6_tim18_ccr6
 {
     uint32_t r;
     struct
@@ -525,42 +525,42 @@ union tim_ctrl_adv6_tim18_ccr6
 /// fields are aligned with the device reference manual to allow
 /// direct access via a peripheral base address.
 ///
-struct tim_ctrl_adv6_tim18_regs
+struct ll_tim_adv6_tim18_regs
 {
-    union tim_ctrl_adv6_tim18_cr1  cr1;
-    union tim_ctrl_adv6_tim18_cr2  cr2;
-    union tim_ctrl_adv6_tim18_smcr smcr;
-    union tim_ctrl_adv6_tim18_dier dier;
-    union tim_ctrl_adv6_tim18_sr   sr;
-    union tim_ctrl_adv6_tim18_egr  egr;
+    union ll_tim_adv6_tim18_cr1  cr1;
+    union ll_tim_adv6_tim18_cr2  cr2;
+    union ll_tim_adv6_tim18_smcr smcr;
+    union ll_tim_adv6_tim18_dier dier;
+    union ll_tim_adv6_tim18_sr   sr;
+    union ll_tim_adv6_tim18_egr  egr;
     union
     {
-        union tim_ctrl_adv6_tim18_ccmr1_in  in;
-        union tim_ctrl_adv6_tim18_ccmr1_out out;
+        union ll_tim_adv6_tim18_ccmr1_in  in;
+        union ll_tim_adv6_tim18_ccmr1_out out;
 
     } ccmr1;
     union
     {
-        union tim_ctrl_adv6_tim18_ccmr2_in  in;
-        union tim_ctrl_adv6_tim18_ccmr2_out out;
+        union ll_tim_adv6_tim18_ccmr2_in  in;
+        union ll_tim_adv6_tim18_ccmr2_out out;
 
     } ccmr2;
-    union tim_ctrl_adv6_tim18_ccer  ccer;
-    union tim_ctrl_adv6_tim18_cnt   cnt;
-    union tim_ctrl_adv6_tim18_psc   psc;
-    union tim_ctrl_adv6_tim18_arr   arr;
-    union tim_ctrl_adv6_tim18_rcr   rcr;
-    union tim_ctrl_adv6_tim18_ccr1  ccr1;
-    union tim_ctrl_adv6_tim18_ccr2  ccr2;
-    union tim_ctrl_adv6_tim18_ccr3  ccr3;
-    union tim_ctrl_adv6_tim18_ccr4  ccr4;
-    union tim_ctrl_adv6_tim18_bdtr  bdtr;
-    union tim_ctrl_adv6_tim18_dcr   dcr;
-    union tim_ctrl_adv6_tim18_dmar  dmar;
+    union ll_tim_adv6_tim18_ccer  ccer;
+    union ll_tim_adv6_tim18_cnt   cnt;
+    union ll_tim_adv6_tim18_psc   psc;
+    union ll_tim_adv6_tim18_arr   arr;
+    union ll_tim_adv6_tim18_rcr   rcr;
+    union ll_tim_adv6_tim18_ccr1  ccr1;
+    union ll_tim_adv6_tim18_ccr2  ccr2;
+    union ll_tim_adv6_tim18_ccr3  ccr3;
+    union ll_tim_adv6_tim18_ccr4  ccr4;
+    union ll_tim_adv6_tim18_bdtr  bdtr;
+    union ll_tim_adv6_tim18_dcr   dcr;
+    union ll_tim_adv6_tim18_dmar  dmar;
     uint32_t res0[1];
-    union tim_ctrl_adv6_tim18_ccmr3 ccmr3;
-    union tim_ctrl_adv6_tim18_ccr5  ccr5;
-    union tim_ctrl_adv6_tim18_ccr6  ccr6;
+    union ll_tim_adv6_tim18_ccmr3 ccmr3;
+    union ll_tim_adv6_tim18_ccr5  ccr5;
+    union ll_tim_adv6_tim18_ccr6  ccr6;
 };
 
 ///
@@ -571,15 +571,15 @@ struct tim_ctrl_adv6_tim18_regs
 /// shadow copy for safe modification, capture/compare history, configuration
 /// modes, and initialization status.
 ///
-struct tim_ctrl_adv6_tim18_dev
+struct ll_tim_adv6_tim18_dev
 {
-    volatile struct tim_ctrl_adv6_tim18_regs *rmap;
-    struct tim_ctrl_adv6_tim18_regs rtmp;
-    struct tim_ctrl_ccr_data ccr_data[6];
-    tim_ctrl_adv6_tim18_id_t id;
-    tim_ctrl_adv6_tim18_mode_t ccmr1_mode;
-    tim_ctrl_adv6_tim18_mode_t ccmr2_mode;
-    tim_ctrl_stat_t stat;
+    volatile struct ll_tim_adv6_tim18_regs *rmap;
+    struct ll_tim_adv6_tim18_regs rtmp;
+    struct ll_tim_ccr_data ccr_data[6];
+    ll_tim_adv6_tim18_id_t id;
+    ll_tim_adv6_tim18_mode_t ccmr1_mode;
+    ll_tim_adv6_tim18_mode_t ccmr2_mode;
+    ll_tim_stat_t stat;
 };
 
 ///
@@ -587,47 +587,47 @@ struct tim_ctrl_adv6_tim18_dev
 ///
 /// \param[in] tim The pointer to timer device.
 ///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
+/// \return ll_tim_res_t   The tim controller result.
+/// \retval LL_TIM_RES_OK  On success.
+/// \retval LL_TIM_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim);
+ll_tim_res_t ll_tim_adv6_tim18_init(void *tim);
 
 ///
 /// \brief Deinitializes the advanced timer (TIM1 and TIM8).
 ///
 /// \param[in] tim The pointer to timer device.
 ///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
+/// \return ll_tim_res_t   The tim controller result.
+/// \retval LL_TIM_RES_OK  On success.
+/// \retval LL_TIM_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_adv6_tim18_deinit(void *tim);
+ll_tim_res_t ll_tim_adv6_tim18_deinit(void *tim);
 
 ///
 /// \brief Enables the advanced timer (TIM1 and TIM8).
 ///
 /// \param[in] tim The pointer to timer device.
 ///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
+/// \return ll_tim_res_t   The tim controller result.
+/// \retval LL_TIM_RES_OK  On success.
+/// \retval LL_TIM_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_adv6_tim18_enable(void *tim);
+ll_tim_res_t ll_tim_adv6_tim18_enable(void *tim);
 
 ///
 /// \brief Disables the advanced timer (TIM1 and TIM8).
 ///
 /// \param[in] tim The pointer to timer device.
 ///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
+/// \return ll_tim_res_t   The tim controller result.
+/// \retval LL_TIM_RES_OK  On success.
+/// \retval LL_TIM_RES_ERR Otherwise.
 ///
-tim_ctrl_res_t tim_ctrl_adv6_tim18_disable(void *tim);
+ll_tim_res_t ll_tim_adv6_tim18_disable(void *tim);
 
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
 
-#endif  /* _TIM_CTRL_ADVX_H */
+#endif  /* _LL_TIM_ADVX_H */

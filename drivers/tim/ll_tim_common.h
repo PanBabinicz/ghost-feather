@@ -1,5 +1,5 @@
-#ifndef _TIM_CTRL_COMMON_H
-#define _TIM_CTRL_COMMON_H
+#ifndef _LL_TIM_COMMON_H
+#define _LL_TIM_COMMON_H
 
 #include <stdint.h>
 
@@ -7,54 +7,54 @@
 extern "C" {
 #endif  /* __cplusplus */
 
-///
+/// TODO
 /// \brief The TIM controller result type.
 ///
 /// This enum indicates the outcome of an operation performed on a TIM
 /// controller.
 ///
-typedef enum tim_ctrl_res
+typedef enum ll_tim_res
 {
-    TIM_CTRL_RES_OK = 0,
-    TIM_CTRL_RES_ERR,
-} tim_ctrl_res_t;
+    LL_TIM_RES_OK = 0,
+    LL_TIM_RES_ERR,
+} ll_tim_res_t;
 
-///
+/// TODO
 /// \brief The TIM controller status type.
 ///
 /// This enum reflects whether a TIM peripheral is currently initialized or
 /// not.
 ///
-typedef enum tim_ctrl_stat
+typedef enum ll_tim_stat
 {
-    TIM_CTRL_STAT_DEINIT = 0,
-    TIM_CTRL_STAT_INIT,
-} tim_ctrl_stat_t;
+    LL_TIM_STAT_DEINIT = 0,
+    LL_TIM_STAT_INIT,
+} ll_tim_stat_t;
 
-///
+/// TODO
 /// \brief The TIM controller capture/compare register instance type.
 ///
 /// This enum identifies a specific CCR within a TIM peripheral.
 /// Few TIM peripherals support up to 6 capture/compare channels.
 ///
-typedef enum tim_ctrl_inst_ccr
+typedef enum ll_tim_ccr_ch
 {
-    TIM_CTRL_INST_CCR1 = 0,
-    TIM_CTRL_INST_CCR2,
-    TIM_CTRL_INST_CCR3,
-    TIM_CTRL_INST_CCR4,
-    TIM_CTRL_INST_CCR5,
-    TIM_CTRL_INST_CCR6,
-} tim_ctrl_inst_ccr_t;
+    LL_TIM_CCR_CH1 = 0,
+    LL_TIM_CCR_CH2,
+    LL_TIM_CCR_CH3,
+    LL_TIM_CCR_CH4,
+    LL_TIM_CCR_CH5,
+    LL_TIM_CCR_CH6,
+} ll_tim_ccr_ch_t;
 
-///
+/// TODO
 /// \brief The TIM controller capture/compare register data.
 ///
 /// Stores previous and current capture values for a specific CCR.
 /// This is useful for calculating differences such as pulse width,
 /// period, or duty cycle.
 ///
-struct tim_ctrl_ccr_data
+struct ll_tim_ccr_data
 {
     uint32_t prev;
     uint32_t curr;
@@ -64,4 +64,4 @@ struct tim_ctrl_ccr_data
 }
 #endif  /* __cplusplus */
 
-#endif  /* _TIM_CTRL_COMMON_H */
+#endif  /* _LL_TIM_COMMON_H */

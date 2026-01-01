@@ -1,4 +1,4 @@
-#include "tim_ctrl_gpx.h"
+#include "ll_tim_gpx.h"
 
 ///***********************************************************************************************************
 /// Private objects - definition.
@@ -11,7 +11,7 @@
 /// known-good baseline for initialization and for restoring registers to their
 /// default values before applying custom configuration.
 ///
-static const struct tim_ctrl_gpx_tim2345_regs tim_ctrl_gpx_tim2345_por =
+static const struct ll_tim_gpx_tim2345_regs ll_tim_gpx_tim2345_por =
 {
     .cr1 =
     {
@@ -266,7 +266,7 @@ static const struct tim_ctrl_gpx_tim2345_regs tim_ctrl_gpx_tim2345_por =
 /// baseline for initialization and for restoring registers to their
 /// default values before applying custom configuration.
 ///
-static const struct tim_ctrl_gpx_tim912_regs tim_ctrl_gpx_tim912_por =
+static const struct ll_tim_gpx_tim912_regs ll_tim_gpx_tim912_por =
 {
     .cr1 =
     {
@@ -412,7 +412,7 @@ static const struct tim_ctrl_gpx_tim912_regs tim_ctrl_gpx_tim912_por =
 /// known-good baseline for initialization and for restoring registers to their
 /// default values before applying custom configuration.
 ///
-static const struct tim_ctrl_gpx_tim10111314_regs tim_ctrl_gpx_tim10111314_por =
+static const struct ll_tim_gpx_tim10111314_regs ll_tim_gpx_tim10111314_por =
 {
     .cr1 =
     {
@@ -526,18 +526,18 @@ static const struct tim_ctrl_gpx_tim10111314_regs tim_ctrl_gpx_tim10111314_por =
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim)
+ll_tim_res_t ll_tim_gpx_tim2345_init(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
+    struct ll_tim_gpx_tim2345_dev *dev = (struct ll_tim_gpx_tim2345_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == LL_TIM_STAT_INIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.r  = dev->rtmp.cr1.r;
@@ -547,7 +547,7 @@ tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim)
     dev->rmap->sr.r   = dev->rtmp.sr.r;
     dev->rmap->egr.r  = dev->rtmp.egr.r;
 
-    if (dev->ccmr1_mode == TIM_CTRL_GPX_TIM2345_MODE_IN_CAP)
+    if (dev->ccmr1_mode == LL_TIM_GPX_TIM2345_MODE_IN_CAP)
     {
         dev->rmap->ccmr1.in.r = dev->rtmp.ccmr1.in.r;
     }
@@ -556,7 +556,7 @@ tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim)
         dev->rmap->ccmr1.out.r = dev->rtmp.ccmr1.out.r;
     }
 
-    if (dev->ccmr2_mode == TIM_CTRL_GPX_TIM2345_MODE_IN_CAP)
+    if (dev->ccmr2_mode == LL_TIM_GPX_TIM2345_MODE_IN_CAP)
     {
         dev->rmap->ccmr2.in.r = dev->rtmp.ccmr2.in.r;
     }
@@ -576,13 +576,13 @@ tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim)
     dev->rmap->dcr.r  = dev->rtmp.dcr.r;
     dev->rmap->dmar.r = dev->rtmp.dmar.r;
 
-    switch(dev->id)
+    switch (dev->id)
     {
-        case TIM_CTRL_GPX_TIM2345_ID_2:
+        case LL_TIM_GPX_TIM2345_ID_2:
             dev->rmap->tim2_or.r = dev->rtmp.tim2_or.r;
             break;
 
-        case TIM_CTRL_GPX_TIM2345_ID_5:
+        case LL_TIM_GPX_TIM2345_ID_5:
             dev->rmap->tim5_or.r = dev->rtmp.tim5_or.r;
             break;
 
@@ -590,23 +590,23 @@ tim_ctrl_res_t tim_ctrl_gpx_tim2345_init(void *tim)
             break;
     }
 
-    dev->stat = TIM_CTRL_STAT_INIT;
+    dev->stat = LL_TIM_STAT_INIT;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_tim912_init(void *tim)
+ll_tim_res_t ll_tim_gpx_tim912_init(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
+    struct ll_tim_gpx_tim912_dev *dev = (struct ll_tim_gpx_tim912_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == LL_TIM_STAT_INIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.r  = dev->rtmp.cr1.r;
@@ -615,7 +615,7 @@ tim_ctrl_res_t tim_ctrl_gpx_tim912_init(void *tim)
     dev->rmap->sr.r   = dev->rtmp.sr.r;
     dev->rmap->egr.r  = dev->rtmp.egr.r;
 
-    if (dev->ccmr1_mode == TIM_CTRL_GPX_TIM912_MODE_IN_CAP)
+    if (dev->ccmr1_mode == LL_TIM_GPX_TIM912_MODE_IN_CAP)
     {
         dev->rmap->ccmr1.in.r = dev->rtmp.ccmr1.in.r;
     }
@@ -631,23 +631,23 @@ tim_ctrl_res_t tim_ctrl_gpx_tim912_init(void *tim)
     dev->rmap->ccr1.r = dev->rtmp.ccr1.r;
     dev->rmap->ccr2.r = dev->rtmp.ccr2.r;
 
-    dev->stat = TIM_CTRL_STAT_INIT;
+    dev->stat = LL_TIM_STAT_INIT;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_tim10111314_init(void *tim)
+ll_tim_res_t ll_tim_gpx_tim10111314_init(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim10111314_dev *dev = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
+    struct ll_tim_gpx_tim10111314_dev *dev = (struct ll_tim_gpx_tim10111314_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == LL_TIM_STAT_INIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.r  = dev->rtmp.cr1.r;
@@ -655,7 +655,7 @@ tim_ctrl_res_t tim_ctrl_gpx_tim10111314_init(void *tim)
     dev->rmap->sr.r   = dev->rtmp.sr.r;
     dev->rmap->egr.r  = dev->rtmp.egr.r;
 
-    if (dev->ccmr1_mode == TIM_CTRL_GPX_TIM10111314_MODE_IN_CAP)
+    if (dev->ccmr1_mode == LL_TIM_GPX_TIM10111314_MODE_IN_CAP)
     {
         dev->rmap->ccmr1.in.r = dev->rtmp.ccmr1.in.r;
     }
@@ -670,9 +670,9 @@ tim_ctrl_res_t tim_ctrl_gpx_tim10111314_init(void *tim)
     dev->rmap->arr.r  = dev->rtmp.arr.r;
     dev->rmap->ccr1.r = dev->rtmp.ccr1.r;
 
-    switch(dev->id)
+    switch (dev->id)
     {
-        case TIM_CTRL_GPX_TIM10111314_ID_11:
+        case LL_TIM_GPX_TIM10111314_ID_11:
             dev->rmap->tim11_or.r = dev->rtmp.tim11_or.r;
             break;
 
@@ -680,233 +680,233 @@ tim_ctrl_res_t tim_ctrl_gpx_tim10111314_init(void *tim)
             break;
     }
 
-    dev->stat = TIM_CTRL_STAT_INIT;
+    dev->stat = LL_TIM_STAT_INIT;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_tim2345_deinit(void *tim)
+ll_tim_res_t ll_tim_gpx_tim2345_deinit(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
+    struct ll_tim_gpx_tim2345_dev *dev = (struct ll_tim_gpx_tim2345_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    if (dev->stat == LL_TIM_STAT_DEINIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    dev->rmap->cr1.r       = tim_ctrl_gpx_tim2345_por.cr1.r;
-    dev->rmap->cr2.r       = tim_ctrl_gpx_tim2345_por.cr2.r;
-    dev->rmap->smcr.r      = tim_ctrl_gpx_tim2345_por.smcr.r;
-    dev->rmap->dier.r      = tim_ctrl_gpx_tim2345_por.dier.r;
-    dev->rmap->sr.r        = tim_ctrl_gpx_tim2345_por.sr.r;
-    dev->rmap->egr.r       = tim_ctrl_gpx_tim2345_por.egr.r;
-    dev->rmap->ccmr1.out.r = tim_ctrl_gpx_tim2345_por.ccmr1.out.r;
-    dev->rmap->ccmr2.out.r = tim_ctrl_gpx_tim2345_por.ccmr2.out.r;
-    dev->rmap->ccer.r      = tim_ctrl_gpx_tim2345_por.ccer.r;
-    dev->rmap->cnt.r       = tim_ctrl_gpx_tim2345_por.cnt.r;
-    dev->rmap->psc.r       = tim_ctrl_gpx_tim2345_por.psc.r;
-    dev->rmap->arr.r       = tim_ctrl_gpx_tim2345_por.arr.r;
-    dev->rmap->ccr1.r      = tim_ctrl_gpx_tim2345_por.ccr1.r;
-    dev->rmap->ccr2.r      = tim_ctrl_gpx_tim2345_por.ccr2.r;
-    dev->rmap->ccr3.r      = tim_ctrl_gpx_tim2345_por.ccr3.r;
-    dev->rmap->ccr4.r      = tim_ctrl_gpx_tim2345_por.ccr4.r;
-    dev->rmap->dcr.r       = tim_ctrl_gpx_tim2345_por.dcr.r;
-    dev->rmap->dmar.r      = tim_ctrl_gpx_tim2345_por.dmar.r;
-    dev->rmap->tim2_or.r   = tim_ctrl_gpx_tim2345_por.tim2_or.r;
-    dev->rmap->tim5_or.r   = tim_ctrl_gpx_tim2345_por.tim5_or.r;
+    dev->rmap->cr1.r       = ll_tim_gpx_tim2345_por.cr1.r;
+    dev->rmap->cr2.r       = ll_tim_gpx_tim2345_por.cr2.r;
+    dev->rmap->smcr.r      = ll_tim_gpx_tim2345_por.smcr.r;
+    dev->rmap->dier.r      = ll_tim_gpx_tim2345_por.dier.r;
+    dev->rmap->sr.r        = ll_tim_gpx_tim2345_por.sr.r;
+    dev->rmap->egr.r       = ll_tim_gpx_tim2345_por.egr.r;
+    dev->rmap->ccmr1.out.r = ll_tim_gpx_tim2345_por.ccmr1.out.r;
+    dev->rmap->ccmr2.out.r = ll_tim_gpx_tim2345_por.ccmr2.out.r;
+    dev->rmap->ccer.r      = ll_tim_gpx_tim2345_por.ccer.r;
+    dev->rmap->cnt.r       = ll_tim_gpx_tim2345_por.cnt.r;
+    dev->rmap->psc.r       = ll_tim_gpx_tim2345_por.psc.r;
+    dev->rmap->arr.r       = ll_tim_gpx_tim2345_por.arr.r;
+    dev->rmap->ccr1.r      = ll_tim_gpx_tim2345_por.ccr1.r;
+    dev->rmap->ccr2.r      = ll_tim_gpx_tim2345_por.ccr2.r;
+    dev->rmap->ccr3.r      = ll_tim_gpx_tim2345_por.ccr3.r;
+    dev->rmap->ccr4.r      = ll_tim_gpx_tim2345_por.ccr4.r;
+    dev->rmap->dcr.r       = ll_tim_gpx_tim2345_por.dcr.r;
+    dev->rmap->dmar.r      = ll_tim_gpx_tim2345_por.dmar.r;
+    dev->rmap->tim2_or.r   = ll_tim_gpx_tim2345_por.tim2_or.r;
+    dev->rmap->tim5_or.r   = ll_tim_gpx_tim2345_por.tim5_or.r;
 
-    dev->stat = TIM_CTRL_STAT_DEINIT;
+    dev->stat = LL_TIM_STAT_DEINIT;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_tim912_deinit(void *tim)
+ll_tim_res_t ll_tim_gpx_tim912_deinit(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
+    struct ll_tim_gpx_tim912_dev *dev = (struct ll_tim_gpx_tim912_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    if (dev->stat == LL_TIM_STAT_DEINIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    dev->rmap->cr1.r       = tim_ctrl_gpx_tim912_por.cr1.r;
-    dev->rmap->smcr.r      = tim_ctrl_gpx_tim912_por.smcr.r;
-    dev->rmap->dier.r      = tim_ctrl_gpx_tim912_por.dier.r;
-    dev->rmap->sr.r        = tim_ctrl_gpx_tim912_por.sr.r;
-    dev->rmap->egr.r       = tim_ctrl_gpx_tim912_por.egr.r;
-    dev->rmap->ccmr1.out.r = tim_ctrl_gpx_tim912_por.ccmr1.out.r;
-    dev->rmap->ccer.r      = tim_ctrl_gpx_tim912_por.ccer.r;
-    dev->rmap->cnt.r       = tim_ctrl_gpx_tim912_por.cnt.r;
-    dev->rmap->psc.r       = tim_ctrl_gpx_tim912_por.psc.r;
-    dev->rmap->arr.r       = tim_ctrl_gpx_tim912_por.arr.r;
-    dev->rmap->ccr1.r      = tim_ctrl_gpx_tim912_por.ccr1.r;
-    dev->rmap->ccr2.r      = tim_ctrl_gpx_tim912_por.ccr2.r;
+    dev->rmap->cr1.r       = ll_tim_gpx_tim912_por.cr1.r;
+    dev->rmap->smcr.r      = ll_tim_gpx_tim912_por.smcr.r;
+    dev->rmap->dier.r      = ll_tim_gpx_tim912_por.dier.r;
+    dev->rmap->sr.r        = ll_tim_gpx_tim912_por.sr.r;
+    dev->rmap->egr.r       = ll_tim_gpx_tim912_por.egr.r;
+    dev->rmap->ccmr1.out.r = ll_tim_gpx_tim912_por.ccmr1.out.r;
+    dev->rmap->ccer.r      = ll_tim_gpx_tim912_por.ccer.r;
+    dev->rmap->cnt.r       = ll_tim_gpx_tim912_por.cnt.r;
+    dev->rmap->psc.r       = ll_tim_gpx_tim912_por.psc.r;
+    dev->rmap->arr.r       = ll_tim_gpx_tim912_por.arr.r;
+    dev->rmap->ccr1.r      = ll_tim_gpx_tim912_por.ccr1.r;
+    dev->rmap->ccr2.r      = ll_tim_gpx_tim912_por.ccr2.r;
 
-    dev->stat = TIM_CTRL_STAT_DEINIT;
+    dev->stat = LL_TIM_STAT_DEINIT;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_tim10111314_deinit(void *tim)
+ll_tim_res_t ll_tim_gpx_tim10111314_deinit(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim10111314_dev *dev = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
+    struct ll_tim_gpx_tim10111314_dev *dev = (struct ll_tim_gpx_tim10111314_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    if (dev->stat == LL_TIM_STAT_DEINIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    dev->rmap->cr1.r       = tim_ctrl_gpx_tim10111314_por.cr1.r;
-    dev->rmap->dier.r      = tim_ctrl_gpx_tim10111314_por.dier.r;
-    dev->rmap->sr.r        = tim_ctrl_gpx_tim10111314_por.sr.r;
-    dev->rmap->egr.r       = tim_ctrl_gpx_tim10111314_por.egr.r;
-    dev->rmap->ccmr1.out.r = tim_ctrl_gpx_tim10111314_por.ccmr1.out.r;
-    dev->rmap->ccer.r      = tim_ctrl_gpx_tim10111314_por.ccer.r;
-    dev->rmap->cnt.r       = tim_ctrl_gpx_tim10111314_por.cnt.r;
-    dev->rmap->psc.r       = tim_ctrl_gpx_tim10111314_por.psc.r;
-    dev->rmap->arr.r       = tim_ctrl_gpx_tim10111314_por.arr.r;
-    dev->rmap->ccr1.r      = tim_ctrl_gpx_tim10111314_por.ccr1.r;
+    dev->rmap->cr1.r       = ll_tim_gpx_tim10111314_por.cr1.r;
+    dev->rmap->dier.r      = ll_tim_gpx_tim10111314_por.dier.r;
+    dev->rmap->sr.r        = ll_tim_gpx_tim10111314_por.sr.r;
+    dev->rmap->egr.r       = ll_tim_gpx_tim10111314_por.egr.r;
+    dev->rmap->ccmr1.out.r = ll_tim_gpx_tim10111314_por.ccmr1.out.r;
+    dev->rmap->ccer.r      = ll_tim_gpx_tim10111314_por.ccer.r;
+    dev->rmap->cnt.r       = ll_tim_gpx_tim10111314_por.cnt.r;
+    dev->rmap->psc.r       = ll_tim_gpx_tim10111314_por.psc.r;
+    dev->rmap->arr.r       = ll_tim_gpx_tim10111314_por.arr.r;
+    dev->rmap->ccr1.r      = ll_tim_gpx_tim10111314_por.ccr1.r;
 
-    switch(dev->id)
+    switch (dev->id)
     {
-        case TIM_CTRL_GPX_TIM10111314_ID_11:
-            dev->rmap->tim11_or.r = tim_ctrl_gpx_tim10111314_por.tim11_or.r;
+        case LL_TIM_GPX_TIM10111314_ID_11:
+            dev->rmap->tim11_or.r = ll_tim_gpx_tim10111314_por.tim11_or.r;
             break;
 
         default:
             break;
     }
 
-    dev->stat = TIM_CTRL_STAT_DEINIT;
+    dev->stat = LL_TIM_STAT_DEINIT;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_tim2345_enable(void *tim)
+ll_tim_res_t ll_tim_gpx_tim2345_enable(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
+    struct ll_tim_gpx_tim2345_dev *dev = (struct ll_tim_gpx_tim2345_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    if (dev->stat == LL_TIM_STAT_DEINIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.bf.cen = 0x01;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_tim912_enable(void *tim)
+ll_tim_res_t ll_tim_gpx_tim912_enable(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
+    struct ll_tim_gpx_tim912_dev *dev = (struct ll_tim_gpx_tim912_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    if (dev->stat == LL_TIM_STAT_DEINIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.bf.cen = 0x01;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_tim10111314_enable(void *tim)
+ll_tim_res_t ll_tim_gpx_tim10111314_enable(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim10111314_dev *dev = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
+    struct ll_tim_gpx_tim10111314_dev *dev = (struct ll_tim_gpx_tim10111314_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    if (dev->stat == LL_TIM_STAT_DEINIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.bf.cen = 0x01;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_tim2345_disable(void *tim)
+ll_tim_res_t ll_tim_gpx_tim2345_disable(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim2345_dev *dev = (struct tim_ctrl_gpx_tim2345_dev *)tim;
+    struct ll_tim_gpx_tim2345_dev *dev = (struct ll_tim_gpx_tim2345_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == LL_TIM_STAT_INIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.bf.cen = 0x00;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_tim912_disable(void *tim)
+ll_tim_res_t ll_tim_gpx_tim912_disable(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim912_dev *dev = (struct tim_ctrl_gpx_tim912_dev *)tim;
+    struct ll_tim_gpx_tim912_dev *dev = (struct ll_tim_gpx_tim912_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == LL_TIM_STAT_INIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.bf.cen = 0x00;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_gpx_tim10111314_disable(void *tim)
+ll_tim_res_t ll_tim_gpx_tim10111314_disable(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_gpx_tim10111314_dev *dev = (struct tim_ctrl_gpx_tim10111314_dev *)tim;
+    struct ll_tim_gpx_tim10111314_dev *dev = (struct ll_tim_gpx_tim10111314_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == LL_TIM_STAT_INIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.bf.cen = 0x00;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }

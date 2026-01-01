@@ -1,4 +1,4 @@
-#include "tim_ctrl_advx.h"
+#include "ll_tim_advx.h"
 
 ///***********************************************************************************************************
 /// Private objects - definition.
@@ -11,7 +11,7 @@
 /// for initialization and for restoring registers to their default values
 /// before applying custom configuration.
 ///
-static const struct tim_ctrl_adv6_tim18_regs tim_ctrl_adv6_tim18_por =
+static const struct ll_tim_adv6_tim18_regs ll_tim_adv6_tim18_por =
 {
     .cr1 =
     {
@@ -337,18 +337,18 @@ static const struct tim_ctrl_adv6_tim18_regs tim_ctrl_adv6_tim18_por =
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
+ll_tim_res_t ll_tim_adv6_tim18_init(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
+    struct ll_tim_adv6_tim18_dev *dev = (struct ll_tim_adv6_tim18_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_INIT)
+    if (dev->stat == LL_TIM_STAT_INIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.r  = dev->rtmp.cr1.r;
@@ -359,7 +359,7 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
     dev->rmap->egr.r  = dev->rtmp.egr.r;
 
     /* TODO: Not every channel can be input. */
-    if (dev->ccmr1_mode == TIM_CTRL_ADV6_TIM18_MODE_IN_CAP)
+    if (dev->ccmr1_mode == LL_TIM_ADV6_TIM18_MODE_IN_CAP)
     {
         dev->rmap->ccmr1.in.r = dev->rtmp.ccmr1.in.r;
     }
@@ -368,7 +368,7 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
         dev->rmap->ccmr1.out.r = dev->rtmp.ccmr1.out.r;
     }
 
-    if (dev->ccmr2_mode == TIM_CTRL_ADV6_TIM18_MODE_IN_CAP)
+    if (dev->ccmr2_mode == LL_TIM_ADV6_TIM18_MODE_IN_CAP)
     {
         dev->rmap->ccmr2.in.r = dev->rtmp.ccmr2.in.r;
     }
@@ -393,88 +393,88 @@ tim_ctrl_res_t tim_ctrl_adv6_tim18_init(void *tim)
     dev->rmap->ccr5.r  = dev->rtmp.ccr5.r;
     dev->rmap->ccr6.r  = dev->rtmp.ccr6.r;
 
-    dev->stat = TIM_CTRL_STAT_INIT;
+    dev->stat = LL_TIM_STAT_INIT;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_adv6_tim18_deinit(void *tim)
+ll_tim_res_t ll_tim_adv6_tim18_deinit(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
+    struct ll_tim_adv6_tim18_dev *dev = (struct ll_tim_adv6_tim18_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    if (dev->stat == LL_TIM_STAT_DEINIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    dev->rmap->cr1.r       = dev->rtmp.cr1.r;
-    dev->rmap->cr2.r       = dev->rtmp.cr2.r;
-    dev->rmap->smcr.r      = dev->rtmp.smcr.r;
-    dev->rmap->dier.r      = dev->rtmp.dier.r;
-    dev->rmap->sr.r        = dev->rtmp.sr.r;
-    dev->rmap->egr.r       = dev->rtmp.egr.r;
-    dev->rmap->ccmr1.out.r = dev->rtmp.ccmr1.out.r;
-    dev->rmap->ccmr2.out.r = dev->rtmp.ccmr2.out.r;
-    dev->rmap->ccer.r      = dev->rtmp.ccer.r;
-    dev->rmap->cnt.r       = dev->rtmp.cnt.r;
-    dev->rmap->psc.r       = dev->rtmp.psc.r;
-    dev->rmap->arr.r       = dev->rtmp.arr.r;
-    dev->rmap->rcr.r       = dev->rtmp.rcr.r;
-    dev->rmap->ccr1.r      = dev->rtmp.ccr1.r;
-    dev->rmap->ccr2.r      = dev->rtmp.ccr2.r;
-    dev->rmap->ccr3.r      = dev->rtmp.ccr3.r;
-    dev->rmap->ccr4.r      = dev->rtmp.ccr4.r;
-    dev->rmap->bdtr.r      = dev->rtmp.bdtr.r;
-    dev->rmap->dcr.r       = dev->rtmp.dcr.r;
-    dev->rmap->dmar.r      = dev->rtmp.dmar.r;
-    dev->rmap->ccmr3.r     = dev->rtmp.ccmr3.r;
-    dev->rmap->ccr5.r      = dev->rtmp.ccr5.r;
-    dev->rmap->ccr6.r      = dev->rtmp.ccr6.r;
+    dev->rmap->cr1.r       = ll_tim_adv6_tim18_por.cr1.r;
+    dev->rmap->cr2.r       = ll_tim_adv6_tim18_por.cr2.r;
+    dev->rmap->smcr.r      = ll_tim_adv6_tim18_por.smcr.r;
+    dev->rmap->dier.r      = ll_tim_adv6_tim18_por.dier.r;
+    dev->rmap->sr.r        = ll_tim_adv6_tim18_por.sr.r;
+    dev->rmap->egr.r       = ll_tim_adv6_tim18_por.egr.r;
+    dev->rmap->ccmr1.out.r = ll_tim_adv6_tim18_por.ccmr1.out.r;
+    dev->rmap->ccmr2.out.r = ll_tim_adv6_tim18_por.ccmr2.out.r;
+    dev->rmap->ccer.r      = ll_tim_adv6_tim18_por.ccer.r;
+    dev->rmap->cnt.r       = ll_tim_adv6_tim18_por.cnt.r;
+    dev->rmap->psc.r       = ll_tim_adv6_tim18_por.psc.r;
+    dev->rmap->arr.r       = ll_tim_adv6_tim18_por.arr.r;
+    dev->rmap->rcr.r       = ll_tim_adv6_tim18_por.rcr.r;
+    dev->rmap->ccr1.r      = ll_tim_adv6_tim18_por.ccr1.r;
+    dev->rmap->ccr2.r      = ll_tim_adv6_tim18_por.ccr2.r;
+    dev->rmap->ccr3.r      = ll_tim_adv6_tim18_por.ccr3.r;
+    dev->rmap->ccr4.r      = ll_tim_adv6_tim18_por.ccr4.r;
+    dev->rmap->bdtr.r      = ll_tim_adv6_tim18_por.bdtr.r;
+    dev->rmap->dcr.r       = ll_tim_adv6_tim18_por.dcr.r;
+    dev->rmap->dmar.r      = ll_tim_adv6_tim18_por.dmar.r;
+    dev->rmap->ccmr3.r     = ll_tim_adv6_tim18_por.ccmr3.r;
+    dev->rmap->ccr5.r      = ll_tim_adv6_tim18_por.ccr5.r;
+    dev->rmap->ccr6.r      = ll_tim_adv6_tim18_por.ccr6.r;
 
-    dev->stat = TIM_CTRL_STAT_DEINIT;
+    dev->stat = LL_TIM_STAT_DEINIT;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_adv6_tim18_enable(void *tim)
+ll_tim_res_t ll_tim_adv6_tim18_enable(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
+    struct ll_tim_adv6_tim18_dev *dev = (struct ll_tim_adv6_tim18_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    if (dev->stat == LL_TIM_STAT_DEINIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.bf.cen = 0x01;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
 
-tim_ctrl_res_t tim_ctrl_adv6_tim18_disable(void *tim)
+ll_tim_res_t ll_tim_adv6_tim18_disable(void *tim)
 {
     if (tim == NULL)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
-    struct tim_ctrl_adv6_tim18_dev *dev = (struct tim_ctrl_adv6_tim18_dev *)tim;
+    struct ll_tim_adv6_tim18_dev *dev = (struct ll_tim_adv6_tim18_dev *)tim;
 
-    if (dev->stat == TIM_CTRL_STAT_DEINIT)
+    if (dev->stat == LL_TIM_STAT_DEINIT)
     {
-        return TIM_CTRL_RES_ERR;
+        return LL_TIM_RES_ERR;
     }
 
     dev->rmap->cr1.bf.cen = 0x00;
 
-    return TIM_CTRL_RES_OK;
+    return LL_TIM_RES_OK;
 }
