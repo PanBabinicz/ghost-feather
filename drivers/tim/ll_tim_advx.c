@@ -478,3 +478,39 @@ ll_tim_res_t ll_tim_adv6_tim18_disable(void *tim)
 
     return LL_TIM_RES_OK;
 }
+
+ll_tim_res_t ll_tim_adv6_tim18_ccr_data_get(void *tim, const ll_tim_ccr_ch_t ch,
+        struct ll_tim_ccr_data *const ccr)
+{
+    if ((tim == NULL) || (ccr == NULL) || (ch < LL_TIM_CCR_CH1) || (ch > LL_TIM_CCR_CH6))
+    {
+        return LL_TIM_RES_ERR;
+    }
+
+    struct ll_tim_adv6_tim18_dev *dev = (struct ll_tim_adv6_tim18_dev *)tim;
+
+    ccr->prev = dev->ccr_data[ch].prev;
+    ccr->curr = dev->ccr_data[ch].curr;
+
+    return LL_TIM_RES_OK;
+}
+
+ll_tim_res_t ll_tim_adv6_tim18_ccr_set(void *tim, const ll_tim_ccr_ch_t ch, const uint32_t ccr)
+{
+    if ((tim == NULL) || (ch < LL_TIM_CCR_CH1) || (ch > LL_TIM_CCR_CH6))
+    {
+        return LL_TIM_RES_ERR;
+    }
+
+    struct ll_tim_adv6_tim18_dev *dev = (struct ll_tim_adv6_tim18_dev *)tim;
+
+    volatile uint32_t *ccrx = (ch == LL_TIM_CCR_CH1) ? &dev->rmap->ccr1.r
+                            : (ch == LL_TIM_CCR_CH2) ? &dev->rmap->ccr2.r
+                            : (ch == LL_TIM_CCR_CH3) ? &dev->rmap->ccr3.r
+                            : (ch == LL_TIM_CCR_CH4) ? &dev->rmap->ccr4.r
+                            : (ch == LL_TIM_CCR_CH5) ? &dev->rmap->ccr5.r : &dev->rmap->ccr6.r;
+
+    *ccrx = ccr;
+
+    return LL_TIM_RES_OK;
+}

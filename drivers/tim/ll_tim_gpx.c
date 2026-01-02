@@ -910,3 +910,101 @@ ll_tim_res_t ll_tim_gpx_tim10111314_disable(void *tim)
 
     return LL_TIM_RES_OK;
 }
+
+ll_tim_res_t ll_tim_gpx_tim2345_ccr_data_get(void *tim, const ll_tim_ccr_ch_t ch,
+        struct ll_tim_ccr_data *const ccr)
+{
+    if ((tim == NULL) || (ccr == NULL) || (ch < LL_TIM_CCR_CH1) || (ch > LL_TIM_CCR_CH4))
+    {
+        return LL_TIM_RES_ERR;
+    }
+
+    struct ll_tim_gpx_tim2345_dev *dev = (struct ll_tim_gpx_tim2345_dev *)tim;
+
+    ccr->prev = dev->ccr_data[ch].prev;
+    ccr->curr = dev->ccr_data[ch].curr;
+
+    return LL_TIM_RES_OK;
+}
+
+ll_tim_res_t ll_tim_gpx_tim912_ccr_data_get(void *tim, const ll_tim_ccr_ch_t ch,
+        struct ll_tim_ccr_data *const ccr)
+{
+    if ((tim == NULL) || (ccr == NULL) || (ch < LL_TIM_CCR_CH1) || (ch > LL_TIM_CCR_CH2))
+    {
+        return LL_TIM_RES_ERR;
+    }
+
+    struct ll_tim_gpx_tim912_dev *dev = (struct ll_tim_gpx_tim912_dev *)tim;
+
+    ccr->prev = dev->ccr_data[ch].prev;
+    ccr->curr = dev->ccr_data[ch].curr;
+
+    return LL_TIM_RES_OK;
+}
+
+ll_tim_res_t ll_tim_gpx_tim10111314_ccr_data_get(void *tim, const ll_tim_ccr_ch_t ch,
+        struct ll_tim_ccr_data *const ccr)
+{
+    if ((tim == NULL) || (ccr == NULL) || (ch != LL_TIM_CCR_CH1))
+    {
+        return LL_TIM_RES_ERR;
+    }
+
+    struct ll_tim_gpx_tim10111314_dev *dev = (struct ll_tim_gpx_tim10111314_dev *)tim;
+
+    ccr->prev = dev->ccr_data[ch].prev;
+    ccr->curr = dev->ccr_data[ch].curr;
+
+    return LL_TIM_RES_OK;
+}
+
+ll_tim_res_t ll_tim_gpx_tim2345_ccr_set(void *tim, const ll_tim_ccr_ch_t ch, const uint32_t ccr)
+{
+    if ((tim == NULL) || (ch < LL_TIM_CCR_CH1) || (ch > LL_TIM_CCR_CH4))
+    {
+        return LL_TIM_RES_ERR;
+    }
+
+    struct ll_tim_gpx_tim2345_dev *dev = (struct ll_tim_gpx_tim2345_dev *)tim;
+
+    volatile uint32_t *ccrx = (ch == LL_TIM_CCR_CH1) ? &dev->rmap->ccr1.r
+                            : (ch == LL_TIM_CCR_CH2) ? &dev->rmap->ccr2.r
+                            : (ch == LL_TIM_CCR_CH3) ? &dev->rmap->ccr3.r : &dev->rmap->ccr4.r;
+
+    *ccrx = ccr;
+
+    return LL_TIM_RES_OK;
+}
+
+ll_tim_res_t ll_tim_gpx_tim912_ccr_set(void *tim, const ll_tim_ccr_ch_t ch, const uint32_t ccr)
+{
+    if ((tim == NULL) || (ch < LL_TIM_CCR_CH1) || (ch > LL_TIM_CCR_CH2))
+    {
+        return LL_TIM_RES_ERR;
+    }
+
+    struct ll_tim_gpx_tim912_dev *dev = (struct ll_tim_gpx_tim912_dev *)tim;
+
+    volatile uint32_t *ccrx = (ch == LL_TIM_CCR_CH1) ? &dev->rmap->ccr1.r : &dev->rmap->ccr2.r;
+
+    *ccrx = ccr;
+
+    return LL_TIM_RES_OK;
+}
+
+ll_tim_res_t ll_tim_gpx_tim10111314_ccr_set(void *tim, const ll_tim_ccr_ch_t ch, const uint32_t ccr)
+{
+    if ((tim == NULL) || (ch != LL_TIM_CCR_CH1))
+    {
+        return LL_TIM_RES_ERR;
+    }
+
+    struct ll_tim_gpx_tim912_dev *dev = (struct ll_tim_gpx_tim912_dev *)tim;
+
+    volatile uint32_t *ccrx =  &dev->rmap->ccr1.r;
+
+    *ccrx = ccr;
+
+    return LL_TIM_RES_OK;
+}

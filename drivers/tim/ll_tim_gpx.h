@@ -43,10 +43,12 @@ typedef enum ll_tim_gpx_tim2345_oc_mode
 ///
 typedef enum ll_tim_gpx_tim2345_id
 {
-    LL_TIM_GPX_TIM2345_ID_2 = 0,
+    LL_TIM_GPX_TIM2345_ID_BEGIN = 0,
+    LL_TIM_GPX_TIM2345_ID_2     = 0,
     LL_TIM_GPX_TIM2345_ID_3,
     LL_TIM_GPX_TIM2345_ID_4,
     LL_TIM_GPX_TIM2345_ID_5,
+    LL_TIM_GPX_TIM2345_ID_TOTAL,
 } ll_tim_gpx_tim2345_id_t;
 
 ///
@@ -68,8 +70,10 @@ typedef enum ll_tim_gpx_tim2345_mode
 ///
 typedef enum ll_tim_gpx_tim912_id
 {
-    LL_TIM_GPX_TIM912_ID_9 = 0,
+    LL_TIM_GPX_TIM912_ID_BEGIN = 0,
+    LL_TIM_GPX_TIM912_ID_9 =     0,
     LL_TIM_GPX_TIM912_ID_12,
+    LL_TIM_GPX_TIM912_ID_TOTAL,
 } ll_tim_gpx_tim912_id_t;
 
 ///
@@ -91,10 +95,12 @@ typedef enum ll_tim_gpx_tim912_mode
 ///
 typedef enum ll_tim_gpx_tim10111314_id
 {
-    LL_TIM_GPX_TIM10111314_ID_10 = 0,
+    LL_TIM_GPX_TIM10111314_ID_BEGIN = 0,
+    LL_TIM_GPX_TIM10111314_ID_10    = 0,
     LL_TIM_GPX_TIM10111314_ID_11,
     LL_TIM_GPX_TIM10111314_ID_13,
     LL_TIM_GPX_TIM10111314_ID_14,
+    LL_TIM_GPX_TIM10111314_ID_TOTAL,
 } ll_tim_gpx_tim10111314_id_t;
 
 ///
@@ -1088,7 +1094,7 @@ struct ll_tim_gpx_tim10111314_dev
 /// \retval LL_TIM_RES_OK  On success.
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///
-ll_tim_res_t ll_tim_gpx_tim2345_init(void *tim);
+ll_tim_res_t ll_tim_gpx_tim2345_init(const ll_tim_gpx_tim2345_id_t id);
 
 /// TODO
 /// \brief Initializes the general-purpose timer (TIM9 and TIM12).
@@ -1210,6 +1216,75 @@ ll_tim_res_t ll_tim_gpx_tim912_disable(void *tim);
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///
 ll_tim_res_t ll_tim_gpx_tim10111314_disable(void *tim);
+
+/// TODO
+/// \brief Disables the base timer (TIM6 and TIM7).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return ll_tim_res_t   The tim controller result.
+/// \retval LL_TIM_RES_OK  On success.
+/// \retval LL_TIM_RES_ERR Otherwise.
+///
+ll_tim_res_t ll_tim_gpx_tim2345_ccr_data_get(void *tim, const ll_tim_ccr_ch_t ch,
+        struct ll_tim_ccr_data *const ccr);
+
+/// TODO
+/// \brief Disables the base timer (TIM6 and TIM7).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return ll_tim_res_t   The tim controller result.
+/// \retval LL_TIM_RES_OK  On success.
+/// \retval LL_TIM_RES_ERR Otherwise.
+///
+ll_tim_res_t ll_tim_gpx_tim912_ccr_data_get(void *tim, const ll_tim_ccr_ch_t ch,
+        struct ll_tim_ccr_data *const ccr);
+
+/// TODO
+/// \brief Disables the base timer (TIM6 and TIM7).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return ll_tim_res_t   The tim controller result.
+/// \retval LL_TIM_RES_OK  On success.
+/// \retval LL_TIM_RES_ERR Otherwise.
+///
+ll_tim_res_t ll_tim_gpx_tim10111314_ccr_data_get(void *tim, const ll_tim_ccr_ch_t ch,
+        struct ll_tim_ccr_data *const ccr);
+
+/// TODO
+/// \brief Disables the base timer (TIM6 and TIM7).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return ll_tim_res_t   The tim controller result.
+/// \retval LL_TIM_RES_OK  On success.
+/// \retval LL_TIM_RES_ERR Otherwise.
+///
+ll_tim_res_t ll_tim_gpx_tim2345_ccr_set(void *tim, const ll_tim_ccr_ch_t ch, const uint32_t ccr);
+
+/// TODO
+/// \brief Disables the base timer (TIM6 and TIM7).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return ll_tim_res_t   The tim controller result.
+/// \retval LL_TIM_RES_OK  On success.
+/// \retval LL_TIM_RES_ERR Otherwise.
+///
+ll_tim_res_t ll_tim_gpx_tim912_ccr_set(void *tim, const ll_tim_ccr_ch_t ch, const uint32_t ccr);
+
+/// TODO
+/// \brief Disables the base timer (TIM6 and TIM7).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return ll_tim_res_t   The tim controller result.
+/// \retval LL_TIM_RES_OK  On success.
+/// \retval LL_TIM_RES_ERR Otherwise.
+///
+ll_tim_res_t ll_tim_gpx_tim10111314_ccr_set(void *tim, const ll_tim_ccr_ch_t ch, const uint32_t ccr);
 
 #ifdef __cplusplus
 }

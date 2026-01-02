@@ -626,6 +626,29 @@ ll_tim_res_t ll_tim_adv6_tim18_enable(void *tim);
 ///
 ll_tim_res_t ll_tim_adv6_tim18_disable(void *tim);
 
+/// TODO
+/// \brief Disables the base timer (TIM6 and TIM7).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return ll_tim_res_t   The tim controller result.
+/// \retval LL_TIM_RES_OK  On success.
+/// \retval LL_TIM_RES_ERR Otherwise.
+///
+ll_tim_res_t ll_tim_adv6_tim18_ccr_data_get(void *tim, const ll_tim_ccr_ch_t ch,
+        struct ll_tim_ccr_data *const ccr);
+
+/// TODO
+/// \brief Disables the base timer (TIM6 and TIM7).
+///
+/// \param[in] tim The pointer to timer device.
+///
+/// \return ll_tim_res_t   The tim controller result.
+/// \retval LL_TIM_RES_OK  On success.
+/// \retval LL_TIM_RES_ERR Otherwise.
+///
+ll_tim_res_t ll_tim_adv6_tim18_ccr_set(void *tim, const ll_tim_ccr_ch_t ch, const uint32_t ccr);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */

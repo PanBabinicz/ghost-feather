@@ -1,8 +1,7 @@
-#include "tim_ctrl.h"
-#include "tim_ctrl_advx.h"
-#include "tim_ctrl_basex.h"
-#include "tim_ctrl_common.h"
-#include "tim_ctrl_gpx.h"
+#include "tim.h"
+#include "ll_tim_advx.h"
+#include "ll_tim_common.h"
+#include "ll_tim_gpx.h"
 
 ///***********************************************************************************************************
 /// Private objects - definition.
@@ -10,9 +9,9 @@
 ///
 /// \brief The TIM4 device.
 ///
-static struct tim_ctrl_gpx_tim2345_dev tim_ctrl_tim4_dev =
+static struct ll_tim_gpx_tim2345_dev tim4 =
 {
-    .rmap = (volatile struct tim_ctrl_gpx_tim2345_regs *)(0x40000800),
+    .rmap = (volatile struct ll_tim_gpx_tim2345_regs *)(0x40000800),
     .rtmp =
     {
         .cr1 =
@@ -115,12 +114,12 @@ static struct tim_ctrl_gpx_tim2345_dev tim_ctrl_tim4_dev =
                     .cc1s     = 0x00,
                     .oc1fe    = 0x00,
                     .oc1pe    = 0x00,
-                    .oc1m     = TIM_CTRL_GPX_TIM2345_OC_MODE_PWM1,
+                    .oc1m     = LL_TIM_GPX_TIM2345_OC_MODE_PWM1,
                     .oc1ce    = 0x00,
                     .cc2s     = 0x00,
                     .oc2fe    = 0x00,
                     .oc2pe    = 0x00,
-                    .oc2m     = TIM_CTRL_GPX_TIM2345_OC_MODE_PWM1,
+                    .oc2m     = LL_TIM_GPX_TIM2345_OC_MODE_PWM1,
                     .oc2ce    = 0x00,
                     .oc1m_msb = 0x00,
                     .oc2m_msb = 0x00,
@@ -137,12 +136,12 @@ static struct tim_ctrl_gpx_tim2345_dev tim_ctrl_tim4_dev =
                     .cc3s     = 0x00,
                     .oc3fe    = 0x00,
                     .oc3pe    = 0x00,
-                    .oc3m     = TIM_CTRL_GPX_TIM2345_OC_MODE_PWM1,
+                    .oc3m     = LL_TIM_GPX_TIM2345_OC_MODE_PWM1,
                     .oc3ce    = 0x00,
                     .cc4s     = 0x00,
                     .oc4fe    = 0x00,
                     .oc4pe    = 0x00,
-                    .oc4m     = TIM_CTRL_GPX_TIM2345_OC_MODE_PWM1,
+                    .oc4m     = LL_TIM_GPX_TIM2345_OC_MODE_PWM1,
                     .oc4ce    = 0x00,
                     .oc3m_msb = 0x00,
                     .oc4m_msb = 0x00,
@@ -260,18 +259,18 @@ static struct tim_ctrl_gpx_tim2345_dev tim_ctrl_tim4_dev =
         },
     },
     .ccr_data   = { 0 },
-    .id         = TIM_CTRL_GPX_TIM2345_ID_4,
-    .ccmr1_mode = TIM_CTRL_GPX_TIM2345_MODE_OUT_COMP,
-    .ccmr2_mode = TIM_CTRL_GPX_TIM2345_MODE_OUT_COMP,
+    .id         = LL_TIM_GPX_TIM2345_ID_4,
+    .ccmr1_mode = LL_TIM_GPX_TIM2345_MODE_OUT_COMP,
+    .ccmr2_mode = LL_TIM_GPX_TIM2345_MODE_OUT_COMP,
     .stat       = false,
 };
 
 ///
 /// \brief The TIM12 device.
 ///
-static struct tim_ctrl_gpx_tim912_dev tim_ctrl_tim12_dev =
+static struct ll_tim_gpx_tim912_dev tim12 =
 {
-    .rmap = (volatile struct tim_ctrl_gpx_tim912_regs *)(0x40001800),
+    .rmap = (volatile struct ll_tim_gpx_tim912_regs *)(0x40001800),
     .rtmp =
     {
         .cr1 =
@@ -405,17 +404,17 @@ static struct tim_ctrl_gpx_tim912_dev tim_ctrl_tim12_dev =
         },
     },
     .ccr_data   = { 0 },
-    .id         = TIM_CTRL_GPX_TIM912_ID_12,
-    .ccmr1_mode = TIM_CTRL_GPX_TIM912_MODE_IN_CAP,
+    .id         = LL_TIM_GPX_TIM912_ID_12,
+    .ccmr1_mode = LL_TIM_GPX_TIM912_MODE_IN_CAP,
     .stat       = false,
 };
 
 ///
 /// \brief The TIM8 device.
 ///
-static struct tim_ctrl_adv6_tim18_dev tim_ctrl_tim8_dev =
+static struct ll_tim_adv6_tim18_dev tim8 =
 {
-    .rmap = (volatile struct tim_ctrl_adv6_tim18_regs *)(0x40010400),
+    .rmap = (volatile struct ll_tim_adv6_tim18_regs *)(0x40010400),
     .rtmp =
     {
         .cr1 =
@@ -727,154 +726,134 @@ static struct tim_ctrl_adv6_tim18_dev tim_ctrl_tim8_dev =
         },
     },
     .ccr_data   = { 0 },
-    .id         = TIM_CTRL_ADV6_TIM18_ID_8,
-    .ccmr1_mode = TIM_CTRL_ADV6_TIM18_MODE_IN_CAP,
-    .ccmr2_mode = TIM_CTRL_ADV6_TIM18_MODE_IN_CAP,
+    .id         = LL_TIM_ADV6_TIM18_ID_8,
+    .ccmr1_mode = LL_TIM_ADV6_TIM18_MODE_IN_CAP,
+    .ccmr2_mode = LL_TIM_ADV6_TIM18_MODE_IN_CAP,
     .stat       = false,
 };
 
 ///
 /// \brief The TIM devices array.
 ///
-static struct tim_ctrl_dev tim_ctrl_dev_arr[TIM_CTRL_INST_TOTAL] =
+static struct tim_dev tim_dev_arr[TIM_INST_TOTAL] =
 {
-    [TIM_CTRL_INST_TIM4] =
+    [TIM_INST_4] =
     {
-        .tim     = &tim_ctrl_tim4_dev,
-        .init    = &tim_ctrl_gpx_tim2345_init,
-        .deinit  = &tim_ctrl_gpx_tim2345_deinit,
-        .enable  = &tim_ctrl_gpx_tim2345_enable,
-        .disable = &tim_ctrl_gpx_tim2345_disable,
+        .tim          = &tim4,
+        .init         = &ll_tim_gpx_tim2345_init,
+        .deinit       = &ll_tim_gpx_tim2345_deinit,
+        .enable       = &ll_tim_gpx_tim2345_enable,
+        .disable      = &ll_tim_gpx_tim2345_disable,
+        .ccr_data_get = &ll_tim_gpx_tim2345_ccr_data_get,
+        .ccr_set      = &ll_tim_gpx_tim2345_ccr_set,
     },
 
-    [TIM_CTRL_INST_TIM12] =
+    [TIM_INST_12] =
     {
-        .tim      = &tim_ctrl_tim12_dev,
-        .init     = &tim_ctrl_gpx_tim912_init,
-        .deinit   = &tim_ctrl_gpx_tim912_deinit,
-        .enable   = &tim_ctrl_gpx_tim912_enable,
-        .disable  = &tim_ctrl_gpx_tim912_disable,
+        .tim          = &tim12,
+        .init         = &ll_tim_gpx_tim912_init,
+        .deinit       = &ll_tim_gpx_tim912_deinit,
+        .enable       = &ll_tim_gpx_tim912_enable,
+        .disable      = &ll_tim_gpx_tim912_disable,
+        .ccr_data_get = &ll_tim_gpx_tim912_ccr_data_get,
+        .ccr_set      = &ll_tim_gpx_tim912_ccr_set,
     },
 
-    [TIM_CTRL_INST_TIM8] =
+    [TIM_INST_8] =
     {
-        .tim      = &tim_ctrl_tim8_dev,
-        .init     = &tim_ctrl_adv6_tim18_init,
-        .deinit   = &tim_ctrl_adv6_tim18_deinit,
-        .enable   = &tim_ctrl_adv6_tim18_enable,
-        .disable  = &tim_ctrl_adv6_tim18_disable,
+        .tim          = &tim8,
+        .init         = &ll_tim_adv6_tim18_init,
+        .deinit       = &ll_tim_adv6_tim18_deinit,
+        .enable       = &ll_tim_adv6_tim18_enable,
+        .disable      = &ll_tim_adv6_tim18_disable,
+        .ccr_data_get = &ll_tim_adv6_tim18_ccr_data_get,
+        .ccr_set      = &ll_tim_adv6_tim18_ccr_set,
     },
 };
-
-///
-/// Used timers inside ghost feather system:
-///
-/// MOTOR0 -> TIM4_CH4  (PB9)   gp4_16
-/// MOTOR1 -> TIM4_CH3  (PB8)   gp4_16
-/// MOTOR2 -> TIM4_CH2  (PB7)   gp4_16
-/// MOTOR3 -> TIM4_CH1  (PB6)   gp4_16
-///
-/// RFCH1  -> TIM12_CH1 (PB14)  gp2
-/// RFCH2  -> TIM12_CH2 (PB15)  gp2
-/// RFCH3  -> TIM8_CH1  (PC6)   adv4
-/// RFCH4  -> TIM8_CH2  (PC7)   adv4
-/// RFCH5  -> TIM8_CH3  (PC8)   adv4
-/// RFCH6  -> TIM8_CH4  (PC9)   adv4
-///
-///  ----------------------------
-/// |                    BAT |*+-|
-/// |                    CH6 |s+-|  --> SWB
-/// |                    CH5 |s+-|  --> SWA
-/// |   FLYSKY FS-R6B    CH4 |s+-|
-/// |                    CH3 |s+-|
-/// |                    CH2 |s+-|
-/// |                    CH1 |s+-|
-///  ----------------------------
-///
 
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
 void _tim8brktim12_handler(void)
 {
-    volatile struct tim_ctrl_gpx_tim912_dev *tim12 =
-        (volatile struct tim_ctrl_gpx_tim912_dev *)tim_ctrl_dev_arr[TIM_CTRL_INST_TIM12].tim;
+    volatile struct ll_tim_gpx_tim912_dev *tim =
+        (volatile struct ll_tim_gpx_tim912_dev *)tim_dev_arr[TIM_INST_12].tim;
 
-    if (tim12->rmap->sr.bf.cc1if)
+    if (tim->rmap->sr.bf.cc1if)
     {
-        uint16_t curr = tim12->rmap->ccr1.bf.ccr1;
+        uint16_t curr = tim->rmap->ccr1.bf.ccr1;
 
-        tim12->ccr_data[TIM_CTRL_INST_CCR1].prev = tim12->ccr_data[TIM_CTRL_INST_CCR1].curr;
-        tim12->ccr_data[TIM_CTRL_INST_CCR1].curr = curr;
+        tim->ccr_data[LL_TIM_CCR_CH1].prev = tim->ccr_data[LL_TIM_CCR_CH1].curr;
+        tim->ccr_data[LL_TIM_CCR_CH1].curr = curr;
     }
 
-    if (tim12->rmap->sr.bf.cc2if)
+    if (tim->rmap->sr.bf.cc2if)
     {
-        uint16_t curr = tim12->rmap->ccr2.bf.ccr2;
+        uint16_t curr = tim->rmap->ccr2.bf.ccr2;
 
-        tim12->ccr_data[TIM_CTRL_INST_CCR2].prev = tim12->ccr_data[TIM_CTRL_INST_CCR2].curr;
-        tim12->ccr_data[TIM_CTRL_INST_CCR2].curr = curr;
+        tim->ccr_data[LL_TIM_CCR_CH2].prev = tim->ccr_data[LL_TIM_CCR_CH2].curr;
+        tim->ccr_data[LL_TIM_CCR_CH2].curr = curr;
     }
 }
 
 void _tim8cc_handler(void)
 {
-    volatile struct tim_ctrl_adv6_tim18_dev *tim8 =
-        (volatile struct tim_ctrl_adv6_tim18_dev *)tim_ctrl_dev_arr[TIM_CTRL_INST_TIM8].tim;
+    volatile struct ll_tim_adv6_tim18_dev *tim =
+        (volatile struct ll_tim_adv6_tim18_dev *)tim_dev_arr[TIM_INST_8].tim;
 
-    if (tim8->rmap->sr.bf.cc1if)
+    if (tim->rmap->sr.bf.cc1if)
     {
-        uint16_t curr = tim8->rmap->ccr1.bf.ccr1;
+        uint16_t curr = tim->rmap->ccr1.bf.ccr1;
 
-        tim8->ccr_data[TIM_CTRL_INST_CCR1].prev = tim8->ccr_data[TIM_CTRL_INST_CCR1].curr;
-        tim8->ccr_data[TIM_CTRL_INST_CCR1].curr = curr;
+        tim->ccr_data[LL_TIM_CCR_CH1].prev = tim->ccr_data[LL_TIM_CCR_CH1].curr;
+        tim->ccr_data[LL_TIM_CCR_CH1].curr = curr;
     }
 
-    if (tim8->rmap->sr.bf.cc2if)
+    if (tim->rmap->sr.bf.cc2if)
     {
-        uint16_t curr = tim8->rmap->ccr2.bf.ccr2;
+        uint16_t curr = tim->rmap->ccr2.bf.ccr2;
 
-        tim8->ccr_data[TIM_CTRL_INST_CCR2].prev = tim8->ccr_data[TIM_CTRL_INST_CCR2].curr;
-        tim8->ccr_data[TIM_CTRL_INST_CCR2].curr = curr;
+        tim->ccr_data[LL_TIM_CCR_CH2].prev = tim->ccr_data[LL_TIM_CCR_CH2].curr;
+        tim->ccr_data[LL_TIM_CCR_CH2].curr = curr;
     }
 
-    if (tim8->rmap->sr.bf.cc3if)
+    if (tim->rmap->sr.bf.cc3if)
     {
-        uint16_t curr = tim8->rmap->ccr3.bf.ccr3;
+        uint16_t curr = tim->rmap->ccr3.bf.ccr3;
 
-        tim8->ccr_data[TIM_CTRL_INST_CCR3].prev = tim8->ccr_data[TIM_CTRL_INST_CCR3].curr;
-        tim8->ccr_data[TIM_CTRL_INST_CCR3].curr = curr;
+        tim->ccr_data[LL_TIM_CCR_CH3].prev = tim->ccr_data[LL_TIM_CCR_CH3].curr;
+        tim->ccr_data[LL_TIM_CCR_CH3].curr = curr;
     }
 
-    if (tim8->rmap->sr.bf.cc4if)
+    if (tim->rmap->sr.bf.cc4if)
     {
-        uint16_t curr = tim8->rmap->ccr4.bf.ccr4;
+        uint16_t curr = tim->rmap->ccr4.bf.ccr4;
 
-        tim8->ccr_data[TIM_CTRL_INST_CCR4].prev = tim8->ccr_data[TIM_CTRL_INST_CCR4].curr;
-        tim8->ccr_data[TIM_CTRL_INST_CCR4].curr = curr;
+        tim->ccr_data[LL_TIM_CCR_CH4].prev = tim->ccr_data[LL_TIM_CCR_CH4].curr;
+        tim->ccr_data[LL_TIM_CCR_CH4].curr = curr;
     }
 }
 
-struct tim_ctrl_dev* tim_ctrl_dev_get(tim_ctrl_inst_t inst)
+struct tim_dev* tim_dev_get(tim_inst_t inst)
 {
-    if ((inst < TIM_CTRL_INST_BEGIN) || (inst >= TIM_CTRL_INST_TOTAL))
+    if ((inst < TIM_INST_BEGIN) || (inst >= TIM_INST_TOTAL))
     {
         return NULL;
     }
 
-    return &tim_ctrl_dev_arr[inst];
+    return &tim_dev_arr[inst];
 }
 
-struct tim_ctrl_dev* tim_ctrl_dev_arr_get(void)
+struct tim_dev* tim_dev_arr_get(void)
 {
-    return &tim_ctrl_dev_arr[0];
+    return &tim_dev_arr[0];
 }
 
-void tim_ctrl_init(void)
+void tim_init(void)
 {
-    for (uint32_t i = 0; i < sizeof(tim_ctrl_dev_arr)/sizeof(tim_ctrl_dev_arr[TIM_CTRL_INST_BEGIN]); i++)
+    for (uint32_t i = 0; i < sizeof(tim_dev_arr)/sizeof(tim_dev_arr[TIM_INST_BEGIN]); i++)
     {
-        tim_ctrl_dev_arr[i].init(tim_ctrl_dev_arr[i].tim);
-        tim_ctrl_dev_arr[i].enable(tim_ctrl_dev_arr[i].tim);
+        tim_dev_arr[i].init(tim_dev_arr[i].tim);
+        tim_dev_arr[i].enable(tim_dev_arr[i].tim);
     }
 }
