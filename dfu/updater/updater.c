@@ -2,7 +2,7 @@
 #include "ghost_feather_common.h"
 #include "printf.h"
 #include "updater.h"
-#include "usart_controller.h"
+#include "ll_usart.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 #include "libopencm3/stm32/usart.h"
@@ -100,14 +100,14 @@ static void transmit_ack(dust_packet_t *const packet, dust_serialized_t *seriali
 
 static void init(void)
 {
-    usart_controller_debug_init();
+    //usart_controller_debug_init();
 
     for (uint32_t i = 0; i < 3; i++)
     {
-        led_off();
-        systick_delay_ms(500);
-        led_on();
-        systick_delay_ms(500);
+        //led_off();
+        //systick_delay_ms(500);
+        //led_on();
+        //systick_delay_ms(500);
     }
 }
 

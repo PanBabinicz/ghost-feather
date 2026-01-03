@@ -422,7 +422,7 @@ void bmi270_soft_rst(void);
 /// \retval BMI270_RES_OK    On success.
 /// \retval BMI270_RES_ERR   Otherwise.
 ///
-void bmi270_pwr_mode_set(const bmi270_pwr_mode_t pwr_mode);
+void bmi270_pwr_mode_set(bmi270_pwr_mode_t pwr_mode);
 
 /// TODO
 /// \brief Sets the device status.

@@ -14,22 +14,20 @@
 # --------------------------------------------------
 # Files list genereation
 # --------------------------------------------------
-file(GLOB_RECURSE APP_SOURCES stm32f722xx/*.c)
+file(GLOB_RECURSE APP_SRCS *.c)
 
 # --------------------------------------------------
 # Target: Application
 # --------------------------------------------------
 message(STATUS "Add app library")
 add_library(app
-    ${APP_SOURCES}
+    ${APP_SRCS}
 )
 
 target_include_directories(app PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/controller/bmi270
-    ${PROJECT_SOURCE_DIR}/controller/spi
-    ${PROJECT_SOURCE_DIR}/controller/tim
-    ${PROJECT_SOURCE_DIR}/shared/timing
+    ${PROJECT_SOURCE_DIR}/drivers/tim
+    ${PROJECT_SOURCE_DIR}/modules/rc
+    ${PROJECT_SOURCE_DIR}/modules/tim
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 

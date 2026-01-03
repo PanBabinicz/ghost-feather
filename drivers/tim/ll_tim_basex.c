@@ -122,7 +122,6 @@ ll_tim_res_t ll_tim_base1_tim67_deinit(void *tim)
     {
         return LL_TIM_RES_ERR;
     }
-    }
 
     struct ll_tim_base1_tim67_dev *dev = (struct ll_tim_base1_tim67_dev *)tim;
 

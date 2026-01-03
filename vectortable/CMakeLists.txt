@@ -12,12 +12,12 @@
 # --------------------------------------------------
 # Files list genereation
 # --------------------------------------------------
-file(GLOB_RECURSE VECTORTABLE_SOURCES stm32f722xx/*.S)
+file(GLOB_RECURSE VECTORTABLE_SRCS *.S)
 
 # --------------------------------------------------
 # Target: Vectortable
 # --------------------------------------------------
 message(STATUS "Add vectortable library")
 add_library(vectortable
-    ${VECTORTABLE_SOURCES}
+    ${VECTORTABLE_SRCS}
 )

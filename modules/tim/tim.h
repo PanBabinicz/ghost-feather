@@ -56,7 +56,7 @@ struct tim_dev* tim_dev_arr_get(void);
 ///
 /// \brief
 ///
-tim_res_t tim_init(void);
+void tim_init(void);
 
 #ifdef __cplusplus
 }

@@ -1,9 +1,6 @@
-#include "bmi270.h"
-#include "bmi270_conf.h"
 #include "app.h"
-#include "memory_map.h"
-#include "tim_ctrl.h"
-#include "timing.h"
+#include "rc.h"
+#include "tim.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 
@@ -48,20 +45,26 @@ static void led_panic(void)
 void app_start(void)
 {
     led_on();
-    tim_ctrl_init();
+    tim_init();
+    rc_init();
 
-    struct bmi270_dev *bmi270 = bmi270_dev_get();
-    struct tim_ctrl_dev *tim_ctrl_dev_arr = tim_ctrl_dev_arr_get();
+    struct rc_dev *rc_dev_arr = rc_dev_arr_get();
 
-    volatile struct tim_ctrl_gpx_tim2345_dev *tim4 =
-        (volatile struct tim_ctrl_gpx_tim2345_dev *)tim_ctrl_dev_arr[TIM_CTRL_INST_TIM4].tim;
-
-    volatile struct tim_ctrl_adv6_tim18_dev *tim8 =
-        (volatile struct tim_ctrl_adv6_tim18_dev *)tim_ctrl_dev_arr[TIM_CTRL_INST_TIM8].tim;
-
-    volatile struct tim_ctrl_gpx_tim912_dev *tim12 =
-        (volatile struct tim_ctrl_gpx_tim912_dev *)tim_ctrl_dev_arr[TIM_CTRL_INST_TIM12].tim;
+    struct rc_dev *rc_dev_1 = &rc_dev_arr[RC_CH_1];
+    struct rc_dev *rc_dev_2 = &rc_dev_arr[RC_CH_2];
+    struct rc_dev *rc_dev_3 = &rc_dev_arr[RC_CH_3];
+    struct rc_dev *rc_dev_4 = &rc_dev_arr[RC_CH_4];
+    struct rc_dev *rc_dev_5 = &rc_dev_arr[RC_CH_5];
+    struct rc_dev *rc_dev_6 = &rc_dev_arr[RC_CH_6];
 
     /* Never return */
-    while (1);
+    while (1)
+    {
+        rc_sig_raw_gen(RC_CH_1);
+        rc_sig_raw_gen(RC_CH_2);
+        rc_sig_raw_gen(RC_CH_3);
+        rc_sig_raw_gen(RC_CH_4);
+        rc_sig_raw_gen(RC_CH_5);
+        rc_sig_raw_gen(RC_CH_6);
+    }
 }

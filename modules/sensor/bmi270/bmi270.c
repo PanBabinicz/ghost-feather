@@ -395,12 +395,12 @@ static void bmi270_wait_cycles(struct bmi270_dev *const dev, const uint32_t cycl
     uint32_t prev;
     uint32_t curr;
 
-    bmi270_time_read(dev);
+    bmi270_time_read();
 
     prev = dev->time.data;
     do
     {
-        bmi270_time_read(dev);
+        bmi270_time_read();
 
         curr = dev->time.data;
         if (curr < prev)
@@ -431,7 +431,7 @@ const struct bmi270_pwr_mode_conf* bmi270_pwr_mode_get_conf(const bmi270_pwr_mod
         return NULL;
     }
 
-    return &bmi270_pwr_mode_confs[pwr_mode];
+    return &bmi270_pwr_mode_conf_arr[pwr_mode];
 }
 
 bmi270_res_t bmi270_init(void)
@@ -458,7 +458,7 @@ bmi270_res_t bmi270_init(void)
     addr = BMI270_REG_PWR_CONF;
     byte = BMI270_POR_PWR_CONF;
     byte &= ~BMI270_PWR_CONF_APS_MSK;
-    ll_bmi270_spi_reg_write(&dev->spi_conf, addr, byte);
+    ll_bmi270_spi_reg_write_byte(&dev->spi_conf, addr, byte);
 
     /* Wait for at least 450us. */
     timing_delay_us(500);
@@ -466,7 +466,7 @@ bmi270_res_t bmi270_init(void)
     /* Write INIT_CTRL.init_ctrl = 0x00 to prepare config load. */
     addr = BMI270_REG_INIT_CTRL;
     byte = 0x00;
-    ll_bmi270_spi_reg_write(&dev->spi_conf, addr, byte);
+    ll_bmi270_spi_reg_write_byte(&dev->spi_conf, addr, byte);
 
     /* Upload configuration file. */
     bmi270_upld_conf_file(dev);
@@ -484,7 +484,7 @@ bmi270_res_t bmi270_init(void)
      *       or soft reset. */
     addr = BMI270_REG_INIT_CTRL;
     byte = 0x01;
-    ll_bmi270_spi_reg_write(&dev->spi_conf, addr, byte);
+    ll_bmi270_spi_reg_write_byte(&dev->spi_conf, addr, byte);
 
     /* Wait until internal status register contains the value 0b0001. */
     addr = BMI270_REG_INST;
@@ -502,8 +502,6 @@ void bmi270_deinit(void)
 {
     struct bmi270_dev *dev = &bmi270;
     dev->stat = BMI270_STAT_DEINIT;
-
-    return BMI270_RES_OK;
 }
 
 /* TODO: Must not be performed while NVM writing operation is in progress. */
@@ -513,7 +511,7 @@ void bmi270_soft_rst(void)
     bmi270_cmd_send(dev, BMI270_CMD_SOFTRESET);
 }
 
-void bmi270_pwr_mode_set(const bmi270_pwr_mode_t pwr_mode)
+void bmi270_pwr_mode_set(bmi270_pwr_mode_t pwr_mode)
 {
     struct bmi270_dev *dev = &bmi270;
     struct bmi270_pwr_mode_conf *pwr_mode_conf = &bmi270_pwr_mode_conf_arr[pwr_mode];
@@ -534,13 +532,13 @@ void bmi270_pwr_mode_set(const bmi270_pwr_mode_t pwr_mode)
 
     /* Read the ACC_CONF register value. */
     addr = BMI270_REG_ACC_CONF;
-    ll_bmi270_spi_reg_read_byte(dev, addr, &buf[0]);
+    ll_bmi270_spi_reg_read_byte(&dev->spi_conf, addr, &buf[0]);
 
     acc_conf_reg = buf[0];
 
     /* Read the GYR_CONF register value. */
     addr = BMI270_REG_GYR_CONF;
-    ll_bmi270_spi_reg_read_byte(dev, addr, &buf[0]);
+    ll_bmi270_spi_reg_read_byte(&dev->spi_conf, addr, &buf[0]);
 
     gyr_conf_reg = buf[0];
 
@@ -560,17 +558,17 @@ void bmi270_pwr_mode_set(const bmi270_pwr_mode_t pwr_mode)
     addr   = BMI270_REG_PWR_CONF;
     buf[0] = pwr_conf_reg;
     buf[1] = pwr_ctrl_reg;
-    ll_bmi270_spi_reg_write_mult_bytes(dev, addr, &buf[0], sizeof(buf));
+    ll_bmi270_spi_reg_write_mult_bytes(&dev->spi_conf, addr, &buf[0], sizeof(buf));
 
     /* Write the ACC_CONF register value. */
     addr   = BMI270_REG_ACC_CONF;
     buf[0] = acc_conf_reg;
-    ll_bmi270_spi_reg_write_byte(dev, addr, buf[0]);
+    ll_bmi270_spi_reg_write_byte(&dev->spi_conf, addr, buf[0]);
 
     /* Write the GYR_CONF register value. */
     addr   = BMI270_REG_GYR_CONF;
     buf[0] = gyr_conf_reg;
-    ll_bmi270_spi_reg_write_byte(dev, addr, buf[0]);
+    ll_bmi270_spi_reg_write_byte(&dev->spi_conf, addr, buf[0]);
 }
 
 void bmi270_stat_set(const bmi270_stat_t stat)
@@ -735,7 +733,7 @@ void bmi270_acc_read(void)
     uint8_t addr   = BMI270_REG_DATA_8;
     uint8_t buf[6] = { 0 };
 
-    ll_bmi270_spi_reg_read_mult_bytes(dev, addr, &buf[0], sizeof(buf));
+    ll_bmi270_spi_reg_read_mult_bytes(&dev->spi_conf, addr, &buf[0], sizeof(buf));
 
     dev->acc.data.x = ((buf[1] << 0x08) | (buf[0] << 0x00));
     dev->acc.data.y = ((buf[3] << 0x08) | (buf[2] << 0x00));
@@ -785,7 +783,7 @@ void bmi270_gyr_read(void)
     uint8_t addr   = BMI270_REG_DATA_14;
     uint8_t buf[6] = { 0 };
 
-    ll_bmi270_spi_reg_read_mult_bytes(dev, addr, &buf[0], sizeof(buf));
+    ll_bmi270_spi_reg_read_mult_bytes(&dev->spi_conf, addr, &buf[0], sizeof(buf));
 
     dev->gyr.data.x = ((buf[1] << 0x08) | (buf[0] << 0x00));
     dev->gyr.data.y = ((buf[3] << 0x08) | (buf[2] << 0x00));
@@ -835,7 +833,7 @@ void bmi270_temp_read(void)
     uint8_t addr   = BMI270_REG_TEMPERATURE_0;
     uint8_t buf[2] = { 0 };
 
-    ll_bmi270_spi_reg_read_mult_bytes(dev, addr, &buf[0], sizeof(buf));
+    ll_bmi270_spi_reg_read_mult_bytes(&dev->spi_conf, addr, &buf[0], sizeof(buf));
 
     dev->temp.data = ((buf[2] << 0x08) | (buf[1] << 0x00));
 }

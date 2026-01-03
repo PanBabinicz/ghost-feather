@@ -40,10 +40,10 @@ static void rcc_setup(void);
 static void nvic_setup(void);
 
 ///
-/// \brief Setups GPIO pins for the first bootloader.
+/// \brief Setups GPIO pins.
 ///
 /// This function initializes the General Purpose Input/Output (GPIO) pins
-/// required by the first bootloader.
+/// required by the system.
 ///
 static void gpio_setup(void);
 

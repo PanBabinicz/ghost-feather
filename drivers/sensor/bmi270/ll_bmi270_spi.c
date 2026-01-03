@@ -28,9 +28,9 @@ void ll_bmi270_spi_reg_read_byte(const struct ll_bmi270_spi_conf *const conf, ui
     gpio_clear(conf->cs_port, conf->cs_pin);
     spi_enable(conf->spi);
 
-    ll_bmi270_spi_reg_xfer_byte(conf->spi, addr);
-    ll_bmi270_spi_reg_xfer_byte(conf->spi, dummy);
-    *byte = ll_bmi270_spi_reg_xfer_byte(conf->spi, dummy);
+    ll_bmi270_spi_reg_xfer_byte(conf, addr);
+    ll_bmi270_spi_reg_xfer_byte(conf, dummy);
+    *byte = ll_bmi270_spi_reg_xfer_byte(conf, dummy);
 
     spi_disable(conf->spi);
     gpio_set(conf->cs_port, conf->cs_pin);
@@ -46,12 +46,12 @@ void ll_bmi270_spi_reg_read_mult_bytes(const struct ll_bmi270_spi_conf *const co
     gpio_clear(conf->cs_port, conf->cs_pin);
     spi_enable(conf->spi);
 
-    ll_bmi270_spi_reg_xfer_byte(conf->spi, addr);
-    ll_bmi270_spi_reg_xfer_byte(conf->spi, dummy);
+    ll_bmi270_spi_reg_xfer_byte(conf, addr);
+    ll_bmi270_spi_reg_xfer_byte(conf, dummy);
 
     for (uint32_t i = 0; i < sz; i++)
     {
-        buf[i] = ll_bmi270_spi_reg_xfer_byte(conf->spi, dummy);
+        buf[i] = ll_bmi270_spi_reg_xfer_byte(conf, dummy);
     }
 
     spi_disable(conf->spi);
@@ -66,8 +66,8 @@ void ll_bmi270_spi_reg_write_byte(const struct ll_bmi270_spi_conf *const conf, u
     gpio_clear(conf->cs_port, conf->cs_pin);
     spi_enable(conf->spi);
 
-    ll_bmi270_spi_reg_xfer_byte(conf->spi, addr);
-    ll_bmi270_spi_reg_xfer_byte(conf->spi, byte);
+    ll_bmi270_spi_reg_xfer_byte(conf, addr);
+    ll_bmi270_spi_reg_xfer_byte(conf, byte);
 
     spi_disable(conf->spi);
     gpio_set(conf->cs_port, conf->cs_pin);
@@ -81,10 +81,10 @@ void ll_bmi270_spi_reg_write_mult_bytes(const struct ll_bmi270_spi_conf *const c
     gpio_clear(conf->cs_port, conf->cs_pin);
     spi_enable(conf->spi);
 
-    ll_bmi270_spi_reg_xfer_byte(conf->spi, addr);
+    ll_bmi270_spi_reg_xfer_byte(conf, addr);
     for (uint32_t i = 0; i < sz; i++)
     {
-        ll_bmi270_spi_reg_xfer_byte(conf->spi, buf[i]);
+        ll_bmi270_spi_reg_xfer_byte(conf, buf[i]);
     }
 
     spi_disable(conf->spi);

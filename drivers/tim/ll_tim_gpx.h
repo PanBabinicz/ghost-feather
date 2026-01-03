@@ -1094,7 +1094,7 @@ struct ll_tim_gpx_tim10111314_dev
 /// \retval LL_TIM_RES_OK  On success.
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///
-ll_tim_res_t ll_tim_gpx_tim2345_init(const ll_tim_gpx_tim2345_id_t id);
+ll_tim_res_t ll_tim_gpx_tim2345_init(void *tim);
 
 /// TODO
 /// \brief Initializes the general-purpose timer (TIM9 and TIM12).

@@ -12,14 +12,14 @@
 # --------------------------------------------------
 # Files list genereation
 # --------------------------------------------------
-file(GLOB_RECURSE PRINTF_SOURCES printf/*.c)
+file(GLOB_RECURSE PRINTF_SRCS printf/*.c)
 
 # --------------------------------------------------
 # Target: Printf
 # --------------------------------------------------
 message(STATUS "Add printf library")
 add_library(printf
-    ${PRINTF_SOURCES}
+    ${PRINTF_SRCS}
 )
 
 target_compile_definitions(printf PRIVATE
