@@ -9,6 +9,32 @@
 static struct rc_dev rc_dev_arr[RC_CH_TOTAL];
 
 ///***********************************************************************************************************
+/// Private functions - declaration.
+///***********************************************************************************************************
+///
+/// \brief
+///
+static float32_t norm_asym_f32(const float32_t min, const float32_t max, const float32_t val);
+
+///
+/// \brief
+///
+static float32_t norm_sym_f32(const float32_t min, const float32_t max, const float32_t val);
+
+///***********************************************************************************************************
+/// Private functions - definition.
+///***********************************************************************************************************
+static float32_t norm_asym_f32(const float32_t min, const float32_t max, const float32_t val)
+{
+    return ((val - min) / (max - min));
+}
+
+static float32_t norm_sym_f32(const float32_t min, const float32_t max, const float32_t val)
+{
+    return ((2 * ((val - min) / (max - min))) - 1);
+}
+
+///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
 struct rc_dev* rc_dev_arr_get(void)
@@ -45,5 +71,50 @@ void rc_sig_raw_gen(rc_ch_t ch)
     {
         dev->sig.raw = ((dev->ccr_data.curr - dev->ccr_data.prev) < 2200) ? dev->ccr_data.curr - dev->ccr_data.prev
                      : dev->sig.raw;
+    }
+}
+
+void rc_sig_norm(rc_ch_t ch)
+{
+    struct rc_dev *dev = &rc_dev_arr[ch];
+
+    if (dev->sig.raw < 1000)
+    {
+        dev->sig.norm = 1000.0;
+    }
+    else if (dev->sig.raw > 2000)
+    {
+        dev->sig.norm = 2000.0;
+    }
+    else
+    {
+        dev->sig.norm = (float32_t)dev->sig.raw;
+    }
+
+    switch (ch)
+    {
+        case RC_CH_1:
+            dev->sig.norm = norm_sym_f32(1000.0, 2000.0, dev->sig.norm);
+            break;
+
+        case RC_CH_2:
+            dev->sig.norm = norm_sym_f32(1000.0, 2000.0, dev->sig.norm);
+            break;
+
+        case RC_CH_3:
+            dev->sig.norm = norm_asym_f32(1000.0, 2000.0, dev->sig.norm);
+            break;
+
+        case RC_CH_4:
+            dev->sig.norm = norm_sym_f32(1000.0, 2000.0, dev->sig.norm);
+            break;
+
+        case RC_CH_5:
+            dev->sig.norm = norm_asym_f32(1000.0, 2000.0, dev->sig.norm);
+            break;
+
+        case RC_CH_6:
+            dev->sig.norm = norm_asym_f32(1000.0, 2000.0, dev->sig.norm);
+            break;
     }
 }

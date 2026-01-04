@@ -27,12 +27,17 @@ extern "C" {
 /// |                    BAT |*+-|
 /// |                    CH6 |s+-|  --> SWB
 /// |                    CH5 |s+-|  --> SWA
-/// |   FLYSKY FS-R6B    CH4 |s+-|
-/// |                    CH3 |s+-|
-/// |                    CH2 |s+-|
-/// |                    CH1 |s+-|
+/// |   FLYSKY FS-R6B    CH4 |s+-|  --> Yaw
+/// |                    CH3 |s+-|  --> Throttle
+/// |                    CH2 |s+-|  --> Pitch
+/// |                    CH1 |s+-|  --> Roll
 ///  ----------------------------
 ///
+
+///
+/// \brief
+///
+typedef float float32_t;
 
 /// TODO
 /// \brief
@@ -40,12 +45,12 @@ extern "C" {
 typedef enum rc_ch
 {
     RC_CH_BEGIN = 0,
-    RC_CH_1     = 0,
-    RC_CH_2,
-    RC_CH_3,
-    RC_CH_4,
-    RC_CH_5,
-    RC_CH_6,
+    RC_CH_1     = 0,    /* Roll     */
+    RC_CH_2,            /* Pitch    */
+    RC_CH_3,            /* Throttle */
+    RC_CH_4,            /* Yaw      */
+    RC_CH_5,            /* SWA      */
+    RC_CH_6,            /* SWB      */
     RC_CH_TOTAL,
 } rc_ch_t;
 
@@ -55,7 +60,7 @@ typedef enum rc_ch
 struct rc_sig
 {
     uint32_t raw;
-    uint32_t norm;
+    float32_t norm;
 };
 
 /// TODO
@@ -83,6 +88,11 @@ void rc_init(void);
 /// \brief
 ///
 void rc_sig_raw_gen(rc_ch_t ch);
+
+///
+/// \brief
+///
+void rc_sig_norm(rc_ch_t ch);
 
 #ifdef __cplusplus
 }

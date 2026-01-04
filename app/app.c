@@ -1,6 +1,8 @@
 #include "app.h"
+#include "motor.h"
 #include "rc.h"
 #include "tim.h"
+#include "vtol.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"
 
@@ -47,24 +49,30 @@ void app_start(void)
     led_on();
     tim_init();
     rc_init();
+    motor_init();
 
     struct rc_dev *rc_dev_arr = rc_dev_arr_get();
-
-    struct rc_dev *rc_dev_1 = &rc_dev_arr[RC_CH_1];
-    struct rc_dev *rc_dev_2 = &rc_dev_arr[RC_CH_2];
     struct rc_dev *rc_dev_3 = &rc_dev_arr[RC_CH_3];
-    struct rc_dev *rc_dev_4 = &rc_dev_arr[RC_CH_4];
-    struct rc_dev *rc_dev_5 = &rc_dev_arr[RC_CH_5];
-    struct rc_dev *rc_dev_6 = &rc_dev_arr[RC_CH_6];
 
     /* Never return */
     while (1)
     {
-        rc_sig_raw_gen(RC_CH_1);
-        rc_sig_raw_gen(RC_CH_2);
-        rc_sig_raw_gen(RC_CH_3);
-        rc_sig_raw_gen(RC_CH_4);
-        rc_sig_raw_gen(RC_CH_5);
-        rc_sig_raw_gen(RC_CH_6);
+        vtol_take_off_proc();
+
+        if (vtol_stat_get() == VTOL_STAT_ON)
+        {
+            struct rc_sig *throttle = &rc_dev_arr[RC_CH_3].sig;
+            rc_sig_raw_gen(RC_CH_3);
+            rc_sig_norm(RC_CH_3);
+
+            throttle->norm = (throttle->norm > 1.0) ? 1.0 : throttle->norm;
+
+            motor_upd(MOTOR_INST_1, 1000 + (1000 * (0)));
+            motor_upd(MOTOR_INST_2, 1000 + (1000 * (throttle->norm)));
+            motor_upd(MOTOR_INST_3, 1000 + (1000 * (0)));
+            motor_upd(MOTOR_INST_4, 1000 + (1000 * (0)));
+        }
+
+        vtol_land_proc();
     }
 }

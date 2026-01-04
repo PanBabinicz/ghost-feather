@@ -7,15 +7,18 @@
 #   - PID module
 #   - RC module
 #   - TIM module
+#   - VTOL module
 #
 # Description:
 # --------------------------------------------------
 # Files list genereation
 # --------------------------------------------------
 file(GLOB_RECURSE BMI270_SRCS sensor/bmi270/*.c)
+file(GLOB_RECURSE MOTOR_SRCS motor/*.c)
 #file(GLOB_RECURSE PID_SRCS pid/*.c)
 file(GLOB_RECURSE RC_SRCS rc/*.c)
 file(GLOB_RECURSE TIM_SRCS tim/*.c)
+file(GLOB_RECURSE VTOL_SRCS vtol/*.c)
 
 # --------------------------------------------------
 # Target: BMI270 sensor module
@@ -38,6 +41,24 @@ target_link_directories(bmi270 PRIVATE
 target_link_libraries(bmi270 PRIVATE
     gfc_common_options
     timing
+)
+
+# --------------------------------------------------
+# Target: Motor module
+# --------------------------------------------------
+message(STATUS "Add motor module library")
+add_library(motor
+    ${MOTOR_SRCS}
+)
+
+target_include_directories(motor PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/tim
+    ${PROJECT_SOURCE_DIR}/modules/tim
+    ${PROJECT_SOURCE_DIR}/modules/rc
+)
+
+target_link_libraries(motor PRIVATE
+    gfc_common_options
 )
 
 # --------------------------------------------------
@@ -69,13 +90,8 @@ target_include_directories(rc PRIVATE
     ${PROJECT_SOURCE_DIR}/modules/tim
 )
 
-target_link_directories(rc PRIVATE
-    ${PROJECT_SOURCE_DIR}/modules
-)
-
 target_link_libraries(rc PRIVATE
     gfc_common_options
-    tim
 )
 
 # --------------------------------------------------
@@ -94,4 +110,22 @@ target_include_directories(tim PRIVATE
 target_link_libraries(tim PRIVATE
     gfc_common_options
     ll_tim
+)
+
+# --------------------------------------------------
+# Target: TIM module
+# --------------------------------------------------
+message(STATUS "Add vtol module library")
+add_library(vtol
+    ${VTOL_SRCS}
+)
+
+target_include_directories(vtol PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/tim
+    ${PROJECT_SOURCE_DIR}/modules/rc
+    ${PROJECT_SOURCE_DIR}/modules/tim
+)
+
+target_link_libraries(vtol PRIVATE
+    gfc_common_options
 )

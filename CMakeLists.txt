@@ -234,8 +234,10 @@ target_include_directories(${APP_ELF} PRIVATE
     ${PROJECT_SOURCE_DIR}/app
     ${PROJECT_SOURCE_DIR}/drivers/spi
     ${PROJECT_SOURCE_DIR}/memory
+    ${PROJECT_SOURCE_DIR}/modules/motor
     ${PROJECT_SOURCE_DIR}/modules/rc
     ${PROJECT_SOURCE_DIR}/modules/tim
+    ${PROJECT_SOURCE_DIR}/modules/vtol
     ${PROJECT_SOURCE_DIR}/modules/sensor/bmi270
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/shared/timing
@@ -256,6 +258,8 @@ target_link_libraries(${APP_ELF} PRIVATE
     app
     bmi270
     libopencm3_stm32f7.a
+    vtol
+    motor
     rc
     tim
     ll_tim
