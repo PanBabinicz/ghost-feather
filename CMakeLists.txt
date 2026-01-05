@@ -256,7 +256,10 @@ target_link_libraries(${APP_ELF} PRIVATE
     gfc_common_options
     app_startup
     app
+    m
     bmi270
+    ll_bmi270
+    ll_spi
     libopencm3_stm32f7.a
     vtol
     motor

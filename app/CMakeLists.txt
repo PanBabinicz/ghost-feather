@@ -26,10 +26,14 @@ add_library(app
 
 target_include_directories(app PRIVATE
     ${PROJECT_SOURCE_DIR}/drivers/tim
+    ${PROJECT_SOURCE_DIR}/drivers/spi
+    ${PROJECT_SOURCE_DIR}/drivers/sensor/bmi270
     ${PROJECT_SOURCE_DIR}/modules/motor
     ${PROJECT_SOURCE_DIR}/modules/rc
     ${PROJECT_SOURCE_DIR}/modules/tim
+    ${PROJECT_SOURCE_DIR}/modules/sensor/bmi270
     ${PROJECT_SOURCE_DIR}/modules/vtol
+    ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
