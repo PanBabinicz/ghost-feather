@@ -28,6 +28,7 @@ target_include_directories(app PRIVATE
     ${PROJECT_SOURCE_DIR}/drivers/tim
     ${PROJECT_SOURCE_DIR}/drivers/spi
     ${PROJECT_SOURCE_DIR}/drivers/sensor/bmi270
+    ${PROJECT_SOURCE_DIR}/modules/ahrs
     ${PROJECT_SOURCE_DIR}/modules/motor
     ${PROJECT_SOURCE_DIR}/modules/rc
     ${PROJECT_SOURCE_DIR}/modules/tim

@@ -1,4 +1,5 @@
 #include "app.h"
+#include "ahrs.h"
 #include "bmi270.h"
 #include "motor.h"
 #include "rc.h"
@@ -51,33 +52,30 @@ static void led_panic(void)
 ///*************************************************************************************************
 void app_start(void)
 {
-    led_on();
+    timing_delay_us(1000 * 1000 * 5);
+
     tim_init();
     rc_init();
     motor_init();
-    (void)timing_init();
 
     struct ll_spi_dev* spi1 = ll_spi_dev_get();
     ll_spi_dev_init(spi1);
 
+    timing_delay_us(1000 * 1000 * 15);
+
     if (bmi270_init() != BMI270_RES_OK)
     {
+        led_on();
         while(1);
     }
     bmi270_pwr_mode_set(BMI270_PWR_MODE_NORM_IMU);
 
+    struct ahrs_dev *ahrs = ahrs_dev_get();
+
     struct rc_dev *rc_dev_arr = rc_dev_arr_get();
     struct rc_dev *rc_dev_3 = &rc_dev_arr[RC_CH_3];
 
-    int16_t acc_x, acc_y, acc_z;
-    int16_t gyr_x, gyr_y, gyr_z;
-
     uint32_t dwt_cnt_start, dwt_cnt_stop, dwt_cnt_total;
-
-    float32_t acc_x_norm, acc_y_norm, acc_z_norm;
-    float32_t acc_norm, acc_roll_ang, acc_pitch_ang;
-
-    timing_start();
 
     /* Never return */
     while (1)
@@ -88,29 +86,18 @@ void app_start(void)
         bmi270_acc_read();
         bmi270_gyr_read();
 
-        acc_x = bmi270_acc_get_x();
-        acc_y = bmi270_acc_get_y();
-        acc_z = bmi270_acc_get_z();
-
-        gyr_x = bmi270_gyr_get_x();
-        gyr_y = bmi270_gyr_get_y();
-        gyr_z = bmi270_gyr_get_z();
-
-        acc_norm = sqrtf((acc_x * acc_x) + (acc_y * acc_y) + (acc_z * acc_z));
-
-        acc_x_norm = acc_x / acc_norm;
-        acc_y_norm = acc_y / acc_norm;
-        acc_z_norm = acc_z / acc_norm;
-
-        acc_roll_ang = atan2(acc_y, acc_z);
-        acc_roll_ang *= 57.2958;
+        ahrs_acc_norm(bmi270_acc_get_x(), bmi270_acc_get_y(), bmi270_acc_get_z());
+        ahrs_ang_calc();
 
         if (vtol_stat_get() == VTOL_STAT_ON)
         {
-            struct rc_sig *roll     = &rc_dev_arr[RC_CH_1].sig;
+
+            struct rc_sig *roll     = &rc_dev_arr[RC_CH_4].sig;
             struct rc_sig *pitch    = &rc_dev_arr[RC_CH_2].sig;
             struct rc_sig *throttle = &rc_dev_arr[RC_CH_3].sig;
-            struct rc_sig *yaw      = &rc_dev_arr[RC_CH_4].sig;
+            struct rc_sig *yaw      = &rc_dev_arr[RC_CH_1].sig;
+
+            int32_t pwm1, pwm2, pwm3, pwm4;
 
             rc_sig_raw_gen(RC_CH_1);
             rc_sig_raw_gen(RC_CH_2);
@@ -122,15 +109,47 @@ void app_start(void)
             rc_sig_norm(RC_CH_3);
             rc_sig_norm(RC_CH_4);
 
-            roll->norm     = (roll->norm > 1.0) ? 1.0 : roll->norm;
-            pitch->norm    = (pitch->norm > 1.0) ? 1.0 : pitch->norm;
             throttle->norm = (throttle->norm > 1.0) ? 1.0 : throttle->norm;
-            yaw->norm      = (yaw->norm > 1.0) ? 1.0 : yaw->norm;
 
-            //motor_upd(MOTOR_INST_1, 1000 + (1000 * (0)));
-            //motor_upd(MOTOR_INST_2, 1000 + (1000 * (throttle->norm)));
-            //motor_upd(MOTOR_INST_3, 1000 + (1000 * (0)));
-            //motor_upd(MOTOR_INST_4, 1000 + (1000 * (0)));
+            if (throttle->norm > 0.3)
+            {
+                roll->norm = (roll->norm >  1.0) ?  1.0 : roll->norm;
+                roll->norm = (roll->norm < -1.0) ? -1.0 : roll->norm;
+
+                pitch->norm = (pitch->norm >  1.0) ?  1.0 : pitch->norm;
+                pitch->norm = (pitch->norm < -1.0) ? -1.0 : pitch->norm;
+
+                yaw->norm = (yaw->norm >  1.0) ?  1.0 : yaw->norm;
+                yaw->norm = (yaw->norm < -1.0) ? -1.0 : yaw->norm;
+            }
+            else
+            {
+                roll->norm  = 0.0;
+                pitch->norm = 0.0;
+                yaw->norm   = 0.0;
+            }
+
+            pwm1 = 1000 + (1000 * (throttle->norm - roll->norm + pitch->norm + yaw->norm));
+            pwm2 = 1000 + (1000 * (throttle->norm + roll->norm + pitch->norm - yaw->norm));
+            pwm3 = 1000 + (1000 * (throttle->norm + roll->norm - pitch->norm + yaw->norm));
+            pwm4 = 1000 + (1000 * (throttle->norm - roll->norm - pitch->norm - yaw->norm));
+
+            pwm1 = (pwm1 > 2000) ? 2000 : pwm1;
+            pwm1 = (pwm1 < 1000) ? 1000 : pwm1;
+
+            pwm2 = (pwm2 > 2000) ? 2000 : pwm2;
+            pwm2 = (pwm2 < 1000) ? 1000 : pwm2;
+
+            pwm3 = (pwm3 > 2000) ? 2000 : pwm3;
+            pwm3 = (pwm3 < 1000) ? 1000 : pwm3;
+
+            pwm4 = (pwm4 > 2000) ? 2000 : pwm4;
+            pwm4 = (pwm4 < 1000) ? 1000 : pwm4;
+
+            motor_upd(MOTOR_INST_1, pwm1);
+            motor_upd(MOTOR_INST_2, pwm2);
+            motor_upd(MOTOR_INST_3, pwm3);
+            motor_upd(MOTOR_INST_4, pwm4);
         }
 
         vtol_land_proc();

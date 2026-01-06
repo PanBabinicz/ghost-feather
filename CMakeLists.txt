@@ -256,6 +256,7 @@ target_link_libraries(${APP_ELF} PRIVATE
     gfc_common_options
     app_startup
     app
+    ahrs
     m
     bmi270
     ll_bmi270
