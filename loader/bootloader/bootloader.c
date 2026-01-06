@@ -117,7 +117,10 @@ static void nvic_setup()
 static void gpio_setup(void)
 {
     gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO2);
-    gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_PULLUP, GPIO4);
+
+    /* Default GPIO output state is LOW -> set CSB to HIGH. */
+    gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO4);
+    gpio_set(GPIOA, GPIO4);
 
     /* Set SPI1 gpios alternate function. */
     gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, (GPIO5 | GPIO6 | GPIO7));
