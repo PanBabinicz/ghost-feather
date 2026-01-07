@@ -55,28 +55,28 @@ void vtol_take_off_proc(void)
         switch (phase->step.take_off)
         {
             case VTOL_TAKE_OFF_STEP_0:
-                if ((pitch->raw > 900) && (pitch->raw < 1100) && (throttle->raw > 900) && (throttle->raw < 1100))
+                if ((pitch->raw > 900) && (pitch->raw < 1200) && (throttle->raw > 900) && (throttle->raw < 1200))
                 {
                     phase->step.take_off = VTOL_TAKE_OFF_STEP_1;
                 }
                 break;
 
             case VTOL_TAKE_OFF_STEP_1:
-                if ((roll->raw > 900) && (roll->raw < 1100) && (throttle->raw > 900) && (throttle->raw < 1100))
+                if ((roll->raw > 900) && (roll->raw < 1200) && (throttle->raw > 900) && (throttle->raw < 1200))
                 {
                     phase->step.take_off = VTOL_TAKE_OFF_STEP_2;
                 }
                 break;
 
             case VTOL_TAKE_OFF_STEP_2:
-                if ((roll->raw > 1450) && (throttle->raw > 900) && (throttle->raw < 1100))
+                if ((roll->raw > 1450) && (throttle->raw > 900) && (throttle->raw < 1200))
                 {
                     phase->step.take_off = VTOL_TAKE_OFF_STEP_3;
                 }
                 break;
 
             case VTOL_TAKE_OFF_STEP_3:
-                if ((pitch->raw > 1450) && (throttle->raw > 900) && (throttle->raw < 1100))
+                if ((pitch->raw > 1450) && (throttle->raw > 900) && (throttle->raw < 1200))
                 {
                     phase->step.take_off = VTOL_TAKE_OFF_STEP_0;
                     phase->stat = VTOL_STAT_ON;
@@ -111,28 +111,28 @@ void vtol_land_proc(void)
         switch (phase->step.land)
         {
             case VTOL_LAND_STEP_0:
-                if ((pitch->raw > 900) && (pitch->raw < 1100) && (throttle->raw > 900) && (throttle->raw < 1100))
+                if ((pitch->raw > 900) && (pitch->raw < 1200) && (throttle->raw > 900) && (throttle->raw < 1200))
                 {
                     phase->step.land = VTOL_LAND_STEP_1;
                 }
                 break;
 
             case VTOL_LAND_STEP_1:
-                if ((roll->raw > 900) && (roll->raw < 1100) && (throttle->raw > 900) && (throttle->raw < 1100))
+                if ((roll->raw > 900) && (roll->raw < 1200) && (throttle->raw > 900) && (throttle->raw < 1200))
                 {
                     phase->step.land = VTOL_LAND_STEP_2;
                 }
                 break;
 
             case VTOL_LAND_STEP_2:
-                if ((roll->raw > 1450) && (throttle->raw > 900) && (throttle->raw < 1100))
+                if ((roll->raw > 1450) && (throttle->raw > 900) && (throttle->raw < 1200))
                 {
                     phase->step.land = VTOL_LAND_STEP_3;
                 }
                 break;
 
             case VTOL_LAND_STEP_3:
-                if ((pitch->raw > 1450) && (throttle->raw > 900) && (throttle->raw < 1100))
+                if ((pitch->raw > 1450) && (throttle->raw > 900) && (throttle->raw < 1200))
                 {
                     phase->step.land = VTOL_LAND_STEP_0;
                     phase->stat = VTOL_STAT_OFF;
