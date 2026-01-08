@@ -3,7 +3,9 @@
 # --------------------------------------------------
 # Project: Ghost Feather Firmware (STM32F7)
 # Modules:
+#   - AHRS module
 #   - BMI270 sensor module
+#   - Motor module
 #   - PID module
 #   - RC module
 #   - TIM module
@@ -13,12 +15,31 @@
 # --------------------------------------------------
 # Files list genereation
 # --------------------------------------------------
+file(GLOB_RECURSE AHRS_SRCS ahrs/*.c)
 file(GLOB_RECURSE BMI270_SRCS sensor/bmi270/*.c)
 file(GLOB_RECURSE MOTOR_SRCS motor/*.c)
 #file(GLOB_RECURSE PID_SRCS pid/*.c)
 file(GLOB_RECURSE RC_SRCS rc/*.c)
 file(GLOB_RECURSE TIM_SRCS tim/*.c)
 file(GLOB_RECURSE VTOL_SRCS vtol/*.c)
+
+# --------------------------------------------------
+# Target: AHRS module
+# --------------------------------------------------
+message(STATUS "Add ahrs module library")
+add_library(ahrs
+    ${AHRS_SRCS}
+)
+
+#target_include_directories(ahrs PRIVATE
+#    ${PROJECT_SOURCE_DIR}/drivers/sensor/bmi270
+#    ${PROJECT_SOURCE_DIR}/shared/timing
+#    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
+#)
+
+target_link_libraries(ahrs PRIVATE
+    gfc_common_options
+)
 
 # --------------------------------------------------
 # Target: BMI270 sensor module
