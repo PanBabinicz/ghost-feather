@@ -146,10 +146,10 @@ void app_start(void)
             pwm4 = (pwm4 > 2000) ? 2000 : pwm4;
             pwm4 = (pwm4 < 1000) ? 1000 : pwm4;
 
-            motor_upd(MOTOR_INST_1, pwm1);
-            motor_upd(MOTOR_INST_2, pwm2);
-            motor_upd(MOTOR_INST_3, pwm3);
-            motor_upd(MOTOR_INST_4, pwm4);
+            motor_upd(MOTOR_1, pwm1);
+            motor_upd(MOTOR_2, pwm2);
+            motor_upd(MOTOR_3, pwm3);
+            motor_upd(MOTOR_4, pwm4);
         }
 
         vtol_land_proc();

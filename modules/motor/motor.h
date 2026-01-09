@@ -11,15 +11,15 @@ extern "C" {
 ///
 /// \brief
 ///
-typedef enum motor_inst
+typedef enum motor
 {
-    MOTOR_INST_BEGIN = 0,
-    MOTOR_INST_1     = 0,
-    MOTOR_INST_2,
-    MOTOR_INST_3,
-    MOTOR_INST_4,
-    MOTOR_INST_TOTAL,
-} motor_inst_t;
+    MOTOR_BEGIN = 0,
+    MOTOR_1     = 0,
+    MOTOR_2,
+    MOTOR_3,
+    MOTOR_4,
+    MOTOR_TOTAL,
+} motor_t;
 
 ///
 /// \brief
@@ -44,7 +44,7 @@ void motor_init(void);
 ///
 /// brief
 ///
-void motor_upd(const motor_inst_t inst, const uint32_t pwm);
+void motor_upd(const motor_t motor, const uint32_t pwm);
 
 #ifdef __cplusplus
 }
