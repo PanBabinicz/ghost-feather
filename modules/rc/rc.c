@@ -12,12 +12,24 @@ static struct rc_dev rc_dev_arr[RC_CH_TOTAL];
 /// Private functions - declaration.
 ///***********************************************************************************************************
 ///
-/// \brief
+/// \brief Normalizes the input value to an asymmetric range defined by the given minimum and maximum limits.
+///
+/// \param[in] min The minimum normalization limit.
+/// \param[in] max The maximum normalization limit.
+/// \param[in] val The input value to be normalized.
+///
+/// \return Asymmetrically normalized 32-bit floating-point value.
 ///
 static float32_t norm_asym_f32(const float32_t min, const float32_t max, const float32_t val);
 
 ///
-/// \brief
+/// \brief Normalizes the input value to a symmetric range defined by the given minimum and maximum limits.
+///
+/// \param[in] min The minimum normalization limit.
+/// \param[in] max The maximum normalization limit.
+/// \param[in] val The input value to be normalized.
+///
+/// \return Symmetrically normalized 32-bit floating-point value.
 ///
 static float32_t norm_sym_f32(const float32_t min, const float32_t max, const float32_t val);
 

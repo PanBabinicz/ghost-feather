@@ -34,7 +34,7 @@ struct motor_dev
 ///
 /// \brief Gets the motor device array.
 ///
-/// \return struct motor_dev* The address of first motor device.
+/// \return struct motor_dev* The address of the first motor device.
 ///
 struct motor_dev* motor_dev_arr_get(void);
 
@@ -46,8 +46,8 @@ void motor_init(void);
 ///
 /// brief Updates selected motor using PWM signal.
 ///
-/// param[in] motor_t  motor The motor identifier.
-/// param[in] uint32_t pwm   The PWM signal.
+/// param[in] motor The motor identifier.
+/// param[in] pwm   The PWM signal.
 ///
 void motor_upd(const motor_t motor, const uint32_t pwm);
 

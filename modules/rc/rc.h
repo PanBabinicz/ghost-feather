@@ -35,12 +35,12 @@ extern "C" {
 ///
 
 ///
-/// \brief
+/// \brief The 32-bit floating-ponit type.
 ///
 typedef float float32_t;
 
-/// TODO
-/// \brief
+///
+/// \brief The RC channel identifiers.
 ///
 typedef enum rc_ch
 {
@@ -54,8 +54,8 @@ typedef enum rc_ch
     RC_CH_TOTAL,
 } rc_ch_t;
 
-/// TODO
-/// \brief
+///
+/// \brief The RC signal components.
 ///
 struct rc_sig
 {
@@ -63,8 +63,8 @@ struct rc_sig
     float32_t norm;
 };
 
-/// TODO
-/// \brief
+///
+/// \brief The RC device.
 ///
 struct rc_dev
 {
@@ -75,22 +75,26 @@ struct rc_dev
 };
 
 ///
-/// \brief
+/// \brief Gets RC device array.
+///
+/// \return struct rc_dav* The address of the first RC device.
 ///
 struct rc_dev* rc_dev_arr_get(void);
 
 ///
-/// \brief
+/// \brief Initializes all RC devices.
 ///
 void rc_init(void);
 
 ///
-/// \brief
+/// \brief Generates PWM pulse width from capture/compare register.
 ///
 void rc_sig_raw_gen(rc_ch_t ch);
 
 ///
-/// \brief
+/// \brief Normalizes PWM pulse width for a given RC channel.
+///
+/// \param[in] ch The RC channel identifier.
 ///
 void rc_sig_norm(rc_ch_t ch);
 
