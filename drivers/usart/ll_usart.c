@@ -11,7 +11,7 @@
 /// Private objects - declaration.
 ///*************************************************************************************************
 ///
-/// \brief The usart controller structure.
+/// \brief The USART structure.
 ///
 typedef struct
 {
@@ -24,7 +24,7 @@ typedef struct
 /// Private objects - definition.
 ///*************************************************************************************************
 ///
-/// \brief The usart controller.
+/// \brief The USART instance.
 ///
 static ll_usart_t ll_usart;
 

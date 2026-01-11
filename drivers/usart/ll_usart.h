@@ -7,8 +7,8 @@
 extern "C" {
 #endif  /* __cplusplus */
 
-/// TODO
-/// \brief The usart controller result type.
+///
+/// \brief The USART result type.
 ///
 typedef enum
 {
@@ -17,8 +17,7 @@ typedef enum
 } ll_usart_result_t;
 
 ///
-/// TODO
-/// \brief The usart controller status type.
+/// \brief The USART status type.
 ///
 typedef enum
 {
@@ -27,32 +26,28 @@ typedef enum
 } ll_usart_status_t;
 
 ///
-/// TODO
-/// \brief Get the usart controller initialized flag.
+/// \brief Gets the USART initialized flag.
 ///
-/// \return ll_usart_status_t      Init status.
-/// \retval LL_USART_STATUS_INIT   When usart controller has been already initialized.
+/// \return ll_usart_status_t      Initialize status.
+/// \retval LL_USART_STATUS_INIT   When usart has been already initialized.
 /// \retval LL_USART_STATUS_DEINIT Otherwise.
 ///
 ll_usart_status_t ll_usart_is_initialized(void);
 
 ///
-/// TODO
-/// \brief Sets the usart controller status.
+/// \brief Sets the USART status.
 ///
 /// \param[in] status The status to be set.
 ///
 void ll_usart_set_init_status(ll_usart_status_t status);
 
 ///
-/// TODO
-/// \brief Initialize the usart controller debug interface.
+/// \brief Initializes the USART debug interface.
 ///
 void ll_usart_debug_init(void);
 
 ///
-/// TODO
-/// \brief Deinitialize the usart controller debug interface.
+/// \brief Deinitializes the USART debug interface.
 ///
 void ll_usart_debug_deinit(void);
 
