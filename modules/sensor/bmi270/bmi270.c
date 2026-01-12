@@ -324,42 +324,38 @@ static const struct bmi270_pwr_mode_conf bmi270_pwr_mode_conf_arr[BMI270_PWR_MOD
 /// Private functions - declaration.
 ///***********************************************************************************************************
 ///
-/// \brief Uploads the bmi270 configuration file.
+/// \brief Uploads the BMI270 configuration file.
 ///
-/// \param[in] dev         The bmi270 device.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \param[in] dev The BMI270 device.
 ///
 static void bmi270_upld_conf_file(const struct bmi270_dev *const dev);
 
 ///
-/// \brief Validates the bmi270 configuration file.
+/// \brief Validates the BMI270 configuration file.
 ///
-/// \param[in] dev         The bmi270 device.
+/// \param[in] dev The BMI270 device.
 ///
-/// \return bmi270_res_t   The bmi270 result.
+/// \return bmi270_res_t   The BMI270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 static bmi270_res_t bmi270_vld_conf_file(const struct bmi270_dev *const dev);
 
 ///
-/// \brief Delays execution for the specified number of bmi270 sensor time cycles.
+/// \brief Delays execution for the specified number of BMI270 sensor time cycles.
 ///
 /// \note  One cycle is equal to 39.0625us.
 ///
-/// \param[in] dev         The bmi270 device.
-/// \param[in] cycles      The number of cycles.
+/// \param[in] dev    The BMI270 device.
+/// \param[in] cycles The number of cycles.
 ///
 static void bmi270_wait_cycles(struct bmi270_dev *const dev, const uint32_t cycles);
 
 ///
-/// \brief Sends given command to the bmi270 device.
+/// \brief Sends given command to the BMI270 device.
 ///
-/// \param[in] dev         The bmi270 device.
-/// \param[in] cmd         The bmi270 command to be sent.
+/// \param[in] dev The BMI270 device.
+/// \param[in] cmd The BMI270 command to be sent.
 ///
 static void bmi270_cmd_send(struct bmi270_dev *const dev, const uint8_t cmd);
 

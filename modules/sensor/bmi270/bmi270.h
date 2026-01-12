@@ -8,7 +8,7 @@ extern "C" {
 #endif  /* __cplusplus */
 
 ///
-/// \brief The bmi270 registers definition.
+/// \brief The BMI270 registers definition.
 ///
 #define BMI270_REG_CHIP_ID                  (0x00)  /*!< Chip identification code.                          */
 #define BMI270_REG_ERR_REG                  (0x02)  /*!< Reports sensor error condition.                    */
@@ -113,7 +113,7 @@ extern "C" {
 #define BMI270_REG_CMD                      (0x7e)  /*!< Command register.                                  */
 
 ///
-/// \brief The bmi270 INST register fields.
+/// \brief The BMI270 INST register fields.
 ///
 #define BMI270_INST_MSK             (0xff << 0x00)  /*!< The internal status register mask.                 */
 #define BMI270_INST_MSG_MSK         (0x0f << 0x00)  /*!< The internal status message mask.                  */
@@ -129,7 +129,7 @@ extern "C" {
 #define BMI270_INST_ODR_50HZ_ERR    (0x01 << 0x06)  /*!< The internal status minimum bandwidth are not met. */
 
 ///
-/// \brief The bmi270 GYR_GAIN_STATUS register fields.
+/// \brief The BMI270 GYR_GAIN_STATUS register fields.
 ///
 #define BMI270_GYR_GAIN_STAT_MSK    (0x3f << 0x00)  /*!< Describes the saturation status for the gyro gain. */
 #define BMI270_GYR_GAIN_STAT_SAT_X  (0x01 << 0x00)  /*!< Gain results to saturated value for x axis.        */
@@ -141,7 +141,7 @@ extern "C" {
 #define BMI270_GYR_GAIN_STAT_ABORT  (0x03 << 0x03)  /*!< Command is aborted.                                */
 
 ///
-/// \brief The bmi270 ACC_CONF register fields.
+/// \brief The BMI270 ACC_CONF register fields.
 ///
 #define BMI270_ACC_MSK              (0xff << 0x00)  /*!< The accelerometer mask.                            */
 #define BMI270_ACC_ODR_MSK          (0x0f << 0x00)  /*!< The accelerometer ODR mask.                        */
@@ -174,7 +174,7 @@ extern "C" {
 #define BMI270_ACC_FILT_PERF_HP     (0x01 << 0x07)  /*!< The accelerometer filter perf optimized mode.      */
 
 ///
-/// \brief The bmi270 ACC_RANGE register g-range field.
+/// \brief The BMI270 ACC_RANGE register g-range field.
 ///
 #define BMI270_ACC_RANGE_MSK        (0x03 << 0x00)  /*!< The accelerometer g-range mask.                    */
 #define BMI270_ACC_RANGE_2G         (0x00 << 0x00)  /*!< The accelerometer g-range +/-2g.                   */
@@ -183,7 +183,7 @@ extern "C" {
 #define BMI270_ACC_RANGE_16G        (0x03 << 0x00)  /*!< The accelerometer g-range +/-16g.                  */
 
 ///
-/// \brief The bmi270 GYR_CONF register fields.
+/// \brief The BMI270 GYR_CONF register fields.
 ///
 #define BMI270_GYR_MSK              (0xff << 0x00)  /*!< The gyroscope mask.                                */
 #define BMI270_GYR_ODR_MSK          (0x0f << 0x00)  /*!< The gyroscope ODR mask.                            */
@@ -215,7 +215,7 @@ extern "C" {
 #define BMI270_GYR_FILT_PERF_HP     (0x01 << 0x07)  /*!< The gyroscope filter perf optimized mode.          */
 
 ///
-/// \brief The bmi270 GYR_RANGE register fields.
+/// \brief The BMI270 GYR_RANGE register fields.
 ///
 #define BMI270_GYR_RANGE_MSK        (0x07 << 0x00)  /*!< The gyroscope range mask.                          */
 #define BMI270_GYR_RANGE_2000       (0x00 << 0x00)  /*!< The gyroscope range +/-2000dps, 16.4  LSB/dps.     */
@@ -228,7 +228,7 @@ extern "C" {
 #define BMI270_GYR_OIS_2000         (0x01 << 0x03)  /*!< The gyroscope ois +/-2000dps, 16.4  LSB/dps.       */
 
 ///
-/// \brief The bmi270 ACC_SELF_TEST register fields.
+/// \brief The BMI270 ACC_SELF_TEST register fields.
 ///
 #define BMI270_ACC_SLF_TST_MSK      (0x0f << 0x00)  /*!< The accelerometer self-test configuration mask.    */
 #define BMI270_ACC_SLF_TST_EN_OFF   (0x00 << 0x00)  /*!< Disable accelerometer self-test.                   */
@@ -239,7 +239,7 @@ extern "C" {
 #define BMI270_ACC_SLF_TST_AMP_HIGH (0x01 << 0x03)  /*!< Set amplitude of the self-test deflection to high. */
 
 ///
-/// \brief The bmi270 ACC_SELF_TEST register fields.
+/// \brief The BMI270 ACC_SELF_TEST register fields.
 ///
 #define BMI270_GYR_SLF_TST_MSK      (0x0f << 0x00)  /*!< The gyroscope self-test configuration mask.        */
 #define BMI270_GYR_SLF_TST_DONE_MSK (0x01 << 0x00)  /*!< Gyroscope functional test of detection ended mask. */
@@ -255,7 +255,7 @@ extern "C" {
 #define BMI270_GYR_SLF_TST_Z_OK     (0x01 << 0x03)  /*!< OK status of gyro Z-axis self test.                */
 
 ///
-/// \brief The bmi270 PWR_CONF register fields.
+/// \brief The BMI270 PWR_CONF register fields.
 ///
 #define BMI270_PWR_CONF_MSK         (0x07 << 0x00)  /*!< The power conf mask.                               */
 #define BMI270_PWR_CONF_APS_MSK     (0x01 << 0x00)  /*!< The power conf advanced power save mask.           */
@@ -269,13 +269,13 @@ extern "C" {
 #define BMI270_PWR_CONF_FUP_ON      (0x01 << 0x02)  /*!< The fast power up enabled.                         */
 
 ///
-/// \brief The bmi270 PWR_CONF register fields.
+/// \brief The BMI270 PWR_CONF register fields.
 ///
 #define BMI270_INIT_CTRL_MSK        (0xff << 0x00)  /*!< The bmi270 init control mask.                      */
 #define BMI270_INIT_CTRL_START      (0x00 << 0x00)  /*!< The bmi270 init control start.                     */
 
 ///
-/// \brief The bmi270 PWR_CTRL register fields.
+/// \brief The BMI270 PWR_CTRL register fields.
 ///
 #define BMI270_PWR_CTRL_MSK         (0x0f << 0x00)  /*!< The bmi270 power control mask.                     */
 #define BMI270_PWR_CTRL_AUX_MSK     (0x01 << 0x00)  /*!< The bmi270 power control auxiliary sensor mask.    */
@@ -292,7 +292,7 @@ extern "C" {
 #define BMI270_PWR_CTRL_TEMP_ON     (0x01 << 0x03)  /*!< The temperature sensor on.                         */
 
 ///
-/// \brief The bmi270 CMD register fields.
+/// \brief The BMI270 CMD register fields.
 ///
 #define BMI270_CMD_MSK              (0xff << 0x00)  /*!< The bmi270 cmd mask.                               */
 #define BMI270_CMD_G_TRIGGER        (0x02 << 0x00)  /*!< The cmd which triggers special gyro ops.           */
@@ -302,23 +302,23 @@ extern "C" {
 #define BMI270_CMD_SOFTRESET        (0xb6 << 0x00)  /*!< The cmd which triggers a reset.                    */
 
 ///
-/// \brief The bmi270 register values at POR.
+/// \brief The BMI270 register values at POR.
 ///
 #define BMI270_POR_CHIP_ID          (0x24)          /*!< The bmi270 chip id value at POR.                   */
 #define BMI270_POR_PWR_CONF         (0x03)          /*!< The bmi270 power configuration value at POR.       */
 
 ///
-/// \brief The bmi270 device type.
+/// \brief The BMI270 device type.
 ///
 struct bmi270_dev;
 
 ///
-/// \brief The bmi270 power mode configuration type.
+/// \brief The BMI270 power mode configuration type.
 ///
 struct bmi270_pwr_mode_conf;
 
 ///
-/// \brief The bmi270 result type.
+/// \brief The BMI270 result type.
 ///
 typedef enum bmi270_res
 {
@@ -330,7 +330,7 @@ typedef enum bmi270_res
 } bmi270_res_t;
 
 ///
-/// \brief The bmi270 status type.
+/// \brief The BMI270 status type.
 ///
 typedef enum bmi270_stat
 {
@@ -341,7 +341,7 @@ typedef enum bmi270_stat
 } bmi270_stat_t;
 
 ///
-/// \brief The bmi270 power mode type.
+/// \brief The BMI270 power mode type.
 ///
 typedef enum bmi270_pwr_mode
 {
@@ -361,334 +361,217 @@ typedef enum bmi270_pwr_mode
 } bmi270_pwr_mode_t;
 
 ///
-/// \brief Gets the bmi270 instance.
+/// \brief Gets the BMI270 device.
 ///
-/// \return struct bmi270_dev* The bmi270 instance address.
+/// \return struct bmi270_dev* The BMI270 device address.
 ///
 struct bmi270_dev* bmi270_dev_get(void);
 
 ///
-/// \brief Gets the bmi270 power mode config.
+/// \brief Gets the BMI270 power mode config.
 ///
-/// \param[in] pwr_mode            The selected power mode.
+/// \param[in] pwr_mode The selected power mode.
 ///
 /// \return bmi270_pwr_mode_conf_t The power mode config.
 ///
 const struct bmi270_pwr_mode_conf* bmi270_pwr_mode_get_conf(const bmi270_pwr_mode_t pwr_mode);
 
-/// TODO
-/// \brief Initializes the bmi270.
 ///
-/// \param[in] dev         The bmi270 device.
+/// \brief Initializes the BMI270.
 ///
-/// \return bmi270_res_t   The bmi270 result.
+/// \param[in] dev The BMI270 device.
+///
+/// \return bmi270_res_t   The BMI270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 bmi270_res_t bmi270_init(void);
 
-/// TODO
-/// \brief Deinitializes the bmi270.
 ///
-/// \param[in] dev         The bmi270 device.
+/// \brief Deinitializes the BMI270.
 ///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \param[in] dev The BMI270 device.
 ///
 void bmi270_deinit(void);
 
-/// TODO
-/// \brief Performs soft reset of the bmi270.
+///
+/// \brief Performs soft reset of the BMI270.
 ///
 /// \note  After every POR or soft reset, the IMU remains in suspend mode. To get ready for
 ///        operation the device must be initialized through init procedure.
 ///
-/// \param[in] dev         The bmi270 device.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
-///
 void bmi270_soft_rst(void);
 
-/// TODO
+///
 /// \brief Sets the power mode.
 ///
-/// \param[in] dev           The bmi270 device.
 /// \param[in] pwr_mode_conf The pointer to power mode config.
-///
-/// \return bmi270_res_t     The bmi270 result.
-/// \retval BMI270_RES_OK    On success.
-/// \retval BMI270_RES_ERR   Otherwise.
 ///
 void bmi270_pwr_mode_set(bmi270_pwr_mode_t pwr_mode);
 
-/// TODO
+///
 /// \brief Sets the device status.
 ///
-/// \param[in] dev           The bmi270 device.
-/// \param[in] stat          The bmi270 device status.
+/// \param[in] stat The BMI270 device status.
 ///
 void bmi270_stat_set(const bmi270_stat_t stat);
 
-/// TODO
-/// \brief Get the device status.
 ///
-/// \param[in]  dev          The bmi270 device.
-/// \param[out] stat         The bmi270 device status.
+/// \brief Gets the device status.
 ///
-/// \return bmi270_res_t     The bmi270 result.
-/// \retval BMI270_RES_OK    On success.
-/// \retval BMI270_RES_ERR   Otherwise.
+/// \return bmi270_stat_t      The BMI270 status.
+/// \retval BMI270_STAT_DEINIT When deinitialized.
+/// \retval BMI270_STAT_INIT   When initialized.
 ///
 bmi270_stat_t bmi270_stat_get(void);
 
-/// TODO
+///
 /// \brief Self-tests accelerometer.
+///
+/// \return bmi270_res_t   The BMI270 result.
+/// \retval BMI270_RES_OK  On success.
+/// \retval BMI270_RES_ERR Otherwise.
 ///
 bmi270_res_t bmi270_acc_slf_tst(void);
 
-/// TODO
+///
 /// \brief Self-tests gyroscope.
 ///
-/// \param[in] dev         The bmi270 device.
-///
-/// \return bmi270_res_t   The bmi270 result.
+/// \return bmi270_res_t   The BMI270 result.
 /// \retval BMI270_RES_OK  On success.
 /// \retval BMI270_RES_ERR Otherwise.
 ///
 bmi270_res_t bmi270_gyr_slf_tst(void);
 
-/// TODO
+///
 /// \brief Reads the accelerometer data.
-///
-/// \param[in] dev         The bmi270 device.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
 ///
 void bmi270_acc_read(void);
 
-/// TODO
+///
 /// \brief Gets the accelerometer x axis value.
 ///
-/// \param[in]  dev        The bmi270 device.
-/// \param[out] x          The x axis value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \return int16_t The accelerometer value on x-axis.
 ///
 int16_t bmi270_acc_get_x(void);
 
-/// TODO
+///
 /// \brief Sets the accelerometer x axis value.
 ///
-/// \param[in] dev         The bmi270 device.
-/// \param[in] x           The x axis value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \param[in] x The x-axis value.
 ///
 void bmi270_acc_set_x(const int16_t x);
 
-/// TODO
+///
 /// \brief Gets the accelerometer y axis value.
 ///
-/// \param[in]  dev        The bmi270 device.
-/// \param[out] y          The y axis value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \return int16_t The accelerometer value on y-axis.
 ///
 int16_t bmi270_acc_get_y(void);
 
-/// TODO
+///
 /// \brief Sets the accelerometer y axis value.
 ///
-/// \param[in] dev         The bmi270 device.
-/// \param[in] y           The y axis value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \param[in] y The y-axis value.
 ///
 void bmi270_acc_set_y(const int16_t y);
 
-/// TODO
+///
 /// \brief Gets the accelerometer z axis value.
 ///
-/// \param[in]  dev        The bmi270 device.
-/// \param[out] z          The z axis value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \return int16_t The accelerometer value on z-axis.
 ///
 int16_t bmi270_acc_get_z(void);
 
-/// TODO
+///
 /// \brief Sets the accelerometer z axis value.
 ///
-/// \param[in] dev         The bmi270 device.
-/// \param[in] z           The z axis value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \param[in] z The z-axis value.
 ///
 void bmi270_acc_set_z(const int16_t z);
 
-/// TODO
+///
 /// \brief Reads the gyroscope data.
-///
-/// \param[in] dev         The bmi270 device.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
 ///
 void bmi270_gyr_read(void);
 
-/// TODO
+///
 /// \brief Gets the gyroscope x axis value.
 ///
-/// \param[in]  dev        The bmi270 device.
-/// \param[out] x          The x axis value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \return int16_t The gyroscope value on x-axis.
 ///
 int16_t bmi270_gyr_get_x(void);
 
-/// TODO
+///
 /// \brief Sets the gyroscope x axis value.
 ///
-/// \param[in] dev         The bmi270 device.
-/// \param[in] x           The x axis value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \param[in] x The x-axis value.
 ///
 void bmi270_gyr_set_x(const int16_t x);
 
-/// TODO
+///
 /// \brief Gets the gyroscope y axis value.
 ///
-/// \param[in]  dev        The bmi270 device.
-/// \param[out] y          The y axis value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \return int16_t The gyroscope value on y-axis.
 ///
 int16_t bmi270_gyr_get_y(void);
 
-/// TODO
+///
 /// \brief Sets the gyroscope y axis value.
 ///
-/// \param[in] dev         The bmi270 device.
-/// \param[in] y           The y axis value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \param[in] y The y-axis value.
 ///
 void bmi270_gyr_set_y(const int16_t y);
 
-/// TODO
+///
 /// \brief Gets the gyroscope z axis value.
 ///
-/// \param[in]  dev        The bmi270 device.
-/// \param[out] z          The z axis value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \return int16_t The gyroscope value on z-axis.
 ///
 int16_t bmi270_gyr_get_z(void);
 
-/// TODO
+///
 /// \brief Sets the gyroscope z axis value.
 ///
-/// \param[in] dev         The bmi270 device.
-/// \param[in] z           The z axis value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \param[in] z The z-axis value.
 ///
 void bmi270_gyr_set_z(const int16_t z);
 
-/// TODO
+///
 /// \brief Reads the temperature data.
-///
-/// \param[in] dev         The bmi270 device.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
 ///
 void bmi270_temp_read(void);
 
-/// TODO
+///
 /// \brief Gets the temperature value.
 ///
-/// \param[in]  dev        The bmi270 device.
-/// \param[out] temp       The temperature value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \return int16_t The temperature value.
 ///
 int16_t bmi270_temp_get(void);
 
-/// TODO
+///
 /// \brief Sets the temperature value.
 ///
-/// \param[in] dev         The bmi270 device.
-/// \param[in] temp        The temperature value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \param[in] temp The temperature value.
 ///
 void bmi270_temp_set(int16_t temp);
 
-/// TODO
-/// \brief Reads the sensor time register data.
 ///
-/// \param[in] dev         The bmi270 device.
+/// \brief Reads the sensor time register data.
 ///
 void bmi270_time_read(void);
 
-/// TODO
+///
 /// \brief Gets the sensor time value.
 ///
-/// \param[in]  dev        The bmi270 device.
-/// \param[out] time       The sensor time value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \return uint32_t The sensor time value.
 ///
 uint32_t bmi270_time_get(void);
 
-/// TODO
+///
 /// \brief Sets the sensor time value.
 ///
-/// \param[in] dev         The bmi270 device.
-/// \param[in] time        The sensor time value.
-///
-/// \return bmi270_res_t   The bmi270 result.
-/// \retval BMI270_RES_OK  On success.
-/// \retval BMI270_RES_ERR Otherwise.
+/// \param[in] time The sensor time value.
 ///
 void bmi270_time_set(const uint32_t time);
 
