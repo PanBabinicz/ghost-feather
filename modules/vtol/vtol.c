@@ -5,7 +5,9 @@
 /// Private objects - declaration.
 ///***********************************************************************************************************
 ///
-/// \brief
+/// \brief VTOL procedure step state.
+///
+/// Holds the current step indices for VTOL take-off (arming), and landing (disarming) procedures.
 ///
 struct vtol_step
 {
@@ -14,7 +16,10 @@ struct vtol_step
 };
 
 ///
-/// \brief
+/// \brief VTOL phase state.
+///
+/// Represents the current operational phase of the VTOL system, including active procedure steps and overall
+/// VTOL status.
 ///
 struct vtol_phase
 {
@@ -26,7 +31,7 @@ struct vtol_phase
 /// Private objects - definition.
 ///***********************************************************************************************************
 ///
-/// \brief
+/// \brief The Ghost Feather VTOL phase instance.
 ///
 static struct vtol_phase ghf_vtol_phase;
 
