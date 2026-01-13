@@ -8,8 +8,8 @@
 extern "C" {
 #endif  /* __cplusplus */
 
-/// TODO
-/// \brief
+///
+/// \brief The TIM module result type.
 ///
 typedef enum tim_res
 {
@@ -17,8 +17,8 @@ typedef enum tim_res
     TIM_RES_ERR,
 } tim_res_t;
 
-/// TODO
-/// \brief
+///
+/// \brief The avaiable TIM instances type.
 ///
 typedef enum tim_inst
 {
@@ -29,8 +29,8 @@ typedef enum tim_inst
     TIM_INST_TOTAL,
 } tim_inst_t;
 
-/// TODO
-/// \brief
+///
+/// \brief The TIM device.
 ///
 struct tim_dev
 {
@@ -44,17 +44,23 @@ struct tim_dev
 };
 
 ///
-/// \brief
+/// \brief Gets TIM device by instance.
+///
+/// \param[in] inst The TIM instance identifier.
+///
+/// \return struct tim_dev* The address of selected TIM device.
 ///
 struct tim_dev* tim_dev_get(tim_inst_t inst);
 
 ///
-/// \brief
+/// \brief Gets the TIM device array.
+///
+/// \return struct tim_dev* The address of the first TIM device.
 ///
 struct tim_dev* tim_dev_arr_get(void);
 
 ///
-/// \brief
+/// \brief Initializes all TIM devices.
 ///
 void tim_init(void);
 
