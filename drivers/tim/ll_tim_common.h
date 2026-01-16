@@ -7,11 +7,8 @@
 extern "C" {
 #endif  /* __cplusplus */
 
-/// TODO
-/// \brief The TIM controller result type.
 ///
-/// This enum indicates the outcome of an operation performed on a TIM
-/// controller.
+/// \brief The TIM result type.
 ///
 typedef enum ll_tim_res
 {
@@ -19,8 +16,8 @@ typedef enum ll_tim_res
     LL_TIM_RES_ERR,
 } ll_tim_res_t;
 
-/// TODO
-/// \brief The TIM controller status type.
+///
+/// \brief The TIM status type.
 ///
 /// This enum reflects whether a TIM peripheral is currently initialized or
 /// not.
@@ -31,8 +28,8 @@ typedef enum ll_tim_stat
     LL_TIM_STAT_INIT,
 } ll_tim_stat_t;
 
-/// TODO
-/// \brief The TIM controller capture/compare register instance type.
+///
+/// \brief The TIM capture/compare register instance type.
 ///
 /// This enum identifies a specific CCR within a TIM peripheral.
 /// Few TIM peripherals support up to 6 capture/compare channels.
@@ -47,8 +44,8 @@ typedef enum ll_tim_ccr_ch
     LL_TIM_CCR_CH6,
 } ll_tim_ccr_ch_t;
 
-/// TODO
-/// \brief The TIM controller capture/compare register data.
+///
+/// \brief The TIM capture/compare register data.
 ///
 /// Stores previous and current capture values for a specific CCR.
 /// This is useful for calculating differences such as pulse width,

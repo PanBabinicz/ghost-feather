@@ -587,7 +587,7 @@ struct ll_tim_adv6_tim18_dev
 ///
 /// \param[in] tim The pointer to timer device.
 ///
-/// \return ll_tim_res_t   The tim controller result.
+/// \return ll_tim_res_t   The TIM result.
 /// \retval LL_TIM_RES_OK  On success.
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///
@@ -598,7 +598,7 @@ ll_tim_res_t ll_tim_adv6_tim18_init(void *tim);
 ///
 /// \param[in] tim The pointer to timer device.
 ///
-/// \return ll_tim_res_t   The tim controller result.
+/// \return ll_tim_res_t   The TIM result.
 /// \retval LL_TIM_RES_OK  On success.
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///
@@ -609,7 +609,7 @@ ll_tim_res_t ll_tim_adv6_tim18_deinit(void *tim);
 ///
 /// \param[in] tim The pointer to timer device.
 ///
-/// \return ll_tim_res_t   The tim controller result.
+/// \return ll_tim_res_t   The TIM result.
 /// \retval LL_TIM_RES_OK  On success.
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///
@@ -620,30 +620,34 @@ ll_tim_res_t ll_tim_adv6_tim18_enable(void *tim);
 ///
 /// \param[in] tim The pointer to timer device.
 ///
-/// \return ll_tim_res_t   The tim controller result.
+/// \return ll_tim_res_t   The TIM result.
 /// \retval LL_TIM_RES_OK  On success.
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///
 ll_tim_res_t ll_tim_adv6_tim18_disable(void *tim);
 
-/// TODO
-/// \brief Disables the base timer (TIM6 and TIM7).
 ///
-/// \param[in] tim The pointer to timer device.
+/// \brief Gets capture/compare register data (TIM1 and TIM8).
 ///
-/// \return ll_tim_res_t   The tim controller result.
+/// \param[in]  tim The pointer to timer device.
+/// \param[in]  ch  The capture/compare channel.
+/// \param[out] ccr The capture/compare data.
+///
+/// \return ll_tim_res_t   The TIM result.
 /// \retval LL_TIM_RES_OK  On success.
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///
 ll_tim_res_t ll_tim_adv6_tim18_ccr_data_get(void *tim, const ll_tim_ccr_ch_t ch,
         struct ll_tim_ccr_data *const ccr);
 
-/// TODO
-/// \brief Disables the base timer (TIM6 and TIM7).
 ///
-/// \param[in] tim The pointer to timer device.
+/// \brief Sets capture/compare register value (TIM1 and TIM8).
 ///
-/// \return ll_tim_res_t   The tim controller result.
+/// \param[in  tim The pointer to timer device.
+/// \param[in  ch  The capture/compare channel.
+/// \param[in] ccr The capture/compare data.
+///
+/// \return ll_tim_res_t   The TIM result.
 /// \retval LL_TIM_RES_OK  On success.
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///

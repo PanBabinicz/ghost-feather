@@ -10,8 +10,8 @@
 extern "C" {
 #endif  /* __cplusplus */
 
-/// TODO
-/// \brief Identifier for general-purpose timers TIM6 and TIM7.
+///
+/// \brief Identifier for base timers TIM6 and TIM7.
 ///
 /// This enum selects which base timer instance is being referenced.
 ///
@@ -136,7 +136,7 @@ union ll_tim_base1_tim67_arr
     } bf;
 };
 
-/// TODO
+///
 /// \brief Register map for timers TIM6 and TIM7.
 ///
 /// This structure defines the memory-mapped register layout for TIM6 and
@@ -157,7 +157,7 @@ struct ll_tim_base1_tim67_regs
     union ll_tim_base1_tim67_arr  arr;
 };
 
-/// TODO
+///
 /// \brief Runtime device context for base timers TIM6 and TIM7.
 ///
 /// This structure holds all runtime state required to control a TIM6 and TIM7
@@ -172,45 +172,45 @@ struct ll_tim_base1_tim67_dev
     ll_tim_stat_t stat;
 };
 
-/// TODO
+///
 /// \brief Initializes the base timer (TIM6 and TIM7).
 ///
 /// \param[in] tim The pointer to timer device.
 ///
-/// \return ll_tim_res_t   The tim controller result.
+/// \return ll_tim_res_t   The TIM result.
 /// \retval LL_TIM_RES_OK  On success.
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///
 ll_tim_res_t ll_tim_base1_tim67_init(void *tim);
 
-/// TODO
+///
 /// \brief Deinitializes the base timer (TIM6 and TIM7).
 ///
 /// \param[in] tim The pointer to timer device.
 ///
-/// \return ll_tim_res_t   The tim controller result.
+/// \return ll_tim_res_t   The TIM result.
 /// \retval LL_TIM_RES_OK  On success.
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///
 ll_tim_res_t ll_tim_base1_tim67_deinit(void *tim);
 
-/// TODO
+///
 /// \brief Enables the base timer (TIM6 and TIM7).
 ///
 /// \param[in] tim The pointer to timer device.
 ///
-/// \return ll_tim_res_t   The tim controller result.
+/// \return ll_tim_res_t   The TIM result.
 /// \retval LL_TIM_RES_OK  On success.
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///
 ll_tim_res_t ll_tim_base1_tim67_enable(void *tim);
 
-/// TODO
+///
 /// \brief Disables the base timer (TIM6 and TIM7).
 ///
 /// \param[in] tim The pointer to timer device.
 ///
-/// \return ll_tim_res_t   The tim controller result.
+/// \return ll_tim_res_t   The TIM result.
 /// \retval LL_TIM_RES_OK  On success.
 /// \retval LL_TIM_RES_ERR Otherwise.
 ///
