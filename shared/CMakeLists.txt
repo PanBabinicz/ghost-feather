@@ -11,14 +11,14 @@
 # --------------------------------------------------
 # Files list genereation
 # --------------------------------------------------
-file(GLOB_RECURSE TIMING_SOURCES timing/*.c)
+file(GLOB_RECURSE TIMING_SRCS timing/*.c)
 
 # --------------------------------------------------
 # Target: Timing
 # --------------------------------------------------
 message(STATUS "Add timing library")
 add_library(timing
-    ${TIMING_SOURCES}
+    ${TIMING_SRCS}
 )
 
 target_include_directories(timing PRIVATE

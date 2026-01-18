@@ -18,9 +18,26 @@ project(ghost-feather
 )
 
 # --------------------------------------------------
+# Project settings
+# --------------------------------------------------
+set(BOOTLOADER_ELF ${PROJECT_NAME}-bootloader.elf)
+set(APPLOADER_ELF  ${PROJECT_NAME}-apploader.elf)
+set(UPDATER_ELF    ${PROJECT_NAME}-updater.elf)
+set(APP_ELF        ${PROJECT_NAME}-app.elf)
+
+# --------------------------------------------------
 # CPU / FPU configuration flags
 # --------------------------------------------------
-set(CPU_FLAGS
+set(COMPILER_OPTIONS
+    -mfloat-abi=hard
+    -mfpu=fpv5-sp-d16
+    -mcpu=cortex-m7
+    -mthumb
+)
+
+set(LINKER_OPTIONS
+    -nostartfiles
+    -specs=nano.specs
     -mfloat-abi=hard
     -mfpu=fpv5-sp-d16
     -mcpu=cortex-m7
@@ -68,12 +85,16 @@ target_compile_definitions(gfc_common_options INTERFACE
 
 target_compile_options(gfc_common_options INTERFACE
     $<$<COMPILE_LANGUAGE:C>:
-        ${CPU_FLAGS}
+        ${COMPILER_OPTIONS}
         ${OPT_FLAGS}
     >
     $<$<COMPILE_LANGUAGE:ASM>:
-        ${CPU_FLAGS}
+        ${COMPILER_OPTIONS}
     >
+)
+
+target_link_options(gfc_common_options INTERFACE
+    ${LINKER_OPTIONS}
 )
 
 # --------------------------------------------------
@@ -83,9 +104,10 @@ target_compile_options(gfc_common_options INTERFACE
 # via set_property(GLOBAL PROPERTY <NAME>_SOURCES ...)
 # --------------------------------------------------
 add_subdirectory(app)
-add_subdirectory(controller)
+add_subdirectory(drivers)
 add_subdirectory(dfu)
 add_subdirectory(loader)
+add_subdirectory(modules)
 add_subdirectory(shared)
 add_subdirectory(submodules)
 add_subdirectory(startup)
@@ -93,163 +115,163 @@ add_subdirectory(startup)
 # --------------------------------------------------
 # Target: Bootloader
 # --------------------------------------------------
-message(STATUS "Configuring ghost-feather-bootloader.elf")
-add_executable(ghost-feather-bootloader.elf
+message(STATUS "Configuring ${BOOTLOADER_ELF}")
+add_executable(${BOOTLOADER_ELF}
     ${PROJECT_SOURCE_DIR}/misc/empty.c
-    ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
+    ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
 )
 
-target_include_directories(ghost-feather-bootloader.elf PUBLIC
-    ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/bootloader
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
+target_include_directories(${BOOTLOADER_ELF} PUBLIC
+    ${PROJECT_SOURCE_DIR}/loader/bootloader
+    ${PROJECT_SOURCE_DIR}/memory/
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
-target_link_directories(ghost-feather-bootloader.elf PRIVATE
-    ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/bootloader
-    ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+target_link_directories(${BOOTLOADER_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/loader/bootloader
+    ${PROJECT_SOURCE_DIR}/linkerscript
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
-    /usr/arm-none-eabi/lib/thumb/v7+fp/hard
 )
 
-target_link_libraries(ghost-feather-bootloader.elf PRIVATE
+target_link_libraries(${BOOTLOADER_ELF} PRIVATE
+    gfc_common_options
     bootloader_startup
     bootloader
-    gfc_common_options
     libopencm3_stm32f7.a
     timing
 )
 
-target_link_options(ghost-feather-bootloader.elf PRIVATE
-    -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/bootloader.ld
-    -nostartfiles
-    -specs=nano.specs
+target_link_options(${BOOTLOADER_ELF} PRIVATE
+    -T${PROJECT_SOURCE_DIR}/linkerscript/bootloader.ld
 )
 
 # --------------------------------------------------
 # Target: Apploader
 # --------------------------------------------------
-message(STATUS "Configuring ghost-feather-apploader.elf")
-add_executable(ghost-feather-apploader.elf
+message(STATUS "Configuring ${APPLOADER_ELF}")
+add_executable(${APPLOADER_ELF}
     ${PROJECT_SOURCE_DIR}/misc/empty.c
-    ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
+    ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
 )
 
-target_include_directories(ghost-feather-apploader.elf PRIVATE
-    ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/apploader
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
+target_include_directories(${APPLOADER_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/loader/apploader
+    ${PROJECT_SOURCE_DIR}/memory/
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
-target_link_directories(ghost-feather-apploader.elf PRIVATE
-    ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+target_link_directories(${APPLOADER_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/linkerscript
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
-    /usr/arm-none-eabi/lib/thumb/v7+fp/hard
 )
 
-target_link_libraries(ghost-feather-apploader.elf PRIVATE
+target_link_libraries(${APPLOADER_ELF} PRIVATE
+    gfc_common_options
     apploader_startup
     apploader
-    gfc_common_options
     libopencm3_stm32f7.a
 )
 
-target_link_options(ghost-feather-apploader.elf PRIVATE
-    -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/apploader.ld
-    -nostartfiles
-    -specs=nano.specs
+target_link_options(${APPLOADER_ELF} PRIVATE
+    -T${PROJECT_SOURCE_DIR}/linkerscript/apploader.ld
 )
 
 # --------------------------------------------------
 # Target: Updater
 # --------------------------------------------------
-message(STATUS "Configuring ghost-feather-updater.elf")
-add_executable(ghost-feather-updater.elf
+message(STATUS "Configuring ${UPDATER_ELF}")
+add_executable(${UPDATER_ELF}
     ${PROJECT_SOURCE_DIR}/misc/empty.c
-    ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
+    ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
 )
 
-target_include_directories(ghost-feather-updater.elf PRIVATE
-    ${PROJECT_SOURCE_DIR}/controller/usart
-    ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/updater
-    ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/dust
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
+target_include_directories(${UPDATER_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/usart
+    ${PROJECT_SOURCE_DIR}/dfu/updater
+    ${PROJECT_SOURCE_DIR}/dfu/dust
+    ${PROJECT_SOURCE_DIR}/memory
     ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     ${PROJECT_SOURCE_DIR}/submodules/printf
 )
 
-target_link_directories(ghost-feather-updater.elf PRIVATE
-    ${PROJECT_SOURCE_DIR}/controller
+target_link_directories(${UPDATER_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers
     ${PROJECT_SOURCE_DIR}/dfu
-    ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/linkerscript
     ${PROJECT_SOURCE_DIR}/submodules
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
-    /usr/arm-none-eabi/lib/thumb/v7+fp/hard
 )
 
-target_link_libraries(ghost-feather-updater.elf PRIVATE
+target_link_libraries(${UPDATER_ELF} PRIVATE
+    gfc_common_options
     updater_startup
     updater
-    usart_controller
     dust
     printf
-    gfc_common_options
+    ll_usart
     libopencm3_stm32f7.a
 )
 
-target_link_options(ghost-feather-updater.elf PRIVATE
-    -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/updater.ld
-    -nostartfiles
-    -specs=nano.specs
+target_link_options(${UPDATER_ELF} PRIVATE
+    -T${PROJECT_SOURCE_DIR}/linkerscript/updater.ld
 )
 
 # --------------------------------------------------
 # Target: Main application
 # --------------------------------------------------
-message(STATUS "Configuring ghost-feather-app.elf")
-add_executable(ghost-feather-app.elf
+message(STATUS "Configuring ${APP_ELF}")
+add_executable(${APP_ELF}
     ${PROJECT_SOURCE_DIR}/misc/empty.c
-    ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
+    ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
 )
 
-target_include_directories(ghost-feather-app.elf PRIVATE
-    ${PROJECT_SOURCE_DIR}/app/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/controller/bmi270
-    ${PROJECT_SOURCE_DIR}/controller/spi
-    ${PROJECT_SOURCE_DIR}/controller/tim
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
+target_include_directories(${APP_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/app
+    ${PROJECT_SOURCE_DIR}/drivers/spi
+    ${PROJECT_SOURCE_DIR}/memory
+    ${PROJECT_SOURCE_DIR}/modules/motor
+    ${PROJECT_SOURCE_DIR}/modules/rc
+    ${PROJECT_SOURCE_DIR}/modules/tim
+    ${PROJECT_SOURCE_DIR}/modules/vtol
+    ${PROJECT_SOURCE_DIR}/modules/sensor/bmi270
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
-target_link_directories(ghost-feather-app.elf PRIVATE
-    ${PROJECT_SOURCE_DIR}/controller
-    ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+target_link_directories(${APP_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers
+    ${PROJECT_SOURCE_DIR}/modules
+    ${PROJECT_SOURCE_DIR}/linkerscript
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
-    /usr/arm-none-eabi/lib/thumb/v7+fp/hard
 )
 
-target_link_libraries(ghost-feather-app.elf PRIVATE
+target_link_libraries(${APP_ELF} PRIVATE
+    gfc_common_options
     app_startup
     app
+    ahrs
+    m
     bmi270
-    gfc_common_options
+    ll_bmi270
+    ll_spi
     libopencm3_stm32f7.a
-    tim_ctrl
+    vtol
+    motor
+    rc
+    tim
+    ll_tim
     timing
 )
 
-target_link_options(ghost-feather-app.elf PRIVATE
-    -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/app.ld
-    -nostartfiles
-    -specs=nano.specs
+target_link_options(${APP_ELF} PRIVATE
+    -T${PROJECT_SOURCE_DIR}/linkerscript/app.ld
 )
 
 # --------------------------------------------------

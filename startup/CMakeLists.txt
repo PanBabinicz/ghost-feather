@@ -18,22 +18,22 @@
 # --------------------------------------------------
 # Files list genereation
 # --------------------------------------------------
-file(GLOB_RECURSE BOOTLOADER_STARTUP_SOURCES stm32f722xx/bootloader/*.c)
-file(GLOB_RECURSE APPLOADER_STARTUP_SOURCES stm32f722xx/apploader/*.c)
-file(GLOB_RECURSE UPDATER_STARTUP_SOURCES stm32f722xx/updater/*.c)
-file(GLOB_RECURSE APP_STARTUP_SOURCES stm32f722xx/app/*.c)
+file(GLOB_RECURSE BOOTLOADER_STARTUP_SRCS bootloader/*.c)
+file(GLOB_RECURSE APPLOADER_STARTUP_SRCS apploader/*.c)
+file(GLOB_RECURSE UPDATER_STARTUP_SRCS updater/*.c)
+file(GLOB_RECURSE APP_STARTUP_SRCS app/*.c)
 
 # --------------------------------------------------
 # Target: Bootloader startup
 # --------------------------------------------------
 message(STATUS "Add bootloader_startup library")
 add_library(bootloader_startup
-    ${BOOTLOADER_STARTUP_SOURCES}
+    ${BOOTLOADER_STARTUP_SRCS}
 )
 
 target_include_directories(bootloader_startup PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/bootloader
+    ${PROJECT_SOURCE_DIR}/memory
+    ${PROJECT_SOURCE_DIR}/loader/bootloader
 )
 
 target_link_libraries(bootloader_startup PRIVATE
@@ -45,12 +45,12 @@ target_link_libraries(bootloader_startup PRIVATE
 # --------------------------------------------------
 message(STATUS "Add apploader_startup library")
 add_library(apploader_startup
-    ${APPLOADER_STARTUP_SOURCES}
+    ${APPLOADER_STARTUP_SRCS}
 )
 
 target_include_directories(apploader_startup PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/apploader
+    ${PROJECT_SOURCE_DIR}/memory
+    ${PROJECT_SOURCE_DIR}/loader/apploader
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
@@ -63,12 +63,12 @@ target_link_libraries(apploader_startup PRIVATE
 # --------------------------------------------------
 message(STATUS "Add updater_startup library")
 add_library(updater_startup
-    ${UPDATER_STARTUP_SOURCES}
+    ${UPDATER_STARTUP_SRCS}
 )
 
 target_include_directories(updater_startup PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/updater
+    ${PROJECT_SOURCE_DIR}/memory
+    ${PROJECT_SOURCE_DIR}/dfu/updater
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
@@ -81,12 +81,12 @@ target_link_libraries(updater_startup PRIVATE
 # --------------------------------------------------
 message(STATUS "Add app_startup library")
 add_library(app_startup
-    ${APP_STARTUP_SOURCES}
+    ${APP_STARTUP_SRCS}
 )
 
 target_include_directories(app_startup PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/app/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/memory
+    ${PROJECT_SOURCE_DIR}/app
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
