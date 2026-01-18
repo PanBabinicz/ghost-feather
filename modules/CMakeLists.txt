@@ -1,0 +1,152 @@
+# --------------------------------------------------
+# SPDX-License-Identifier: MIT
+# --------------------------------------------------
+# Project: Ghost Feather Firmware (STM32F7)
+# Modules:
+#   - AHRS module
+#   - BMI270 sensor module
+#   - Motor module
+#   - PID module
+#   - RC module
+#   - TIM module
+#   - VTOL module
+#
+# Description:
+# --------------------------------------------------
+# Files list genereation
+# --------------------------------------------------
+file(GLOB_RECURSE AHRS_SRCS ahrs/*.c)
+file(GLOB_RECURSE BMI270_SRCS sensor/bmi270/*.c)
+file(GLOB_RECURSE MOTOR_SRCS motor/*.c)
+#file(GLOB_RECURSE PID_SRCS pid/*.c)
+file(GLOB_RECURSE RC_SRCS rc/*.c)
+file(GLOB_RECURSE TIM_SRCS tim/*.c)
+file(GLOB_RECURSE VTOL_SRCS vtol/*.c)
+
+# --------------------------------------------------
+# Target: AHRS module
+# --------------------------------------------------
+message(STATUS "Add ahrs module library")
+add_library(ahrs
+    ${AHRS_SRCS}
+)
+
+#target_include_directories(ahrs PRIVATE
+#    ${PROJECT_SOURCE_DIR}/drivers/sensor/bmi270
+#    ${PROJECT_SOURCE_DIR}/shared/timing
+#    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
+#)
+
+target_link_libraries(ahrs PRIVATE
+    gfc_common_options
+)
+
+# --------------------------------------------------
+# Target: BMI270 sensor module
+# --------------------------------------------------
+message(STATUS "Add bmi270 sensor module library")
+add_library(bmi270
+    ${BMI270_SRCS}
+)
+
+target_include_directories(bmi270 PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/sensor/bmi270
+    ${PROJECT_SOURCE_DIR}/shared/timing
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
+)
+
+target_link_directories(bmi270 PRIVATE
+    ${PROJECT_SOURCE_DIR}/shared
+)
+
+target_link_libraries(bmi270 PRIVATE
+    gfc_common_options
+    timing
+)
+
+# --------------------------------------------------
+# Target: Motor module
+# --------------------------------------------------
+message(STATUS "Add motor module library")
+add_library(motor
+    ${MOTOR_SRCS}
+)
+
+target_include_directories(motor PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/tim
+    ${PROJECT_SOURCE_DIR}/modules/tim
+    ${PROJECT_SOURCE_DIR}/modules/rc
+)
+
+target_link_libraries(motor PRIVATE
+    gfc_common_options
+)
+
+# --------------------------------------------------
+# Target: PID module
+# --------------------------------------------------
+#message(STATUS "Add pid module library")
+#add_library(pid
+#    ${PID_SRCS}
+#)
+#
+#target_include_directories(pid PRIVATE
+#    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
+#)
+#
+#target_link_libraries(pid PRIVATE
+#    gfc_common_options
+#)
+
+# --------------------------------------------------
+# Target: RC module
+# --------------------------------------------------
+message(STATUS "Add rc module library")
+add_library(rc
+    ${RC_SRCS}
+)
+
+target_include_directories(rc PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/tim
+    ${PROJECT_SOURCE_DIR}/modules/tim
+)
+
+target_link_libraries(rc PRIVATE
+    gfc_common_options
+)
+
+# --------------------------------------------------
+# Target: TIM module
+# --------------------------------------------------
+message(STATUS "Add tim module library")
+add_library(tim
+    ${TIM_SRCS}
+)
+
+target_include_directories(tim PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/tim
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
+)
+
+target_link_libraries(tim PRIVATE
+    gfc_common_options
+    ll_tim
+)
+
+# --------------------------------------------------
+# Target: TIM module
+# --------------------------------------------------
+message(STATUS "Add vtol module library")
+add_library(vtol
+    ${VTOL_SRCS}
+)
+
+target_include_directories(vtol PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/tim
+    ${PROJECT_SOURCE_DIR}/modules/rc
+    ${PROJECT_SOURCE_DIR}/modules/tim
+)
+
+target_link_libraries(vtol PRIVATE
+    gfc_common_options
+)

@@ -104,10 +104,10 @@ target_link_options(gfc_common_options INTERFACE
 # via set_property(GLOBAL PROPERTY <NAME>_SOURCES ...)
 # --------------------------------------------------
 add_subdirectory(app)
-add_subdirectory(controller)
-add_subdirectory(core)
+add_subdirectory(drivers)
 add_subdirectory(dfu)
 add_subdirectory(loader)
+add_subdirectory(modules)
 add_subdirectory(shared)
 add_subdirectory(submodules)
 add_subdirectory(startup)
@@ -118,20 +118,20 @@ add_subdirectory(startup)
 message(STATUS "Configuring ${BOOTLOADER_ELF}")
 add_executable(${BOOTLOADER_ELF}
     ${PROJECT_SOURCE_DIR}/misc/empty.c
-    ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
+    ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
 )
 
 target_include_directories(${BOOTLOADER_ELF} PUBLIC
-    ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/bootloader
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/loader/bootloader
+    ${PROJECT_SOURCE_DIR}/memory/
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
 target_link_directories(${BOOTLOADER_ELF} PRIVATE
-    ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/bootloader
-    ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/loader/bootloader
+    ${PROJECT_SOURCE_DIR}/linkerscript
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
 )
@@ -145,7 +145,7 @@ target_link_libraries(${BOOTLOADER_ELF} PRIVATE
 )
 
 target_link_options(${BOOTLOADER_ELF} PRIVATE
-    -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/bootloader.ld
+    -T${PROJECT_SOURCE_DIR}/linkerscript/bootloader.ld
 )
 
 # --------------------------------------------------
@@ -154,18 +154,18 @@ target_link_options(${BOOTLOADER_ELF} PRIVATE
 message(STATUS "Configuring ${APPLOADER_ELF}")
 add_executable(${APPLOADER_ELF}
     ${PROJECT_SOURCE_DIR}/misc/empty.c
-    ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
+    ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
 )
 
 target_include_directories(${APPLOADER_ELF} PRIVATE
-    ${PROJECT_SOURCE_DIR}/loader/stm32f722xx/apploader
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/loader/apploader
+    ${PROJECT_SOURCE_DIR}/memory/
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
 target_link_directories(${APPLOADER_ELF} PRIVATE
-    ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/linkerscript
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
 )
 
@@ -177,7 +177,7 @@ target_link_libraries(${APPLOADER_ELF} PRIVATE
 )
 
 target_link_options(${APPLOADER_ELF} PRIVATE
-    -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/apploader.ld
+    -T${PROJECT_SOURCE_DIR}/linkerscript/apploader.ld
 )
 
 # --------------------------------------------------
@@ -186,23 +186,23 @@ target_link_options(${APPLOADER_ELF} PRIVATE
 message(STATUS "Configuring ${UPDATER_ELF}")
 add_executable(${UPDATER_ELF}
     ${PROJECT_SOURCE_DIR}/misc/empty.c
-    ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
+    ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
 )
 
 target_include_directories(${UPDATER_ELF} PRIVATE
-    ${PROJECT_SOURCE_DIR}/controller/usart
-    ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/updater
-    ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/dust
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/drivers/usart
+    ${PROJECT_SOURCE_DIR}/dfu/updater
+    ${PROJECT_SOURCE_DIR}/dfu/dust
+    ${PROJECT_SOURCE_DIR}/memory
     ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     ${PROJECT_SOURCE_DIR}/submodules/printf
 )
 
 target_link_directories(${UPDATER_ELF} PRIVATE
-    ${PROJECT_SOURCE_DIR}/controller
+    ${PROJECT_SOURCE_DIR}/drivers
     ${PROJECT_SOURCE_DIR}/dfu
-    ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/linkerscript
     ${PROJECT_SOURCE_DIR}/submodules
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
 )
@@ -211,14 +211,14 @@ target_link_libraries(${UPDATER_ELF} PRIVATE
     gfc_common_options
     updater_startup
     updater
-    usart_controller
     dust
     printf
+    ll_usart
     libopencm3_stm32f7.a
 )
 
 target_link_options(${UPDATER_ELF} PRIVATE
-    -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/updater.ld
+    -T${PROJECT_SOURCE_DIR}/linkerscript/updater.ld
 )
 
 # --------------------------------------------------
@@ -227,25 +227,27 @@ target_link_options(${UPDATER_ELF} PRIVATE
 message(STATUS "Configuring ${APP_ELF}")
 add_executable(${APP_ELF}
     ${PROJECT_SOURCE_DIR}/misc/empty.c
-    ${PROJECT_SOURCE_DIR}/vectortable/stm32f722xx/vectortable.S
+    ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
 )
 
 target_include_directories(${APP_ELF} PRIVATE
-    ${PROJECT_SOURCE_DIR}/app/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/controller/bmi270
-    ${PROJECT_SOURCE_DIR}/controller/pid
-    ${PROJECT_SOURCE_DIR}/controller/spi
-    ${PROJECT_SOURCE_DIR}/controller/tim
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/app
+    ${PROJECT_SOURCE_DIR}/drivers/spi
+    ${PROJECT_SOURCE_DIR}/memory
+    ${PROJECT_SOURCE_DIR}/modules/motor
+    ${PROJECT_SOURCE_DIR}/modules/rc
+    ${PROJECT_SOURCE_DIR}/modules/tim
+    ${PROJECT_SOURCE_DIR}/modules/vtol
+    ${PROJECT_SOURCE_DIR}/modules/sensor/bmi270
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
 )
 
 target_link_directories(${APP_ELF} PRIVATE
-    ${PROJECT_SOURCE_DIR}/controller
-    ${PROJECT_SOURCE_DIR}/core
-    ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
+    ${PROJECT_SOURCE_DIR}/drivers
+    ${PROJECT_SOURCE_DIR}/modules
+    ${PROJECT_SOURCE_DIR}/linkerscript
     ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
 )
@@ -254,17 +256,22 @@ target_link_libraries(${APP_ELF} PRIVATE
     gfc_common_options
     app_startup
     app
+    ahrs
+    m
     bmi270
-    pid_ctrl
+    ll_bmi270
+    ll_spi
     libopencm3_stm32f7.a
-    ghf
-    rf_ctrl
-    tim_ctrl
+    vtol
+    motor
+    rc
+    tim
+    ll_tim
     timing
 )
 
 target_link_options(${APP_ELF} PRIVATE
-    -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/app.ld
+    -T${PROJECT_SOURCE_DIR}/linkerscript/app.ld
 )
 
 # --------------------------------------------------
