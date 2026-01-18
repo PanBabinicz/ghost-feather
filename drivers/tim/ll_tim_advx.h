@@ -653,30 +653,6 @@ ll_tim_res_t ll_tim_adv6_tim18_ccr_data_get(void *tim, const ll_tim_ccr_ch_t ch,
 ///
 ll_tim_res_t ll_tim_adv6_tim18_ccr_set(void *tim, const ll_tim_ccr_ch_t ch, const uint32_t ccr);
 
-/// TODO
-/// \brief Disables the advanced timer (TIM1 and TIM8).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_adv6_tim18_ccr_data_get(void *tim, const tim_ctrl_inst_ccr_t ccr_inst,
-        struct tim_ctrl_ccr_data *ccr_data);
-
-/// TODO
-/// \brief Disables the advanced timer (TIM1 and TIM8).
-///
-/// \param[in] tim The pointer to timer device.
-///
-/// \return tim_ctrl_res_t   The tim controller result.
-/// \retval TIM_CTRL_RES_OK  On success.
-/// \retval TIM_CTRL_RES_ERR Otherwise.
-///
-tim_ctrl_res_t tim_ctrl_adv6_tim18_ccr_set(void *tim, const tim_ctrl_inst_ccr_t ccr_inst,
-        const uint32_t ccr);
-
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
