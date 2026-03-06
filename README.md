@@ -73,6 +73,19 @@
 > ~ cmake --build . --config Debug
 > ```
 
+> **CMake Presets**
+>
+> ```console
+> ~ cmake --preset list
+> ~ cmake --preset <build-type>
+> ```
+>
+> **Build shell script**
+>
+> ```console
+> ~ ./build.sh <build-type>
+> ```
+
 # How to program
 
 > For now, CMake generates two elf files. Each of these files needs to be uploaded to the device.
