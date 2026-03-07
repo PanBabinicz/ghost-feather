@@ -79,7 +79,7 @@
 > ~ cmake --preset list
 > ~ cmake --preset <build-type>
 > ```
->
+
 > **Build shell script**
 >
 > ```console
@@ -96,6 +96,12 @@
 > The second option is to use soft floating point numbers but the speed will be slower.
 
 # Marco Paland printf implementation
+
+> The Marco Paland printf implementation is a lightweight, standalone alternative designed
+> specifically to address these limitations. This implementation offers a small memory footprint,
+> portability, and independence from the full C standard library. It is widely used in embedded
+> projects where developers require formatted output but cannot afford the code size and
+> dependencies of a complete libc implementation.
 
 # DFU script
 
