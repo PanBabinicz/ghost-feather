@@ -17,7 +17,7 @@ typedef enum cf_res
 } cf_res_t;
 
 ///
-/// \brief The complementary filter status type.
+/// \brief The complementary filter instance type.
 ///
 typedef enum cf_inst
 {
