@@ -21,19 +21,34 @@ typedef enum pid_inst
 } pid_inst_t;
 
 ///
-/// \brief
+/// \brief Initializes the PID controller.
 ///
-void pid_init(const pid_inst_t inst, const float32_t kp, const float32_t ki, const float32_t kd);
+/// \param[in] inst The PID controller instance.
+/// \param[in] kp   The proportional term gain.
+/// \param[in] ki   The integral term gain.
+/// \param[in] kd   The derivative term gain.
+/// \param[in] dt   The time step value.
+///
+void pid_init(const pid_inst_t inst, const float32_t kp, const float32_t ki, const float32_t kd
+        const float32_t dt);
 
 ///
-/// \brief
+/// \brief Deinitializes the PID controller.
+///
+/// \param[in] inst The PID controller instance.
 ///
 void pid_deinit(const pid_inst_t inst);
 
 ///
-/// \brief
+/// \brief Updates the PID controller control variable.
 ///
-float32_t pid_update(const pid_inst_t inst, float32_t err);
+/// \param[in] inst The PID controller instance.
+/// \param[in] sp   The setpoint value.
+/// \param[in] pv   The process variable value.
+///
+/// \return float32_t The control variable.
+///
+float32_t pid_update(const pid_inst_t inst, float32_t sp, float32_t pv);
 
 #ifdef __cplusplus
 }
