@@ -5,6 +5,7 @@
 # Modules:
 #   - AHRS module
 #   - BMI270 sensor module
+#   - Complementary filter module
 #   - Motor module
 #   - PID module
 #   - RC module
@@ -17,8 +18,9 @@
 # --------------------------------------------------
 file(GLOB_RECURSE AHRS_SRCS ahrs/*.c)
 file(GLOB_RECURSE BMI270_SRCS sensor/bmi270/*.c)
+file(GLOB_RECURSE CF_SRCS cf/*.c)
 file(GLOB_RECURSE MOTOR_SRCS motor/*.c)
-#file(GLOB_RECURSE PID_SRCS pid/*.c)
+file(GLOB_RECURSE PID_SRCS pid/*.c)
 file(GLOB_RECURSE RC_SRCS rc/*.c)
 file(GLOB_RECURSE TIM_SRCS tim/*.c)
 file(GLOB_RECURSE VTOL_SRCS vtol/*.c)
@@ -65,6 +67,18 @@ target_link_libraries(bmi270 PRIVATE
 )
 
 # --------------------------------------------------
+# Target: CF module
+# --------------------------------------------------
+message(STATUS "Add cf module library")
+add_library(cf
+    ${CF_SRCS}
+)
+
+target_link_libraries(cf PRIVATE
+    gfc_common_options
+)
+
+# --------------------------------------------------
 # Target: Motor module
 # --------------------------------------------------
 message(STATUS "Add motor module library")
@@ -85,18 +99,14 @@ target_link_libraries(motor PRIVATE
 # --------------------------------------------------
 # Target: PID module
 # --------------------------------------------------
-#message(STATUS "Add pid module library")
-#add_library(pid
-#    ${PID_SRCS}
-#)
-#
-#target_include_directories(pid PRIVATE
-#    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
-#)
-#
-#target_link_libraries(pid PRIVATE
-#    gfc_common_options
-#)
+message(STATUS "Add pid module library")
+add_library(pid
+    ${PID_SRCS}
+)
+
+target_link_libraries(pid PRIVATE
+    gfc_common_options
+)
 
 # --------------------------------------------------
 # Target: RC module
@@ -134,7 +144,7 @@ target_link_libraries(tim PRIVATE
 )
 
 # --------------------------------------------------
-# Target: TIM module
+# Target: VTOL module
 # --------------------------------------------------
 message(STATUS "Add vtol module library")
 add_library(vtol
