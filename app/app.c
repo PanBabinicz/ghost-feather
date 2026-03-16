@@ -1,7 +1,9 @@
 #include "app.h"
 #include "ahrs.h"
 #include "bmi270.h"
+#include "cf.h"
 #include "motor.h"
+#include "pid.h"
 #include "rc.h"
 #include "tim.h"
 #include "timing.h"
@@ -57,6 +59,10 @@ void app_start(void)
     tim_init();
     rc_init();
     motor_init();
+    cf_init(CF_INST_ROLL, 0.95f, 0.0f);
+    cf_init(CF_INST_PITCH, 0.95f, 0.0f);
+    pid_init(PID_INST_ROLL, 1.0f, 1.0f, 1.0f, 1.0f);
+    pid_init(PID_INST_PITCH, 1.0f, 1.0f, 1.0f, 1.0f);
 
     struct ll_spi_dev* spi1 = ll_spi_dev_get();
     ll_spi_dev_init(spi1);

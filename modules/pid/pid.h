@@ -29,7 +29,7 @@ typedef enum pid_inst
 /// \param[in] kd   The derivative term gain.
 /// \param[in] dt   The time step value.
 ///
-void pid_init(const pid_inst_t inst, const float32_t kp, const float32_t ki, const float32_t kd
+void pid_init(const pid_inst_t inst, const float32_t kp, const float32_t ki, const float32_t kd,
         const float32_t dt);
 
 ///

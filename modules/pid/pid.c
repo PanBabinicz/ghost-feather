@@ -40,7 +40,7 @@ static struct pid pid_arr[PID_INST_TOTAL] =
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-void pid_init(const pid_inst_t inst, const float32_t kp, const float32_t ki, const float32_t kd
+void pid_init(const pid_inst_t inst, const float32_t kp, const float32_t ki, const float32_t kd,
         const float32_t dt)
 {
     struct pid *dev = &pid_arr[inst];

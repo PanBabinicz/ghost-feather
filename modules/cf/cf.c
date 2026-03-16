@@ -27,7 +27,7 @@ static struct cf cf_arr[CF_INST_TOTAL] =
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-void cf_init(const cf_inst_t inst, const float32_t alpha, const float32_t ang);
+void cf_init(const cf_inst_t inst, const float32_t alpha, const float32_t ang)
 {
     struct cf *dev = &cf_arr[inst];
 
