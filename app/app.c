@@ -18,6 +18,11 @@
 /// Private functions - declaration.
 ///*************************************************************************************************
 ///
+/// \brief Initializes all the modules used in application.
+///
+static void app_init(void);
+
+///
 /// \brief Turns the LED on.
 ///
 static void led_on(void);
@@ -35,6 +40,27 @@ static void led_panic(void);
 ///*************************************************************************************************
 /// Private functions - definition.
 ///*************************************************************************************************
+static void app_init(void)
+{
+    tim_init();
+    rc_init();
+    motor_init();
+    cf_init(CF_INST_ROLL, 0.95f, 0.0f);
+    cf_init(CF_INST_PITCH, 0.95f, 0.0f);
+    pid_init(PID_INST_ROLL, 1.0f, 1.0f, 1.0f, 1.0f);
+    pid_init(PID_INST_PITCH, 1.0f, 1.0f, 1.0f, 1.0f);
+    ll_spi_dev_init(ll_spi_dev_get());
+
+    //timing_delay_us(1000 * 1000 * 15);
+
+    if (bmi270_init() != BMI270_RES_OK)
+    {
+        led_on();
+        while(1);
+    }
+    bmi270_pwr_mode_set(BMI270_PWR_MODE_NORM_IMU);
+}
+
 static void led_on(void)
 {
     gpio_set(GPIOA, GPIO2);
@@ -54,34 +80,14 @@ static void led_panic(void)
 ///*************************************************************************************************
 void app_start(void)
 {
-    timing_delay_us(1000 * 1000 * 5);
-
-    tim_init();
-    rc_init();
-    motor_init();
-    cf_init(CF_INST_ROLL, 0.95f, 0.0f);
-    cf_init(CF_INST_PITCH, 0.95f, 0.0f);
-    pid_init(PID_INST_ROLL, 1.0f, 1.0f, 1.0f, 1.0f);
-    pid_init(PID_INST_PITCH, 1.0f, 1.0f, 1.0f, 1.0f);
-
-    struct ll_spi_dev* spi1 = ll_spi_dev_get();
-    ll_spi_dev_init(spi1);
-
-    timing_delay_us(1000 * 1000 * 15);
-
-    if (bmi270_init() != BMI270_RES_OK)
-    {
-        led_on();
-        while(1);
-    }
-    bmi270_pwr_mode_set(BMI270_PWR_MODE_NORM_IMU);
-
     struct ahrs_dev *ahrs = ahrs_dev_get();
 
     struct rc_dev *rc_dev_arr = rc_dev_arr_get();
     struct rc_dev *rc_dev_3 = &rc_dev_arr[RC_CH_3];
 
     uint32_t dwt_cnt_start, dwt_cnt_stop, dwt_cnt_total;
+
+    app_init();
 
     /* Never return */
     while (1)
