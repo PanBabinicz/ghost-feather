@@ -49,7 +49,7 @@ static void app_init(void)
     cf_init(CF_INST_PITCH, 0.95f, 0.0f);
     pid_init(PID_INST_ROLL, 1.0f, 1.0f, 1.0f, 1.0f);
     pid_init(PID_INST_PITCH, 1.0f, 1.0f, 1.0f, 1.0f);
-    ll_spi_dev_init(ll_spi_dev_get());
+    ll_spi_dev_init(LL_SPI_INST_SPI1);
 
     //timing_delay_us(1000 * 1000 * 15);
 

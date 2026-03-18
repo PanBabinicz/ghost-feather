@@ -26,6 +26,16 @@ typedef enum ll_spi_res
 ///
 /// \brief The SPI result type.
 ///
+typedef enum ll_spi_inst
+{
+    LL_SPI_INST_BEGIN = 0,
+    LL_SPI_INST_SPI1  = 0,
+    LL_SPI_INST_TOTAL,
+} ll_spi_inst_t;
+
+///
+/// \brief The SPI result type.
+///
 typedef enum ll_spi_stat
 {
     LL_SPI_STAT_DEINIT = 0,                         /*!< The SPI is deinitialized.                          */
@@ -264,7 +274,7 @@ typedef enum ll_spi_ldmarx
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_dev_init(struct ll_spi_dev *const dev);
+ll_spi_res_t ll_spi_dev_init(const ll_spi_inst_t inst);
 
 /// \brief Deinitializes the SPI.
 ///
@@ -281,7 +291,7 @@ ll_spi_res_t ll_spi_dev_deinit(struct ll_spi_dev *const dev);
 ///
 /// \return struct ll_spi_dev* The SPI device address.
 ///
-struct ll_spi_dev* ll_spi_dev_get(void);
+struct ll_spi_dev* ll_spi_dev_get(const ll_spi_inst_t inst);
 
 ///
 /// \brief Sets the SPI CRC polynomial value inside device.

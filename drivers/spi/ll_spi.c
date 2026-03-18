@@ -67,39 +67,42 @@ struct ll_spi_dev
 ///
 /// \brief The spi controller instance.
 ///
-static struct ll_spi_dev ll_spi =
+static struct ll_spi_dev ll_spi_dev_arr[LL_SPI_INST_TOTAL] =
 {
-    .intf  = SPI1,
-    .crcpr =
+    [LL_SPI_INST_SPI1] =
     {
-        .crcpoly  = CRCPOLY_RES_VAL,
-        .set      = false,
+        .intf  = SPI1,
+        .crcpr =
+        {
+            .crcpoly  = CRCPOLY_RES_VAL,
+            .set      = false,
+        },
+        .cr1 =
+        {
+            .cpha     = LL_SPI_CPHA_0,
+            .cpol     = LL_SPI_CPOL_0,
+            .bidimode = LL_SPI_BIDIMODE_0,
+            .bidioe   = LL_SPI_BIDIOE_0,
+            .rxonly   = LL_SPI_RXONLY_0,
+            .lsbfirst = LL_SPI_LSBFIRST_0,
+            .crcen    = LL_SPI_CRCEN_0,
+            .ssm      = LL_SPI_SSM_0,
+            .ssi      = LL_SPI_SSI_0,
+            .mstr     = LL_SPI_MSTR_1,
+            .br       = SPI_CR1_BR_FPCLK_DIV_16,
+        },
+        .cr2 =
+        {
+            .ds       = LL_SPI_DS_8,
+            .ssoe     = LL_SPI_SSOE_1,
+            .frf      = LL_SPI_FRF_0,
+            .nssp     = LL_SPI_NSSP_0,
+            .frxth    = LL_SPI_FRXTH_1,
+            .ldmatx   = LL_SPI_LDMATX_0,
+            .ldmarx   = LL_SPI_LDMARX_0,
+        },
+        .stat = LL_SPI_STAT_DEINIT,
     },
-    .cr1 =
-    {
-        .cpha     = LL_SPI_CPHA_0,
-        .cpol     = LL_SPI_CPOL_0,
-        .bidimode = LL_SPI_BIDIMODE_0,
-        .bidioe   = LL_SPI_BIDIOE_0,
-        .rxonly   = LL_SPI_RXONLY_0,
-        .lsbfirst = LL_SPI_LSBFIRST_0,
-        .crcen    = LL_SPI_CRCEN_0,
-        .ssm      = LL_SPI_SSM_0,
-        .ssi      = LL_SPI_SSI_0,
-        .mstr     = LL_SPI_MSTR_1,
-        .br       = SPI_CR1_BR_FPCLK_DIV_16,
-    },
-    .cr2 =
-    {
-        .ds       = LL_SPI_DS_8,
-        .ssoe     = LL_SPI_SSOE_1,
-        .frf      = LL_SPI_FRF_0,
-        .nssp     = LL_SPI_NSSP_0,
-        .frxth    = LL_SPI_FRXTH_1,
-        .ldmatx   = LL_SPI_LDMATX_0,
-        .ldmarx   = LL_SPI_LDMARX_0,
-    },
-    .stat = LL_SPI_STAT_DEINIT,
 };
 
 ///
@@ -319,12 +322,9 @@ static void spi_set_crcpr(const struct ll_spi_dev *const dev)
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-ll_spi_res_t ll_spi_dev_init(struct ll_spi_dev *const dev)
+ll_spi_res_t ll_spi_dev_init(const ll_spi_inst_t inst)
 {
-    if (dev == NULL)
-    {
-        return LL_SPI_RES_ERR;
-    }
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
 
     if (ll_spi_vld_conf(dev) != LL_SPI_RES_OK)
     {
@@ -378,9 +378,9 @@ ll_spi_res_t ll_spi_dev_deinit(struct ll_spi_dev *const dev)
     return LL_SPI_RES_OK;
 }
 
-struct ll_spi_dev* ll_spi_dev_get(void)
+struct ll_spi_dev* ll_spi_dev_get(const ll_spi_inst_t inst)
 {
-    return &ll_spi;
+    return &ll_spi_dev_arr[inst];
 }
 
 ll_spi_res_t ll_spi_crcpr_set(struct ll_spi_dev *const dev, const uint16_t crcpoly)
