@@ -50,7 +50,7 @@ struct cr2_conf
 };
 
 ///
-/// \brief The spi controller device type.
+/// \brief The spi device type.
 ///
 struct ll_spi_dev
 {
@@ -65,7 +65,7 @@ struct ll_spi_dev
 /// Private objects - definition.
 ///***********************************************************************************************************
 ///
-/// \brief The spi controller instance.
+/// \brief The spi deivce array.
 ///
 static struct ll_spi_dev ll_spi_dev_arr[LL_SPI_INST_TOTAL] =
 {
@@ -261,9 +261,9 @@ static void (*const ll_spi_set_ldmarx_arr[LL_SPI_LDMARX_TOTAL])(uint32_t intf) =
 ///
 /// \brief Validates the CR1 and CR2 config values.
 ///
-/// \param[in] dev           The spi controller instance.
+/// \param[in] dev The spi device.
 ///
-/// \return ll_spi_res_t   The spi controller result.
+/// \return ll_spi_res_t   The spi result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
@@ -272,7 +272,7 @@ static ll_spi_res_t ll_spi_vld_conf(const struct ll_spi_dev *const dev);
 ///
 /// \brief Sets the CRC polynomial register.
 ///
-/// \param[in] dev The spi controller device.
+/// \param[in] dev The spi device.
 ///
 static void spi_set_crcpr(const struct ll_spi_dev *const dev);
 
@@ -281,8 +281,6 @@ static void spi_set_crcpr(const struct ll_spi_dev *const dev);
 ///***********************************************************************************************************
 static ll_spi_res_t ll_spi_vld_conf(const struct ll_spi_dev *const dev)
 {
-    /* Whether the instance is NULL was checked before. */
-
     /* CPHA must be cleared in NSSP mode.*/
     if ((dev->cr2.nssp == LL_SPI_NSSP_1) && (dev->cr1.cpha == LL_SPI_CPHA_1))
     {
@@ -314,8 +312,6 @@ static ll_spi_res_t ll_spi_vld_conf(const struct ll_spi_dev *const dev)
 
 static void spi_set_crcpr(const struct ll_spi_dev *const dev)
 {
-    /* Whether the instance is NULL was checked before. */
-
     SPI_CRCPR(dev->intf) = dev->crcpr.crcpoly;
 }
 
@@ -365,12 +361,9 @@ ll_spi_res_t ll_spi_dev_init(const ll_spi_inst_t inst)
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_dev_deinit(struct ll_spi_dev *const dev)
+ll_spi_res_t ll_spi_dev_deinit(const ll_spi_inst_t inst)
 {
-    if (dev == NULL)
-    {
-        return LL_SPI_RES_ERR;
-    }
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
 
     spi_disable(dev->intf);
     dev->stat = LL_SPI_STAT_DEINIT;
@@ -383,12 +376,9 @@ struct ll_spi_dev* ll_spi_dev_get(const ll_spi_inst_t inst)
     return &ll_spi_dev_arr[inst];
 }
 
-ll_spi_res_t ll_spi_crcpr_set(struct ll_spi_dev *const dev, const uint16_t crcpoly)
+ll_spi_res_t ll_spi_crcpr_set(const ll_spi_inst_t inst, const uint16_t crcpoly)
 {
-    if (dev == NULL)
-    {
-        return LL_SPI_RES_ERR;
-    }
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
 
     dev->crcpr.crcpoly = crcpoly;
     dev->crcpr.set     = true;
@@ -396,9 +386,11 @@ ll_spi_res_t ll_spi_crcpr_set(struct ll_spi_dev *const dev, const uint16_t crcpo
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_cpha_set(struct ll_spi_dev *const dev, const ll_spi_cpha_t cpha)
+ll_spi_res_t ll_spi_cpha_set(const ll_spi_inst_t inst, const ll_spi_cpha_t cpha)
 {
-    if ((cpha < LL_SPI_CPHA_BEGIN) || (cpha >= LL_SPI_CPHA_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((cpha < LL_SPI_CPHA_BEGIN) || (cpha >= LL_SPI_CPHA_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -408,9 +400,11 @@ ll_spi_res_t ll_spi_cpha_set(struct ll_spi_dev *const dev, const ll_spi_cpha_t c
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_cpol_set(struct ll_spi_dev *const dev, const ll_spi_cpol_t cpol)
+ll_spi_res_t ll_spi_cpol_set(const ll_spi_inst_t inst, const ll_spi_cpol_t cpol)
 {
-    if ((cpol < LL_SPI_CPOL_BEGIN) || (cpol >= LL_SPI_CPOL_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((cpol < LL_SPI_CPOL_BEGIN) || (cpol >= LL_SPI_CPOL_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -420,10 +414,11 @@ ll_spi_res_t ll_spi_cpol_set(struct ll_spi_dev *const dev, const ll_spi_cpol_t c
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_bidimode_set(struct ll_spi_dev *const dev, const ll_spi_bidimode_t bidimode)
+ll_spi_res_t ll_spi_bidimode_set(const ll_spi_inst_t inst, const ll_spi_bidimode_t bidimode)
 {
-    if ((bidimode < LL_SPI_BIDIMODE_BEGIN) || (bidimode >= LL_SPI_BIDIMODE_TOTAL) ||
-        (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((bidimode < LL_SPI_BIDIMODE_BEGIN) || (bidimode >= LL_SPI_BIDIMODE_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -433,10 +428,11 @@ ll_spi_res_t ll_spi_bidimode_set(struct ll_spi_dev *const dev, const ll_spi_bidi
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_bidioe_set(struct ll_spi_dev *const dev, const ll_spi_bidioe_t bidioe)
+ll_spi_res_t ll_spi_bidioe_set(const ll_spi_inst_t inst, const ll_spi_bidioe_t bidioe)
 {
-    if ((bidioe < LL_SPI_BIDIOE_BEGIN) || (bidioe >= LL_SPI_BIDIOE_TOTAL) ||
-        (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((bidioe < LL_SPI_BIDIOE_BEGIN) || (bidioe >= LL_SPI_BIDIOE_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -446,9 +442,11 @@ ll_spi_res_t ll_spi_bidioe_set(struct ll_spi_dev *const dev, const ll_spi_bidioe
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_rxonly_set(struct ll_spi_dev *const dev, const ll_spi_rxonly_t rxonly)
+ll_spi_res_t ll_spi_rxonly_set(const ll_spi_inst_t inst, const ll_spi_rxonly_t rxonly)
 {
-    if ((rxonly < LL_SPI_RXONLY_BEGIN) || (rxonly >= LL_SPI_RXONLY_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((rxonly < LL_SPI_RXONLY_BEGIN) || (rxonly >= LL_SPI_RXONLY_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -458,9 +456,11 @@ ll_spi_res_t ll_spi_rxonly_set(struct ll_spi_dev *const dev, const ll_spi_rxonly
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_lsbfirst_set(struct ll_spi_dev *const dev, const ll_spi_lsbfirst_t lsbfirst)
+ll_spi_res_t ll_spi_lsbfirst_set(const ll_spi_inst_t inst, const ll_spi_lsbfirst_t lsbfirst)
 {
-    if ((lsbfirst < LL_SPI_LSBFIRST_BEGIN) || (lsbfirst >= LL_SPI_LSBFIRST_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((lsbfirst < LL_SPI_LSBFIRST_BEGIN) || (lsbfirst >= LL_SPI_LSBFIRST_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -470,9 +470,11 @@ ll_spi_res_t ll_spi_lsbfirst_set(struct ll_spi_dev *const dev, const ll_spi_lsbf
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_crcen_set(struct ll_spi_dev *const dev, const ll_spi_crcen_t crcen)
+ll_spi_res_t ll_spi_crcen_set(const ll_spi_inst_t inst, const ll_spi_crcen_t crcen)
 {
-    if ((crcen < LL_SPI_CRCEN_BEGIN) || (crcen >= LL_SPI_CRCEN_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((crcen < LL_SPI_CRCEN_BEGIN) || (crcen >= LL_SPI_CRCEN_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -482,9 +484,11 @@ ll_spi_res_t ll_spi_crcen_set(struct ll_spi_dev *const dev, const ll_spi_crcen_t
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_crcl_set(struct ll_spi_dev *const dev, const ll_spi_crcl_t crcl)
+ll_spi_res_t ll_spi_crcl_set(const ll_spi_inst_t inst, const ll_spi_crcl_t crcl)
 {
-    if ((crcl < LL_SPI_CRCL_BEGIN) || (crcl >= LL_SPI_CRCL_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((crcl < LL_SPI_CRCL_BEGIN) || (crcl >= LL_SPI_CRCL_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -494,9 +498,11 @@ ll_spi_res_t ll_spi_crcl_set(struct ll_spi_dev *const dev, const ll_spi_crcl_t c
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_ssm_set(struct ll_spi_dev *const dev, const ll_spi_ssm_t ssm)
+ll_spi_res_t ll_spi_ssm_set(const ll_spi_inst_t inst, const ll_spi_ssm_t ssm)
 {
-    if ((ssm < LL_SPI_SSM_BEGIN) || (ssm >= LL_SPI_SSM_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((ssm < LL_SPI_SSM_BEGIN) || (ssm >= LL_SPI_SSM_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -506,9 +512,11 @@ ll_spi_res_t ll_spi_ssm_set(struct ll_spi_dev *const dev, const ll_spi_ssm_t ssm
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_ssi_set(struct ll_spi_dev *const dev, const ll_spi_ssi_t ssi)
+ll_spi_res_t ll_spi_ssi_set(const ll_spi_inst_t inst, const ll_spi_ssi_t ssi)
 {
-    if ((ssi < LL_SPI_SSI_BEGIN) || (ssi >= LL_SPI_SSI_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((ssi < LL_SPI_SSI_BEGIN) || (ssi >= LL_SPI_SSI_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -518,9 +526,11 @@ ll_spi_res_t ll_spi_ssi_set(struct ll_spi_dev *const dev, const ll_spi_ssi_t ssi
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_mstr_set(struct ll_spi_dev *const dev, const ll_spi_mstr_t mstr)
+ll_spi_res_t ll_spi_mstr_set(const ll_spi_inst_t inst, const ll_spi_mstr_t mstr)
 {
-    if ((mstr < LL_SPI_MSTR_BEGIN) || (mstr >= LL_SPI_MSTR_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((mstr < LL_SPI_MSTR_BEGIN) || (mstr >= LL_SPI_MSTR_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -530,9 +540,11 @@ ll_spi_res_t ll_spi_mstr_set(struct ll_spi_dev *const dev, const ll_spi_mstr_t m
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_ds_set(struct ll_spi_dev *const dev, const ll_spi_ds_t ds)
+ll_spi_res_t ll_spi_ds_set(const ll_spi_inst_t inst, const ll_spi_ds_t ds)
 {
-    if ((ds < LL_SPI_DS_BEGIN) || (ds >= LL_SPI_DS_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((ds < LL_SPI_DS_BEGIN) || (ds >= LL_SPI_DS_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -542,9 +554,11 @@ ll_spi_res_t ll_spi_ds_set(struct ll_spi_dev *const dev, const ll_spi_ds_t ds)
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_ssoe_set(struct ll_spi_dev *const dev, const ll_spi_ssoe_t ssoe)
+ll_spi_res_t ll_spi_ssoe_set(const ll_spi_inst_t inst, const ll_spi_ssoe_t ssoe)
 {
-    if ((ssoe < LL_SPI_SSOE_BEGIN) || (ssoe >= LL_SPI_SSOE_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((ssoe < LL_SPI_SSOE_BEGIN) || (ssoe >= LL_SPI_SSOE_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -554,9 +568,11 @@ ll_spi_res_t ll_spi_ssoe_set(struct ll_spi_dev *const dev, const ll_spi_ssoe_t s
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_frf_set(struct ll_spi_dev *const dev, const ll_spi_frf_t frf)
+ll_spi_res_t ll_spi_frf_set(const ll_spi_inst_t inst, const ll_spi_frf_t frf)
 {
-    if ((frf < LL_SPI_FRF_BEGIN) || (frf >= LL_SPI_FRF_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((frf < LL_SPI_FRF_BEGIN) || (frf >= LL_SPI_FRF_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -566,9 +582,11 @@ ll_spi_res_t ll_spi_frf_set(struct ll_spi_dev *const dev, const ll_spi_frf_t frf
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_nssp_set(struct ll_spi_dev *const dev, const ll_spi_nssp_t nssp)
+ll_spi_res_t ll_spi_nssp_set(const ll_spi_inst_t inst, const ll_spi_nssp_t nssp)
 {
-    if ((nssp < LL_SPI_NSSP_BEGIN) || (nssp >= LL_SPI_NSSP_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((nssp < LL_SPI_NSSP_BEGIN) || (nssp >= LL_SPI_NSSP_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -578,9 +596,11 @@ ll_spi_res_t ll_spi_nssp_set(struct ll_spi_dev *const dev, const ll_spi_nssp_t n
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_frxth_set(struct ll_spi_dev *const dev, const ll_spi_frxth_t frxth)
+ll_spi_res_t ll_spi_frxth_set(const ll_spi_inst_t inst, const ll_spi_frxth_t frxth)
 {
-    if ((frxth < LL_SPI_FRXTH_BEGIN) || (frxth >= LL_SPI_FRXTH_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((frxth < LL_SPI_FRXTH_BEGIN) || (frxth >= LL_SPI_FRXTH_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -590,9 +610,11 @@ ll_spi_res_t ll_spi_frxth_set(struct ll_spi_dev *const dev, const ll_spi_frxth_t
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_ldmatx_set(struct ll_spi_dev *const dev, const ll_spi_ldmatx_t ldmatx)
+ll_spi_res_t ll_spi_ldmatx_set(const ll_spi_inst_t inst, const ll_spi_ldmatx_t ldmatx)
 {
-    if ((ldmatx < LL_SPI_LDMATX_BEGIN) || (ldmatx >= LL_SPI_LDMATX_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((ldmatx < LL_SPI_LDMATX_BEGIN) || (ldmatx >= LL_SPI_LDMATX_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
@@ -602,9 +624,11 @@ ll_spi_res_t ll_spi_ldmatx_set(struct ll_spi_dev *const dev, const ll_spi_ldmatx
     return LL_SPI_RES_OK;
 }
 
-ll_spi_res_t ll_spi_ldmarx_set(struct ll_spi_dev *const dev, const ll_spi_ldmarx_t ldmarx)
+ll_spi_res_t ll_spi_ldmarx_set(const ll_spi_inst_t inst, const ll_spi_ldmarx_t ldmarx)
 {
-    if ((ldmarx < LL_SPI_LDMARX_BEGIN) || (ldmarx >= LL_SPI_LDMARX_TOTAL) || (dev == NULL))
+    struct ll_spi_dev *dev = &ll_spi_dev_arr[inst];
+
+    if ((ldmarx < LL_SPI_LDMARX_BEGIN) || (ldmarx >= LL_SPI_LDMARX_TOTAL))
     {
         return LL_SPI_RES_ERR;
     }
