@@ -10,9 +10,19 @@ extern "C" {
 typedef float float32_t;
 
 ///
+/// \brief The AHRS axis type.
+///
+typedef enum ahrs_rot_axis
+{
+    AHRS_ROT_AXIS_ROLL = 0,
+    AHRS_ROT_AXIS_PITCH,
+    AHRS_ROT_AXIS_YAW,
+} ahrs_rot_axis_t;
+
+///
 /// \brief
 ///
-struct ahrs_ang
+struct ahrs_rot_axes
 {
     float32_t roll;
     float32_t pitch;
@@ -22,21 +32,9 @@ struct ahrs_ang
 ///
 /// \brief
 ///
-struct ahrs_axis
-{
-    float32_t x;
-    float32_t y;
-    float32_t z;
-};
-
-///
-/// \brief
-///
 struct ahrs_acc
 {
-    struct ahrs_ang ang;
-    struct ahrs_axis axis;
-    float32_t norm;
+    struct ahrs_rot_axes axes;
 };
 
 ///
@@ -44,17 +42,7 @@ struct ahrs_acc
 ///
 struct ahrs_gyr
 {
-    struct ahrs_ang ang;
-    struct ahrs_axis axis;
-};
-
-///
-/// \brief
-///
-struct ahrs_arg
-{
-    struct ahrs_acc acc;
-    struct ahrs_gyr gyr;
+    struct ahrs_rot_axes axes;
 };
 
 ///
@@ -62,7 +50,8 @@ struct ahrs_arg
 ///
 struct ahrs_dev
 {
-    struct ahrs_arg arg;
+    struct ahrs_acc acc;
+    struct ahrs_gyr gyr;
 };
 
 ///
@@ -73,12 +62,7 @@ struct ahrs_dev* ahrs_dev_get(void);
 ///
 /// brief
 ///
-void ahrs_acc_norm(int16_t x, int16_t y, int16_t z);
-
-///
-/// brief
-///
-void ahrs_ang_calc(void);
+void ahrs_ang_calc(int16_t x, int16_t y, int16_t z);
 
 #ifdef __cplusplus
 }

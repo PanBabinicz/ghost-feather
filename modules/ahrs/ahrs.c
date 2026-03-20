@@ -26,24 +26,18 @@ struct ahrs_dev* ahrs_dev_get(void)
     return &ahrs;
 }
 
-void ahrs_acc_norm(int16_t x, int16_t y, int16_t z)
+void ahrs_ang_calc(int16_t x, int16_t y, int16_t z)
 {
     struct ahrs_dev *dev = &ahrs;
 
-    dev->arg.acc.norm = sqrtf((x * x) + (y * y) + (z * z));
+    float32_t norm   = sqrtf((x * x) + (y * y) + (z * z));
+    float32_t x_norm = x / norm;
+    float32_t y_norm = y / norm;
+    float32_t z_norm = z / norm;
 
-    dev->arg.acc.axis.x = x / dev->arg.acc.norm;
-    dev->arg.acc.axis.y = y / dev->arg.acc.norm;
-    dev->arg.acc.axis.z = z / dev->arg.acc.norm;
-}
+    dev->acc.axes.roll  = atan2(y_norm, z_norm);
+    dev->acc.axes.pitch = atan2((-x_norm), (sqrtf(pow(y_norm, 2) + pow(z_norm, 2))));
 
-void ahrs_ang_calc(void)
-{
-    struct ahrs_dev *dev = &ahrs;
-
-    dev->arg.acc.ang.roll  = atan2(dev->arg.acc.axis.y, dev->arg.acc.axis.z);
-    dev->arg.acc.ang.pitch = atan2((-dev->arg.acc.axis.x), (sqrtf(pow(dev->arg.acc.axis.y, 2) + pow(dev->arg.acc.axis.z, 2))));
-
-    dev->arg.acc.ang.roll  *= rad_in_deg;
-    dev->arg.acc.ang.pitch *= rad_in_deg;
+    dev->acc.axes.roll  *= rad_in_deg;
+    dev->acc.axes.pitch *= rad_in_deg;
 }
