@@ -2,6 +2,7 @@
 #define _CF_H
 
 #include <stdint.h>
+#include <string.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +10,9 @@ extern "C" {
 
 typedef float float32_t;
 
+///***********************************************************************************************************
+/// Private objects - declaration.
+///***********************************************************************************************************
 ///
 /// \brief The complementary filter struct.
 ///
