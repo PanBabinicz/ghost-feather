@@ -26,54 +26,59 @@ struct pid
 };
 
 ///***********************************************************************************************************
-/// Private objects - definition.
-///***********************************************************************************************************
-///
-/// \brief The PID controllers array.
-///
-static struct pid pid_arr[PID_INST_TOTAL] =
-{
-    [PID_INST_ROLL]  = { 0 },
-    [PID_INST_PITCH] = { 0 },
-};
-
-///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-void pid_init(const pid_inst_t inst, const float32_t kp, const float32_t ki, const float32_t kd,
+void pid_init(struct pid *const handle, const float32_t kp, const float32_t ki, const float32_t kd,
         const float32_t dt)
 {
-    struct pid *dev = &pid_arr[inst];
+    if (handle == NULL)
+    {
+        return;
+    }
 
-    dev->p.k = kp;
-    dev->i.k = ki;
-    dev->d.k = kd;
-    dev->dt  = dt;
+    handle->p.k   = kp;
+    handle->p.val = 0.0f;
+    handle->i.k   = ki;
+    handle->i.val = 0.0f;
+    handle->d.k   = kd;
+    handle->d.val = 0.0f;
+    handle->dt    = dt;
+    handle->err   = 0.0f;
+    handle->u     = 0.0f;
 }
 
-void pid_deinit(const pid_inst_t inst)
+void pid_deinit(struct pid *const handle)
 {
-    struct pid *dev = &pid_arr[inst];
+    if (handle == NULL)
+    {
+        return;
+    }
 
-    dev->p.k = 0.0f;
-    dev->i.k = 0.0f;
-    dev->d.k = 0.0f;
-    dev->dt  = 0.0f;
-    dev->err = 0.0f;
-    dev->u   = 0.0f;
+    handle->p.k   = 0.0f;
+    handle->p.val = 0.0f;
+    handle->i.k   = 0.0f;
+    handle->i.val = 0.0f;
+    handle->d.k   = 0.0f;
+    handle->d.val = 0.0f;
+    handle->dt    = 0.0f;
+    handle->err   = 0.0f;
+    handle->u     = 0.0f;
 }
 
-float32_t pid_update(const pid_inst_t inst, float32_t sp, float32_t pv)
+float32_t pid_update(struct pid *const handle, float32_t sp, float32_t pv)
 {
-    struct pid *dev = &pid_arr[inst];
+    if (handle == NULL)
+    {
+        return 0.0f;
+    }
 
-    dev->err = sp - pv;
+    handle->err = sp - pv;
 
-    dev->p.val  = dev->p.k * dev->err;
-    dev->i.val += dev->i.k * dev->err * dev->dt;
-    dev->d.val  = dev->d.k * dev->err / dev->dt;
+    handle->p.val  = handle->p.k * handle->err;
+    handle->i.val += handle->i.k * handle->err * handle->dt;
+    handle->d.val  = handle->d.k * handle->err / handle->dt;
 
-    dev->u = dev->p.val + dev->i.val + dev->d.val;
+    handle->u = handle->p.val + handle->i.val + handle->d.val;
 
-    return dev->u;
+    return handle->u;
 }
