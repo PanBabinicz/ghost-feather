@@ -2,6 +2,7 @@
 #define _AHRS_H
 
 #include <stdint.h>
+#include "cf.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,32 +10,17 @@ extern "C" {
 
 typedef float float32_t;
 
-///
-/// \brief The AHRS axis type.
-///
-typedef enum ahrs_rot_axis
-{
-    AHRS_ROT_AXIS_ROLL = 0,
-    AHRS_ROT_AXIS_PITCH,
-    AHRS_ROT_AXIS_YAW,
-} ahrs_rot_axis_t;
-
-///
-/// \brief
-///
-struct ahrs_rot_axes
-{
-    float32_t roll;
-    float32_t pitch;
-    float32_t yaw;
-};
-
+///***********************************************************************************************************
+/// Private objects - declaration.
+///***********************************************************************************************************
 ///
 /// \brief
 ///
 struct ahrs_acc
 {
-    struct ahrs_rot_axes axes;
+    float32_t roll;
+    float32_t pitch;
+    float32_t scale;
 };
 
 ///
@@ -42,27 +28,117 @@ struct ahrs_acc
 ///
 struct ahrs_gyr
 {
-    struct ahrs_rot_axes axes;
+    float32_t roll;
+    float32_t pitch;
+    float32_t yaw;
+    float32_t scale;
+    float32_t dt;
 };
 
 ///
 /// \brief
 ///
-struct ahrs_dev
+struct ahrs_out
 {
-    struct ahrs_acc acc;
-    struct ahrs_gyr gyr;
+    float32_t roll;
+    float32_t pitch;
+    float32_t yaw;
+}
+
+///
+/// \brief
+///
+struct ahrs_raw_data
+{
+    int16_t ax;
+    int16_t ay;
+    int16_t az;
+    int16_t gx;
+    int16_t gy;
+    int16_t gz;
 };
 
 ///
-/// brief
+/// \brief
 ///
-struct ahrs_dev* ahrs_dev_get(void);
+struct ahrs
+{
+    struct ahrs_acc acc;
+    struct ahrs_gyr gyr;
+    struct ahrs_out out;
+    struct cf cf_roll;
+    struct cf cf_pitch;
+};
+
+///***********************************************************************************************************
+/// Private functions - declaration.
+///***********************************************************************************************************
+///
+/// \brief
+///
+static inline float32_t ahrs_get_roll_ang(const struct ahrs *const handle);
 
 ///
-/// brief
+/// \brief
 ///
-void ahrs_ang_calc(int16_t x, int16_t y, int16_t z);
+static inline float32_t ahrs_get_pitch_ang(const struct ahrs *const handle);
+
+///
+/// \brief
+///
+static inline float32_t ahrs_get_yaw_ang(const struct ahrs *const handle);
+
+///***********************************************************************************************************
+/// Private functions - definition.
+///***********************************************************************************************************
+static inline float32_t ahrs_get_roll_ang(const struct ahrs *const handle)
+{
+    if (handle == NULL)
+    {
+        return 0.0f;
+    }
+
+    return handle->out.roll;
+}
+
+static inline float32_t ahrs_get_pitch_ang(const struct ahrs *const handle)
+{
+    if (handle == NULL)
+    {
+        return 0.0f;
+    }
+
+    return handle->out.pitch;
+}
+
+static inline float32_t ahrs_get_yaw_ang(const struct ahrs *const handle)
+{
+    if (handle == NULL)
+    {
+        return 0.0f;
+    }
+
+    return handle->out.yaw;
+}
+
+///***********************************************************************************************************
+/// Global functions - declaration.
+///***********************************************************************************************************
+///
+/// \brief
+///
+void ahrs_init(struct ahrs *const handle, const float32_t acc_scale, const float32_t gyr_scale,
+        const float32_t alpha, const float32_t dt);
+
+///
+/// \brief
+///
+void ahrs_deinit(struct ahrs *const handle);
+
+///
+/// \brief
+///
+void ahrs_update(struct ahrs *const handle, struct ahrs_raw_data *const data);
 
 #ifdef __cplusplus
 }
