@@ -14,16 +14,38 @@ void cf_init(struct cf *const handle, const float32_t alpha, const float32_t ang
     handle->ang   = ang;
 }
 
-void cf_update(struct cf *const handle, const float32_t gyro_rate, const float32_t accel_ang, const float32_t dt)
+void cf_fuse(struct cf *const handle, const float32_t pred_ang, const float32_t acc_ang)
 {
     if (handle == NULL)
     {
         return;
     }
 
-    float32_t gyro_ang = handle->ang + (gyro_rate * dt);
+    float32_t err = acc_ang - pred_ang;
 
-    handle->ang = (handle->alpha * gyro_ang) + ((1.0f - handle->alpha) * accel_ang);
+    /* Wrap the error (180-degree protection). */
+    if (err > 180.0f)
+    {
+        err -= 360.0f;
+    }
+
+    if (err < -180.0f)
+    {
+        err += 360.0f;
+    }
+
+    handle->ang = pred_ang + ((1.0f - handle->alpha) * acc_ang);
+
+    /* Final wrap. */
+    if (handle->ang > 180.0f)
+    {
+        err -= 360.0f;
+    }
+
+    if (handle->ang < -180.0f)
+    {
+        err += 360.0f;
+    }
 }
 
 void cf_set_ang(struct cf *const handle, const float32_t ang)

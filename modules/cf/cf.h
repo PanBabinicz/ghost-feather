@@ -23,7 +23,7 @@ struct cf
 };
 
 ///***********************************************************************************************************
-/// Private functions - definition.
+/// Private functions - declaration.
 ///***********************************************************************************************************
 ///
 /// \brief Gets the angle of the complementary filter instance.
@@ -32,6 +32,20 @@ struct cf
 ///
 /// \return float32_t The estimated angle.
 ///
+static inline float32_t cf_get_ang(const struct cf *const handle);
+
+///
+/// \brief Gets the alpha of the complementary filter instance.
+///
+/// \param[in] handle The pointer to complementary filter.
+///
+/// \return float32_t The alpha coefficient.
+///
+static inline float32_t cf_get_alpha(const struct cf *const handle);
+
+///***********************************************************************************************************
+/// Private functions - definition.
+///***********************************************************************************************************
 static inline float32_t cf_get_ang(const struct cf *const handle)
 {
     if (handle == NULL)
@@ -42,13 +56,6 @@ static inline float32_t cf_get_ang(const struct cf *const handle)
     return handle->ang;
 }
 
-///
-/// \brief Gets the alpha of the complementary filter instance.
-///
-/// \param[in] handle The pointer to complementary filter.
-///
-/// \return float32_t The alpha coefficient.
-///
 static inline float32_t cf_get_alpha(const struct cf *const handle)
 {
     if (handle == NULL)
@@ -58,7 +65,6 @@ static inline float32_t cf_get_alpha(const struct cf *const handle)
 
     return handle->alpha;
 }
-
 
 ///***********************************************************************************************************
 /// Global functions - declaration.
