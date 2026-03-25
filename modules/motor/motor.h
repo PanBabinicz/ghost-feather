@@ -9,22 +9,22 @@ extern "C" {
 #endif  /* __cplusplus */
 
 ///
-/// \brief The motor indentifiers.
+/// \brief The motor instance type.
 ///
-typedef enum motor
+typedef enum motor_inst
 {
-    MOTOR_BEGIN = 0,
-    MOTOR_1     = 0,
-    MOTOR_2,
-    MOTOR_3,
-    MOTOR_4,
-    MOTOR_TOTAL,
-} motor_t;
+    MOTOR_INST_BEGIN = 0,
+    MOTOR_INST_1     = 0,
+    MOTOR_INST_2,
+    MOTOR_INST_3,
+    MOTOR_INST_4,
+    MOTOR_INST_TOTAL,
+} motor_inst_t;
 
 ///
-/// \brief The motor device.
+/// \brief The motor structure.
 ///
-struct motor_dev
+struct motor
 {
     struct tim_dev *tim;
     struct ll_tim_ccr_data ccr_data;
@@ -32,24 +32,37 @@ struct motor_dev
 };
 
 ///
-/// \brief Gets the motor device array.
+/// \brief Initializes selected motor.
 ///
-/// \return struct motor_dev* The address of the first motor device.
+/// \param[in] handle The pointer to the motor.
+/// \param[in] inst   The timer instance.
+/// \param[in] ch     The timer capture/compare channel.
 ///
-struct motor_dev* motor_dev_arr_get(void);
+void motor_init(struct motor *const handle, const tim_inst_t inst, const ll_tim_ccr_ch_t ch);
 
 ///
-/// \brief Initializes all motor devices.
+/// \brief Deinitializes selected motor.
 ///
-void motor_init(void);
+/// \param[in] handle The pointer to the motor.
+///
+void motor_deinit(struct motor *const handle);
 
 ///
-/// brief Updates selected motor using PWM signal.
+/// \brief Gets the motor pointer.
 ///
-/// param[in] motor The motor identifier.
-/// param[in] pwm   The PWM signal.
+/// \param[in] inst The motor instance.
 ///
-void motor_upd(const motor_t motor, const uint32_t pwm);
+/// \return struct motor* The motor pointer.
+///
+struct motor* motor_get(const motor_inst_t inst);
+
+///
+/// \brief Updates the motor using PWM signal.
+///
+/// \param[in] handle The pointer to the motor.
+/// \param[in] pwm    The PWM signal.
+///
+void motor_update(const struct motor *const handle, const uint32_t pwm);
 
 #ifdef __cplusplus
 }
