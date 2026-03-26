@@ -1,12 +1,13 @@
 #include "rc.h"
+#include <string.h>
 
 ///***********************************************************************************************************
 /// Private objects - definition.
 ///***********************************************************************************************************
 ///
-/// \brief The RC devices array.
+/// \brief The RC channels array.
 ///
-static struct rc_dev rc_dev_arr[RC_CH_TOTAL];
+static struct rc rc_arr[RC_CH_TOTAL];
 
 ///***********************************************************************************************************
 /// Private functions - declaration.
@@ -49,84 +50,100 @@ static float32_t norm_sym_f32(const float32_t min, const float32_t max, const fl
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-struct rc_dev* rc_dev_arr_get(void)
+void rc_init(struct rc *const handle, const tim_inst_t inst, const ll_tim_ccr_ch_t ch)
 {
-    return &rc_dev_arr[0];
-}
+    if (inst == NULL)
+    {
+        return;
+    }
 
-void rc_init(void)
-{
+    /* TODO: Change tim_dev_arr_get() to tim_get() */
     struct tim_dev *tim_dev_arr = tim_dev_arr_get();
 
-    rc_dev_arr[RC_CH_1].tim = &tim_dev_arr[TIM_INST_12];
-    rc_dev_arr[RC_CH_2].tim = &tim_dev_arr[TIM_INST_12];
-    rc_dev_arr[RC_CH_3].tim = &tim_dev_arr[TIM_INST_8];
-    rc_dev_arr[RC_CH_4].tim = &tim_dev_arr[TIM_INST_8];
-    rc_dev_arr[RC_CH_5].tim = &tim_dev_arr[TIM_INST_8];
-    rc_dev_arr[RC_CH_6].tim = &tim_dev_arr[TIM_INST_8];
-
-    rc_dev_arr[RC_CH_1].ccr_ch = LL_TIM_CCR_CH1;
-    rc_dev_arr[RC_CH_2].ccr_ch = LL_TIM_CCR_CH2;
-    rc_dev_arr[RC_CH_3].ccr_ch = LL_TIM_CCR_CH1;
-    rc_dev_arr[RC_CH_4].ccr_ch = LL_TIM_CCR_CH2;
-    rc_dev_arr[RC_CH_5].ccr_ch = LL_TIM_CCR_CH3;
-    rc_dev_arr[RC_CH_6].ccr_ch = LL_TIM_CCR_CH4;
+    handle->tim    = &tim_dev_arr[inst];
+    handle->ccr_ch = ch;
 }
 
-void rc_sig_raw_gen(rc_ch_t ch)
+void rc_deinit(struct rc *const handle)
 {
-    struct rc_dev *dev = &rc_dev_arr[ch];
-
-    dev->tim->ccr_data_get(dev->tim->tim, dev->ccr_ch, &dev->ccr_data);
-
-    if (dev->ccr_data.curr > dev->ccr_data.prev)
+    if (inst == NULL)
     {
-        dev->sig.raw = ((dev->ccr_data.curr - dev->ccr_data.prev) < 2200) ? dev->ccr_data.curr - dev->ccr_data.prev
-                     : dev->sig.raw;
+        return;
+    }
+
+    memset(handle, 0, sizeof(struct rc));
+}
+
+struct rc* rc_get(const rc_ch_t ch)
+{
+    if ((ch < RC_CH_BEGIN) || (ch >= RC_CH_TOTAL))
+    {
+        return NULL;
+    }
+
+    return &rc_arr[ch];
+}
+
+void rc_sig_raw_gen(struct rc *const handle)
+{
+    if (handle == NULL)
+    {
+        return;
+    }
+
+    handle->tim->ccr_data_get(handle->tim->tim, handle->ccr_ch, &handle->ccr_data);
+
+    if (handle->ccr_data.curr > handle->ccr_data.prev)
+    {
+        handle->sig.raw = ((handle->ccr_data.curr - handle->ccr_data.prev) < 2200)
+                        ? handle->ccr_data.curr - handle->ccr_data.prev : handle->sig.raw;
     }
 }
 
-void rc_sig_norm(rc_ch_t ch)
+void rc_sig_norm(struct rc *const handle)
 {
-    struct rc_dev *dev = &rc_dev_arr[ch];
-
-    if (dev->sig.raw < 1000)
+    if (handle == NULL)
     {
-        dev->sig.norm = 1000.0;
+        return;
     }
-    else if (dev->sig.raw > 2000)
+
+    if (handle->sig.raw < 1000)
     {
-        dev->sig.norm = 2000.0;
+        handle->sig.norm = 1000.0;
+    }
+    else if (handle->sig.raw > 2000)
+    {
+        handle->sig.norm = 2000.0;
     }
     else
     {
-        dev->sig.norm = (float32_t)dev->sig.raw;
+        handle->sig.norm = (float32_t)handle->sig.raw;
     }
 
     switch (ch)
     {
         case RC_CH_1:
-            dev->sig.norm = norm_sym_f32(1000.0, 2000.0, dev->sig.norm);
+            handle->sig.norm = norm_sym_f32(1000.0, 2000.0, handle->sig.norm);
             break;
 
         case RC_CH_2:
-            dev->sig.norm = norm_sym_f32(1000.0, 2000.0, dev->sig.norm);
+            handle->sig.norm = norm_sym_f32(1000.0, 2000.0, handle->sig.norm);
             break;
 
         case RC_CH_3:
-            dev->sig.norm = norm_asym_f32(1000.0, 2000.0, dev->sig.norm);
+            handle->sig.norm = norm_asym_f32(1000.0, 2000.0, handle->sig.norm);
             break;
 
         case RC_CH_4:
-            dev->sig.norm = norm_sym_f32(1000.0, 2000.0, dev->sig.norm);
+            handle->sig.norm = norm_sym_f32(1000.0, 2000.0, handle->sig.norm);
             break;
 
         case RC_CH_5:
-            dev->sig.norm = norm_asym_f32(1000.0, 2000.0, dev->sig.norm);
+            handle->sig.norm = norm_asym_f32(1000.0, 2000.0, handle->sig.norm);
             break;
 
         case RC_CH_6:
-            dev->sig.norm = norm_asym_f32(1000.0, 2000.0, dev->sig.norm);
+            handle->sig.norm = norm_asym_f32(1000.0, 2000.0, handle->sig.norm);
             break;
     }
 }

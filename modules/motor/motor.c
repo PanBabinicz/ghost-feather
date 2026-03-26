@@ -1,5 +1,6 @@
 #include "motor.h"
 #include "rc.h"
+#include <string.h>
 
 ///***********************************************************************************************************
 /// Private objects - definition.
