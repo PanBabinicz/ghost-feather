@@ -33,11 +33,9 @@ add_library(ahrs
     ${AHRS_SRCS}
 )
 
-#target_include_directories(ahrs PRIVATE
-#    ${PROJECT_SOURCE_DIR}/drivers/sensor/bmi270
-#    ${PROJECT_SOURCE_DIR}/shared/timing
-#    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
-#)
+target_include_directories(ahrs PRIVATE
+    ${PROJECT_SOURCE_DIR}/modules/cf
+)
 
 target_link_libraries(ahrs PRIVATE
     gfc_common_options
