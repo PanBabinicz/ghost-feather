@@ -13,6 +13,11 @@
 ///
 static const float32_t rad_in_deg = (180 / M_PI);
 
+///
+/// \brief
+///
+static struct ahrs ahrs;
+
 ///***********************************************************************************************************
 /// Private functions - declaration.
 ///***********************************************************************************************************
@@ -58,7 +63,7 @@ static void ahrs_calc_gyr_ang(struct ahrs *const handle, float32_t gx, float32_t
 void ahrs_init(struct ahrs *const handle, const float32_t acc_scale, const float32_t gyr_scale,
         const float32_t alpha, const float32_t dt)
 {
-    if (ahrs == NULL)
+    if (handle == NULL)
     {
         return;
     }
@@ -77,21 +82,26 @@ void ahrs_init(struct ahrs *const handle, const float32_t acc_scale, const float
     handle->out.pitch = 0.0f;
     handle->out.yaw   = 0.0f;
 
-    cf_set_alpha(handle->cf_roll,  0.95f);
-    cf_set_alpha(handle->cf_pitch, 0.95f);
+    handle->cf_roll  = cf_get(CF_INST_ROLL);
+    handle->cf_pitch = cf_get(CF_INST_PITCH);
 
-    cf_set_ang(handle->cf_roll,  0.0f);
-    cf_set_ang(handle->cf_pitch, 0.0f);
+    cf_init(handle->cf_roll,  alpha, 0.0f);
+    cf_init(handle->cf_pitch, alpha, 0.0f);
 }
 
 void ahrs_deinit(struct ahrs *const handle)
 {
-    if (ahrs == NULL)
+    if (handle == NULL)
     {
         return;
     }
 
     memset(handle, 0, sizeof(struct ahrs));
+}
+
+struct ahrs* ahrs_get(void)
+{
+    return &ahrs;
 }
 
 void ahrs_update(struct ahrs *const handle, struct ahrs_raw_data *const data)
@@ -112,11 +122,11 @@ void ahrs_update(struct ahrs *const handle, struct ahrs_raw_data *const data)
     ahrs_calc_acc_ang(handle, axf, ayf, azf);
     ahrs_calc_gyr_ang(handle, gxf, gyf, gzf);
 
-    cf_fuse(&handle->cf_roll,  handle->gyr.roll,  handle->acc.roll);
-    cf_fuse(&handle->cf_pitch, handle->gyr.pitch, handle->acc.pitch);
+    cf_fuse(handle->cf_roll,  handle->gyr.roll,  handle->acc.roll);
+    cf_fuse(handle->cf_pitch, handle->gyr.pitch, handle->acc.pitch);
 
-    handle->out.roll  = cf_get_ang(&handle->cf_roll);
-    handle->out.pitch = cf_get_ang(&handle->cf_pitch);
+    handle->out.roll  = cf_get_ang(handle->cf_roll);
+    handle->out.pitch = cf_get_ang(handle->cf_pitch);
 
     handle->out.yaw = handle->gyr.roll;
 
@@ -125,7 +135,7 @@ void ahrs_update(struct ahrs *const handle, struct ahrs_raw_data *const data)
         handle->out.yaw -= 360.0f;
     }
 
-    if (hanlde->out.yaw < -180.0f)
+    if (handle->out.yaw < -180.0f)
     {
         handle->out.yaw += 360.0f;
     }

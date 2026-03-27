@@ -43,7 +43,7 @@ struct ahrs_out
     float32_t roll;
     float32_t pitch;
     float32_t yaw;
-}
+};
 
 ///
 /// \brief
@@ -66,8 +66,8 @@ struct ahrs
     struct ahrs_acc acc;
     struct ahrs_gyr gyr;
     struct ahrs_out out;
-    struct cf cf_roll;
-    struct cf cf_pitch;
+    struct cf *cf_roll;
+    struct cf *cf_pitch;
 };
 
 ///***********************************************************************************************************
@@ -134,6 +134,11 @@ void ahrs_init(struct ahrs *const handle, const float32_t acc_scale, const float
 /// \brief
 ///
 void ahrs_deinit(struct ahrs *const handle);
+
+///
+/// \brief
+///
+struct ahrs* ahrs_get(void);
 
 ///
 /// \brief
