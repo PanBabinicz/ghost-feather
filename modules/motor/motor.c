@@ -1,5 +1,6 @@
 #include "motor.h"
 #include "rc.h"
+#include <string.h>
 
 ///***********************************************************************************************************
 /// Private objects - definition.
@@ -7,33 +8,51 @@
 ///
 /// \brief The motor devices array.
 ///
-static struct motor_dev motor_dev_arr[MOTOR_TOTAL];
+static struct motor motor_arr[MOTOR_INST_TOTAL];
 
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-struct motor_dev* motor_dev_arr_get(void)
+void motor_init(struct motor *const handle, const tim_inst_t inst, const ll_tim_ccr_ch_t ch)
 {
-    return &motor_dev_arr[0];
-}
+    if (handle == NULL)
+    {
+        return;
+    }
 
-void motor_init(void)
-{
+    /* TODO: Change tim_dev_arr_get() to tim_get() */
     struct tim_dev *tim_dev_arr = tim_dev_arr_get();
 
-    motor_dev_arr[MOTOR_1].tim = &tim_dev_arr[TIM_INST_4];
-    motor_dev_arr[MOTOR_2].tim = &tim_dev_arr[TIM_INST_4];
-    motor_dev_arr[MOTOR_3].tim = &tim_dev_arr[TIM_INST_4];
-    motor_dev_arr[MOTOR_4].tim = &tim_dev_arr[TIM_INST_4];
-
-    motor_dev_arr[MOTOR_1].ccr_ch = LL_TIM_CCR_CH1;
-    motor_dev_arr[MOTOR_2].ccr_ch = LL_TIM_CCR_CH2;
-    motor_dev_arr[MOTOR_3].ccr_ch = LL_TIM_CCR_CH3;
-    motor_dev_arr[MOTOR_4].ccr_ch = LL_TIM_CCR_CH4;
+    handle->tim    = &tim_dev_arr[inst];
+    handle->ccr_ch = ch;
 }
 
-void motor_upd(const motor_t motor, const uint32_t pwm)
+void motor_deinit(struct motor *const handle)
 {
-    struct motor_dev *dev = &motor_dev_arr[motor];
-    dev->tim->ccr_set(dev->tim->tim, dev->ccr_ch, pwm);
+    if (handle == NULL)
+    {
+        return;
+    }
+
+    memset(handle, 0, sizeof(struct motor));
+}
+
+struct motor* motor_get(const motor_inst_t inst)
+{
+    if ((inst < MOTOR_INST_BEGIN) || (inst >= MOTOR_INST_TOTAL))
+    {
+        return NULL;
+    }
+
+    return &motor_arr[inst];
+}
+
+void motor_update(const struct motor *const handle, const uint32_t pwm)
+{
+    if (handle == NULL)
+    {
+        return;
+    }
+
+    handle->tim->ccr_set(handle->tim->tim, handle->ccr_ch, pwm);
 }

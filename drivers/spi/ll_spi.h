@@ -26,6 +26,16 @@ typedef enum ll_spi_res
 ///
 /// \brief The SPI result type.
 ///
+typedef enum ll_spi_inst
+{
+    LL_SPI_INST_BEGIN = 0,
+    LL_SPI_INST_SPI1  = 0,
+    LL_SPI_INST_TOTAL,
+} ll_spi_inst_t;
+
+///
+/// \brief The SPI result type.
+///
 typedef enum ll_spi_stat
 {
     LL_SPI_STAT_DEINIT = 0,                         /*!< The SPI is deinitialized.                          */
@@ -258,260 +268,260 @@ typedef enum ll_spi_ldmarx
 ///
 /// \brief Initializes the SPI.
 ///
-/// \param[in] dev The SPI device.
+/// \param[in] inst The SPI device instance.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_dev_init(struct ll_spi_dev *const dev);
+ll_spi_res_t ll_spi_dev_init(const ll_spi_inst_t inst);
 
 /// \brief Deinitializes the SPI.
 ///
-/// \param[in] dev The SPI device.
+/// \param[in] inst The SPI device instance.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_dev_deinit(struct ll_spi_dev *const dev);
+ll_spi_res_t ll_spi_dev_deinit(const ll_spi_inst_t inst);
 
 ///
 /// \brief Gets the SPI device.
 ///
 /// \return struct ll_spi_dev* The SPI device address.
 ///
-struct ll_spi_dev* ll_spi_dev_get(void);
+struct ll_spi_dev* ll_spi_dev_get(const ll_spi_inst_t inst);
 
 ///
 /// \brief Sets the SPI CRC polynomial value inside device.
 ///
 /// \note  Default reset value is `0x0007`.
 ///
-/// \param[in] dev     The SPI device.
+/// \param[in] inst    The SPI device instance.
 /// \param[in] crcpoly The SPI CRC polynomial value.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_crcpr_set(struct ll_spi_dev *const dev, const uint16_t crcpoly);
+ll_spi_res_t ll_spi_crcpr_set(const ll_spi_inst_t inst, const uint16_t crcpoly);
 
 ///
 /// \brief Sets the SPI clock phase index inside device.
 ///
-/// \param[in] dev  The SPI device.
+/// \param[in] inst The SPI device instance.
 /// \param[in] cpha The SPI clock phase index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_cpha_set(struct ll_spi_dev *const dev, const ll_spi_cpha_t cpha);
+ll_spi_res_t ll_spi_cpha_set(const ll_spi_inst_t inst, const ll_spi_cpha_t cpha);
 
 ///
 /// \brief Sets the SPI clock polarity index inside device.
 ///
-/// \param[in] dev  The SPI device.
+/// \param[in] inst The SPI device instance.
 /// \param[in] cpol The SPI clock polarity index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_cpol_set(struct ll_spi_dev *const dev, const ll_spi_cpol_t cpol);
+ll_spi_res_t ll_spi_cpol_set(const ll_spi_inst_t inst, const ll_spi_cpol_t cpol);
 
 ///
 /// \brief Sets the SPI bidirectional data mode index inside device.
 ///
-/// \param[in] dev      The SPI device.
+/// \param[in] inst     The SPI device instance.
 /// \param[in] bidimode The SPI bidirectional data mode index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_bidimode_set(struct ll_spi_dev *const dev, const ll_spi_bidimode_t bidimode);
+ll_spi_res_t ll_spi_bidimode_set(const ll_spi_inst_t inst, const ll_spi_bidimode_t bidimode);
 
 ///
 /// \brief Sets the SPI output enable in bidirectional mode index inside device.
 ///
-/// \param[in] dev    The SPI device.
+/// \param[in] inst   The SPI device instance.
 /// \param[in] bidioe The SPI output enable in bidirectional mode index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_bidioe_set(struct ll_spi_dev *const dev, const ll_spi_bidioe_t bidioe);
+ll_spi_res_t ll_spi_bidioe_set(const ll_spi_inst_t inst, const ll_spi_bidioe_t bidioe);
 
 ///
 /// \brief Sets the SPI receive only mode enable index inside device.
 ///
-/// \param[in] dev    The SPI device.
+/// \param[in] inst   The SPI device instance.
 /// \param[in] rxonly The SPI receive only mode enable index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_rxonly_set(struct ll_spi_dev *const dev, const ll_spi_rxonly_t rxonly);
+ll_spi_res_t ll_spi_rxonly_set(const ll_spi_inst_t inst, const ll_spi_rxonly_t rxonly);
 
 ///
 /// \brief Sets the SPI frame format index inside device.
 ///
-/// \param[in] dev      The SPI device.
+/// \param[in] inst     The SPI device instance.
 /// \param[in] lsbfirst The SPI frame format index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_lsbfirst_set(struct ll_spi_dev *const dev, const ll_spi_lsbfirst_t lsbfirst);
+ll_spi_res_t ll_spi_lsbfirst_set(const ll_spi_inst_t inst, const ll_spi_lsbfirst_t lsbfirst);
 
 ///
 /// \brief Sets the SPI hardware CRC calculation index inside device.
 ///
-/// \param[in] dev   The SPI device.
+/// \param[in] inst  The SPI device instance.
 /// \param[in] crcen The SPI hardware CRC calculation index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_crcen_set(struct ll_spi_dev *const dev, const ll_spi_crcen_t crcen);
+ll_spi_res_t ll_spi_crcen_set(const ll_spi_inst_t inst, const ll_spi_crcen_t crcen);
 
 ///
 /// \brief Sets the SPI CRC length index inside device.
 ///
-/// \param[in] dev  The SPI device.
+/// \param[in] inst The SPI device instance.
 /// \param[in] crcl The SPI CRC length index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_crcl_set(struct ll_spi_dev *const dev, const ll_spi_crcl_t crcl);
+ll_spi_res_t ll_spi_crcl_set(const ll_spi_inst_t inst, const ll_spi_crcl_t crcl);
 
 ///
 /// \brief Sets the SPI software slave management index inside device.
 ///
-/// \param[in] dev The SPI device.
-/// \param[in] ssm The SPI software slave management index.
+/// \param[in] inst The SPI device instance.
+/// \param[in] ssm  The SPI software slave management index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_ssm_set(struct ll_spi_dev *const dev, const ll_spi_ssm_t ssm);
+ll_spi_res_t ll_spi_ssm_set(const ll_spi_inst_t inst, const ll_spi_ssm_t ssm);
 
 ///
 /// \brief Sets the SPI internal slave select index inside device.
 ///
-/// \param[in] dev The SPI device.
-/// \param[in] ssi The SPI internal slave select index.
+/// \param[in] inst The SPI device instance.
+/// \param[in] ssi  The SPI internal slave select index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_ssi_set(struct ll_spi_dev *const dev, const ll_spi_ssi_t ssi);
+ll_spi_res_t ll_spi_ssi_set(const ll_spi_inst_t inst, const ll_spi_ssi_t ssi);
 
 ///
 /// \brief Sets the SPI master selection index inside dev.
 ///
-/// \param[in] dev  The SPI device.
+/// \param[in] inst The SPI device instance.
 /// \param[in] mstr The SPI master selection index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_mstr_set(struct ll_spi_dev *const dev, const ll_spi_mstr_t mstr);
+ll_spi_res_t ll_spi_mstr_set(const ll_spi_inst_t inst, const ll_spi_mstr_t mstr);
 
 ///
 /// \brief Sets the SPI data size index inside device.
 ///
-/// \param[in] dev The SPI device.
-/// \param[in] ds  The SPI data size index.
+/// \param[in] inst The SPI device instance.
+/// \param[in] ds   The SPI data size index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_ds_set(struct ll_spi_dev *const dev, const ll_spi_ds_t ds);
+ll_spi_res_t ll_spi_ds_set(const ll_spi_inst_t inst, const ll_spi_ds_t ds);
 
 ///
 /// \brief Sets the SPI slave select output enable index inside device.
 ///
-/// \param[in] dev  The SPI device.
+/// \param[in] inst The SPI device instance.
 /// \param[in] ssoe The SPI slave select output enable index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_ssoe_set(struct ll_spi_dev *const dev, const ll_spi_ssoe_t ssoe);
+ll_spi_res_t ll_spi_ssoe_set(const ll_spi_inst_t inst, const ll_spi_ssoe_t ssoe);
 
 ///
 /// \brief Sets the SPI frame format inside index device.
 ///
-/// \param[in] dev The SPI device.
-/// \param[in] frf The SPI frame format index.
+/// \param[in] inst The SPI device instance.
+/// \param[in] frf  The SPI frame format index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_frf_set(struct ll_spi_dev *const dev, const ll_spi_frf_t frf);
+ll_spi_res_t ll_spi_frf_set(const ll_spi_inst_t inst, const ll_spi_frf_t frf);
 
 ///
 /// \brief Sets the SPI NSS pulse mangement index inside device.
 ///
-/// \param[in] dev  The SPI device.
+/// \param[in] inst The SPI device instance.
 /// \param[in] nssp The SPI NSS pulse management index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_nssp_set(struct ll_spi_dev *const dev, const ll_spi_nssp_t nssp);
+ll_spi_res_t ll_spi_nssp_set(const ll_spi_inst_t inst, const ll_spi_nssp_t nssp);
 
 ///
 /// \brief Sets the SPI FIFO reception threshold index inside device.
 ///
-/// \param[in] dev   The SPI device.
+/// \param[in] inst  The SPI device instance.
 /// \param[in] frxth The SPI FIFO reception threshold index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_frxth_set(struct ll_spi_dev *const dev, const ll_spi_frxth_t frxth);
+ll_spi_res_t ll_spi_frxth_set(const ll_spi_inst_t inst, const ll_spi_frxth_t frxth);
 
 ///
 /// \brief Sets the SPI last DMA transfer for transmission index inside device.
 ///
-/// \param[in] dev    The SPI device.
+/// \param[in] inst   The SPI device instance.
 /// \param[in] ldmatx The SPI last DMA transfer for transmission index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_ldmatx_set(struct ll_spi_dev *const dev, const ll_spi_ldmatx_t ldmatx);
+ll_spi_res_t ll_spi_ldmatx_set(const ll_spi_inst_t inst, const ll_spi_ldmatx_t ldmatx);
 
 ///
 /// \brief Sets the SPI last DMA transfer for reception index inside device.
 ///
-/// \param[in] dev    The SPI device.
+/// \param[in] inst   The SPI device instance.
 /// \param[in] ldmarx The SPI last DMA transfer for reception index.
 ///
 /// \return ll_spi_res_t   The SPI result.
 /// \retval LL_SPI_RES_OK  On success.
 /// \retval LL_SPI_RES_ERR Otherwise.
 ///
-ll_spi_res_t ll_spi_ldmarx_set(struct ll_spi_dev *const dev, const ll_spi_ldmarx_t ldmarx);
+ll_spi_res_t ll_spi_ldmarx_set(const ll_spi_inst_t inst, const ll_spi_ldmarx_t ldmarx);
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,5 @@
-#include "ghost_feather_common.h"
 #include "apploader.h"
+#include "ghost_feather_common.h"
 #include "memory_map.h"
 #include "libopencm3/stm32/rcc.h"
 #include "libopencm3/stm32/gpio.h"

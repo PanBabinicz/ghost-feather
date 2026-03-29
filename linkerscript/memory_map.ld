@@ -3,7 +3,7 @@ MEMORY
     rom_bootloader (rx)  : ORIGIN = 0x00200000, LENGTH = 0x00004000
     rom_apploader  (rx)  : ORIGIN = 0x00204000, LENGTH = 0x00004000
     rom_updater    (rx)  : ORIGIN = 0x00208000, LENGTH = 0x00008000
-    rom_app        (rx)  : ORIGIN = 0x00210000, LENGTH = 0x0000a000
+    rom_app        (rx)  : ORIGIN = 0x00210000, LENGTH = 0x00010000
     sram_bootloader(rwx) : ORIGIN = 0x20010000, LENGTH = 0x00004000
     sram_apploader (rwx) : ORIGIN = 0x20014000, LENGTH = 0x00004000
     sram_updater   (rwx) : ORIGIN = 0x20018000, LENGTH = 0x00008000

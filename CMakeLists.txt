@@ -230,6 +230,7 @@ add_executable(${APP_ELF}
     ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
 )
 
+# TODO: Check if these includes are necessary
 target_include_directories(${APP_ELF} PRIVATE
     ${PROJECT_SOURCE_DIR}/app
     ${PROJECT_SOURCE_DIR}/drivers/spi
@@ -259,11 +260,13 @@ target_link_libraries(${APP_ELF} PRIVATE
     ahrs
     m
     bmi270
+    cf
     ll_bmi270
     ll_spi
     libopencm3_stm32f7.a
     vtol
     motor
+    pid
     rc
     tim
     ll_tim

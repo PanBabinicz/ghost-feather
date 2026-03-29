@@ -5,9 +5,6 @@
 #include "libopencm3/stm32/rcc.h"
 #include <stdbool.h>
 
-#define TIMING_TICK_DURATION    ((1.0f)/(timing_sysclk_freq))
-#define TIMING_US_TO_TICKS(us)  ((us)/((TIMING_TICK_DURATION) * (1000000.0f)))
-
 ///*************************************************************************************************
 /// Private objects - definition.
 ///*************************************************************************************************

@@ -30,12 +30,11 @@ static void jump(uint32_t pc, uint32_t sp);
 ///
 static void rcc_setup(void);
 
-/// TODO:
-/// \brief Setups the Reset and Clock Control registers.
 ///
-/// This function initializes the system's clock configuration by setting up
-/// the Reset and Clock Control (RCC) registers for the desired system
-/// performance and peripheral clock settings.
+/// \brief Sets up the Nested Vectored Interrupt Controller (NVIC).
+///
+/// This function configures the NVIC by setting interrupt priorities
+/// and enabling required interrupts for the system operation.
 ///
 static void nvic_setup(void);
 
@@ -113,7 +112,6 @@ static void nvic_setup()
     nvic_enable_irq(NVIC_TIM8_CC_IRQ);
 }
 
-/* TODO: Set te gpio speed and driver type for timers. */
 static void gpio_setup(void)
 {
     gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO2);

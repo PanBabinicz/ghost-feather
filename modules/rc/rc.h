@@ -55,6 +55,15 @@ typedef enum rc_ch
 } rc_ch_t;
 
 ///
+/// \brief
+///
+typedef enum rc_norm
+{
+    RC_NORM_SYM = 0,
+    RC_NORM_ASYM,
+} rc_norm_t;
+
+///
 /// \brief The RC signal components.
 ///
 struct rc_sig
@@ -64,9 +73,9 @@ struct rc_sig
 };
 
 ///
-/// \brief The RC device.
+/// \brief The RC structure.
 ///
-struct rc_dev
+struct rc
 {
     struct tim_dev *tim;
     struct ll_tim_ccr_data ccr_data;
@@ -75,28 +84,44 @@ struct rc_dev
 };
 
 ///
-/// \brief Gets RC device array.
+/// \brief Initializes the RC channel.
 ///
-/// \return struct rc_dav* The address of the first RC device.
+/// \param[in] handle The pointer to the RC channel.
+/// \param[in] inst   The timer instance.
+/// \param[in] ch     The timer capture/compare channel.
 ///
-struct rc_dev* rc_dev_arr_get(void);
+void rc_init(struct rc *const handle, const tim_inst_t inst, const ll_tim_ccr_ch_t ch);
 
 ///
-/// \brief Initializes all RC devices.
+/// \brief Denitializes the RC channel.
 ///
-void rc_init(void);
+/// \param[in] handle The pointer to the RC channel.
+///
+void rc_deinit(struct rc *const handle);
+
+///
+/// \brief Gets RC channel.
+///
+/// \param[in] ch The RC channel.
+///
+/// \return struct rc* The RC channel pointer.
+///
+struct rc* rc_get(const rc_ch_t ch);
 
 ///
 /// \brief Generates PWM pulse width from capture/compare register.
 ///
-void rc_sig_raw_gen(rc_ch_t ch);
+/// \param[in] handle The pointer to the RC channel.
+///
+void rc_sig_raw_gen(struct rc *const handle);
 
 ///
 /// \brief Normalizes PWM pulse width for a given RC channel.
 ///
-/// \param[in] ch The RC channel identifier.
+/// \param[in] handle The pointer to the RC channel.
+/// \param[in] norm   The normalization type.
 ///
-void rc_sig_norm(rc_ch_t ch);
+void rc_sig_norm(struct rc *const handle, const rc_norm_t norm);
 
 #ifdef __cplusplus
 }

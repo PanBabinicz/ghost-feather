@@ -41,21 +41,19 @@ static struct vtol_phase ghf_vtol_phase;
 void vtol_take_off_proc(void)
 {
     struct vtol_phase *phase = &ghf_vtol_phase;
-    struct rc_dev* rc_dev_arr = rc_dev_arr_get();
+    struct rc *rc_1 = rc_get(RC_CH_1);
+    struct rc *rc_2 = rc_get(RC_CH_2);
+    struct rc *rc_3 = rc_get(RC_CH_3);
 
-    struct rc_sig *roll;
-    struct rc_sig *pitch;
-    struct rc_sig *throttle;
+    struct rc_sig *roll     = &rc_1->sig;
+    struct rc_sig *pitch    = &rc_2->sig;
+    struct rc_sig *throttle = &rc_3->sig;
 
-    rc_sig_raw_gen(RC_CH_1);
-    rc_sig_raw_gen(RC_CH_2);
-    rc_sig_raw_gen(RC_CH_3);
+    rc_sig_raw_gen(rc_1);
+    rc_sig_raw_gen(rc_2);
+    rc_sig_raw_gen(rc_3);
 
-    roll     = &rc_dev_arr[RC_CH_1].sig;
-    pitch    = &rc_dev_arr[RC_CH_2].sig;
-    throttle = &rc_dev_arr[RC_CH_3].sig;
-    
-    if (phase->stat == VTOL_STAT_OFF)
+    if ((phase->stat == VTOL_STAT_OFF) && (throttle->raw < 1200))
     {
         switch (phase->step.take_off)
         {
@@ -97,21 +95,19 @@ void vtol_take_off_proc(void)
 void vtol_land_proc(void)
 {
     struct vtol_phase *phase = &ghf_vtol_phase;
-    struct rc_dev* rc_dev_arr = rc_dev_arr_get();
+    struct rc *rc_1 = rc_get(RC_CH_1);
+    struct rc *rc_2 = rc_get(RC_CH_2);
+    struct rc *rc_3 = rc_get(RC_CH_3);
 
-    struct rc_sig *roll;
-    struct rc_sig *pitch;
-    struct rc_sig *throttle;
+    struct rc_sig *roll     = &rc_1->sig;
+    struct rc_sig *pitch    = &rc_2->sig;
+    struct rc_sig *throttle = &rc_3->sig;
 
-    rc_sig_raw_gen(RC_CH_1);
-    rc_sig_raw_gen(RC_CH_2);
-    rc_sig_raw_gen(RC_CH_3);
-
-    roll     = &rc_dev_arr[RC_CH_1].sig;
-    pitch    = &rc_dev_arr[RC_CH_2].sig;
-    throttle = &rc_dev_arr[RC_CH_3].sig;
+    rc_sig_raw_gen(rc_1);
+    rc_sig_raw_gen(rc_2);
+    rc_sig_raw_gen(rc_3);
     
-    if (phase->stat == VTOL_STAT_ON)
+    if ((phase->stat == VTOL_STAT_ON) && (throttle->raw < 1200))
     {
         switch (phase->step.land)
         {
