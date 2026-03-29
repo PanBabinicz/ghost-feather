@@ -1,38 +1,30 @@
-file(GLOB_RECURSE USART_PRINTF_SOURCES printf/*.c)
+# --------------------------------------------------
+# SPDX-License-Identifier: MIT
+# --------------------------------------------------
+# Project: Ghost Feather Firmware (STM32F7)
+# Modules:
+#   - Timing
+#
+# Description:
+#   Collects all source files related to the timing
+#   mechanism for the STM32F722 MCU.
+# --------------------------------------------------
+# Files list genereation
+# --------------------------------------------------
+file(GLOB_RECURSE TIMING_SRCS timing/*.c)
 
-set_property(
-    GLOBAL
-    PROPERTY USART_PRINTF_SOURCES
-    ${USART_PRINTF_SOURCES}
-    )
+# --------------------------------------------------
+# Target: Timing
+# --------------------------------------------------
+message(STATUS "Add timing library")
+add_library(timing
+    ${TIMING_SRCS}
+)
 
-message(STATUS "Add usart_printf library")
-add_library(
-    usart_printf
-    ${USART_PRINTF_SOURCES}
-    )
+target_include_directories(timing PRIVATE
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
+)
 
-message(STATUS "Add usart_printf target include directories")
-target_include_directories(
-    usart_printf
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/libopencm3/include
-    )
-
-message(STATUS "Add usart_printf target compile definitions")
-target_compile_definitions(
-    usart_printf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    )
-
-message(STATUS "Add usart_printf target compile options")
-target_compile_options(
-    usart_printf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv4-sp-d16>"
-    "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
-    "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O3>"
-    )
+target_link_libraries(timing PRIVATE
+    gfc_common_options
+)

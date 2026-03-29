@@ -1,298 +1,283 @@
+# --------------------------------------------------
+# SPDX-License-Identifier: MIT
+# --------------------------------------------------
+# Project: Ghost Feather Firmware (STM32F7)
+# Description: Top-level CMake configuration.
+# Handles multiple build targets: bootloader,
+# apploader, updater, and main application.
+# --------------------------------------------------
+
 cmake_minimum_required(VERSION 3.30.2)
 
-project(
-    ghost-feather
+# --------------------------------------------------
+# Project metadata
+# --------------------------------------------------
+project(ghost-feather
     VERSION 1.0.0
     LANGUAGES C ASM
-    )
+)
 
-add_subdirectory(bootloader)
-add_subdirectory(dfu)
+# --------------------------------------------------
+# Project settings
+# --------------------------------------------------
+set(BOOTLOADER_ELF ${PROJECT_NAME}-bootloader.elf)
+set(APPLOADER_ELF  ${PROJECT_NAME}-apploader.elf)
+set(UPDATER_ELF    ${PROJECT_NAME}-updater.elf)
+set(APP_ELF        ${PROJECT_NAME}-app.elf)
+
+# --------------------------------------------------
+# CPU / FPU configuration flags
+# --------------------------------------------------
+set(COMPILER_OPTIONS
+    -mfloat-abi=hard
+    -mfpu=fpv5-sp-d16
+    -mcpu=cortex-m7
+    -mthumb
+)
+
+set(LINKER_OPTIONS
+    -nostartfiles
+    -specs=nano.specs
+    -mfloat-abi=hard
+    -mfpu=fpv5-sp-d16
+    -mcpu=cortex-m7
+    -mthumb
+)
+
+# --------------------------------------------------
+# Build-type configuration
+# --------------------------------------------------
+# Use `-DCMAKE_BUILD_TYPE=Debug` or `Release` on configure.
+# CMake will handle optimization automatically.
+# --------------------------------------------------
+set(OPT_FLAGS_DEBUG          -O0 -g3)
+set(OPT_FLAGS_RELEASE        -O3 -DNDEBUG)
+set(OPT_FLAGS_RELWITHDEBINFO -O2 -g3 -DNDEBUG)
+set(OPT_FLAGS_MINSIZEREL     -Os -DNDEBUG)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(OPT_FLAGS ${OPT_FLAGS_DEBUG})
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(OPT_FLAGS ${OPT_FLAGS_RELEASE})
+elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    set(OPT_FLAGS ${OPT_FLAGS_RELWITHDEBINFO})
+elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
+    set(OPT_FLAGS ${OPT_FLAGS_MINSIZEREL})
+else()
+    message(FATAL_ERROR "Unknown build type: ${CMAKE_BUILD_TYPE}")
+endif()
+
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "Compiler flags: ${OPT_FLAGS}")
+
+
+# --------------------------------------------------
+# Define a reusable INTERFACE library for shared options
+# --------------------------------------------------
+
+add_library(gfc_common_options INTERFACE)
+
+target_compile_definitions(gfc_common_options INTERFACE
+    $<$<COMPILE_LANGUAGE:C>:
+        STM32F7
+    >
+)
+
+target_compile_options(gfc_common_options INTERFACE
+    $<$<COMPILE_LANGUAGE:C>:
+        ${COMPILER_OPTIONS}
+        ${OPT_FLAGS}
+    >
+    $<$<COMPILE_LANGUAGE:ASM>:
+        ${COMPILER_OPTIONS}
+    >
+)
+
+target_link_options(gfc_common_options INTERFACE
+    ${LINKER_OPTIONS}
+)
+
+# --------------------------------------------------
+# Subdirectories
+# --------------------------------------------------
+# Each subdirectory defines and registers sources
+# via set_property(GLOBAL PROPERTY <NAME>_SOURCES ...)
+# --------------------------------------------------
 add_subdirectory(app)
-add_subdirectory(startup)
-add_subdirectory(vectortable)
-add_subdirectory(controller)
+add_subdirectory(drivers)
+add_subdirectory(dfu)
+add_subdirectory(loader)
+add_subdirectory(modules)
+add_subdirectory(shared)
 add_subdirectory(submodules)
+add_subdirectory(startup)
 
-get_cmake_property(first_bootloader_sources FIRST_BOOTLOADER_SOURCES)
-get_cmake_property(second_bootloader_sources SECOND_BOOTLOADER_SOURCES)
-get_cmake_property(boot_updater BOOT_UPDATER_SOURCES)
-get_cmake_property(dust DUST_SOURCES)
-get_cmake_property(app_sources APP_SOURCES)
-get_cmake_property(stm32f722xx_first_bootloader_startup_sources STM32F722XX_FIRST_BOOTLOADER_STARTUP_SOURCES)
-get_cmake_property(stm32f722xx_second_bootloader_startup_sources STM32F722XX_SECOND_BOOTLOADER_STARTUP_SOURCES)
-get_cmake_property(stm32f722xx_boot_updater_startup_sources STM32F722XX_BOOT_UPDATER_STARTUP_SOURCES)
-get_cmake_property(stm32f722xx_app_startup_sources STM32F722XX_APP_STARTUP_SOURCES)
-get_cmake_property(vectortable_sources VECTORTABLE_SOURCES)
-get_cmake_property(usart_controller_sources USART_CONTROLLER_SOURCES)
-get_cmake_property(printf_sources PRINTF_SOURCES)
+# --------------------------------------------------
+# Target: Bootloader
+# --------------------------------------------------
+message(STATUS "Configuring ${BOOTLOADER_ELF}")
+add_executable(${BOOTLOADER_ELF}
+    ${PROJECT_SOURCE_DIR}/misc/empty.c
+    ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
+)
 
-message(STATUS "Add ghost-feather-first-bootloader executable")
-add_executable(
-    ghost-feather-first-bootloader.elf
-    ${first_bootloader_sources}
-    ${stm32f722xx_first_bootloader_startup_sources}
-    ${vectortable_sources}
-    )
-
-message(STATUS "Add ghost-feather-second-bootloader executable")
-add_executable(
-    ghost-feather-second-bootloader.elf
-    ${second_bootloader_sources}
-    ${stm32f722xx_second_bootloader_startup_sources}
-    ${vectortable_sources}
-    )
-
-message(STATUS "Add ghost-feather-boot-updater executable")
-add_executable(
-    ghost-feather-boot-updater.elf
-    ${boot_updater}
-    ${dust}
-    ${stm32f722xx_boot_updater_startup_sources}
-    ${vectortable_sources}
-    ${usart_controller_sources}
-    ${printf_sources}
-    )
-
-message(STATUS "Add ghost-feather-app executable")
-add_executable(
-    ghost-feather-app.elf
-    ${app_sources}
-    ${stm32f722xx_app_startup_sources}
-    ${vectortable_sources}
-    )
-
-message(STATUS "Add ghost-feather-first-bootloader target link directories")
-target_link_directories(
-    ghost-feather-first-bootloader.elf
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
-    ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
-    /Applications/ArmGNUToolchain/13.3.rel1/arm-none-eabi/arm-none-eabi/lib/thumb/v7+fp/hard
-    )
-
-message(STATUS "Add ghost-feather-second-bootloader target link directories")
-target_link_directories(
-    ghost-feather-second-bootloader.elf
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
-    ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
-    /Applications/ArmGNUToolchain/13.3.rel1/arm-none-eabi/arm-none-eabi/lib/thumb/v7+fp/hard
-    )
-
-message(STATUS "Add ghost-feather-boot-updater target link directories")
-target_link_directories(
-    ghost-feather-boot-updater.elf
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
-    ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/lib
-    ${PROJECT_SOURCE_DIR}/controller
-    ${PROJECT_SOURCE_DIR}/submodules
-    ${PROJECT_SOURCE_DIR}/dfu
-    /Applications/ArmGNUToolchain/13.3.rel1/arm-none-eabi/arm-none-eabi/lib/thumb/v7+fp/hard
-    )
-
-message(STATUS "Add ghost-feather-app target link directories")
-target_link_directories(
-    ghost-feather-app.elf
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
-    ${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx
-    /Applications/ArmGNUToolchain/13.3.rel1/arm-none-eabi/arm-none-eabi/lib/thumb/v7+fp/hard
-    )
-
-message(STATUS "Add ghost-feather-first-bootloader target link libraries")
-target_link_libraries(
-    ghost-feather-first-bootloader.elf
-    PRIVATE
-    stm32f722xx_first_bootloader_startup
-    first_bootloader
-    vectortable
-    libopencm3_stm32f7.a
-    )
-
-message(STATUS "Add ghost-feather-second-bootloader target link libraries")
-target_link_libraries(
-    ghost-feather-second-bootloader.elf
-    PRIVATE
-    stm32f722xx_second_bootloader_startup
-    second_bootloader
-    vectortable
-    libopencm3_stm32f7.a
-    )
-
-message(STATUS "Add ghost-feather-boot-updater target link libraries")
-target_link_libraries(
-    ghost-feather-boot-updater.elf
-    PRIVATE
-    stm32f722xx_boot_updater_startup
-    boot_updater
-    dust
-    vectortable
-    usart_controller
-    printf
-    libopencm3_stm32f7.a
-    )
-
-message(STATUS "Add ghost-feather-app target link libraries")
-target_link_libraries(
-    ghost-feather-app.elf
-    PRIVATE
-    stm32f722xx_app_startup
-    app
-    vectortable
-    libopencm3_stm32f7.a
-    )
-
-message(STATUS "Add ghost-feather-first-bootloader target include directories")
-target_include_directories(
-    ghost-feather-first-bootloader.elf
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/bootloader/stm32f722xx/first_bootloader
+target_include_directories(${BOOTLOADER_ELF} PUBLIC
+    ${PROJECT_SOURCE_DIR}/loader/bootloader
+    ${PROJECT_SOURCE_DIR}/memory/
+    ${PROJECT_SOURCE_DIR}/shared
+    ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
-    )
+)
 
-message(STATUS "Add ghost-feather-second-bootloader target include directories")
-target_include_directories(
-    ghost-feather-second-bootloader.elf
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/bootloader/stm32f722xx/second_bootloader
+target_link_directories(${BOOTLOADER_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/loader/bootloader
+    ${PROJECT_SOURCE_DIR}/linkerscript
+    ${PROJECT_SOURCE_DIR}/shared
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
+)
+
+target_link_libraries(${BOOTLOADER_ELF} PRIVATE
+    gfc_common_options
+    bootloader_startup
+    bootloader
+    libopencm3_stm32f7.a
+    timing
+)
+
+target_link_options(${BOOTLOADER_ELF} PRIVATE
+    -T${PROJECT_SOURCE_DIR}/linkerscript/bootloader.ld
+)
+
+# --------------------------------------------------
+# Target: Apploader
+# --------------------------------------------------
+message(STATUS "Configuring ${APPLOADER_ELF}")
+add_executable(${APPLOADER_ELF}
+    ${PROJECT_SOURCE_DIR}/misc/empty.c
+    ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
+)
+
+target_include_directories(${APPLOADER_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/loader/apploader
+    ${PROJECT_SOURCE_DIR}/memory/
+    ${PROJECT_SOURCE_DIR}/shared
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
-    )
+)
 
-message(STATUS "Add ghost-feather-boot-updater target include directories")
-target_include_directories(
-    ghost-feather-boot-updater.elf
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/boot_updater
-    ${PROJECT_SOURCE_DIR}/dfu/stm32f722xx/dust
-    ${PROJECT_SOURCE_DIR}/controller/usart
+target_link_directories(${APPLOADER_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/linkerscript
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
+)
+
+target_link_libraries(${APPLOADER_ELF} PRIVATE
+    gfc_common_options
+    apploader_startup
+    apploader
+    libopencm3_stm32f7.a
+)
+
+target_link_options(${APPLOADER_ELF} PRIVATE
+    -T${PROJECT_SOURCE_DIR}/linkerscript/apploader.ld
+)
+
+# --------------------------------------------------
+# Target: Updater
+# --------------------------------------------------
+message(STATUS "Configuring ${UPDATER_ELF}")
+add_executable(${UPDATER_ELF}
+    ${PROJECT_SOURCE_DIR}/misc/empty.c
+    ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
+)
+
+target_include_directories(${UPDATER_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/usart
+    ${PROJECT_SOURCE_DIR}/dfu/updater
+    ${PROJECT_SOURCE_DIR}/dfu/dust
+    ${PROJECT_SOURCE_DIR}/memory
+    ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     ${PROJECT_SOURCE_DIR}/submodules/printf
-    )
+)
 
-message(STATUS "Add ghost-feather-app target include directories")
-target_include_directories(
-    ghost-feather-app.elf
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
-    ${PROJECT_SOURCE_DIR}/app/stm32f722xx
+target_link_directories(${UPDATER_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers
+    ${PROJECT_SOURCE_DIR}/dfu
+    ${PROJECT_SOURCE_DIR}/linkerscript
+    ${PROJECT_SOURCE_DIR}/submodules
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
+)
+
+target_link_libraries(${UPDATER_ELF} PRIVATE
+    gfc_common_options
+    updater_startup
+    updater
+    dust
+    printf
+    ll_usart
+    libopencm3_stm32f7.a
+)
+
+target_link_options(${UPDATER_ELF} PRIVATE
+    -T${PROJECT_SOURCE_DIR}/linkerscript/updater.ld
+)
+
+# --------------------------------------------------
+# Target: Main application
+# --------------------------------------------------
+message(STATUS "Configuring ${APP_ELF}")
+add_executable(${APP_ELF}
+    ${PROJECT_SOURCE_DIR}/misc/empty.c
+    ${PROJECT_SOURCE_DIR}/vectortable/vectortable.S
+)
+
+# TODO: Check if these includes are necessary
+target_include_directories(${APP_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/app
+    ${PROJECT_SOURCE_DIR}/drivers/spi
+    ${PROJECT_SOURCE_DIR}/memory
+    ${PROJECT_SOURCE_DIR}/modules/motor
+    ${PROJECT_SOURCE_DIR}/modules/rc
+    ${PROJECT_SOURCE_DIR}/modules/tim
+    ${PROJECT_SOURCE_DIR}/modules/vtol
+    ${PROJECT_SOURCE_DIR}/modules/sensor/bmi270
+    ${PROJECT_SOURCE_DIR}/shared
+    ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
-    )
+)
 
+target_link_directories(${APP_ELF} PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers
+    ${PROJECT_SOURCE_DIR}/modules
+    ${PROJECT_SOURCE_DIR}/linkerscript
+    ${PROJECT_SOURCE_DIR}/shared
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/lib
+)
 
-message(STATUS "Add ghost-feather-first-bootloader target compile definitions")
-target_compile_definitions(
-    ghost-feather-first-bootloader.elf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    )
+target_link_libraries(${APP_ELF} PRIVATE
+    gfc_common_options
+    app_startup
+    app
+    ahrs
+    m
+    bmi270
+    cf
+    ll_bmi270
+    ll_spi
+    libopencm3_stm32f7.a
+    vtol
+    motor
+    pid
+    rc
+    tim
+    ll_tim
+    timing
+)
 
-message(STATUS "Add ghost-feather-second-bootloader target compile definitions")
-target_compile_definitions(
-    ghost-feather-second-bootloader.elf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    )
+target_link_options(${APP_ELF} PRIVATE
+    -T${PROJECT_SOURCE_DIR}/linkerscript/app.ld
+)
 
-message(STATUS "Add ghost-feather-boot-updater target compile definitions")
-target_compile_definitions(
-    ghost-feather-boot-updater.elf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    "$<$<COMPILE_LANGUAGE:C>:PRINTF_DISABLE_SUPPORT_LONG_LONG>"
-    "$<$<COMPILE_LANGUAGE:C>:DEBUG_DUST_PROTOCOL=1>"
-    "$<$<COMPILE_LANGUAGE:C>:DEBUG=1>"
-    )
-
-message(STATUS "Add ghost-feather-app target compile definitions")
-target_compile_definitions(
-    ghost-feather-app.elf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    )
-
-message(STATUS "Add ghost-feather-first-bootloader target compile options")
-target_compile_options(
-    ghost-feather-first-bootloader.elf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-sp-d16>"
-    "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
-    "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O3>"
-    )
-
-message(STATUS "Add ghost-feather-second-bootloader target compile options")
-target_compile_options(
-    ghost-feather-second-bootloader.elf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-sp-d16>"
-    "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
-    "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O3>"
-    )
-
-message(STATUS "Add ghost-feather-boot-updater target compile options")
-target_compile_options(
-    ghost-feather-boot-updater.elf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-sp-d16>"
-    "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
-    "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-Wcast-align>"
-    "$<$<COMPILE_LANGUAGE:C>:-O3>"
-    )
-
-message(STATUS "Add ghost-feather-app target compile options")
-target_compile_options(
-    ghost-feather-app.elf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-sp-d16>"
-    "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
-    "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O3>"
-    )
-
-message(STATUS "Add ghost-feather-first-bootloader target compile options")
-target_link_options(
-    ghost-feather-first-bootloader.elf
-    PRIVATE
-    -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/stm32f722xx_first_bootloader.ld
-    -nostartfiles
-    -specs=nano.specs
-    )
-
-message(STATUS "Add ghost-feather-second-bootloader target compile options")
-target_link_options(
-    ghost-feather-second-bootloader.elf
-    PRIVATE
-    -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/stm32f722xx_second_bootloader.ld
-    -nostartfiles
-    -specs=nano.specs
-    )
-
-message(STATUS "Add ghost-feather-boot-updater target compile options")
-target_link_options(
-    ghost-feather-boot-updater.elf
-    PRIVATE
-    -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/stm32f722xx_boot_updater.ld
-    -nostartfiles
-    -specs=nano.specs
-    )
-
-message(STATUS "Add ghost-feather-app target compile options")
-target_link_options(
-    ghost-feather-app.elf
-    PRIVATE
-    -T${PROJECT_SOURCE_DIR}/linkerscript/stm32f722xx/stm32f722xx_app.ld
-    -nostartfiles
-    -specs=nano.specs
-    )
+# --------------------------------------------------
+# Summary
+# --------------------------------------------------
+message(STATUS "Ghost Feather firmware build configured successfully.")

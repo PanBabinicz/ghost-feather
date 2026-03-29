@@ -18,7 +18,7 @@ typedef struct
 /// Private objects - definition.
 ///*************************************************************************************************
 ///
-/// \breif The circular buffer structure array.
+/// \brief The circular buffer structure array.
 ///
 static circular_buffer_t circular_buffer_array[CIRCULAR_BUFFER_INSTANCE_TOTAL];
 
@@ -26,7 +26,7 @@ static circular_buffer_t circular_buffer_array[CIRCULAR_BUFFER_INSTANCE_TOTAL];
 /// Private functions - declaration.
 ///*************************************************************************************************
 ///
-/// \breif Gets the circular buffer structure from given instance.
+/// \brief Gets the circular buffer structure from given instance.
 ///
 /// \param[in] instance        The instance of the circular buffer data structure.
 /// \param[in] circular_buffer The address of the circular buffer pointer which will point to the

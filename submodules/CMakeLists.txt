@@ -1,39 +1,36 @@
-file(GLOB_RECURSE PRINTF_SOURCES printf/*.c)
+# --------------------------------------------------
+# SPDX-License-Identifier: MIT
+# --------------------------------------------------
+# Project: Ghost Feather Firmware (STM32F7)
+# Modules:
+#   - Printf
+#
+# Description:
+#   Collects printf related source files for
+#   the Ghost Feather firmware targets running on
+#   the STM32F722 MCU.
+# --------------------------------------------------
+# Files list genereation
+# --------------------------------------------------
+file(GLOB_RECURSE PRINTF_SRCS printf/*.c)
 
-set_property(
-    GLOBAL
-    PROPERTY PRINTF_SOURCES
-    ${PRINTF_SOURCES}
-    )
-
+# --------------------------------------------------
+# Target: Printf
+# --------------------------------------------------
 message(STATUS "Add printf library")
-add_library(
-    printf
-    ${PRINTF_SOURCES}
-    )
+add_library(printf
+    ${PRINTF_SRCS}
+)
 
-message(STATUS "Add printf target include directories")
-target_include_directories(
-    printf
-    PRIVATE
+target_compile_definitions(printf PRIVATE
+    "$<$<COMPILE_LANGUAGE:C>:PRINTF_DISABLE_SUPPORT_LONG_LONG>"
+)
+
+target_include_directories(printf PRIVATE
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
     ${PROJECT_SOURCE_DIR}/submodules/printf
-    )
+)
 
-message(STATUS "Add printf target compile definitions")
-target_compile_definitions(
-    printf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    )
-
-message(STATUS "Add printf target compile options")
-target_compile_options(
-    printf
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv5-d16>"
-    "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
-    "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O3>"
-    )
+target_link_libraries(printf PRIVATE
+    gfc_common_options
+)

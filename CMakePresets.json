@@ -1,0 +1,77 @@
+{
+  "version": 10,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 30,
+    "patch": 2
+  },
+  "$comment": "The CMakePresets.json file for Ghost Feather project",
+  "configurePresets": [
+    {
+      "name": "base",
+      "displayName": "Base Config",
+      "description": "The base build using Ninja Multi-Config generator",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "toolchainFile": "${sourceDir}/arm-none-eabi-toolchain.cmake"
+    },
+    {
+      "name": "debug",
+      "displayName": "debug",
+      "description": "The debug build using Ninja Multi-Config generator",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "release",
+      "description": "The release build using Ninja Multi-Config generator",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "release_with_debug_info",
+      "displayName": "release_with_debug_info",
+      "description": "The release with debug info build using Ninja Multi-Config generator",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
+      "name": "minimum_size_release",
+      "displayName": "minimum_size_release",
+      "description": "The minimum size release build using Ninja Multi-Config generator",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "debug",
+      "displayName": "Build debug",
+      "configurePreset": "debug"
+    },
+    {
+      "name": "release",
+      "displayName": "Build release",
+      "configurePreset": "release"
+    },
+    {
+      "name": "release_with_debug_info",
+      "displayName": "Build release_with_debug_info",
+      "configurePreset": "release_with_debug_info"
+    },
+    {
+      "name": "minimum_size_release",
+      "displayName": "Build minimum_size_release",
+      "configurePreset": "minimum_size_release"
+    }
+  ]
+}

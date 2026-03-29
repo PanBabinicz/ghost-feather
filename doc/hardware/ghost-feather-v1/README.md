@@ -40,5 +40,10 @@
 > These models provide a clear visual reference for component placement,
 > board layout, and connector orientation.
 
+### KiCAD 3D Model
 ![Front](https://github.com/PanBabinicz/ghost-feather/blob/develop/doc/hardware/ghost-feather-v1/screenshots/ghost-feather-v1-pcb-front.png)
 ![Rear](https://github.com/PanBabinicz/ghost-feather/blob/develop/doc/hardware/ghost-feather-v1/screenshots/ghost-feather-v1-pcb-rear.png)
+
+### Manufactured PCB
+![Bench](https://github.com/PanBabinicz/ghost-feather/blob/develop/doc/hardware/ghost-feather-v1/screenshots/real-drone-1.jpg)
+![Floor](https://github.com/PanBabinicz/ghost-feather/blob/develop/doc/hardware/ghost-feather-v1/screenshots/real-drone-2.jpg)

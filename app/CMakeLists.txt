@@ -1,39 +1,45 @@
-file(GLOB_RECURSE APP_SOURCES stm32f722xx/*.c)
+# --------------------------------------------------
+# SPDX-License-Identifier: MIT
+# --------------------------------------------------
+# Project: Ghost Feather Firmware (STM32F7)
+# Modules:
+#   - Application
+#
+# Description:
+#   Defines the main application build configuration
+#   for the STM32F722 MCU. Collects all application
+#   sources, sets include paths, and links against
+#   shared libraries and the common interface target
+#   (`gfc_common_options`).
+# --------------------------------------------------
+# Files list genereation
+# --------------------------------------------------
+file(GLOB_RECURSE APP_SRCS *.c)
 
-set_property(
-    GLOBAL
-    PROPERTY APP_SOURCES
-    ${APP_SOURCES}
-    )
-
+# --------------------------------------------------
+# Target: Application
+# --------------------------------------------------
 message(STATUS "Add app library")
-add_library(
-    app
-    ${APP_SOURCES}
-    )
+add_library(app
+    ${APP_SRCS}
+)
 
-message(STATUS "Add app target include directories")
-target_include_directories(
-    app
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/memory/stm32f722xx
+target_include_directories(app PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/tim
+    ${PROJECT_SOURCE_DIR}/drivers/spi
+    ${PROJECT_SOURCE_DIR}/drivers/sensor/bmi270
+    ${PROJECT_SOURCE_DIR}/modules/ahrs
+    ${PROJECT_SOURCE_DIR}/modules/cf
+    ${PROJECT_SOURCE_DIR}/modules/motor
+    ${PROJECT_SOURCE_DIR}/modules/pid
+    ${PROJECT_SOURCE_DIR}/modules/rc
+    ${PROJECT_SOURCE_DIR}/modules/tim
+    ${PROJECT_SOURCE_DIR}/modules/sensor/bmi270
+    ${PROJECT_SOURCE_DIR}/modules/vtol
+    ${PROJECT_SOURCE_DIR}/shared/timing
     ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
-    )
+)
 
-message(STATUS "Add app target compile definitions")
-target_compile_definitions(
-    app
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:STM32F7>"
-    )
-
-message(STATUS "Add app target compile options")
-target_compile_options(
-    app
-    PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:-mfloat-abi=hard>"
-    "$<$<COMPILE_LANGUAGE:C>:-mfpu=fpv4-sp-d16>"
-    "$<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m7>"
-    "$<$<COMPILE_LANGUAGE:C>:-mthumb>"
-    "$<$<COMPILE_LANGUAGE:C>:-O3>"
-    )
+target_link_libraries(app PRIVATE
+    gfc_common_options
+)
