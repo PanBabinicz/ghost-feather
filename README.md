@@ -73,6 +73,19 @@
 > ~ cmake --build . --config Debug
 > ```
 
+> **CMake Presets**
+>
+> ```console
+> ~ cmake --preset list
+> ~ cmake --preset <build-type>
+> ```
+
+> **Build shell script**
+>
+> ```console
+> ~ ./build.sh <build-type>
+> ```
+
 # How to program
 
 > For now, CMake generates two elf files. Each of these files needs to be uploaded to the device.
@@ -83,6 +96,12 @@
 > The second option is to use soft floating point numbers but the speed will be slower.
 
 # Marco Paland printf implementation
+
+> The Marco Paland printf implementation is a lightweight, standalone alternative designed
+> specifically to address these limitations. This implementation offers a small memory footprint,
+> portability, and independence from the full C standard library. It is widely used in embedded
+> projects where developers require formatted output but cannot afford the code size and
+> dependencies of a complete libc implementation.
 
 # DFU script
 
@@ -131,6 +150,110 @@
 > ~ cd build && ctest
 > ```
 
-> **Instalation**
+# Conda
+
+## What is Conda?
+
+> Conda is an open-source **package manager and environment manager** used for installing, running, and
+> updating software packages and their dependencies. It is widely used in data science, machine learning,
+> and scientific computing because it simplifies managing complex software environments.
 >
+> Unlike `pip`, which only installs Python packages, **Conda can manage packages written in multiple languages**
+> (such as Python, R, and C libraries) and handles system-level dependencies as well.
 >
+> Conda is distributed with platforms such as:
+
+- **Anaconda** – a large distribution that includes many preinstalled scientific packages.
+- **Miniconda** – a lightweight version that installs only Conda and Python.
+
+## Why Use Conda?
+
+> Conda helps solve common development problems:
+
+- **Dependency management** – automatically installs required libraries.
+- **Environment isolation** – different projects can use different package versions.
+- **Cross-language support** – works with Python, R, and other tools.
+- **Reproducibility** – environments can be exported and recreated.
+
+> Example: one project may require `Python 3.9` while another requires `Python 3.11`. Conda allows both to
+> coexist without conflicts.
+
+## Creating an Environment
+
+> A Conda environment is an isolated workspace containing its own Python version and installed packages.
+>
+> Create a new environment:
+
+```bash
+conda create -n myenv python=3.10
+```
+
+Here:
+- `-n myenv` specifies the environment name
+- `python=3.10` installs a specific Python version
+
+## Activating an Environment
+
+> Before using an environment, it must be activated.
+
+```bash
+conda activate myenv
+```
+
+> After activation, all installed packages and Python commands will come from this environment.
+>
+> To deactivate:
+
+```bash
+conda deactivate
+```
+
+## Installing Packages
+
+> Packages can be installed directly into the active environment.
+
+```bash
+conda install numpy pandas matplotlib
+```
+
+> Conda will automatically resolve and install required dependencies.
+
+## Listing Environments
+
+> To see all available environments:
+
+```bash
+conda env list
+```
+
+> or:
+
+```bash
+conda info --envs
+```
+
+## Removing an Environment
+
+> If an environment is no longer needed, it can be deleted:
+
+```bash
+conda remove -n myenv --all
+```
+
+## Exporting an Environment
+
+> To share or reproduce an environment:
+
+```bash
+conda env export > environment.yml
+```
+
+> This file can later be used to recreate the same environment.
+
+## Recreating an Environment
+
+```bash
+conda env create -f environment.yml
+```
+
+> This installs all packages and dependencies exactly as defined in the exported file.

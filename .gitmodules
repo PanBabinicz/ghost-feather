@@ -7,3 +7,6 @@
 [submodule "submodules/googletest"]
 	path = submodules/googletest
 	url = https://github.com/google/googletest.git
+[submodule "submodules/kf_book"]
+	path = submodules/kf_book
+	url = https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python.git
