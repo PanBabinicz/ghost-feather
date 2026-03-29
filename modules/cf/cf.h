@@ -22,6 +22,17 @@ struct cf
     float32_t ang;
 };
 
+///
+/// \brief
+///
+typedef enum cf_inst
+{
+    CF_INST_BEGIN = 0,
+    CF_INST_ROLL  = 0,
+    CF_INST_PITCH,
+    CF_INST_TOTAL,
+} cf_inst_t;
+
 ///***********************************************************************************************************
 /// Private functions - declaration.
 ///***********************************************************************************************************
@@ -83,18 +94,31 @@ static inline float32_t cf_get_alpha(const struct cf *const handle)
 void cf_init(struct cf *const handle, const float32_t alpha, const float32_t ang);
 
 ///
+/// \brief Deinitializes the complementary filter instance.
+///
+/// \param[in] handle The pointer to complementary filter.
+///
+void cf_deinit(struct cf *const handle);
+
+///
+/// \brief Deinitializes the complementary filter instance.
+///
+/// \param[in] handle The pointer to complementary filter.
+///
+struct cf* cf_get(const cf_inst_t inst);
+
+///
 /// \brief Updates the complementary filter with new sensor measuremets.
 ///
 /// Performs one update step of the complementary filter using the gyroscope
 /// angular rate and the accelerometer-derived angle. The gyroscope data is
 /// integrated over time while the accelerometer provides long-term correction.
 ///
-/// \param[in] handle    The pointer to complementary filter.
-/// \param[in] gyro_rate The angular rate from gyroscope.
-/// \param[in] accel_ang The angle estimated from accelerometer.
-/// \param[in] dt        The time step since the last update in seconds.
+/// \param[in] handle   The pointer to complementary filter.
+/// \param[in] pred_ang The predicted angle from gyroscope.
+/// \param[in] acc_ang  The angle estimated from accelerometer.
 ///
-void cf_update(struct cf *const handle, const float32_t gyro_rate, const float32_t accel_ang, const float32_t dt);
+void cf_fuse(struct cf *const handle, const float32_t pred_ang, const float32_t acc_ang);
 
 ///
 /// \brief Sets the angle of the complementary filter instance.

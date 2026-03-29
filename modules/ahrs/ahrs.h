@@ -58,6 +58,17 @@ struct ahrs_raw_data
     int16_t gz;
 };
 
+
+///
+/// \brief
+///
+struct ahrs_calib
+{
+    int16_t gx;
+    int16_t gy;
+    int16_t gz;
+};
+
 ///
 /// \brief
 ///

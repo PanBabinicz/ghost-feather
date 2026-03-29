@@ -55,6 +55,15 @@ typedef enum rc_ch
 } rc_ch_t;
 
 ///
+/// \brief
+///
+typedef enum rc_norm
+{
+    RC_NORM_SYM = 0,
+    RC_NORM_ASYM,
+} rc_norm_t;
+
+///
 /// \brief The RC signal components.
 ///
 struct rc_sig
@@ -110,8 +119,9 @@ void rc_sig_raw_gen(struct rc *const handle);
 /// \brief Normalizes PWM pulse width for a given RC channel.
 ///
 /// \param[in] handle The pointer to the RC channel.
+/// \param[in] norm   The normalization type.
 ///
-void rc_sig_norm(struct rc *const handle);
+void rc_sig_norm(struct rc *const handle, const rc_norm_t norm);
 
 #ifdef __cplusplus
 }

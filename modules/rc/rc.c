@@ -52,7 +52,7 @@ static float32_t norm_sym_f32(const float32_t min, const float32_t max, const fl
 ///***********************************************************************************************************
 void rc_init(struct rc *const handle, const tim_inst_t inst, const ll_tim_ccr_ch_t ch)
 {
-    if (inst == NULL)
+    if (handle == NULL)
     {
         return;
     }
@@ -66,7 +66,7 @@ void rc_init(struct rc *const handle, const tim_inst_t inst, const ll_tim_ccr_ch
 
 void rc_deinit(struct rc *const handle)
 {
-    if (inst == NULL)
+    if (handle == NULL)
     {
         return;
     }
@@ -100,7 +100,7 @@ void rc_sig_raw_gen(struct rc *const handle)
     }
 }
 
-void rc_sig_norm(struct rc *const handle)
+void rc_sig_norm(struct rc *const handle, const rc_norm_t norm)
 {
     if (handle == NULL)
     {
@@ -120,30 +120,17 @@ void rc_sig_norm(struct rc *const handle)
         handle->sig.norm = (float32_t)handle->sig.raw;
     }
 
-    switch (ch)
+    switch (norm)
     {
-        case RC_CH_1:
+        case RC_NORM_SYM:
             handle->sig.norm = norm_sym_f32(1000.0, 2000.0, handle->sig.norm);
             break;
 
-        case RC_CH_2:
-            handle->sig.norm = norm_sym_f32(1000.0, 2000.0, handle->sig.norm);
-            break;
-
-        case RC_CH_3:
+        case RC_NORM_ASYM:
             handle->sig.norm = norm_asym_f32(1000.0, 2000.0, handle->sig.norm);
             break;
 
-        case RC_CH_4:
-            handle->sig.norm = norm_sym_f32(1000.0, 2000.0, handle->sig.norm);
-            break;
-
-        case RC_CH_5:
-            handle->sig.norm = norm_asym_f32(1000.0, 2000.0, handle->sig.norm);
-            break;
-
-        case RC_CH_6:
-            handle->sig.norm = norm_asym_f32(1000.0, 2000.0, handle->sig.norm);
+        default:
             break;
     }
 }

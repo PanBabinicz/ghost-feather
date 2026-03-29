@@ -44,7 +44,7 @@ static void ahrs_calc_acc_ang(struct ahrs *const handle, float32_t ax, float32_t
     }
 
     handle->acc.roll  = atan2(ay, az);
-    handle->acc.pitch = atan2((-ax), sqrtf(ay*ay + az*az));
+    handle->acc.pitch = atan2((-ax), sqrtf((ay*ay) + (az*az)));
 
     handle->acc.roll  *= rad_in_deg;
     handle->acc.pitch *= rad_in_deg;
@@ -54,7 +54,13 @@ static void ahrs_calc_gyr_ang(struct ahrs *const handle, float32_t gx, float32_t
 {
     handle->gyr.roll  += gx * handle->gyr.dt;
     handle->gyr.pitch += gy * handle->gyr.dt;
-    handle->gyr.yaw   += gz * handle->gyr.dt;
+
+    if ((gz < 0.1f) && (gz > -0.1f))
+    {
+        gz = 0.0f;
+    }
+
+    handle->gyr.yaw += gz * handle->gyr.dt;
 }
 
 ///***********************************************************************************************************
@@ -114,10 +120,12 @@ void ahrs_update(struct ahrs *const handle, struct ahrs_raw_data *const data)
     float32_t axf = (float32_t)data->ax * handle->acc.scale;
     float32_t ayf = (float32_t)data->ay * handle->acc.scale;
     float32_t azf = (float32_t)data->az * handle->acc.scale;
-
     float32_t gxf = (float32_t)data->gx * handle->gyr.scale;
     float32_t gyf = (float32_t)data->gy * handle->gyr.scale;
     float32_t gzf = (float32_t)data->gz * handle->gyr.scale;
+
+    handle->gyr.roll  = handle->out.roll;
+    handle->gyr.pitch = handle->out.pitch;
 
     ahrs_calc_acc_ang(handle, axf, ayf, azf);
     ahrs_calc_gyr_ang(handle, gxf, gyf, gzf);
@@ -128,7 +136,7 @@ void ahrs_update(struct ahrs *const handle, struct ahrs_raw_data *const data)
     handle->out.roll  = cf_get_ang(handle->cf_roll);
     handle->out.pitch = cf_get_ang(handle->cf_pitch);
 
-    handle->out.yaw = handle->gyr.roll;
+    handle->out.yaw = handle->gyr.yaw;
 
     if (handle->out.yaw > 180.0f)
     {

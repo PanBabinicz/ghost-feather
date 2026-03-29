@@ -24,7 +24,6 @@ struct ghf_time
 struct ghf_data
 {
     struct ghf_time time;
-    struct ahrs_raw_data ahrs;
     float32_t roll;
     float32_t pitch;
     float32_t throttle;
@@ -33,6 +32,8 @@ struct ghf_data
     uint32_t  pwm2;
     uint32_t  pwm3;
     uint32_t  pwm4;
+    struct ahrs_raw_data raw_data;
+    struct ahrs_calib calib;
 };
 
 struct ghf_config
@@ -61,6 +62,7 @@ struct ghf_module
     struct motor *motor_4;
     struct pid   *pid_roll;
     struct pid   *pid_pitch;
+    struct pid   *pid_yaw;
 };
 
 struct ghf
@@ -84,6 +86,11 @@ static void app_setup(struct ghf *const handle);
 /// \brief Initializes all the modules used in application.
 ///
 static void app_init(struct ghf *const handle);
+
+///
+/// \brief
+///
+static void app_calib(struct ghf *const handle);
 
 ///
 /// \brief Turns the LED on.
@@ -126,6 +133,7 @@ static void app_setup(struct ghf *const handle)
 
     handle->module.pid_roll  = pid_get(PID_INST_ROLL);
     handle->module.pid_pitch = pid_get(PID_INST_PITCH);
+    handle->module.pid_yaw   = pid_get(PID_INST_YAW);
 
     handle->config.kp        = 0.01f;
     handle->config.ki        = 0.00f;
@@ -149,12 +157,16 @@ static void app_setup(struct ghf *const handle)
     handle->data.throttle = 0.0f;
     handle->data.yaw      = 0.0f;
 
-    handle->data.ahrs.ax = 0.0f;
-    handle->data.ahrs.ay = 0.0f;
-    handle->data.ahrs.az = 0.0f;
-    handle->data.ahrs.gx = 0.0f;
-    handle->data.ahrs.gy = 0.0f;
-    handle->data.ahrs.gz = 0.0f;
+    handle->data.raw_data.ax = 0;
+    handle->data.raw_data.ay = 0;
+    handle->data.raw_data.az = 0;
+    handle->data.raw_data.gx = 0;
+    handle->data.raw_data.gy = 0;
+    handle->data.raw_data.gz = 0;
+
+    handle->data.calib.gx = 0;
+    handle->data.calib.gy = 0;
+    handle->data.calib.gz = 0;
 }
 
 static void app_init(struct ghf *const handle)
@@ -185,15 +197,39 @@ static void app_init(struct ghf *const handle)
 
     pid_init(handle->module.pid_roll,  handle->config.kp, handle->config.ki, handle->config.kd, handle->config.dt);
     pid_init(handle->module.pid_pitch, handle->config.kp, handle->config.ki, handle->config.kd, handle->config.dt);
+    pid_init(handle->module.pid_yaw,   handle->config.kp, handle->config.ki, handle->config.kd, handle->config.dt);
 
     timing_delay_us(1000 * 1000 * 5);
 
     if (bmi270_init() != BMI270_RES_OK)
     {
-        led_on();
         while(1);
     }
     bmi270_pwr_mode_set(BMI270_PWR_MODE_NORM_IMU);
+}
+
+static void app_calib(struct ghf *const handle)
+{
+    if (handle == NULL)
+    {
+        return;
+    }
+
+    int32_t gx = 0;
+    int32_t gz = 0;
+    int32_t gy = 0;
+
+    for (int i=0; i<100; ++i)
+    {
+        bmi270_gyr_read();
+        gx += bmi270_gyr_get_x();
+        gy += bmi270_gyr_get_y();
+        gz += bmi270_gyr_get_z();
+    }
+
+    handle->data.calib.gx = gx / 100;
+    handle->data.calib.gy = gy / 100;
+    handle->data.calib.gz = gz / 100;
 }
 
 static void led_on(void)
@@ -220,8 +256,11 @@ void app_start(void)
     float32_t time_in_us;
     float32_t time;
 
+    led_on();
     app_setup(&ghf);
     app_init(&ghf);
+    app_calib(&ghf);
+    led_off();
 
     /* Never return */
     while (1)
@@ -234,14 +273,14 @@ void app_start(void)
             bmi270_acc_read();
             bmi270_gyr_read();
 
-            ghf.data.ahrs.ax = bmi270_acc_get_x();
-            ghf.data.ahrs.ay = bmi270_acc_get_y();
-            ghf.data.ahrs.az = bmi270_acc_get_z();
-            ghf.data.ahrs.gx = bmi270_gyr_get_x();
-            ghf.data.ahrs.gy = bmi270_gyr_get_y();
-            ghf.data.ahrs.gz = bmi270_gyr_get_z();
+            ghf.data.raw_data.ax = bmi270_acc_get_x();
+            ghf.data.raw_data.ay = bmi270_acc_get_y();
+            ghf.data.raw_data.az = bmi270_acc_get_z();
+            ghf.data.raw_data.gx = bmi270_gyr_get_x() - ghf.data.calib.gx;
+            ghf.data.raw_data.gy = bmi270_gyr_get_y() - ghf.data.calib.gy;
+            ghf.data.raw_data.gz = bmi270_gyr_get_z() - ghf.data.calib.gz;
 
-            ahrs_update(ghf.module.ahrs, &ghf.data.ahrs);
+            ahrs_update(ghf.module.ahrs, &ghf.data.raw_data);
 
             rc_sig_raw_gen(ghf.module.rc_1);
             rc_sig_raw_gen(ghf.module.rc_2);
@@ -256,8 +295,9 @@ void app_start(void)
             ghf.data.throttle = ghf.module.rc_3->sig.norm;
 
             ghf.data.roll  = pid_update(ghf.module.pid_roll,  ghf.module.rc_1->sig.norm*max_degree, ghf.module.ahrs->out.roll);
-            ghf.data.pitch = pid_update(ghf.module.pid_pitch, ghf.module.rc_2->sig.norm*max_degree, ghf.module.ahrs->out.roll);
-            ghf.data.yaw   = ghf.module.rc_4->sig.norm * 0.33f;
+            ghf.data.pitch = pid_update(ghf.module.pid_pitch, ghf.module.rc_2->sig.norm*max_degree, ghf.module.ahrs->out.pitch);
+            ghf.data.yaw   = pid_update(ghf.module.pid_yaw,   ghf.module.rc_4->sig.norm*max_degree, ghf.module.ahrs->out.yaw);
+            //ghf.data.yaw   = ghf.module.rc_4->sig.norm * 0.66f;
 
             if (ghf.data.throttle < 0.2f)
             {
