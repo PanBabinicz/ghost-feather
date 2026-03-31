@@ -30,6 +30,7 @@ target_include_directories(app PRIVATE
     ${PROJECT_SOURCE_DIR}/drivers/sensor/bmi270
     ${PROJECT_SOURCE_DIR}/modules/ahrs
     ${PROJECT_SOURCE_DIR}/modules/cf
+    ${PROJECT_SOURCE_DIR}/modules/ghf
     ${PROJECT_SOURCE_DIR}/modules/motor
     ${PROJECT_SOURCE_DIR}/modules/pid
     ${PROJECT_SOURCE_DIR}/modules/rc

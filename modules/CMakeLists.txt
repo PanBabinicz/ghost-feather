@@ -6,6 +6,7 @@
 #   - AHRS module
 #   - BMI270 sensor module
 #   - Complementary filter module
+#   - GHF module
 #   - Motor module
 #   - PID module
 #   - RC module
@@ -19,6 +20,7 @@
 file(GLOB_RECURSE AHRS_SRCS ahrs/*.c)
 file(GLOB_RECURSE BMI270_SRCS sensor/bmi270/*.c)
 file(GLOB_RECURSE CF_SRCS cf/*.c)
+file(GLOB_RECURSE GHF_SRCS ghf/*.c)
 file(GLOB_RECURSE MOTOR_SRCS motor/*.c)
 file(GLOB_RECURSE PID_SRCS pid/*.c)
 file(GLOB_RECURSE RC_SRCS rc/*.c)
@@ -73,6 +75,31 @@ add_library(cf
 )
 
 target_link_libraries(cf PRIVATE
+    gfc_common_options
+)
+
+# --------------------------------------------------
+# Target: GHF module
+# --------------------------------------------------
+message(STATUS "Add ghf module library")
+add_library(ghf
+    ${GHF_SRCS}
+)
+
+target_include_directories(ghf PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/tim
+    ${PROJECT_SOURCE_DIR}/drivers/spi
+    ${PROJECT_SOURCE_DIR}/modules/ahrs
+    ${PROJECT_SOURCE_DIR}/modules/cf
+    ${PROJECT_SOURCE_DIR}/modules/motor
+    ${PROJECT_SOURCE_DIR}/modules/pid
+    ${PROJECT_SOURCE_DIR}/modules/rc
+    ${PROJECT_SOURCE_DIR}/modules/tim
+    ${PROJECT_SOURCE_DIR}/modules/sensor/bmi270
+    ${PROJECT_SOURCE_DIR}/shared/timing
+)
+
+target_link_libraries(ghf PRIVATE
     gfc_common_options
 )
 

@@ -86,18 +86,32 @@ struct ghf
 typedef float float32_t;
 
 ///
-/// \brief Initializes the ghf module.
+/// \brief Initializes the ghf.
 ///
 /// \param[in] The pointer to ghf.
 ///
 void ghf_init(struct ghf *const handle);
 
 ///
-/// \brief Deinitializes the ghf module.
+/// \brief Deinitializes the ghf.
 ///
 /// \param[in] The pointer to ghf.
 ///
 void ghf_deinit(struct ghf *const handle);
+
+///
+/// \brief Setups the ghf.
+///
+/// \param[in] The pointer to ghf.
+///
+void ghf_setup(struct ghf *const handle);
+
+///
+/// \brief Gets the ghf.
+///
+/// \return struct ghf* The ghf pointer.
+///
+struct ghf* ghf_get(void);
 
 #ifdef __cplusplus
 }
