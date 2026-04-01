@@ -136,6 +136,30 @@ void ghf_setup(struct ghf *const handle)
     handle->data.calib.gz = 0;
 }
 
+void ghf_calib(struct ghf *const handle)
+{
+    if (handle == NULL)
+    {
+        return;
+    }
+
+    int32_t gx = 0;
+    int32_t gz = 0;
+    int32_t gy = 0;
+
+    for (int i=0; i<100; ++i)
+    {
+        bmi270_gyr_read();
+        gx += bmi270_gyr_get_x();
+        gy += bmi270_gyr_get_y();
+        gz += bmi270_gyr_get_z();
+    }
+
+    handle->data.calib.gx = gx / 100;
+    handle->data.calib.gy = gy / 100;
+    handle->data.calib.gz = gz / 100;
+}
+
 struct ghf* ghf_get(void)
 {
     return &ghf;
