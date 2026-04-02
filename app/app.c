@@ -55,8 +55,6 @@ void app_start(void)
 
     led_on();
     ghf_init(ghf);
-    ghf_setup(ghf);
-    ghf_calib(ghf);
     led_off();
 
     /* Never return */

@@ -100,20 +100,6 @@ void ghf_init(struct ghf *const handle);
 void ghf_deinit(struct ghf *const handle);
 
 ///
-/// \brief Setups the ghf.
-///
-/// \param[in] The pointer to ghf.
-///
-void ghf_setup(struct ghf *const handle);
-
-///
-/// \brief Calibrates the ghf IMU.
-///
-/// \param[in] The pointer to ghf.
-///
-void ghf_calib(struct ghf *const handle);
-
-///
 /// \brief Gets the ghf.
 ///
 /// \return struct ghf* The ghf pointer.
