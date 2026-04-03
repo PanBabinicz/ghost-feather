@@ -86,6 +86,7 @@ void app_start(void)
             rc_sig_norm(ghf->module.rc_2, RC_NORM_SYM);
             rc_sig_norm(ghf->module.rc_3, RC_NORM_ASYM);
             rc_sig_norm(ghf->module.rc_4, RC_NORM_SYM);
+            rc_sig_norm(ghf->module.rc_5, RC_NORM_ASYM);
 
             ghf->data.throttle = ghf->module.rc_3->sig.norm;
 
@@ -94,7 +95,7 @@ void app_start(void)
             ghf->data.yaw   = pid_update(ghf->module.pid_yaw,   ghf->module.rc_4->sig.norm*max_degree, ghf->module.ahrs->out.yaw);
             //ghf->data.yaw   = ghf->module.rc_4->sig.norm * 0.66f;
 
-            if (ghf->data.throttle < 0.2f)
+            if ((ghf->data.throttle < 0.2f) || (ghf->module.rc_5->sig.norm > 0.8f))
             {
                 ghf->data.roll  = 0.0f;
                 ghf->data.pitch = 0.0f;
@@ -122,6 +123,15 @@ void app_start(void)
             motor_update(ghf->module.motor_2, ghf->data.pwm2);
             motor_update(ghf->module.motor_3, ghf->data.pwm3);
             motor_update(ghf->module.motor_4, ghf->data.pwm4);
+
+            /* Emergency function. */
+            while (ghf->module.rc_5->sig.norm > 0.8f)
+            {
+                led_on();
+                timing_delay_us(1000 * 1000);
+                led_off();
+                timing_delay_us(1000 * 1000);
+            }
         }
 
         vtol_land_proc();
