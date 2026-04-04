@@ -33,6 +33,11 @@ static void led_on(void);
 ///
 static void led_off(void);
 
+///
+/// \brief Enters the safe mode. All motors are turned off until safe mode is deactivated.
+///
+static void enter_safe_mode(struct ghf *const handle);
+
 ///*************************************************************************************************
 /// Private functions - definition.
 ///*************************************************************************************************
@@ -44,6 +49,25 @@ static void led_on(void)
 static void led_off(void)
 {
     gpio_clear(GPIOA, GPIO2);
+}
+
+static void enter_safe_mode(struct ghf *const handle)
+{
+    motor_update(ghf->module.motor_1, 1000);
+    motor_update(ghf->module.motor_2, 1000);
+    motor_update(ghf->module.motor_3, 1000);
+    motor_update(ghf->module.motor_4, 1000);
+
+    while (ghf->module.rc_5->sig.norm > 0.8f)
+    {
+        rc_sig_raw_gen(ghf->module.rc_5);
+        rc_sig_norm(ghf->module.rc_5, RC_NORM_ASYM);
+
+        led_on();
+        timing_delay_us(1000 * 1000);
+        led_off();
+        timing_delay_us(1000 * 1000);
+    }
 }
 
 ///*************************************************************************************************
@@ -81,12 +105,13 @@ void app_start(void)
             rc_sig_raw_gen(ghf->module.rc_2);
             rc_sig_raw_gen(ghf->module.rc_3);
             rc_sig_raw_gen(ghf->module.rc_4);
+            rc_sig_raw_gen(ghf->module.rc_5);
 
             rc_sig_norm(ghf->module.rc_1, RC_NORM_SYM);
             rc_sig_norm(ghf->module.rc_2, RC_NORM_SYM);
             rc_sig_norm(ghf->module.rc_3, RC_NORM_ASYM);
             rc_sig_norm(ghf->module.rc_4, RC_NORM_SYM);
-            rc_sig_norm(ghf->module.rc_5, RC_NORM_ASYM);
+            rc_sig_corm(ghf->module.rc_5, RC_NORM_ASYM);
 
             ghf->data.throttle = ghf->module.rc_3->sig.norm;
 
@@ -95,7 +120,7 @@ void app_start(void)
             ghf->data.yaw   = pid_update(ghf->module.pid_yaw,   ghf->module.rc_4->sig.norm*max_degree, ghf->module.ahrs->out.yaw);
             //ghf->data.yaw   = ghf->module.rc_4->sig.norm * 0.66f;
 
-            if ((ghf->data.throttle < 0.2f) || (ghf->module.rc_5->sig.norm > 0.8f))
+            if (ghf->data.throttle < 0.2f)
             {
                 ghf->data.roll  = 0.0f;
                 ghf->data.pitch = 0.0f;
@@ -124,13 +149,10 @@ void app_start(void)
             motor_update(ghf->module.motor_3, ghf->data.pwm3);
             motor_update(ghf->module.motor_4, ghf->data.pwm4);
 
-            /* Emergency function. */
-            while (ghf->module.rc_5->sig.norm > 0.8f)
+            /* Safe mode. */
+            if (ghf->module.rc_5->sig.norm > 0.8f)
             {
-                led_on();
-                timing_delay_us(1000 * 1000);
-                led_off();
-                timing_delay_us(1000 * 1000);
+                enter_safe_mode(ghf);
             }
         }
 
