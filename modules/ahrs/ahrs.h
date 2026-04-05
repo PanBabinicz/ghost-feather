@@ -14,7 +14,7 @@ typedef float float32_t;
 /// Private objects - declaration.
 ///***********************************************************************************************************
 ///
-/// \brief
+/// \brief The ahrs accelerometer related processed data with scale settings.
 ///
 struct ahrs_acc
 {
@@ -24,7 +24,7 @@ struct ahrs_acc
 };
 
 ///
-/// \brief
+/// \brief The ahrs gyroscope related processed data with scale settings and time step.
 ///
 struct ahrs_gyr
 {
@@ -36,7 +36,7 @@ struct ahrs_gyr
 };
 
 ///
-/// \brief
+/// \brief The ahrs output angles.
 ///
 struct ahrs_out
 {
@@ -46,7 +46,7 @@ struct ahrs_out
 };
 
 ///
-/// \brief
+/// \brief The ahrs accelerometer and gyroscope raw data.
 ///
 struct ahrs_raw_data
 {
@@ -60,7 +60,7 @@ struct ahrs_raw_data
 
 
 ///
-/// \brief
+/// \brief The ahrs gyroscope calibration data.
 ///
 struct ahrs_calib
 {
@@ -70,7 +70,7 @@ struct ahrs_calib
 };
 
 ///
-/// \brief
+/// \brief The ahrs struct containing sensor data, outputs, and filter instances.
 ///
 struct ahrs
 {
@@ -85,17 +85,29 @@ struct ahrs
 /// Private functions - declaration.
 ///***********************************************************************************************************
 ///
-/// \brief
+/// \brief Gets the output roll angle.
+///
+/// \param[in] The pointer to ahrs.
+///
+/// \return float32_t The output roll angle.
 ///
 static inline float32_t ahrs_get_roll_ang(const struct ahrs *const handle);
 
 ///
-/// \brief
+/// \brief Gets the output pitch angle.
+///
+/// \param[in] The pointer to ahrs.
+///
+/// \return float32_t The output pitch angle.
 ///
 static inline float32_t ahrs_get_pitch_ang(const struct ahrs *const handle);
 
 ///
-/// \brief
+/// \brief Gets the output yaw angle.
+///
+/// \param[in] The pointer to ahrs.
+///
+/// \return float32_t The output yaw angle.
 ///
 static inline float32_t ahrs_get_yaw_ang(const struct ahrs *const handle);
 
@@ -136,23 +148,36 @@ static inline float32_t ahrs_get_yaw_ang(const struct ahrs *const handle)
 /// Global functions - declaration.
 ///***********************************************************************************************************
 ///
-/// \brief
+/// \brief Initializes the ahrs.
+///
+/// \param[in] handle    The pointer to ahrs.
+/// \param[in] acc_scale The scale factor for accelerometer.
+/// \param[in] gyr_scale The scale factor for gyroscope.
+/// \param[in] alpha     The alpha factor for complementary filter.
+/// \param[in] dt        The time step.
 ///
 void ahrs_init(struct ahrs *const handle, const float32_t acc_scale, const float32_t gyr_scale,
         const float32_t alpha, const float32_t dt);
 
 ///
-/// \brief
+/// \brief Deinitializes the ahrs. The ahrs is zero initialized.
+///
+/// \param[in] handle The pointer to ahrs.
 ///
 void ahrs_deinit(struct ahrs *const handle);
 
 ///
-/// \brief
+/// \brief Gets the ahrs object.
+///
+/// \return struct ahrs* The ahrs object.
 ///
 struct ahrs* ahrs_get(void);
 
 ///
-/// \brief
+/// \brief Updates the ahrs output.
+///
+/// \param[in] handle The pointer to ahrs.
+/// \param[in] data   The ahrs accelerometer and gyroscope raw data.
 ///
 void ahrs_update(struct ahrs *const handle, struct ahrs_raw_data *const data);
 

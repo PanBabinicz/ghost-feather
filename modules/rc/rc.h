@@ -55,7 +55,7 @@ typedef enum rc_ch
 } rc_ch_t;
 
 ///
-/// \brief
+/// \brief The RC channel normalization type.
 ///
 typedef enum rc_norm
 {

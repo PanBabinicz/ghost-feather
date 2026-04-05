@@ -9,12 +9,12 @@
 /// Private objects - definition.
 ///***********************************************************************************************************
 ///
-/// \brief
+/// \brief The value of one radian in degrees.
 ///
 static const float32_t rad_in_deg = (180 / M_PI);
 
 ///
-/// \brief
+/// \brief The AHRS object.
 ///
 static struct ahrs ahrs;
 
@@ -22,12 +22,22 @@ static struct ahrs ahrs;
 /// Private functions - declaration.
 ///***********************************************************************************************************
 ///
-/// \brief
+/// \brief Calculates the accelerometer angles.
+///
+/// \param[in] handle The pointer to ahrs.
+/// \param[in] ax     The accelerometer measurement in x-axis.
+/// \param[in] ay     The accelerometer measurement in y-axis.
+/// \param[in] az     The accelerometer measurement in z-axis.
 ///
 static void ahrs_calc_acc_ang(struct ahrs *const handle, float32_t ax, float32_t ay, float32_t az);
 
 ///
-/// \brief
+/// \brief Calculates the gyroscope angles.
+///
+/// \param[in] handle The pointer to ahrs.
+/// \param[in] gx     The gyroscope angular rate in x-axis.
+/// \param[in] gy     The gyroscope angular rate in y-axis.
+/// \param[in] gz     The gyroscope angular rate in z-axis.
 ///
 static void ahrs_calc_gyr_ang(struct ahrs *const handle, float32_t gx, float32_t gy, float32_t gz);
 

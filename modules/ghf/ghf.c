@@ -13,7 +13,7 @@
 /// Private objects - definition.
 ///***********************************************************************************************************
 ///
-/// \brief
+/// \brief The ghf object.
 ///
 static struct ghf ghf;
 

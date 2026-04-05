@@ -15,7 +15,7 @@ typedef float float32_t;
 struct pid;
 
 ///
-/// \brief
+/// \brief The PID controller instance type.
 ///
 typedef enum pid_inst
 {

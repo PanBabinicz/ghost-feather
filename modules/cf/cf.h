@@ -23,7 +23,7 @@ struct cf
 };
 
 ///
-/// \brief
+/// \brief The complementary filter instance type.
 ///
 typedef enum cf_inst
 {
@@ -103,7 +103,7 @@ void cf_deinit(struct cf *const handle);
 ///
 /// \brief Deinitializes the complementary filter instance.
 ///
-/// \param[in] handle The pointer to complementary filter.
+/// \param[in] inst The complementary filter instance.
 ///
 struct cf* cf_get(const cf_inst_t inst);
 
