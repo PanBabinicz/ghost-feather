@@ -36,6 +36,8 @@ static void led_off(void);
 ///
 /// \brief Enters the safe mode. All motors are turned off until safe mode is deactivated.
 ///
+/// \param[in] handle The pointer to ghf.
+///
 static void enter_safe_mode(struct ghf *const handle);
 
 ///*************************************************************************************************
@@ -53,15 +55,15 @@ static void led_off(void)
 
 static void enter_safe_mode(struct ghf *const handle)
 {
-    motor_update(ghf->module.motor_1, 1000);
-    motor_update(ghf->module.motor_2, 1000);
-    motor_update(ghf->module.motor_3, 1000);
-    motor_update(ghf->module.motor_4, 1000);
+    motor_update(handle->module.motor_1, 1000);
+    motor_update(handle->module.motor_2, 1000);
+    motor_update(handle->module.motor_3, 1000);
+    motor_update(handle->module.motor_4, 1000);
 
-    while (ghf->module.rc_5->sig.norm > 0.8f)
+    while (handle->module.rc_5->sig.norm > 0.8f)
     {
-        rc_sig_raw_gen(ghf->module.rc_5);
-        rc_sig_norm(ghf->module.rc_5, RC_NORM_ASYM);
+        rc_sig_raw_gen(handle->module.rc_5);
+        rc_sig_norm(handle->module.rc_5, RC_NORM_ASYM);
 
         led_on();
         timing_delay_us(1000 * 1000);
@@ -111,7 +113,7 @@ void app_start(void)
             rc_sig_norm(ghf->module.rc_2, RC_NORM_SYM);
             rc_sig_norm(ghf->module.rc_3, RC_NORM_ASYM);
             rc_sig_norm(ghf->module.rc_4, RC_NORM_SYM);
-            rc_sig_corm(ghf->module.rc_5, RC_NORM_ASYM);
+            rc_sig_norm(ghf->module.rc_5, RC_NORM_ASYM);
 
             ghf->data.throttle = ghf->module.rc_3->sig.norm;
 
