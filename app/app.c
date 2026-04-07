@@ -60,7 +60,9 @@ static void led_off(void)
 
 static void led_panic(void)
 {
-    gpio_toggle(GPIOA, GPIO2);
+    gpio_set(GPIOA, GPIO2);
+    timing_delay_us(1000 * 500);
+    gpio_clear(GPIOA, GPIO2);
     timing_delay_us(1000 * 500);
 }
 
