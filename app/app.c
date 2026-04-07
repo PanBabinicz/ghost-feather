@@ -34,6 +34,11 @@ static void led_on(void);
 static void led_off(void);
 
 ///
+/// \brief Turns the LED into panic mode.
+///
+static void led_panic(void);
+
+///
 /// \brief Enters the safe mode. All motors are turned off until safe mode is deactivated.
 ///
 /// \param[in] handle The pointer to ghf.
@@ -53,6 +58,12 @@ static void led_off(void)
     gpio_clear(GPIOA, GPIO2);
 }
 
+static void led_panic(void)
+{
+    gpio_toggle(GPIOA, GPIO2);
+    timing_delay_us(1000 * 500);
+}
+
 static void enter_safe_mode(struct ghf *const handle)
 {
     motor_update(handle->module.motor_1, 1000);
@@ -65,10 +76,7 @@ static void enter_safe_mode(struct ghf *const handle)
         rc_sig_raw_gen(handle->module.rc_5);
         rc_sig_norm(handle->module.rc_5, RC_NORM_ASYM);
 
-        led_on();
-        timing_delay_us(1000 * 1000);
-        led_off();
-        timing_delay_us(1000 * 1000);
+        led_panic();
     }
 }
 
