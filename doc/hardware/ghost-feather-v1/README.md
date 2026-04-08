@@ -47,3 +47,6 @@
 ### Manufactured PCB
 ![Bench](https://github.com/PanBabinicz/ghost-feather/blob/develop/doc/hardware/ghost-feather-v1/screenshots/real-drone-1.jpg)
 ![Floor](https://github.com/PanBabinicz/ghost-feather/blob/develop/doc/hardware/ghost-feather-v1/screenshots/real-drone-2.jpg)
+
+### Preparation for tuning PID gains
+![OnBench](https://github.com/PanBabinicz/ghost-feather/blob/develop/doc/hardware/ghost-feather-v1/screenshots/real-drone-prepared-for-tuning.jpg)
