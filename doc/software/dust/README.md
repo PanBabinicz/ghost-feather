@@ -4,7 +4,7 @@
 
 ## Protocol structures
 
-![dust-protocol-structures-layout](https://github.com/PanBabinicz/ghost-feather/blob/master/doc/dust/dust-protocol-structures-layout.png)
+![dust-protocol-structures-layout](https://github.com/PanBabinicz/ghost-feather/blob/master/doc/software/dust/dust-protocol-structures-layout.png)
 
 ## Packet structure
 
