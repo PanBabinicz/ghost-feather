@@ -139,10 +139,10 @@ void app_start(void)
                 ghf->data.yaw   = 0.0f;
             }
 
-            ghf->data.pwm1 = 1000 + (1000 * (ghf->data.throttle + ghf->data.roll + ghf->data.pitch + ghf->data.yaw));
-            ghf->data.pwm2 = 1000 + (1000 * (ghf->data.throttle - ghf->data.roll + ghf->data.pitch - ghf->data.yaw));
-            ghf->data.pwm3 = 1000 + (1000 * (ghf->data.throttle + ghf->data.roll - ghf->data.pitch - ghf->data.yaw));
-            ghf->data.pwm4 = 1000 + (1000 * (ghf->data.throttle - ghf->data.roll - ghf->data.pitch + ghf->data.yaw));
+            ghf->data.pwm1 = 1000 + (1000 * (ghf->data.throttle + ghf->data.roll - ghf->data.pitch + ghf->data.yaw));
+            ghf->data.pwm2 = 1000 + (1000 * (ghf->data.throttle - ghf->data.roll - ghf->data.pitch - ghf->data.yaw));
+            ghf->data.pwm3 = 1000 + (1000 * (ghf->data.throttle + ghf->data.roll + ghf->data.pitch - ghf->data.yaw));
+            ghf->data.pwm4 = 1000 + (1000 * (ghf->data.throttle - ghf->data.roll + ghf->data.pitch + ghf->data.yaw));
 
             ghf->data.pwm1 = (ghf->data.pwm1 > 2000) ? 2000 : ghf->data.pwm1;
             ghf->data.pwm1 = (ghf->data.pwm1 < 1000) ? 1000 : ghf->data.pwm1;
