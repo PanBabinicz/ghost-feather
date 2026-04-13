@@ -34,6 +34,13 @@ static void setup(struct ghf *const handle);
 ///
 static void calib(struct ghf *const handle);
 
+///
+/// \brief Checks the ready signal from radio.
+///
+/// \param[in] The pointer to ghf.
+///
+static void is_ready(struct ghf *const handle);
+
 ///***********************************************************************************************************
 /// Private functions - definition.
 ///***********************************************************************************************************
@@ -110,6 +117,18 @@ static void calib(struct ghf *const handle)
     handle->data.calib.gz = gz / 100;
 }
 
+static void is_ready(struct ghf *const handle)
+{
+    rc_sig_raw_gen(handle->module.rc_6);
+    rc_sig_norm(handle->module.rc_6, RC_NORM_ASYM);
+
+    while (handle->module.rc_6->sig.norm > 0.8f)
+    {
+        rc_sig_raw_gen(handle->module.rc_6);
+        rc_sig_norm(handle->module.rc_6, RC_NORM_ASYM);
+    }
+}
+
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
@@ -145,7 +164,7 @@ void ghf_init(struct ghf *const handle)
     pid_init(handle->module.pid_pitch, handle->config.kp, handle->config.ki, handle->config.kd, handle->config.dt);
     pid_init(handle->module.pid_yaw,   handle->config.kp, handle->config.ki, handle->config.kd, handle->config.dt);
 
-    timing_delay_us(1000 * 1000 * 5);
+    is_ready(handle);
 
     if (bmi270_init() != BMI270_RES_OK)
     {
