@@ -2,9 +2,16 @@
 
 ## Description
 
+> The DUST communication protocol is a lightweight and reliable data transfer mechanism designed for
+> Device Firmware Update (DFU) operations in ghost feather system. It supports flexible payload sizes, allowing
+> efficient transmission of firmware data across varying link conditions. Data integrity is ensured through
+> integrated CRC and checksum validation, minimizing the risk of corrupted updates. The protocol includes
+> acknowledgment and retransmission mechanisms to guarantee delivery and robustness in unstable or lossy communication
+> environments.
+
 ## Protocol structures
 
-![dust-protocol-structures-layout](https://github.com/PanBabinicz/ghost-feather/blob/master/doc/software/dust/dust-protocol-structures-layout.png)
+![dust-protocol-structures-layout](https://github.com/PanBabinicz/ghost-feather/blob/master/doc/software/dust/dust-protocol-structures-layout.png?raw=true)
 
 ## Packet structure
 
