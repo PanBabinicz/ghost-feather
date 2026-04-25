@@ -1,5 +1,6 @@
 # 👻 Ghost Feather v2
 
+
 ## Introduction
 
 > [!NOTE]  
@@ -22,7 +23,7 @@
 
 - 🧭 IIS2MDCTR Magnetometer – 3-axis magnetic field sensing for heading and navigation
 
-- 🌡️ SPL06-001 Barometer – High-resolution pressure sensor for altitude estimation
+- 🌡️ BMP390 Barometer – High-resolution pressure sensor for altitude estimation
 
 - 📡 External ELRS Receiver Support – Designed for use with Radiomaster RP3 (ExpressLRS 2.4 GHz) via CRSF protocol
 
