@@ -4,6 +4,7 @@
 # Project: Ghost Feather Firmware (STM32F7)
 # Modules:
 #   - BMI270 sensor low level driver
+#   - I2C low level driver
 #   - SPI low level driver
 #   - TIM low level driver
 #   - USART low level driver
@@ -13,6 +14,7 @@
 # Files list genereation
 # --------------------------------------------------
 file(GLOB_RECURSE LL_BMI270_SRCS sensor/bmi270/*.c)
+file(GLOB_RECURSE LL_I2C_SRCS i2c/*.c)
 file(GLOB_RECURSE LL_SPI_SRCS spi/*.c)
 file(GLOB_RECURSE LL_TIM_SRCS tim/*.c)
 file(GLOB_RECURSE LL_USART_SRCS usart/*.c)
@@ -38,6 +40,23 @@ target_link_libraries(ll_bmi270 PRIVATE
     gfc_common_options
     timing
 )
+
+# --------------------------------------------------
+# Target: I2C low-lever driver
+# --------------------------------------------------
+message(STATUS "Add i2c low-level driver library")
+add_library(ll_i2c
+    ${LL_I2C_SRCS}
+)
+
+target_include_directories(ll_i2c PRIVATE
+    ${PROJECT_SOURCE_DIR}/submodules/libopencm3/include
+)
+
+target_link_libraries(ll_i2c PRIVATE
+    gfc_common_options
+)
+
 
 # --------------------------------------------------
 # Target: SPI low-lever driver
