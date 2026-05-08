@@ -184,6 +184,68 @@ union ll_i2c_isr
     } bf;
 };
 
+///
+/// \brief Interrupt Clear Register (ICR) for I2C.
+///
+union ll_i2c_icr
+{
+    uint32_t r;
+    struct
+    {
+        uint32_t          : 3;
+        uint32_t addrcf   : 1;
+        uint32_t nackcf   : 1;
+        uint32_t stopcf   : 1;
+        uint32_t          : 2;
+        uint32_t berrcf   : 1;
+        uint32_t arlocf   : 1;
+        uint32_t ovrcf    : 1;
+        uint32_t peccf    : 1;
+        uint32_t timoutcf : 1;
+        uint32_t alertcf  : 1;
+        uint32_t          : 18;
+    } bf;
+};
+
+///
+/// \brief PEC Register (PECR) for I2C.
+///
+union ll_i2c_pecr
+{
+    uint32_t r;
+    struct
+    {
+        uint32_t pec : 8;
+        uint32_t     : 24;
+    } bf;
+};
+
+///
+/// \brief Receive Data Register (RXDR) for I2C.
+///
+union ll_i2c_rxdr
+{
+    uint32_t r;
+    struct
+    {
+        uint32_t rxdata : 8;
+        uint32_t        : 24;
+    } bf;
+};
+
+///
+/// \brief Transmit Data Register (TXDR) for I2C.
+///
+union ll_i2c_txdr
+{
+    uint32_t r;
+    struct
+    {
+        uint32_t txdata : 8;
+        uint32_t        : 24;
+    } bf;
+};
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
