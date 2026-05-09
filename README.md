@@ -257,3 +257,7 @@ conda env create -f environment.yml
 ```
 
 > This installs all packages and dependencies exactly as defined in the exported file.
+
+## EASTER EGG!
+
+> CBR 929 broke. We have to repair it. I will do todays job tomorrow.
