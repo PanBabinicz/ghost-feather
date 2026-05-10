@@ -246,6 +246,29 @@ union ll_i2c_txdr
     } bf;
 };
 
+///
+/// \brief Register map for I2C.
+///
+/// This structure represents the memory-mapped register layout of the
+/// I2C. The register order and reserved fields are aligned with the
+/// device reference manual to allow direct access via a peripheral base
+/// address.
+///
+struct ll_i2c_regs
+{
+    union ll_i2c_cr1 cr1;
+    union ll_i2c_cr2 cr2;
+    union ll_i2c_oar1 oar1;
+    union ll_i2c_oar2 oar2;
+    union ll_i2c_timingr timingr;
+    union ll_i2c_timeoutr timeoutr;
+    union ll_i2c_isr isr;
+    union ll_i2c_icr icr;
+    union ll_i2c_pecr pecr;
+    union ll_i2c_rxdr rxdr;
+    union ll_i2c_txdr txdr;
+};
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
