@@ -269,6 +269,42 @@ struct ll_i2c_regs
     union ll_i2c_txdr txdr;
 };
 
+///
+/// \brief Runtime device context for I2C.
+///
+/// This structure holds all runtime state required to control a I2C instance.
+/// It includes a pointer to the memory-mapped registers, a temporary
+/// shadow copy for safe modification and initialization status.
+///
+struct ll_i2c_dev
+{
+    volatile struct ll_i2c_regs *rmap;
+    struct ll_i2c_regs rtmp;
+    ll_i2c_stat_t stat;
+};
+
+///
+/// \brief Initializes the I2C.
+///
+/// \param[in] handle The pointer to i2c device.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_init(ll_i2c_dev *handle);
+
+///
+/// \brief Deinitializes the I2C.
+///
+/// \param[in] handle The pointer to i2c device.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_deinit(ll_i2c_dev *handle);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
