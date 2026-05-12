@@ -219,3 +219,20 @@ ll_i2c_res_t ll_i2c_deinit(ll_i2c_dev *handle)
 
     return LL_I2C_RES_OK;
 }
+
+ll_i2c_res_t ll_i2c_software_reset(ll_i2c_dev *handle)
+{
+    if (handle == NULL)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    handle->rmap->cr1.bf.pe = 0x00;
+
+    if (handle->rmap->cr1.bf.pe == 0x00)
+    {
+        handle->rmap->cr1.bf.pe = 0x01;
+    }
+
+    return LL_I2C_RES_OK;
+}
