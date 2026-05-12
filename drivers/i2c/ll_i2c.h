@@ -316,6 +316,30 @@ ll_i2c_res_t ll_i2c_deinit(ll_i2c_dev *handle);
 ///
 ll_i2c_res_t ll_i2c_software_reset(ll_i2c_dev *handle);
 
+///
+/// \brief Receives a single byte over the I2C bus.
+///
+/// \param[in]  handle The pointer to i2c device.
+/// \param[out] byte   The pointer to storage for the received byte.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_receive(ll_i2c_dev *handle, uint8_t *const byte);
+
+///
+/// \brief Transmits a single byte over the I2C bus.
+///
+/// \param[in]  handle The pointer to i2c device.
+/// \param[out] byte   The pointer to storage for the transmited byte.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_transmit(ll_i2c_dev *handle, const uint8_t *const byte);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */

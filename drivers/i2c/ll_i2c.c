@@ -236,3 +236,31 @@ ll_i2c_res_t ll_i2c_software_reset(ll_i2c_dev *handle)
 
     return LL_I2C_RES_OK;
 }
+
+ll_i2c_res_t ll_i2c_receive(ll_i2c_dev *handle, uint8_t *const byte)
+{
+    if ((handle == NULL) || (handle->stat = LL_I2C_STAT_DEINIT) || (byte == NULL))
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    while (handle->rmap->isr.bf.rxne == 0);
+
+    *byte = (uint8_t)handle->rmap->rxdr.bf.rxdata;
+
+    return LL_I2C_RES_OK;
+}
+
+ll_i2c_res_t ll_i2c_transmit(ll_i2c_dev *handle, const uint8_t *const byte)
+{
+    if ((handle == NULL) || (handle->stat = LL_I2C_STAT_DEINIT) || (byte == NULL))
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    while (handle->rmap->isr.bf.txe == 0);
+
+    handle->rmap->txdr.bf.txdata = *byte;
+
+    return LL_I2C_RES_OK;
+}
