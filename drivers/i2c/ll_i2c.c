@@ -182,7 +182,7 @@ static const struct ll_tim_adv6_tim18_regs ll_tim_adv6_tim18_por =
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-ll_i2c_res_t ll_i2c_init(ll_i2c_dev *handle)
+ll_i2c_res_t ll_i2c_master_init(ll_i2c_dev *handle)
 {
     if ((handle == NULL) || (handle->stat == LL_I2C_STAT_INIT))
     {
@@ -201,7 +201,45 @@ ll_i2c_res_t ll_i2c_init(ll_i2c_dev *handle)
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_deinit(ll_i2c_dev *handle)
+ll_i2c_res_t ll_i2c_slave_init(ll_i2c_dev *handle)
+{
+    if ((handle == NULL) || (handle->stat == LL_I2C_STAT_INIT))
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    handle->rmap->cr1.r     = handle->rtmp->cr1.r;
+    handle->rmap->cr2.r     = handle->rtmp->cr2.r;
+    handle->rmap->oar1.r    = handle->rtmp->oar1.r;
+    handle->rmap->oar2.r    = handle->rtmp->oar2.r;
+    handle->rmap->timingr.r = handle->rtmp->timingr.r;
+    handle->rmap->icr.r     = handle->rtmp->icr.r;
+
+    handle->stat = LL_I2C_STAT_INIT;
+
+    return LL_I2C_RES_OK;
+}
+
+ll_i2c_res_t ll_i2c_master_deinit(ll_i2c_dev *handle)
+{
+    if ((handle == NULL) || (handle->stat == LL_I2C_STAT_DEINIT))
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    handle->rmap->cr1.r     = ll_i2c_por.cr1.r;
+    handle->rmap->cr2.r     = ll_i2c_por.cr2.r;
+    handle->rmap->oar1.r    = ll_i2c_por.oar1.r;
+    handle->rmap->oar2.r    = ll_i2c_por.oar2.r;
+    handle->rmap->timingr.r = ll_i2c_por.timingr.r;
+    handle->rmap->icr.r     = ll_i2c_por.icr.r;
+
+    handle->stat = LL_I2C_STAT_DEINIT;
+
+    return LL_I2C_RES_OK;
+}
+
+ll_i2c_res_t ll_i2c_slave_deinit(ll_i2c_dev *handle)
 {
     if ((handle == NULL) || (handle->stat == LL_I2C_STAT_DEINIT))
     {
