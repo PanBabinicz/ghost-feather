@@ -302,3 +302,52 @@ ll_i2c_res_t ll_i2c_transmit(ll_i2c_dev *handle, const uint8_t *const byte)
 
     return LL_I2C_RES_OK;
 }
+
+ll_i2c_res_t ll_i2c_txdma_enable(ll_i2c_dev *handle)
+{
+    if (handle == NULL)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    handle->rmap->cr1.bf.txdmaen = 0x01;
+
+    return LL_I2C_RES_OK;
+}
+
+ll_i2c_res_t ll_i2c_rxdma_enable(ll_i2c_dev *handle)
+{
+    if (handle == NULL)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    handle->rmap->cr1.bf.rxdmaen = 0x01;
+
+    return LL_I2C_RES_OK;
+}
+
+ll_i2c_res_t ll_i2c_txdma_disable(ll_i2c_dev *handle)
+{
+    if (handle == NULL)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    handle->rmap->cr1.bf.txdmaen = 0x00;
+
+
+    return LL_I2C_RES_OK;
+}
+
+ll_i2c_res_t ll_i2c_rxdma_disable(ll_i2c_dev *handle)
+{
+}
+    if (handle == NULL)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    handle->rmap->cr1.bf.rxdmaen = 0x00;
+
+    return LL_I2C_RES_OK;

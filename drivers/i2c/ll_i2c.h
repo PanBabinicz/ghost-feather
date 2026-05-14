@@ -362,6 +362,50 @@ ll_i2c_res_t ll_i2c_receive(ll_i2c_dev *handle, uint8_t *const byte);
 ///
 ll_i2c_res_t ll_i2c_transmit(ll_i2c_dev *handle, const uint8_t *const byte);
 
+///
+/// \brief Enables TX DMA mode on I2C.
+///
+/// \param[in]  handle The pointer to i2c device.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_txdma_enable(ll_i2c_dev *handle);
+
+///
+/// \brief Enables RX DMA mode on I2C.
+///
+/// \param[in]  handle The pointer to i2c device.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_rxdma_enable(ll_i2c_dev *handle);
+
+///
+/// \brief Disables TX DMA mode on I2C.
+///
+/// \param[in]  handle The pointer to i2c device.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_txdma_disable(ll_i2c_dev *handle);
+
+///
+/// \brief Disables RX DMA mode on I2C.
+///
+/// \param[in]  handle The pointer to i2c device.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_rxdma_disable(ll_i2c_dev *handle);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
