@@ -7,6 +7,38 @@
 extern "C" {
 #endif  /* __cplusplus */
 
+#define LL_I2C_I2C1_ADDRESS     (0x40005400ul)
+#define LL_I2C_I2C2_ADDRESS     (0x40005800ul)
+#define LL_I2C_I2C3_ADDRESS     (0x40005c00ul)
+
+#define LL_I2C_MMIO(address)    ((*(volatile uint32_t *)(address)))
+
+///
+/// \brief The I2C Control Register 1 (CR1) mask type.
+///
+typedef enum ll_i2c_cr1_mask
+{
+    LL_I2C_CR1_PE_MASK        = (0x01U << 0x00),
+    LL_I2C_CR1_TXIE_MASK      = (0x01U << 0x01),
+    LL_I2C_CR1_RXIE_MASK      = (0x01U << 0x02),
+    LL_I2C_CR1_ADDRIE_MASK    = (0x01U << 0x03),
+    LL_I2C_CR1_NACKIE_MASK    = (0x01U << 0x04),
+    LL_I2C_CR1_STOPIE_MASK    = (0x01U << 0x05),
+    LL_I2C_CR1_TCIE_MASK      = (0x01U << 0x06),
+    LL_I2C_CR1_ERRIE_MASK     = (0x01U << 0x07),
+    LL_I2C_CR1_DNF_MASK       = (0x0fU << 0x08),
+    LL_I2C_CR1_ANFOFF_MASK    = (0x01U << 0x0c),
+    LL_I2C_CR1_TXDMAEN_MASK   = (0x01U << 0x0e),
+    LL_I2C_CR1_RXDMAEN_MASK   = (0x01U << 0x0f),
+    LL_I2C_CR1_SBC_MASK       = (0x01U << 0x10),
+    LL_I2C_CR1_NOSTRETCH_MASK = (0x01U << 0x11),
+    LL_I2C_CR1_GCEN_MASK      = (0x01U << 0x13),
+    LL_I2C_CR1_SMBHEN_MASK    = (0x01U << 0x14),
+    LL_I2C_CR1_SMBDEN_MASK    = (0x01U << 0x15),
+    LL_I2C_CR1_ALERTEN_MASK   = (0x01U << 0x16),
+    LL_I2C_CR1_PECEN_MASK     = (0x01U << 0x17),
+} ll_i2c_cr1_mask_t;
+
 ///
 /// \brief The I2C result type.
 ///
