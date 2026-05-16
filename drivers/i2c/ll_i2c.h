@@ -142,6 +142,30 @@ typedef enum ll_i2c_icr_mask
 } ll_i2c_icr_mask_t;
 
 ///
+/// \brief The I2C PEC Register (PECR) mask type.
+///
+typedef enum ll_i2c_pecr_mask
+{
+    LL_I2C_PECR_PEC_MASK = (0x00ffU << 0x00),
+} ll_i2c_pecr_mask_t;
+
+///
+/// \brief The I2C Receive Data Register (RXDR) mask type.
+///
+typedef enum ll_i2c_rxdr_mask
+{
+    LL_I2C_RXDR_RXDATA_MASK = (0x00ffU << 0x00),
+} ll_i2c_rxdr_mask_t;
+
+///
+/// \brief The I2C Transmit Data Register (TXDR) mask type.
+///
+typedef enum ll_i2c_txdr_mask
+{
+    LL_I2C_TXDR_TXDATA_MASK = (0x00ffU << 0x00),
+} ll_i2c_txdr_mask_t;
+
+///
 /// \brief The I2C result type.
 ///
 typedef enum ll_i2c_res
