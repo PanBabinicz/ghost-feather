@@ -102,6 +102,46 @@ typedef enum ll_i2c_timeoutr_mask
 } ll_i2c_timeoutr_mask_t;
 
 ///
+/// \brief The I2C Interrupt and Status Register (ISR) mask type.
+///
+typedef enum ll_i2c_isr_mask
+{
+    LL_I2C_ISR_TXE_MASK     = (0x0001U << 0x00),
+    LL_I2C_ISR_TXIS_MASK    = (0x0001U << 0x01),
+    LL_I2C_ISR_RXNE_MASK    = (0x0001U << 0x02),
+    LL_I2C_ISR_ADDR_MASK    = (0x0001U << 0x03),
+    LL_I2C_ISR_NACKF_MASK   = (0x0001U << 0x04),
+    LL_I2C_ISR_STOPF_MASK   = (0x0001U << 0x05),
+    LL_I2C_ISR_TC_MASK      = (0x0001U << 0x06),
+    LL_I2C_ISR_TCR_MASK     = (0x0001U << 0x07),
+    LL_I2C_ISR_BERR_MASK    = (0x0001U << 0x08),
+    LL_I2C_ISR_ARLO_MASK    = (0x0001U << 0x09),
+    LL_I2C_ISR_OVR_MASK     = (0x0001U << 0x0a),
+    LL_I2C_ISR_PECERR_MASK  = (0x0001U << 0x0b),
+    LL_I2C_ISR_TIMEOUT_MASK = (0x0001U << 0x0c),
+    LL_I2C_ISR_ALERT_MASK   = (0x0001U << 0x0d),
+    LL_I2C_ISR_BUSY_MASK    = (0x0001U << 0x0f),
+    LL_I2C_ISR_DIR_MASK     = (0x0001U << 0x10),
+    LL_I2C_ISR_ADDCODE_MASK = (0x007fU << 0x11),
+} ll_i2c_isr_mask_t;
+
+///
+/// \brief The I2C Interrupt Clear Register (ICR) mask type.
+///
+typedef enum ll_i2c_icr_mask
+{
+    LL_I2C_ICR_ADDRCF_MASK   = (0x0001U << 0x03),
+    LL_I2C_ICR_NACKCF_MASK   = (0x0001U << 0x04),
+    LL_I2C_ICR_STOPCF_MASK   = (0x0001U << 0x05),
+    LL_I2C_ICR_BERRCF_MASK   = (0x0001U << 0x08),
+    LL_I2C_ICR_ARLOCF_MASK   = (0x0001U << 0x09),
+    LL_I2C_ICR_OVRCF_MASK    = (0x0001U << 0x0a),
+    LL_I2C_ICR_PECCF_MASK    = (0x0001U << 0x0b),
+    LL_I2C_ICR_TIMOUTCF_MASK = (0x0001U << 0x0c),
+    LL_I2C_ICR_ALERTCF_MASK  = (0x0001U << 0x0d),
+} ll_i2c_icr_mask_t;
+
+///
 /// \brief The I2C result type.
 ///
 typedef enum ll_i2c_res
