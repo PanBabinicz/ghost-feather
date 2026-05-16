@@ -62,20 +62,44 @@ typedef enum ll_i2c_cr2_mask
 ///
 typedef enum ll_i2c_oar1_mask
 {
-    LL_I2C_OAR1_OA1_MASK       = (0x03ffU << 0x00),
-    LL_I2C_OAR1_OA1MODE_MASK   = (0x0001U << 0x0a),
-    LL_I2C_OAR1_OA1EN_MASK     = (0x0001U << 0x0f),
+    LL_I2C_OAR1_OA1_MASK     = (0x03ffU << 0x00),
+    LL_I2C_OAR1_OA1MODE_MASK = (0x0001U << 0x0a),
+    LL_I2C_OAR1_OA1EN_MASK   = (0x0001U << 0x0f),
 } ll_i2c_oar1_mask_t;
 
 ///
 /// \brief The I2C Own Address Register 2 (OAR2) mask type.
 ///
-typedef enum ll_i2c_oar1_mask
+typedef enum ll_i2c_oar2_mask
 {
     LL_I2C_OAR2_OA2_MASK    = (0x007fU << 0x01),
     LL_I2C_OAR2_OA2MSK_MASK = (0x0007U << 0x08),
     LL_I2C_OAR2_OA2EN_MASK  = (0x0001U << 0x0f),
 } ll_i2c_oar2_mask_t;
+
+///
+/// \brief The I2C Timing Register (TIMINGR) mask type.
+///
+typedef enum ll_i2c_timingr_mask
+{
+    LL_I2C_TIMINGR_SCLL_MASK   = (0x00ffU << 0x00),
+    LL_I2C_TIMINGR_SCLH_MASK   = (0x00ffU << 0x08),
+    LL_I2C_TIMINGR_SDADEL_MASK = (0x000fU << 0x10),
+    LL_I2C_TIMINGR_SCLDEL_MASK = (0x000fU << 0x14),
+    LL_I2C_TIMINGR_PRESC_MASK  = (0x000fU << 0x1c),
+} ll_i2c_timingr_mask_t;
+
+///
+/// \brief The I2C Timeout Register (TIMEOUTR) mask type.
+///
+typedef enum ll_i2c_timeoutr_mask
+{
+    LL_I2C_TIMEOUTR_TIMEOUTA_MASK = (0x0fffU << 0x00),
+    LL_I2C_TIMEOUTR_TIDLE_MASK    = (0x0001U << 0x0c),
+    LL_I2C_TIMEOUTR_TIMOUTEN_MASK = (0x0001U << 0x0f),
+    LL_I2C_TIMEOUTR_TIMEOUTB_MASK = (0x0fffU << 0x10),
+    LL_I2C_TIMEOUTR_TEXTEN_MASK   = (0x0001U << 0x1f),
+} ll_i2c_timeoutr_mask_t;
 
 ///
 /// \brief The I2C result type.
