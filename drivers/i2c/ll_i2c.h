@@ -44,18 +44,38 @@ typedef enum ll_i2c_cr1_mask
 ///
 typedef enum ll_i2c_cr2_mask
 {
-    LL_I2C_CR2_SADD_MASK      = (0x03ffU << 0x00),
-    LL_I2C_CR2_RDWRN_MASK     = (0x0001U << 0x0a),
-    LL_I2C_CR2_ADD10_MASK     = (0x0001U << 0x0b),
-    LL_I2C_CR2_HEAD10R_MASK   = (0x0001U << 0x0c),
-    LL_I2C_CR2_START_MASK     = (0x0001U << 0x0d),
-    LL_I2C_CR2_STOP_MASK      = (0x0001U << 0x0e),
-    LL_I2C_CR2_NACK_MASK      = (0x0001U << 0x0f),
-    LL_I2C_CR2_NBYTES_MASK    = (0x00ffU << 0x10),
-    LL_I2C_CR2_RELOAD_MASK    = (0x0001U << 0x18),
-    LL_I2C_CR2_AUTOEND_MASK   = (0x0001U << 0x19),
-    LL_I2C_CR2_PECBYTE_MASK   = (0x0001U << 0x1a),
+    LL_I2C_CR2_SADD_MASK    = (0x03ffU << 0x00),
+    LL_I2C_CR2_RDWRN_MASK   = (0x0001U << 0x0a),
+    LL_I2C_CR2_ADD10_MASK   = (0x0001U << 0x0b),
+    LL_I2C_CR2_HEAD10R_MASK = (0x0001U << 0x0c),
+    LL_I2C_CR2_START_MASK   = (0x0001U << 0x0d),
+    LL_I2C_CR2_STOP_MASK    = (0x0001U << 0x0e),
+    LL_I2C_CR2_NACK_MASK    = (0x0001U << 0x0f),
+    LL_I2C_CR2_NBYTES_MASK  = (0x00ffU << 0x10),
+    LL_I2C_CR2_RELOAD_MASK  = (0x0001U << 0x18),
+    LL_I2C_CR2_AUTOEND_MASK = (0x0001U << 0x19),
+    LL_I2C_CR2_PECBYTE_MASK = (0x0001U << 0x1a),
 } ll_i2c_cr2_mask_t;
+
+///
+/// \brief The I2C Own Address Register 1 (OAR1) mask type.
+///
+typedef enum ll_i2c_oar1_mask
+{
+    LL_I2C_OAR1_OA1_MASK       = (0x03ffU << 0x00),
+    LL_I2C_OAR1_OA1MODE_MASK   = (0x0001U << 0x0a),
+    LL_I2C_OAR1_OA1EN_MASK     = (0x0001U << 0x0f),
+} ll_i2c_oar1_mask_t;
+
+///
+/// \brief The I2C Own Address Register 2 (OAR2) mask type.
+///
+typedef enum ll_i2c_oar1_mask
+{
+    LL_I2C_OAR2_OA2_MASK    = (0x007fU << 0x01),
+    LL_I2C_OAR2_OA2MSK_MASK = (0x0007U << 0x08),
+    LL_I2C_OAR2_OA2EN_MASK  = (0x0001U << 0x0f),
+} ll_i2c_oar2_mask_t;
 
 ///
 /// \brief The I2C result type.
