@@ -258,21 +258,17 @@ ll_i2c_res_t ll_i2c_slave_deinit(ll_i2c_dev *handle)
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_software_reset(ll_i2c_dev *handle)
+ll_i2c_res_t ll_i2c_software_reset(const uint32_t address)
 {
-    if (handle == NULL)
+    LL_I2C_MMIO(address) &= ~(LL_I2C_CR1_PE_MASK);
+
+    if ((LL_I2C_MMIO(address) | LL_I2C_CR1_PE_MASK) == 0x00)
     {
-        return LL_I2C_RES_ERR;
+        LL_I2C_MMIO(address) |= LL_I2C_CR1_PE_MASK;
+        return LL_I2C_RES_OK;
     }
 
-    handle->rmap->cr1.bf.pe = 0x00;
-
-    if (handle->rmap->cr1.bf.pe == 0x00)
-    {
-        handle->rmap->cr1.bf.pe = 0x01;
-    }
-
-    return LL_I2C_RES_OK;
+    return LL_I2C_RES_ERR;
 }
 
 ll_i2c_res_t ll_i2c_receive(ll_i2c_dev *handle, uint8_t *const byte)

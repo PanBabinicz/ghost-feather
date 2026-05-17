@@ -488,13 +488,13 @@ ll_i2c_res_t ll_i2c_slave_deinit(ll_i2c_dev *handle);
 ///
 /// \brief Performs the software reset of the I2C.
 ///
-/// \param[in] handle The pointer to i2c device.
+/// \param[in] address The i2c address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_software_reset(ll_i2c_dev *handle);
+ll_i2c_res_t ll_i2c_software_reset(const uint32_t address);
 
 ///
 /// \brief Receives a single byte over the I2C bus.
