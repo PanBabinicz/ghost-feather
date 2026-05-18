@@ -14,6 +14,24 @@ extern "C" {
 #define LL_I2C_MMIO(address)    ((*(volatile uint32_t *)(address)))
 
 ///
+/// \brief The I2C Register Offset type.
+///
+typedef enum ll_i2c_reg_offset
+{
+    LL_I2C_REG_OFFSET_CR1      = 0x00,
+    LL_I2C_REG_OFFSET_CR2      = 0x04,
+    LL_I2C_REG_OFFSET_OAR1     = 0x08,
+    LL_I2C_REG_OFFSET_OAR2     = 0x0c,
+    LL_I2C_REG_OFFSET_TIMINGR  = 0x10,
+    LL_I2C_REG_OFFSET_TIMEOUTR = 0x14,
+    LL_I2C_REG_OFFSET_ISR      = 0x18,
+    LL_I2C_REG_OFFSET_ICR      = 0x1c,
+    LL_I2C_REG_OFFSET_PECR     = 0x20,
+    LL_I2C_REG_OFFSET_RXDR     = 0x24,
+    LL_I2C_REG_OFFSET_TXDR     = 0x28,
+} ll_i2c_reg_offset_t;
+
+///
 /// \brief The I2C Control Register 1 (CR1) mask type.
 ///
 typedef enum ll_i2c_cr1_mask
