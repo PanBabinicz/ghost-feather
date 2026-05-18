@@ -260,50 +260,50 @@ ll_i2c_res_t ll_i2c_slave_deinit(ll_i2c_dev *handle)
 
 ll_i2c_res_t ll_i2c_software_reset(const uint32_t address)
 {
-    LL_I2C_MMIO(address) &= ~(LL_I2C_CR1_PE_MASK);
+    LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_CR1) &= ~(LL_I2C_CR1_PE_MASK);
 
-    if ((LL_I2C_MMIO(address) | LL_I2C_CR1_PE_MASK) == 0x00)
+    if ((LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_CR1) | LL_I2C_CR1_PE_MASK) == 0x00)
     {
-        LL_I2C_MMIO(address) |= LL_I2C_CR1_PE_MASK;
+        LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_CR1) |= LL_I2C_CR1_PE_MASK;
         return LL_I2C_RES_OK;
     }
 
     return LL_I2C_RES_ERR;
 }
 
-ll_i2c_res_t ll_i2c_receive(ll_i2c_dev *handle, uint8_t *const byte)
+ll_i2c_res_t ll_i2c_receive(const uint32_t address, uint8_t *const byte)
 {
-    if ((handle == NULL) || (handle->stat = LL_I2C_STAT_DEINIT) || (byte == NULL))
+    if (byte == NULL)
     {
         return LL_I2C_RES_ERR;
     }
 
-    while (handle->rmap->isr.bf.rxne == 0);
+    while ((LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_ISR) | LL_I2C_ISR_RXNE_MASK) == 0x00);
 
-    *byte = (uint8_t)handle->rmap->rxdr.bf.rxdata;
+    *byte = (uint8_t)LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_RXDR);
 
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_transmit(ll_i2c_dev *handle, const uint8_t *const byte)
+ll_i2c_res_t ll_i2c_transmit(const uint32_t address, const uint8_t *const byte)
 {
-    if ((handle == NULL) || (handle->stat = LL_I2C_STAT_DEINIT) || (byte == NULL))
+    if (byte == NULL)
     {
         return LL_I2C_RES_ERR;
     }
 
-    while (handle->rmap->isr.bf.txe == 0);
+    while ((LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_ISR) | LL_I2C_ISR_TXE_MASK) == 0x00);
 
-    handle->rmap->txdr.bf.txdata = *byte;
+    LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_TXDR) = *byte;
 
     return LL_I2C_RES_OK;
 }
 
 ll_i2c_res_t ll_i2c_txdma_enable(const uint32_t address)
 {
-    LL_I2C_MMIO(address) |= LL_I2C_CR1_TXDMAEN_MASK;
+    LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_CR1) |= LL_I2C_CR1_TXDMAEN_MASK;
 
-    if (LL_I2C_MMIO(address) | LL_I2C_CR1_TXDMAEN_MASK) == 0x01)
+    if (LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_CR1) | LL_I2C_CR1_TXDMAEN_MASK) == 0x01)
     {
         return LL_I2C_RES_OK;
     }
@@ -313,9 +313,9 @@ ll_i2c_res_t ll_i2c_txdma_enable(const uint32_t address)
 
 ll_i2c_res_t ll_i2c_rxdma_enable(const uint32_t address)
 {
-    LL_I2C_MMIO(address) |= LL_I2C_CR1_RXDMAEN_MASK;
+    LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_CR1) |= LL_I2C_CR1_RXDMAEN_MASK;
 
-    if (LL_I2C_MMIO(address) | LL_I2C_CR1_RXDMAEN_MASK) == 0x01)
+    if (LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_CR1) | LL_I2C_CR1_RXDMAEN_MASK) == 0x01)
     {
         return LL_I2C_RES_OK;
     }
@@ -325,9 +325,9 @@ ll_i2c_res_t ll_i2c_rxdma_enable(const uint32_t address)
 
 ll_i2c_res_t ll_i2c_txdma_disable(const uint32_t address)
 {
-    LL_I2C_MMIO(address) &= ~(LL_I2C_CR1_TXDMAEN_MASK);
+    LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_CR1) &= ~(LL_I2C_CR1_TXDMAEN_MASK);
 
-    if (LL_I2C_MMIO(address) | LL_I2C_CR1_TXDMAEN_MASK) == 0x00)
+    if (LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_CR1) | LL_I2C_CR1_TXDMAEN_MASK) == 0x00)
     {
         return LL_I2C_RES_OK;
     }
@@ -337,9 +337,9 @@ ll_i2c_res_t ll_i2c_txdma_disable(const uint32_t address)
 
 ll_i2c_res_t ll_i2c_rxdma_disable(const uint32_t address)
 {
-    LL_I2C_MMIO(address) &= ~(LL_I2C_CR1_RXDMAEN_MASK);
+    LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_CR1) &= ~(LL_I2C_CR1_RXDMAEN_MASK);
 
-    if (LL_I2C_MMIO(address) | LL_I2C_CR1_RXDMAEN_MASK) == 0x00)
+    if (LL_I2C_MMIO(address + LL_I2C_REG_OFFSET_CR1) | LL_I2C_CR1_RXDMAEN_MASK) == 0x00)
     {
         return LL_I2C_RES_OK;
     }

@@ -506,7 +506,7 @@ ll_i2c_res_t ll_i2c_slave_deinit(ll_i2c_dev *handle);
 ///
 /// \brief Performs the software reset of the I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -517,26 +517,26 @@ ll_i2c_res_t ll_i2c_software_reset(const uint32_t address);
 ///
 /// \brief Receives a single byte over the I2C bus.
 ///
-/// \param[in]  handle The pointer to i2c device.
-/// \param[out] byte   The pointer to storage for the received byte.
+/// \param[in]  address The I2C address.
+/// \param[out] byte    The pointer to storage for the received byte.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_receive(ll_i2c_dev *handle, uint8_t *const byte);
+ll_i2c_res_t ll_i2c_receive(const uint32_t address, uint8_t *const byte);
 
 ///
 /// \brief Transmits a single byte over the I2C bus.
 ///
-/// \param[in]  handle The pointer to i2c device.
-/// \param[out] byte   The pointer to storage for the transmited byte.
+/// \param[in] address The I2C address.
+/// \param[in] byte    The pointer to storage for the transmited byte.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_transmit(ll_i2c_dev *handle, const uint8_t *const byte);
+ll_i2c_res_t ll_i2c_transmit(const uint32_t address, const uint8_t *const byte);
 
 ///
 /// \brief Enables TX DMA mode on I2C.
