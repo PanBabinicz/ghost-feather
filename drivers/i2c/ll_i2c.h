@@ -2,16 +2,27 @@
 #define _LL_I2C_H
 
 #include <stdint.h>
+#include "libopencm3/cm3/common.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */
 
-#define LL_I2C_I2C1_ADDRESS     (0x40005400ul)
-#define LL_I2C_I2C2_ADDRESS     (0x40005800ul)
-#define LL_I2C_I2C3_ADDRESS     (0x40005c00ul)
+#define LL_I2C_I2C1_ADDRESS             (0x40005400ul)
+#define LL_I2C_I2C2_ADDRESS             (0x40005800ul)
+#define LL_I2C_I2C3_ADDRESS             (0x40005c00ul)
 
-#define LL_I2C_MMIO(address)    ((*(volatile uint32_t *)(address)))
+#define LL_I2C_REG_CR1(address)         MMIO32(address + LL_I2C_REG_OFFSET_CR1)
+#define LL_I2C_REG_CR2(address)         MMIO32(address + LL_I2C_REG_OFFSET_CR2)
+#define LL_I2C_REG_OAR1(address)        MMIO32(address + LL_I2C_REG_OFFSET_OAR1)
+#define LL_I2C_REG_OAR2(address)        MMIO32(address + LL_I2C_REG_OFFSET_OAR2)
+#define LL_I2C_REG_TIMINGR(address)     MMIO32(address + LL_I2C_REG_OFFSET_TIMINGR)
+#define LL_I2C_REG_TIMEOUTR(address)    MMIO32(address + LL_I2C_REG_OFFSET_TIMEOUTR)
+#define LL_I2C_REG_ISR(address)         MMIO32(address + LL_I2C_REG_OFFSET_ISR)
+#define LL_I2C_REG_ICR(address)         MMIO32(address + LL_I2C_REG_OFFSET_ICR)
+#define LL_I2C_REG_PECR(address)        MMIO32(address + LL_I2C_REG_OFFSET_PECR)
+#define LL_I2C_REG_RXDR(address)        MMIO32(address + LL_I2C_REG_OFFSET_RXDR)
+#define LL_I2C_REG_TXDR(address)        MMIO32(address + LL_I2C_REG_OFFSET_TXDR)
 
 ///
 /// \brief The I2C Register Offset type.
@@ -468,7 +479,7 @@ struct ll_i2c_dev
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_master_init(ll_i2c_dev *handle);
+ll_i2c_res_t ll_i2c_master_init(struct ll_i2c_dev *handle);
 
 ///
 /// \brief Initializes the I2C slave.
@@ -479,7 +490,7 @@ ll_i2c_res_t ll_i2c_master_init(ll_i2c_dev *handle);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_slave_init(ll_i2c_dev *handle);
+ll_i2c_res_t ll_i2c_slave_init(struct ll_i2c_dev *handle);
 
 ///
 /// \brief Deinitializes the I2C master.
@@ -490,7 +501,7 @@ ll_i2c_res_t ll_i2c_slave_init(ll_i2c_dev *handle);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_master_deinit(ll_i2c_dev *handle);
+ll_i2c_res_t ll_i2c_master_deinit(struct ll_i2c_dev *handle);
 
 ///
 /// \brief Deinitializes the I2C slave.
@@ -501,7 +512,7 @@ ll_i2c_res_t ll_i2c_master_deinit(ll_i2c_dev *handle);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_slave_deinit(ll_i2c_dev *handle);
+ll_i2c_res_t ll_i2c_slave_deinit(struct ll_i2c_dev *handle);
 
 ///
 /// \brief Performs the software reset of the I2C.
