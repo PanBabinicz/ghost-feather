@@ -471,48 +471,26 @@ struct ll_i2c_dev
 };
 
 ///
-/// \brief Initializes the I2C master.
+/// \brief Enables the I2C peripheral.
 ///
-/// \param[in] handle The pointer to i2c device.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_master_init(struct ll_i2c_dev *handle);
+ll_i2c_res_t ll_i2c_periph_enable(const uint32_t address);
 
 ///
-/// \brief Initializes the I2C slave.
+/// \brief Disable the I2C peripheral.
 ///
-/// \param[in] handle The pointer to i2c device.
-///
-/// \return ll_i2c_res_t   The I2C result.
-/// \retval LL_I2C_RES_OK  On success.
-/// \retval LL_I2C_RES_ERR Otherwise.
-///
-ll_i2c_res_t ll_i2c_slave_init(struct ll_i2c_dev *handle);
-
-///
-/// \brief Deinitializes the I2C master.
-///
-/// \param[in] handle The pointer to i2c device.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_master_deinit(struct ll_i2c_dev *handle);
-
-///
-/// \brief Deinitializes the I2C slave.
-///
-/// \param[in] handle The pointer to i2c device.
-///
-/// \return ll_i2c_res_t   The I2C result.
-/// \retval LL_I2C_RES_OK  On success.
-/// \retval LL_I2C_RES_ERR Otherwise.
-///
-ll_i2c_res_t ll_i2c_slave_deinit(struct ll_i2c_dev *handle);
+ll_i2c_res_t ll_i2c_periph_disable(const uint32_t address);
 
 ///
 /// \brief Performs the software reset of the I2C.
