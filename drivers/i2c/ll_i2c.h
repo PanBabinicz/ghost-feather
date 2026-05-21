@@ -171,6 +171,29 @@ typedef enum ll_i2c_icr_mask
 } ll_i2c_icr_mask_t;
 
 ///
+/// \brief The I2C digital noise filter capability type.
+///
+typedef enum ll_i2c_dnf
+{
+    LL_I2C_DNF_DISABLE = 0,
+    LL_I2C_DNF_1TCLK,
+    LL_I2C_DNF_2TCLK,
+    LL_I2C_DNF_3TCLK,
+    LL_I2C_DNF_4TCLK,
+    LL_I2C_DNF_5TCLK,
+    LL_I2C_DNF_6TCLK,
+    LL_I2C_DNF_7TCLK,
+    LL_I2C_DNF_8TCLK,
+    LL_I2C_DNF_9TCLK,
+    LL_I2C_DNF_10TCLK,
+    LL_I2C_DNF_11TCLK,
+    LL_I2C_DNF_12TCLK,
+    LL_I2C_DNF_13TCLK,
+    LL_I2C_DNF_14TCLK,
+    LL_I2C_DNF_15TCLK,
+} ll_i2c_dnf_t;
+
+///
 /// \brief The I2C PEC Register (PECR) mask type.
 ///
 typedef enum ll_i2c_pecr_mask
