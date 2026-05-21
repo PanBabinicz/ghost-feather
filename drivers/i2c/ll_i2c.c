@@ -117,3 +117,35 @@ ll_i2c_res_t ll_i2c_rxdma_disable(const uint32_t address)
 
     return LL_I2C_RES_ERR;
 }
+
+ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_cr1_mask interrupt)
+{
+    if ((interrupt < LL_I2C_CR1_TXIE_MASK) || (interrupt > LL_I2C_CR1_ERRIE_MASK))
+    {
+        return LL_I2C_RES_ERR;
+    }
+    else if ((LL_I2C_REG_CR1(address) | interrupt) == 0x01)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    LL_I2C_REG_CR1(address) |= interrupt;
+
+    return LL_I2C_RES_OK;
+}
+
+ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_cr1_mask interrupt)
+{
+    if ((interrupt < LL_I2C_CR1_TXIE_MASK) || (interrupt > LL_I2C_CR1_ERRIE_MASK))
+    {
+        return LL_I2C_RES_ERR;
+    }
+    else if ((LL_I2C_REG_CR1(address) | interrupt) == 0x00)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    LL_I2C_REG_CR1(address) &= ~(interrupt);
+
+    return LL_I2C_RES_OK;
+}

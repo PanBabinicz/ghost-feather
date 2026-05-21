@@ -571,6 +571,30 @@ ll_i2c_res_t ll_i2c_txdma_disable(const uint32_t address);
 ///
 ll_i2c_res_t ll_i2c_rxdma_disable(const uint32_t address);
 
+///
+/// \brief Enables selected interrupt in I2C.
+///
+/// \param[in] address   The i2c address.
+/// \param[in] interrupt The selected interrupt.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_cr1_mask interrupt);
+
+///
+/// \brief Disables selected interrupt in I2C.
+///
+/// \param[in] address   The i2c address.
+/// \param[in] interrupt The selected interrupt.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_cr1_mask interrupt);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
