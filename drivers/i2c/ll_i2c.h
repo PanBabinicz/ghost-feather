@@ -171,6 +171,20 @@ typedef enum ll_i2c_icr_mask
 } ll_i2c_icr_mask_t;
 
 ///
+/// \brief The I2C interrupt type.
+///
+typedef enum ll_i2c_interrupt
+{
+    LL_I2C_INTERRUPT_TX = 0x01,
+    LL_I2C_INTERRUPT_RX,
+    LL_I2C_INTERRUPT_ADDR,
+    LL_I2C_INTERRUPT_NACK,
+    LL_I2C_INTERRUPT_STOP,
+    LL_I2C_INTERRUPT_TC,
+    LL_I2C_INTERRUPT_ERR,
+} ll_i2c_interrupt_t;
+
+///
 /// \brief The I2C digital noise filter capability type.
 ///
 typedef enum ll_i2c_dnf
@@ -598,25 +612,25 @@ ll_i2c_res_t ll_i2c_rxdma_disable(const uint32_t address);
 /// \brief Enables selected interrupt in I2C.
 ///
 /// \param[in] address   The i2c address.
-/// \param[in] interrupt The selected interrupt.
+/// \param[in] interrupt The interrupt type.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_cr1_mask_t interrupt);
+ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_interrupt_t interrupt);
 
 ///
 /// \brief Disables selected interrupt in I2C.
 ///
 /// \param[in] address   The i2c address.
-/// \param[in] interrupt The selected interrupt.
+/// \param[in] interrupt The interrupt type.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_cr1_mask_t interrupt);
+ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_interrupt_t interrupt);
 
 ///
 /// \brief Sets digital noise filter on SDA and SCL input in I2C.

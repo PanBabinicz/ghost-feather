@@ -118,34 +118,34 @@ ll_i2c_res_t ll_i2c_rxdma_disable(const uint32_t address)
     return LL_I2C_RES_ERR;
 }
 
-ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_cr1_mask interrupt)
+ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_interrupt_t interrupt)
 {
-    if ((interrupt < LL_I2C_CR1_TXIE_MASK) || (interrupt > LL_I2C_CR1_ERRIE_MASK))
+    if ((interrupt < LL_I2C_INTERRUPT_TX) || (interrupt > LL_I2C_INTERRUPT_ERR))
     {
         return LL_I2C_RES_ERR;
     }
-    else if ((LL_I2C_REG_CR1(address) | interrupt) == 0x01)
+    else if ((LL_I2C_REG_CR1(address) | (0x01 << interrupt)) == 0x01)
     {
         return LL_I2C_RES_ERR;
     }
 
-    LL_I2C_REG_CR1(address) |= interrupt;
+    LL_I2C_REG_CR1(address) |= (0x01 << interrupt);
 
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_cr1_mask interrupt)
+ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_interrupt_t interrupt)
 {
-    if ((interrupt < LL_I2C_CR1_TXIE_MASK) || (interrupt > LL_I2C_CR1_ERRIE_MASK))
+    if ((interrupt < LL_I2C_INTERRUPT_TX) || (interrupt > LL_I2C_INTERRUPT_TX))
     {
         return LL_I2C_RES_ERR;
     }
-    else if ((LL_I2C_REG_CR1(address) | interrupt) == 0x00)
+    else if ((LL_I2C_REG_CR1(address) | (0x01 << interrupt)) == 0x00)
     {
         return LL_I2C_RES_ERR;
     }
 
-    LL_I2C_REG_CR1(address) &= ~(interrupt);
+    LL_I2C_REG_CR1(address) &= ~(0x01 << interrupt);
 
     return LL_I2C_RES_OK;
 }
