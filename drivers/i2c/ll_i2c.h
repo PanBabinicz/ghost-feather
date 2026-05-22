@@ -604,7 +604,7 @@ ll_i2c_res_t ll_i2c_rxdma_disable(const uint32_t address);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_cr1_mask interrupt);
+ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_cr1_mask_t interrupt);
 
 ///
 /// \brief Disables selected interrupt in I2C.
@@ -616,7 +616,19 @@ ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_cr1_ma
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_cr1_mask interrupt);
+ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_cr1_mask_t interrupt);
+
+///
+/// \brief Sets digital noise filter on SDA and SCL input in I2C.
+///
+/// \param[in] address The i2c address.
+/// \param[in] dnf     The digital noise filter capability.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_set_dnf(const uint32_t address, const ll_i2c_dnf_t dnf);
 
 #ifdef __cplusplus
 }

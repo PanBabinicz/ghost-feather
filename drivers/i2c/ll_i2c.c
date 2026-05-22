@@ -149,3 +149,15 @@ ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_cr1_m
 
     return LL_I2C_RES_OK;
 }
+
+ll_i2c_res_t ll_i2c_set_dnf(const uint32_t address, const ll_i2c_dnf_t dnf)
+{
+    if ((dnf < LL_I2C_DNF_DISABLE) || (dnf > LL_I2C_DNF_15TCLK))
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    LL_I2C_REG_CR1(address) |= (dnf << LL_I2C_CR1_DNF_MASK);
+
+    return LL_I2C_RES_OK;
+}
