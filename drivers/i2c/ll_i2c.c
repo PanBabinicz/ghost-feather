@@ -7,7 +7,7 @@
 ///***********************************************************************************************************
 ll_i2c_res_t ll_i2c_periph_enable(const uint32_t address)
 {
-    if ((LL_I2C_REG_CR1(address) | LL_I2C_CR1_PE_MASK) == 0x01)
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_PE_MASK) == 0x01)
     {
         return LL_I2C_RES_ERR;
     }
@@ -19,7 +19,7 @@ ll_i2c_res_t ll_i2c_periph_enable(const uint32_t address)
 
 ll_i2c_res_t ll_i2c_periph_disable(const uint32_t address)
 {
-    if ((LL_I2C_REG_CR1(address) | LL_I2C_CR1_PE_MASK) == 0x00)
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_PE_MASK) == 0x00)
     {
         return LL_I2C_RES_ERR;
     }
@@ -33,7 +33,7 @@ ll_i2c_res_t ll_i2c_software_reset(const uint32_t address)
 {
     LL_I2C_REG_CR1(address) &= ~(LL_I2C_CR1_PE_MASK);
 
-    if ((LL_I2C_REG_CR1(address) | LL_I2C_CR1_PE_MASK) == 0x00)
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_PE_MASK) == 0x00)
     {
         LL_I2C_REG_CR1(address) |= LL_I2C_CR1_PE_MASK;
         return LL_I2C_RES_OK;
@@ -49,7 +49,7 @@ ll_i2c_res_t ll_i2c_receive(const uint32_t address, uint8_t *const byte)
         return LL_I2C_RES_ERR;
     }
 
-    while ((LL_I2C_REG_ISR(address) | LL_I2C_ISR_RXNE_MASK) == 0x00);
+    while ((LL_I2C_REG_ISR(address) & LL_I2C_ISR_RXNE_MASK) == 0x00);
 
     *byte = (uint8_t)LL_I2C_REG_RXDR(address);
 
@@ -63,7 +63,7 @@ ll_i2c_res_t ll_i2c_transmit(const uint32_t address, const uint8_t *const byte)
         return LL_I2C_RES_ERR;
     }
 
-    while ((LL_I2C_REG_ISR(address) | LL_I2C_ISR_TXE_MASK) == 0x00);
+    while ((LL_I2C_REG_ISR(address) & LL_I2C_ISR_TXE_MASK) == 0x00);
 
     LL_I2C_REG_TXDR(address) = *byte;
 
@@ -74,7 +74,7 @@ ll_i2c_res_t ll_i2c_txdma_enable(const uint32_t address)
 {
     LL_I2C_REG_CR1(address) |= LL_I2C_CR1_TXDMAEN_MASK;
 
-    if ((LL_I2C_REG_CR1(address) | LL_I2C_CR1_TXDMAEN_MASK) == 0x01)
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_TXDMAEN_MASK) == 0x01)
     {
         return LL_I2C_RES_OK;
     }
@@ -86,7 +86,7 @@ ll_i2c_res_t ll_i2c_rxdma_enable(const uint32_t address)
 {
     LL_I2C_REG_CR1(address) |= LL_I2C_CR1_RXDMAEN_MASK;
 
-    if ((LL_I2C_REG_CR1(address) | LL_I2C_CR1_RXDMAEN_MASK) == 0x01)
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_RXDMAEN_MASK) == 0x01)
     {
         return LL_I2C_RES_OK;
     }
@@ -98,7 +98,7 @@ ll_i2c_res_t ll_i2c_txdma_disable(const uint32_t address)
 {
     LL_I2C_REG_CR1(address) &= ~(LL_I2C_CR1_TXDMAEN_MASK);
 
-    if ((LL_I2C_REG_CR1(address) | LL_I2C_CR1_TXDMAEN_MASK) == 0x00)
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_TXDMAEN_MASK) == 0x00)
     {
         return LL_I2C_RES_OK;
     }
@@ -110,7 +110,7 @@ ll_i2c_res_t ll_i2c_rxdma_disable(const uint32_t address)
 {
     LL_I2C_REG_CR1(address) &= ~(LL_I2C_CR1_RXDMAEN_MASK);
 
-    if ((LL_I2C_REG_CR1(address) | LL_I2C_CR1_RXDMAEN_MASK) == 0x00)
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_RXDMAEN_MASK) == 0x00)
     {
         return LL_I2C_RES_OK;
     }
@@ -124,7 +124,7 @@ ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_interr
     {
         return LL_I2C_RES_ERR;
     }
-    else if ((LL_I2C_REG_CR1(address) | (0x01 << interrupt)) == 0x01)
+    else if ((LL_I2C_REG_CR1(address) & (0x01 << interrupt)) == 0x01)
     {
         return LL_I2C_RES_ERR;
     }
@@ -140,7 +140,7 @@ ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_inter
     {
         return LL_I2C_RES_ERR;
     }
-    else if ((LL_I2C_REG_CR1(address) | (0x01 << interrupt)) == 0x00)
+    else if ((LL_I2C_REG_CR1(address) & (0x01 << interrupt)) == 0x00)
     {
         return LL_I2C_RES_ERR;
     }
@@ -164,7 +164,7 @@ ll_i2c_res_t ll_i2c_set_dnf(const uint32_t address, const ll_i2c_dnf_t dnf)
 
 ll_i2c_res_t ll_i2c_anf_enable(const uint32_t address)
 {
-    if ((LL_I2C_REG_CR1(address) | LL_I2C_CR1_ANFOFF_MASK) == 0x01)
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_ANFOFF_MASK) == 0x01)
     {
         return LL_I2C_RES_ERR;
     }
@@ -176,12 +176,36 @@ ll_i2c_res_t ll_i2c_anf_enable(const uint32_t address)
 
 ll_i2c_res_t ll_i2c_anf_disable(const uint32_t address)
 {
-    if ((LL_I2C_REG_CR1(address) | LL_I2C_CR1_ANFOFF_MASK) == 0x00)
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_ANFOFF_MASK) == 0x00)
     {
         return LL_I2C_RES_ERR;
     }
 
     LL_I2C_REG_CR1(address) &= ~(LL_I2C_CR1_ANFOFF_MASK);
+
+    return LL_I2C_RES_OK;
+}
+
+ll_i2c_res_t ll_i2c_sbc_enable(const uint32_t address)
+{
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_SBC_MASK) == 0x01)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    LL_I2C_REG_CR1(address) |= LL_I2C_CR1_SBC_MASK;
+
+    return LL_I2C_RES_OK;
+}
+
+ll_i2c_res_t ll_i2c_sbc_disable(const uint32_t address)
+{
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_SBC_MASK) == 0x00)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    LL_I2C_REG_CR1(address) &= ~(LL_I2C_CR1_SBC_MASK);
 
     return LL_I2C_RES_OK;
 }
