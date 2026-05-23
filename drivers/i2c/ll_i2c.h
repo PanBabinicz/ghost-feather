@@ -644,6 +644,28 @@ ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_inter
 ///
 ll_i2c_res_t ll_i2c_set_dnf(const uint32_t address, const ll_i2c_dnf_t dnf);
 
+///
+/// \brief Enables analog noise filter in I2C.
+///
+/// \param[in] address The i2c address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_anf_enable(const uint32_t address);
+
+///
+/// \brief Disables analog noise filter in I2C.
+///
+/// \param[in] address The i2c address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_anf_disable(const uint32_t address);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
