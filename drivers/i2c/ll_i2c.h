@@ -516,7 +516,7 @@ struct ll_i2c_dev
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_periph_enable(const uint32_t address);
+ll_i2c_res_t ll_i2c_enable_periph(const uint32_t address);
 
 ///
 /// \brief Disable the I2C peripheral.
@@ -527,7 +527,7 @@ ll_i2c_res_t ll_i2c_periph_enable(const uint32_t address);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_periph_disable(const uint32_t address);
+ll_i2c_res_t ll_i2c_disable_periph(const uint32_t address);
 
 ///
 /// \brief Performs the software reset of the I2C.
@@ -573,18 +573,7 @@ ll_i2c_res_t ll_i2c_transmit(const uint32_t address, const uint8_t *const byte);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_txdma_enable(const uint32_t address);
-
-///
-/// \brief Enables RX DMA mode on I2C.
-///
-/// \param[in] address The i2c address.
-///
-/// \return ll_i2c_res_t   The I2C result.
-/// \retval LL_I2C_RES_OK  On success.
-/// \retval LL_I2C_RES_ERR Otherwise.
-///
-ll_i2c_res_t ll_i2c_rxdma_enable(const uint32_t address);
+ll_i2c_res_t ll_i2c_enable_txdma(const uint32_t address);
 
 ///
 /// \brief Disables TX DMA mode on I2C.
@@ -595,7 +584,18 @@ ll_i2c_res_t ll_i2c_rxdma_enable(const uint32_t address);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_txdma_disable(const uint32_t address);
+ll_i2c_res_t ll_i2c_disable_txdma(const uint32_t address);
+
+///
+/// \brief Enables RX DMA mode on I2C.
+///
+/// \param[in] address The i2c address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_enable_rxdma(const uint32_t address);
 
 ///
 /// \brief Disables RX DMA mode on I2C.
@@ -606,7 +606,7 @@ ll_i2c_res_t ll_i2c_txdma_disable(const uint32_t address);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_rxdma_disable(const uint32_t address);
+ll_i2c_res_t ll_i2c_disable_rxdma(const uint32_t address);
 
 ///
 /// \brief Enables selected interrupt in I2C.
@@ -618,7 +618,7 @@ ll_i2c_res_t ll_i2c_rxdma_disable(const uint32_t address);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_interrupt_t interrupt);
+ll_i2c_res_t ll_i2c_enable_interrupt(const uint32_t address, const ll_i2c_interrupt_t interrupt);
 
 ///
 /// \brief Disables selected interrupt in I2C.
@@ -630,7 +630,7 @@ ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_interr
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_interrupt_t interrupt);
+ll_i2c_res_t ll_i2c_disable_interrupt(const uint32_t address, const ll_i2c_interrupt_t interrupt);
 
 ///
 /// \brief Sets digital noise filter on SDA and SCL input in I2C.
@@ -653,7 +653,7 @@ ll_i2c_res_t ll_i2c_set_dnf(const uint32_t address, const ll_i2c_dnf_t dnf);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_anf_enable(const uint32_t address);
+ll_i2c_res_t ll_i2c_enable_anf(const uint32_t address);
 
 ///
 /// \brief Disables analog noise filter in I2C.
@@ -664,7 +664,7 @@ ll_i2c_res_t ll_i2c_anf_enable(const uint32_t address);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_anf_disable(const uint32_t address);
+ll_i2c_res_t ll_i2c_disable_anf(const uint32_t address);
 
 ///
 /// \brief Enables slave byte control in I2C.
@@ -675,7 +675,7 @@ ll_i2c_res_t ll_i2c_anf_disable(const uint32_t address);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_sbc_enable(const uint32_t address);
+ll_i2c_res_t ll_i2c_enable_sbc(const uint32_t address);
 
 ///
 /// \brief Disables slave byte control in I2C.
@@ -686,7 +686,7 @@ ll_i2c_res_t ll_i2c_sbc_enable(const uint32_t address);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_sbc_disable(const uint32_t address);
+ll_i2c_res_t ll_i2c_disable_sbc(const uint32_t address);
 
 ///
 /// \brief Enables clock stretching in I2C.
@@ -697,7 +697,7 @@ ll_i2c_res_t ll_i2c_sbc_disable(const uint32_t address);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_clk_stretch_enable(const uint32_t address);
+ll_i2c_res_t ll_i2c_enable_clk_stretch(const uint32_t address);
 
 ///
 /// \brief Disables clock stretching in I2C.
@@ -708,7 +708,7 @@ ll_i2c_res_t ll_i2c_clk_stretch_enable(const uint32_t address);
 /// \retval LL_I2C_RES_OK  On success.
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
-ll_i2c_res_t ll_i2c_clk_stretch_disable(const uint32_t address);
+ll_i2c_res_t ll_i2c_disable_clk_stretch(const uint32_t address);
 
 #ifdef __cplusplus
 }

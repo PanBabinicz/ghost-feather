@@ -5,7 +5,7 @@
 ///***********************************************************************************************************
 /// Global functions - definition.
 ///***********************************************************************************************************
-ll_i2c_res_t ll_i2c_periph_enable(const uint32_t address)
+ll_i2c_res_t ll_i2c_enable_periph(const uint32_t address)
 {
     if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_PE_MASK) == 0x01)
     {
@@ -17,7 +17,7 @@ ll_i2c_res_t ll_i2c_periph_enable(const uint32_t address)
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_periph_disable(const uint32_t address)
+ll_i2c_res_t ll_i2c_disable_periph(const uint32_t address)
 {
     if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_PE_MASK) == 0x00)
     {
@@ -70,7 +70,7 @@ ll_i2c_res_t ll_i2c_transmit(const uint32_t address, const uint8_t *const byte)
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_txdma_enable(const uint32_t address)
+ll_i2c_res_t ll_i2c_enable_txdma(const uint32_t address)
 {
     LL_I2C_REG_CR1(address) |= LL_I2C_CR1_TXDMAEN_MASK;
 
@@ -82,19 +82,7 @@ ll_i2c_res_t ll_i2c_txdma_enable(const uint32_t address)
     return LL_I2C_RES_ERR;
 }
 
-ll_i2c_res_t ll_i2c_rxdma_enable(const uint32_t address)
-{
-    LL_I2C_REG_CR1(address) |= LL_I2C_CR1_RXDMAEN_MASK;
-
-    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_RXDMAEN_MASK) == 0x01)
-    {
-        return LL_I2C_RES_OK;
-    }
-
-    return LL_I2C_RES_ERR;
-}
-
-ll_i2c_res_t ll_i2c_txdma_disable(const uint32_t address)
+ll_i2c_res_t ll_i2c_disable_txdma(const uint32_t address)
 {
     LL_I2C_REG_CR1(address) &= ~(LL_I2C_CR1_TXDMAEN_MASK);
 
@@ -106,7 +94,19 @@ ll_i2c_res_t ll_i2c_txdma_disable(const uint32_t address)
     return LL_I2C_RES_ERR;
 }
 
-ll_i2c_res_t ll_i2c_rxdma_disable(const uint32_t address)
+ll_i2c_res_t ll_i2c_enable_rxdma(const uint32_t address)
+{
+    LL_I2C_REG_CR1(address) |= LL_I2C_CR1_RXDMAEN_MASK;
+
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_RXDMAEN_MASK) == 0x01)
+    {
+        return LL_I2C_RES_OK;
+    }
+
+    return LL_I2C_RES_ERR;
+}
+
+ll_i2c_res_t ll_i2c_disable_rxdma(const uint32_t address)
 {
     LL_I2C_REG_CR1(address) &= ~(LL_I2C_CR1_RXDMAEN_MASK);
 
@@ -118,7 +118,7 @@ ll_i2c_res_t ll_i2c_rxdma_disable(const uint32_t address)
     return LL_I2C_RES_ERR;
 }
 
-ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_interrupt_t interrupt)
+ll_i2c_res_t ll_i2c_enable_interrupt(const uint32_t address, const ll_i2c_interrupt_t interrupt)
 {
     if ((interrupt < LL_I2C_INTERRUPT_TX) || (interrupt > LL_I2C_INTERRUPT_ERR))
     {
@@ -134,7 +134,7 @@ ll_i2c_res_t ll_i2c_interrupt_enable(const uint32_t address, const ll_i2c_interr
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_interrupt_disable(const uint32_t address, const ll_i2c_interrupt_t interrupt)
+ll_i2c_res_t ll_i2c_disable_interrupt(const uint32_t address, const ll_i2c_interrupt_t interrupt)
 {
     if ((interrupt < LL_I2C_INTERRUPT_TX) || (interrupt > LL_I2C_INTERRUPT_TX))
     {
@@ -162,7 +162,7 @@ ll_i2c_res_t ll_i2c_set_dnf(const uint32_t address, const ll_i2c_dnf_t dnf)
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_anf_enable(const uint32_t address)
+ll_i2c_res_t ll_i2c_enable_anf(const uint32_t address)
 {
     if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_ANFOFF_MASK) == 0x01)
     {
@@ -174,7 +174,7 @@ ll_i2c_res_t ll_i2c_anf_enable(const uint32_t address)
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_anf_disable(const uint32_t address)
+ll_i2c_res_t ll_i2c_disable_anf(const uint32_t address)
 {
     if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_ANFOFF_MASK) == 0x00)
     {
@@ -186,7 +186,7 @@ ll_i2c_res_t ll_i2c_anf_disable(const uint32_t address)
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_sbc_enable(const uint32_t address)
+ll_i2c_res_t ll_i2c_enable_sbc(const uint32_t address)
 {
     if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_SBC_MASK) == 0x01)
     {
@@ -198,7 +198,7 @@ ll_i2c_res_t ll_i2c_sbc_enable(const uint32_t address)
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_sbc_disable(const uint32_t address)
+ll_i2c_res_t ll_i2c_disable_sbc(const uint32_t address)
 {
     if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_SBC_MASK) == 0x00)
     {
@@ -210,7 +210,7 @@ ll_i2c_res_t ll_i2c_sbc_disable(const uint32_t address)
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_clk_stretch_enable(const uint32_t address)
+ll_i2c_res_t ll_i2c_enable_clk_stretch(const uint32_t address)
 {
     if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_NOSTRETCH_MASK) == 0x00)
     {
@@ -222,7 +222,7 @@ ll_i2c_res_t ll_i2c_clk_stretch_enable(const uint32_t address)
     return LL_I2C_RES_OK;
 }
 
-ll_i2c_res_t ll_i2c_clk_stretch_disable(const uint32_t address)
+ll_i2c_res_t ll_i2c_disable_clk_stretch(const uint32_t address)
 {
     if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_NOSTRETCH_MASK) == 0x01)
     {
