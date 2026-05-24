@@ -209,3 +209,27 @@ ll_i2c_res_t ll_i2c_sbc_disable(const uint32_t address)
 
     return LL_I2C_RES_OK;
 }
+
+ll_i2c_res_t ll_i2c_clk_stretch_enable(const uint32_t address)
+{
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_NOSTRETCH_MASK) == 0x00)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    LL_I2C_REG_CR1(address) &= ~(LL_I2C_CR1_NOSTRETCH_MASK);
+
+    return LL_I2C_RES_OK;
+}
+
+ll_i2c_res_t ll_i2c_clk_stretch_disable(const uint32_t address)
+{
+    if ((LL_I2C_REG_CR1(address) & LL_I2C_CR1_NOSTRETCH_MASK) == 0x01)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    LL_I2C_REG_CR1(address) |= LL_I2C_CR1_NOSTRETCH_MASK;
+
+    return LL_I2C_RES_OK;
+}
