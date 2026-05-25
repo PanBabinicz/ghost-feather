@@ -710,6 +710,28 @@ ll_i2c_res_t ll_i2c_enable_clk_stretch(const uint32_t address);
 ///
 ll_i2c_res_t ll_i2c_disable_clk_stretch(const uint32_t address);
 
+///
+/// \brief Enables general call in I2C.
+///
+/// \param[in] address The i2c address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_enable_general_call(const uint32_t address);
+
+///
+/// \brief Disables general call in I2C.
+///
+/// \param[in] address The i2c address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_disable_general_call(const uint32_t address);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
