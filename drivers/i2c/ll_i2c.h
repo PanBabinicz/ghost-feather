@@ -754,6 +754,28 @@ ll_i2c_res_t ll_i2c_enable_smbh(const uint32_t address);
 ///
 ll_i2c_res_t ll_i2c_disable_smbh(const uint32_t address);
 
+///
+/// \brief Enables SMBus device default address in I2C.
+///
+/// \param[in] address The i2c address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_enable_smbd(const uint32_t address);
+
+///
+/// \brief Disables SMBus device default address in I2C.
+///
+/// \param[in] address The i2c address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_disable_smbd(const uint32_t address);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
