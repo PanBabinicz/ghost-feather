@@ -798,6 +798,28 @@ ll_i2c_res_t ll_i2c_enable_alert(const uint32_t address);
 ///
 ll_i2c_res_t ll_i2c_disable_alert(const uint32_t address);
 
+///
+/// \brief Enables PEC in I2C.
+///
+/// \param[in] address The i2c address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_enable_pec(const uint32_t address);
+
+///
+/// \brief Disables PEC in I2C.
+///
+/// \param[in] address The i2c address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_disable_pec(const uint32_t address);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
