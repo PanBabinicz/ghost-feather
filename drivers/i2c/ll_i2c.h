@@ -820,6 +820,30 @@ ll_i2c_res_t ll_i2c_enable_pec(const uint32_t address);
 ///
 ll_i2c_res_t ll_i2c_disable_pec(const uint32_t address);
 
+///
+/// \brief Sets I2C slave address in 7-bit addressing mode.
+///
+/// \param[in] address   The i2c address.
+/// \param[in] 7bit_addr The 7-bit slave address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_set_addr_7bit(const uint32_t address, const uint32_t 7bit_addr);
+
+///
+/// \brief Sets I2C slave address in 10-bit addressing mode.
+///
+/// \param[in] address    The i2c address.
+/// \param[in] 10bit_addr The 10-bit slave address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_set_addr_10bit(const uint32_t address, const uint32_t 10bit_addr);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
