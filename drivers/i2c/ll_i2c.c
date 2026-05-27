@@ -356,6 +356,11 @@ ll_i2c_res_t ll_i2c_disable_pec(const uint32_t address)
 
 ll_i2c_res_t ll_i2c_set_addr_7bit(const uint32_t address, const uint32_t 7bit_addr)
 {
+    if ((LL_I2C_REG_CR2(address) & LL_I2C_CR2_START_MASK) == 0x01)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
     LL_I2C_REG_CR2(address) &= ~(LL_I2C_CR2_ADD10_MASK);
     LL_I2C_REG_CR2(address) &= ~(0x00fe);
     LL_I2C_REG_CR2(address) |= (7bit_addr & 0x07f) << 0x01;
@@ -365,6 +370,11 @@ ll_i2c_res_t ll_i2c_set_addr_7bit(const uint32_t address, const uint32_t 7bit_ad
 
 ll_i2c_res_t ll_i2c_set_addr_10bit(const uint32_t address, const uint32_t 10bit_addr)
 {
+    if ((LL_I2C_REG_CR2(address) & LL_I2C_CR2_START_MASK) == 0x01)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
     LL_I2C_REG_CR2(address) |= LL_I2C_CR2_ADD10_MASK;
     LL_I2C_REG_CR2(address) &= ~(0x03ff);
     LL_I2C_REG_CR2(address) |= (10bit_addr & 0x03ff);
