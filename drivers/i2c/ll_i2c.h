@@ -844,6 +844,28 @@ ll_i2c_res_t ll_i2c_set_addr_7bit(const uint32_t address, const uint32_t 7bit_ad
 ///
 ll_i2c_res_t ll_i2c_set_addr_10bit(const uint32_t address, const uint32_t 10bit_addr);
 
+///
+/// \brief Sets I2C transfer direction to write in master mode.
+///
+/// \param[in] address   The i2c address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_set_xfer_dir_write(const uint32_t address);
+
+///
+/// \brief Sets I2C transfer direction to read in master mode.
+///
+/// \param[in] address   The i2c address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_set_xfer_dir_read(const uint32_t address);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
