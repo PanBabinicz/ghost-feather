@@ -877,6 +877,17 @@ ll_i2c_res_t ll_i2c_set_xfer_dir_read(const uint32_t address);
 ///
 ll_i2c_res_t ll_i2c_start(const uint32_t address);
 
+///
+/// \brief Generates the I2C stop condition.
+///
+/// \param[in] address The i2c address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_stop(const uint32_t address);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
