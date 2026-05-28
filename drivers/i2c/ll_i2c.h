@@ -567,7 +567,7 @@ ll_i2c_res_t ll_i2c_transmit(const uint32_t address, const uint8_t *const byte);
 ///
 /// \brief Enables TX DMA mode on I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -578,7 +578,7 @@ ll_i2c_res_t ll_i2c_enable_txdma(const uint32_t address);
 ///
 /// \brief Disables TX DMA mode on I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -589,7 +589,7 @@ ll_i2c_res_t ll_i2c_disable_txdma(const uint32_t address);
 ///
 /// \brief Enables RX DMA mode on I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -600,7 +600,7 @@ ll_i2c_res_t ll_i2c_enable_rxdma(const uint32_t address);
 ///
 /// \brief Disables RX DMA mode on I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -611,7 +611,7 @@ ll_i2c_res_t ll_i2c_disable_rxdma(const uint32_t address);
 ///
 /// \brief Enables selected interrupt in I2C.
 ///
-/// \param[in] address   The i2c address.
+/// \param[in] address   The I2C address.
 /// \param[in] interrupt The interrupt type.
 ///
 /// \return ll_i2c_res_t   The I2C result.
@@ -623,7 +623,7 @@ ll_i2c_res_t ll_i2c_enable_interrupt(const uint32_t address, const ll_i2c_interr
 ///
 /// \brief Disables selected interrupt in I2C.
 ///
-/// \param[in] address   The i2c address.
+/// \param[in] address   The I2C address.
 /// \param[in] interrupt The interrupt type.
 ///
 /// \return ll_i2c_res_t   The I2C result.
@@ -635,7 +635,7 @@ ll_i2c_res_t ll_i2c_disable_interrupt(const uint32_t address, const ll_i2c_inter
 ///
 /// \brief Sets digital noise filter on SDA and SCL input in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 /// \param[in] dnf     The digital noise filter capability.
 ///
 /// \return ll_i2c_res_t   The I2C result.
@@ -647,7 +647,7 @@ ll_i2c_res_t ll_i2c_set_dnf(const uint32_t address, const ll_i2c_dnf_t dnf);
 ///
 /// \brief Enables analog noise filter in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -658,7 +658,7 @@ ll_i2c_res_t ll_i2c_enable_anf(const uint32_t address);
 ///
 /// \brief Disables analog noise filter in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -669,7 +669,7 @@ ll_i2c_res_t ll_i2c_disable_anf(const uint32_t address);
 ///
 /// \brief Enables slave byte control in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -680,7 +680,7 @@ ll_i2c_res_t ll_i2c_enable_sbc(const uint32_t address);
 ///
 /// \brief Disables slave byte control in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -691,7 +691,7 @@ ll_i2c_res_t ll_i2c_disable_sbc(const uint32_t address);
 ///
 /// \brief Enables clock stretching in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -702,7 +702,7 @@ ll_i2c_res_t ll_i2c_enable_clk_stretch(const uint32_t address);
 ///
 /// \brief Disables clock stretching in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -713,7 +713,7 @@ ll_i2c_res_t ll_i2c_disable_clk_stretch(const uint32_t address);
 ///
 /// \brief Enables general call in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -724,7 +724,7 @@ ll_i2c_res_t ll_i2c_enable_general_call(const uint32_t address);
 ///
 /// \brief Disables general call in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -735,7 +735,7 @@ ll_i2c_res_t ll_i2c_disable_general_call(const uint32_t address);
 ///
 /// \brief Enables SMBus host address in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -746,7 +746,7 @@ ll_i2c_res_t ll_i2c_enable_smbh(const uint32_t address);
 ///
 /// \brief Disables SMBus host address in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -757,7 +757,7 @@ ll_i2c_res_t ll_i2c_disable_smbh(const uint32_t address);
 ///
 /// \brief Enables SMBus device default address in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -768,7 +768,7 @@ ll_i2c_res_t ll_i2c_enable_smbd(const uint32_t address);
 ///
 /// \brief Disables SMBus device default address in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -779,7 +779,7 @@ ll_i2c_res_t ll_i2c_disable_smbd(const uint32_t address);
 ///
 /// \brief Enables SMBus alert in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -790,7 +790,7 @@ ll_i2c_res_t ll_i2c_enable_alert(const uint32_t address);
 ///
 /// \brief Disables SMBus alert in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -801,7 +801,7 @@ ll_i2c_res_t ll_i2c_disable_alert(const uint32_t address);
 ///
 /// \brief Enables PEC in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -812,7 +812,7 @@ ll_i2c_res_t ll_i2c_enable_pec(const uint32_t address);
 ///
 /// \brief Disables PEC in I2C.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -823,7 +823,7 @@ ll_i2c_res_t ll_i2c_disable_pec(const uint32_t address);
 ///
 /// \brief Sets I2C slave address in 7-bit addressing mode.
 ///
-/// \param[in] address   The i2c address.
+/// \param[in] address   The I2C address.
 /// \param[in] 7bit_addr The 7-bit slave address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
@@ -835,7 +835,7 @@ ll_i2c_res_t ll_i2c_set_addr_7bit(const uint32_t address, const uint32_t 7bit_ad
 ///
 /// \brief Sets I2C slave address in 10-bit addressing mode.
 ///
-/// \param[in] address    The i2c address.
+/// \param[in] address    The I2C address.
 /// \param[in] 10bit_addr The 10-bit slave address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
@@ -847,7 +847,7 @@ ll_i2c_res_t ll_i2c_set_addr_10bit(const uint32_t address, const uint32_t 10bit_
 ///
 /// \brief Sets I2C transfer direction to write in master mode.
 ///
-/// \param[in] address   The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -858,7 +858,7 @@ ll_i2c_res_t ll_i2c_set_xfer_dir_write(const uint32_t address);
 ///
 /// \brief Sets I2C transfer direction to read in master mode.
 ///
-/// \param[in] address   The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -869,7 +869,7 @@ ll_i2c_res_t ll_i2c_set_xfer_dir_read(const uint32_t address);
 ///
 /// \brief Generates the I2C start condition.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
@@ -880,7 +880,7 @@ ll_i2c_res_t ll_i2c_start(const uint32_t address);
 ///
 /// \brief Generates the I2C stop condition.
 ///
-/// \param[in] address The i2c address.
+/// \param[in] address The I2C address.
 ///
 /// \return ll_i2c_res_t   The I2C result.
 /// \retval LL_I2C_RES_OK  On success.
