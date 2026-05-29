@@ -171,6 +171,134 @@ typedef enum ll_i2c_icr_mask
 } ll_i2c_icr_mask_t;
 
 ///
+/// \brief The I2C Control Register 1 (CR1) shift type.
+///
+typedef enum ll_i2c_cr1_shift
+{
+    LL_I2C_CR1_PE_SHIFT        = 0x00,
+    LL_I2C_CR1_TXIE_SHIFT      = 0x01,
+    LL_I2C_CR1_RXIE_SHIFT      = 0x02,
+    LL_I2C_CR1_ADDRIE_SHIFT    = 0x03,
+    LL_I2C_CR1_NACKIE_SHIFT    = 0x04,
+    LL_I2C_CR1_STOPIE_SHIFT    = 0x05,
+    LL_I2C_CR1_TCIE_SHIFT      = 0x06,
+    LL_I2C_CR1_ERRIE_SHIFT     = 0x07,
+    LL_I2C_CR1_DNF_SHIFT       = 0x08,
+    LL_I2C_CR1_ANFOFF_SHIFT    = 0x0c,
+    LL_I2C_CR1_TXDMAEN_SHIFT   = 0x0e,
+    LL_I2C_CR1_RXDMAEN_SHIFT   = 0x0f,
+    LL_I2C_CR1_SBC_SHIFT       = 0x10,
+    LL_I2C_CR1_NOSTRETCH_SHIFT = 0x11,
+    LL_I2C_CR1_GCEN_SHIFT      = 0x13,
+    LL_I2C_CR1_SMBHEN_SHIFT    = 0x14,
+    LL_I2C_CR1_SMBDEN_SHIFT    = 0x15,
+    LL_I2C_CR1_ALERTEN_SHIFT   = 0x16,
+    LL_I2C_CR1_PECEN_SHIFT     = 0x17,
+} ll_i2c_cr1_shift_t;
+
+///
+/// \brief The I2C Control Register 2 (CR2) shift type.
+///
+typedef enum ll_i2c_cr2_shift
+{
+    LL_I2C_CR2_SADD_SHIFT    = 0x00,
+    LL_I2C_CR2_RDWRN_SHIFT   = 0x0a,
+    LL_I2C_CR2_ADD10_SHIFT   = 0x0b,
+    LL_I2C_CR2_HEAD10R_SHIFT = 0x0c,
+    LL_I2C_CR2_START_SHIFT   = 0x0d,
+    LL_I2C_CR2_STOP_SHIFT    = 0x0e,
+    LL_I2C_CR2_NACK_SHIFT    = 0x0f,
+    LL_I2C_CR2_NBYTES_SHIFT  = 0x10,
+    LL_I2C_CR2_RELOAD_SHIFT  = 0x18,
+    LL_I2C_CR2_AUTOEND_SHIFT = 0x19,
+    LL_I2C_CR2_PECBYTE_SHIFT = 0x1a,
+} ll_i2c_cr2_shift_t;
+
+///
+/// \brief The I2C Own Address Register 1 (OAR1) shift type.
+///
+typedef enum ll_i2c_oar1_shift
+{
+    LL_I2C_OAR1_OA1_SHIFT     = 0x00,
+    LL_I2C_OAR1_OA1MODE_SHIFT = 0x0a,
+    LL_I2C_OAR1_OA1EN_SHIFT   = 0x0f,
+} ll_i2c_oar1_shift_t;
+
+///
+/// \brief The I2C Own Address Register 2 (OAR2) shift type.
+///
+typedef enum ll_i2c_oar2_shift
+{
+    LL_I2C_OAR2_OA2_SHIFT    = 0x01,
+    LL_I2C_OAR2_OA2MSK_SHIFT = 0x08,
+    LL_I2C_OAR2_OA2EN_SHIFT  = 0x0f,
+} ll_i2c_oar2_shift_t;
+
+///
+/// \brief The I2C Timing Register (TIMINGR) shift type.
+///
+typedef enum ll_i2c_timingr_shift
+{
+    LL_I2C_TIMINGR_SCLL_SHIFT   = 0x00,
+    LL_I2C_TIMINGR_SCLH_SHIFT   = 0x08,
+    LL_I2C_TIMINGR_SDADEL_SHIFT = 0x10,
+    LL_I2C_TIMINGR_SCLDEL_SHIFT = 0x14,
+    LL_I2C_TIMINGR_PRESC_SHIFT  = 0x1c,
+} ll_i2c_timingr_shift_t;
+
+///
+/// \brief The I2C Timeout Register (TIMEOUTR) shift type.
+///
+typedef enum ll_i2c_timeoutr_shift
+{
+    LL_I2C_TIMEOUTR_TIMEOUTA_SHIFT = 0x00,
+    LL_I2C_TIMEOUTR_TIDLE_SHIFT    = 0x0c,
+    LL_I2C_TIMEOUTR_TIMOUTEN_SHIFT = 0x0f,
+    LL_I2C_TIMEOUTR_TIMEOUTB_SHIFT = 0x10,
+    LL_I2C_TIMEOUTR_TEXTEN_SHIFT   = 0x1f,
+} ll_i2c_timeoutr_shift_t;
+
+///
+/// \brief The I2C Interrupt and Status Register (ISR) shift type.
+///
+typedef enum ll_i2c_isr_shift
+{
+    LL_I2C_ISR_TXE_SHIFT     = 0x00,
+    LL_I2C_ISR_TXIS_SHIFT    = 0x01,
+    LL_I2C_ISR_RXNE_SHIFT    = 0x02,
+    LL_I2C_ISR_ADDR_SHIFT    = 0x03,
+    LL_I2C_ISR_NACKF_SHIFT   = 0x04,
+    LL_I2C_ISR_STOPF_SHIFT   = 0x05,
+    LL_I2C_ISR_TC_SHIFT      = 0x06,
+    LL_I2C_ISR_TCR_SHIFT     = 0x07,
+    LL_I2C_ISR_BERR_SHIFT    = 0x08,
+    LL_I2C_ISR_ARLO_SHIFT    = 0x09,
+    LL_I2C_ISR_OVR_SHIFT     = 0x0a,
+    LL_I2C_ISR_PECERR_SHIFT  = 0x0b,
+    LL_I2C_ISR_TIMEOUT_SHIFT = 0x0c,
+    LL_I2C_ISR_ALERT_SHIFT   = 0x0d,
+    LL_I2C_ISR_BUSY_SHIFT    = 0x0f,
+    LL_I2C_ISR_DIR_SHIFT     = 0x10,
+    LL_I2C_ISR_ADDCODE_SHIFT = 0x11,
+} ll_i2c_isr_shift_t;
+
+///
+/// \brief The I2C Interrupt Clear Register (ICR) shift type.
+///
+typedef enum ll_i2c_icr_shift
+{
+    LL_I2C_ICR_ADDRCF_SHIFT   = 0x03,
+    LL_I2C_ICR_NACKCF_SHIFT   = 0x04,
+    LL_I2C_ICR_STOPCF_SHIFT   = 0x05,
+    LL_I2C_ICR_BERRCF_SHIFT   = 0x08,
+    LL_I2C_ICR_ARLOCF_SHIFT   = 0x09,
+    LL_I2C_ICR_OVRCF_SHIFT    = 0x0a,
+    LL_I2C_ICR_PECCF_SHIFT    = 0x0b,
+    LL_I2C_ICR_TIMOUTCF_SHIFT = 0x0c,
+    LL_I2C_ICR_ALERTCF_SHIFT  = 0x0d,
+} ll_i2c_icr_shift_t;
+
+///
 /// \brief The I2C interrupt type.
 ///
 typedef enum ll_i2c_interrupt
