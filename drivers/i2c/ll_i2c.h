@@ -888,6 +888,17 @@ ll_i2c_res_t ll_i2c_start(const uint32_t address);
 ///
 ll_i2c_res_t ll_i2c_stop(const uint32_t address);
 
+///
+/// \brief Generates the I2C nack condition.
+///
+/// \param[in] address The I2C address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_nack(const uint32_t address);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
