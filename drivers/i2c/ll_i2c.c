@@ -449,3 +449,15 @@ ll_i2c_res_t ll_i2c_nack(const uint32_t address)
 
     return LL_I2C_RES_OK;
 }
+
+ll_i2c_res_t ll_i2c_set_nbytes(const uint32_t address, const uint8_t nbytes)
+{
+    if ((LL_I2C_REG_CR2(address) & LL_I2C_CR2_START_MASK) == 0x01)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    LL_I2C_REG_CR2(address) |= (nbytes << LL_I2C_CR2_NBYTES_SHIFT);
+
+    return LL_I2C_RES_OK;
+}

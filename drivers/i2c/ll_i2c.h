@@ -1027,6 +1027,18 @@ ll_i2c_res_t ll_i2c_stop(const uint32_t address);
 ///
 ll_i2c_res_t ll_i2c_nack(const uint32_t address);
 
+///
+/// \brief Sets the number of bytes to be transmitted/received in I2C.
+///
+/// \param[in] address The I2C address.
+/// \param[in] nbytes  The number of bytes to be transmitted/received.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_set_nbytes(const uint32_t address, const uint8_t nbytes);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
