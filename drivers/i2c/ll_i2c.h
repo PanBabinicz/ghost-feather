@@ -1039,6 +1039,28 @@ ll_i2c_res_t ll_i2c_nack(const uint32_t address);
 ///
 ll_i2c_res_t ll_i2c_set_nbytes(const uint32_t address, const uint8_t nbytes);
 
+///
+/// \brief Sets the NBYTES reload mode bit in I2C.
+///
+/// \param[in] address The I2C address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_set_reload(const uint32_t address);
+
+///
+/// \brief Clears the NBYTES reload mode bit in I2C.
+///
+/// \param[in] address The I2C address.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_clr_reload(const uint32_t address);
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */

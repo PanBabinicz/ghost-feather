@@ -461,3 +461,27 @@ ll_i2c_res_t ll_i2c_set_nbytes(const uint32_t address, const uint8_t nbytes)
 
     return LL_I2C_RES_OK;
 }
+
+ll_i2c_res_t ll_i2c_set_reload(const uint32_t address)
+{
+    if ((LL_I2C_REG_CR2(address) & LL_I2C_CR2_RELOAD_MASK) == 0x01)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    LL_I2C_REG_CR2(address) |= LL_I2C_CR2_RELOAD_MASK;
+
+    return LL_I2C_RES_OK;
+}
+
+ll_i2c_res_t ll_i2c_clr_reload(const uint32_t address)
+{
+    if ((LL_I2C_REG_CR2(address) & LL_I2C_CR2_RELOAD_MASK) == 0x00)
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    LL_I2C_REG_CR2(address) &= ~(LL_I2C_CR2_RELOAD_MASK);
+
+    return LL_I2C_RES_OK;
+}
