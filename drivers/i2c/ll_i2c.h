@@ -336,6 +336,15 @@ typedef enum ll_i2c_dnf
 } ll_i2c_dnf_t;
 
 ///
+/// \brief The I2C end mode type.
+///
+typedef enum ll_i2c_end_mode
+{
+    LL_I2C_END_MODE_SOFTWARE = 0,
+    LL_I2C_END_MODE_AUTOMATIC,
+} ll_i2c_end_mode_t;
+
+///
 /// \brief The I2C PEC Register (PECR) mask type.
 ///
 typedef enum ll_i2c_pecr_mask
@@ -1060,6 +1069,18 @@ ll_i2c_res_t ll_i2c_set_reload(const uint32_t address);
 /// \retval LL_I2C_RES_ERR Otherwise.
 ///
 ll_i2c_res_t ll_i2c_clr_reload(const uint32_t address);
+
+///
+/// \brief Sets the end mode in I2C.
+///
+/// \param[in] address  The I2C address.
+/// \param[in] end_mode The I2C end mode.
+///
+/// \return ll_i2c_res_t   The I2C result.
+/// \retval LL_I2C_RES_OK  On success.
+/// \retval LL_I2C_RES_ERR Otherwise.
+///
+ll_i2c_res_t ll_i2c_set_end_mode(const uint32_t address, const ll_i2c_end_mode_t end_mode);
 
 #ifdef __cplusplus
 }

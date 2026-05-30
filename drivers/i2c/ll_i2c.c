@@ -485,3 +485,15 @@ ll_i2c_res_t ll_i2c_clr_reload(const uint32_t address)
 
     return LL_I2C_RES_OK;
 }
+
+ll_i2c_res_t ll_i2c_set_end_mode(const uint32_t address, const ll_i2c_end_mode_t end_mode)
+{
+    if ((end_mode < LL_I2C_END_MODE_SOFTWARE) || (end_mode > LL_I2C_END_MODE_AUTOMATIC))
+    {
+        return LL_I2C_RES_ERR;
+    }
+
+    LL_I2C_REG_CR2(address) |= (end_mode << LL_I2C_CR2_AUTOEND_SHIFT);
+
+    return LL_I2C_RES_OK;
+}
